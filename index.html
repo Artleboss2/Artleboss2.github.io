@@ -440,6 +440,167 @@
             }
         }
 
+        /* Terminal interactif */
+        .terminal-container {
+            position: fixed;
+            bottom: 0;
+            right: 2rem;
+            width: 500px;
+            max-width: calc(100vw - 4rem);
+            background: rgba(15, 15, 15, 0.95);
+            border: 1px solid var(--border);
+            border-bottom: none;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .terminal-container.minimized {
+            transform: translateY(calc(100% - 40px));
+        }
+
+        .terminal-header {
+            padding: 0.75rem 1rem;
+            background: rgba(20, 20, 20, 0.8);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .terminal-title {
+            font-size: 0.85rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .terminal-title::before {
+            content: '●';
+            color: #4ade80;
+            font-size: 1rem;
+        }
+
+        .terminal-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .terminal-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .terminal-btn:hover {
+            opacity: 0.7;
+        }
+
+        .terminal-btn.close {
+            background: #ef4444;
+        }
+
+        .terminal-btn.minimize {
+            background: #fbbf24;
+        }
+
+        .terminal-output {
+            padding: 1rem;
+            height: 250px;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+        .terminal-output::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .terminal-output::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .terminal-output::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        .terminal-line {
+            margin-bottom: 0.5rem;
+        }
+
+        .terminal-prompt {
+            color: #4ade80;
+        }
+
+        .terminal-command {
+            color: #60a5fa;
+        }
+
+        .terminal-error {
+            color: #ef4444;
+        }
+
+        .terminal-success {
+            color: #4ade80;
+        }
+
+        .terminal-info {
+            color: var(--text-dim);
+        }
+
+        .terminal-input-container {
+            padding: 0.75rem 1rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(10, 10, 10, 0.5);
+        }
+
+        .terminal-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        .cursor-blink {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .terminal-container.hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .terminal-container {
+                right: 1rem;
+                width: calc(100vw - 2rem);
+            }
+
+            .terminal-output {
+                height: 200px;
+                font-size: 0.75rem;
+            }
+        }
+
         @media (hover: none) {
             .cursor,
             .cursor-follower {
@@ -600,8 +761,315 @@
         </div>
     </footer>
 
+    <!-- Terminal Interactif -->
+    <div class="terminal-container minimized" id="terminal">
+        <div class="terminal-header" onclick="toggleTerminal()">
+            <div class="terminal-title">terminal@artleboss2</div>
+            <div class="terminal-controls">
+                <div class="terminal-btn minimize" onclick="event.stopPropagation(); toggleTerminal()"></div>
+                <div class="terminal-btn close" onclick="event.stopPropagation(); closeTerminal()"></div>
+            </div>
+        </div>
+        <div class="terminal-output" id="terminalOutput">
+            <div class="terminal-line">
+                <span class="terminal-success">Bienvenue dans le terminal interactif!</span>
+            </div>
+            <div class="terminal-line terminal-info">
+                Tapez 'help' pour voir les commandes disponibles.
+            </div>
+            <div class="terminal-line"></div>
+        </div>
+        <div class="terminal-input-container">
+            <span class="terminal-prompt">$</span>
+            <input 
+                type="text" 
+                class="terminal-input" 
+                id="terminalInput" 
+                placeholder="Tapez une commande..."
+                autocomplete="off"
+                spellcheck="false"
+            >
+        </div>
+    </div>
+
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        // Curseur personnalisé
+        // ========== TERMINAL INTERACTIF ==========
+        const terminal = document.getElementById('terminal');
+        const terminalOutput = document.getElementById('terminalOutput');
+        const terminalInput = document.getElementById('terminalInput');
+        let commandHistory = [];
+        let historyIndex = -1;
+
+        // Commandes disponibles
+        const commands = {
+            help: {
+                description: 'Affiche toutes les commandes disponibles',
+                execute: () => {
+                    return `<div class="terminal-success">Commandes disponibles:</div>
+                    <div class="terminal-info">
+                    • help - Affiche cette aide<br>
+                    • about - À propos de moi<br>
+                    • skills - Liste mes compétences<br>
+                    • projects - Liste mes projets<br>
+                    • contact - Informations de contact<br>
+                    • github - Ouvre mon GitHub<br>
+                    • clear - Efface le terminal<br>
+                    • date - Affiche la date actuelle<br>
+                    • whoami - Qui suis-je?<br>
+                    • social - Liens vers mes réseaux sociaux<br>
+                    • matrix - Active l'effet Matrix 🟢<br>
+                    </div>`;
+                }
+            },
+            about: {
+                description: 'À propos de moi',
+                execute: () => {
+                    return `<div class="terminal-success">À propos de moi:</div>
+                    <div class="terminal-info">
+                    Développeur passionné par le gaming et la création.<br>
+                    Je développe des texture packs, outils d'automatisation<br>
+                    et projets créatifs pour la communauté gaming.<br>
+                    <br>
+                    Spécialités: Web Dev, Game Modding, Automation
+                    </div>`;
+                }
+            },
+            skills: {
+                description: 'Liste mes compétences',
+                execute: () => {
+                    return `<div class="terminal-success">Compétences principales:</div>
+                    <div class="terminal-info">
+                    Frontend: HTML5, CSS3, JavaScript<br>
+                    Game Dev: Texture Packs, WebGL, 3D Modeling<br>
+                    Automation: Batch, Shell Scripting<br>
+                    Tools: Git, VS Code, GitHub Pages
+                    </div>`;
+                }
+            },
+            projects: {
+                description: 'Liste mes projets',
+                execute: () => {
+                    return `<div class="terminal-success">Projets récents:</div>
+                    <div class="terminal-info">
+                    1. Bloxd Texture Pack - Customisation CSS pour Bloxd.io<br>
+                    2. Batch Multitool - Automatisation Windows<br>
+                    3. Portfolio GitHub - Ce site que vous visitez!<br>
+                    <br>
+                    Visitez github.com/Artleboss2 pour plus de détails.
+                    </div>`;
+                }
+            },
+            contact: {
+                description: 'Informations de contact',
+                execute: () => {
+                    return `<div class="terminal-success">Contact:</div>
+                    <div class="terminal-info">
+                    GitHub: github.com/Artleboss2<br>
+                    Email: votre@email.com<br>
+                    Discord: Disponible sur demande<br>
+                    LinkedIn: À venir
+                    </div>`;
+                }
+            },
+            github: {
+                description: 'Ouvre mon GitHub',
+                execute: () => {
+                    window.open('https://github.com/Artleboss2', '_blank');
+                    return `<div class="terminal-success">Ouverture de GitHub dans un nouvel onglet...</div>`;
+                }
+            },
+            clear: {
+                description: 'Efface le terminal',
+                execute: () => {
+                    terminalOutput.innerHTML = '';
+                    return '';
+                }
+            },
+            date: {
+                description: 'Affiche la date actuelle',
+                execute: () => {
+                    const now = new Date();
+                    return `<div class="terminal-info">${now.toLocaleString('fr-FR')}</div>`;
+                }
+            },
+            whoami: {
+                description: 'Qui suis-je?',
+                execute: () => {
+                    return `<div class="terminal-info">artleboss2 - Développeur & Créateur</div>`;
+                }
+            },
+            social: {
+                description: 'Liens vers mes réseaux sociaux',
+                execute: () => {
+                    return `<div class="terminal-success">Réseaux sociaux:</div>
+                    <div class="terminal-info">
+                    🐙 GitHub: github.com/Artleboss2<br>
+                    💼 LinkedIn: À venir<br>
+                    💬 Discord: Disponible sur demande<br>
+                    📧 Email: votre@email.com
+                    </div>`;
+                }
+            },
+            matrix: {
+                description: 'Active l\'effet Matrix',
+                execute: () => {
+                    activateMatrix();
+                    return `<div class="terminal-success">Effet Matrix activé! Appuyez sur ESC pour quitter.</div>`;
+                }
+            }
+        };
+
+        // Easter eggs
+        const easterEggs = {
+            'hello': 'Hello! 👋 Bienvenue sur mon portfolio!',
+            'hi': 'Salut! Comment puis-je vous aider?',
+            'bonjour': 'Bonjour! Tapez "help" pour voir les commandes.',
+            'sudo': 'Désolé, vous n\'avez pas les permissions sudo ici 😄',
+            'hack': 'Accès refusé. Mais j\'apprécie la tentative! 🔒',
+            'ls': 'portfolio.html  README.md  projects/',
+            'pwd': '/home/artleboss2/portfolio',
+            'exit': 'Vous ne pouvez pas quitter le terminal, mais vous pouvez le fermer! 😉',
+            'konami': 'Code Konami détecté! Mais je n\'ai pas encore d\'easter egg pour ça... 🎮'
+        };
+
+        function toggleTerminal() {
+            terminal.classList.toggle('minimized');
+            if (!terminal.classList.contains('minimized')) {
+                terminalInput.focus();
+            }
+        }
+
+        function closeTerminal() {
+            terminal.classList.add('hidden');
+        }
+
+        function addToOutput(content) {
+            const line = document.createElement('div');
+            line.className = 'terminal-line';
+            line.innerHTML = content;
+            terminalOutput.appendChild(line);
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }
+
+        function executeCommand(cmd) {
+            const trimmedCmd = cmd.trim().toLowerCase();
+            
+            // Ajoute la commande à l'historique
+            if (trimmedCmd) {
+                commandHistory.push(cmd);
+                historyIndex = commandHistory.length;
+            }
+
+            // Affiche la commande tapée
+            addToOutput(`<span class="terminal-prompt">$</span> <span class="terminal-command">${cmd}</span>`);
+
+            if (!trimmedCmd) return;
+
+            // Easter eggs
+            if (easterEggs[trimmedCmd]) {
+                addToOutput(`<div class="terminal-info">${easterEggs[trimmedCmd]}</div>`);
+                return;
+            }
+
+            // Commandes normales
+            if (commands[trimmedCmd]) {
+                const result = commands[trimmedCmd].execute();
+                if (result) {
+                    addToOutput(result);
+                }
+            } else {
+                addToOutput(`<div class="terminal-error">Commande inconnue: "${cmd}". Tapez "help" pour voir les commandes disponibles.</div>`);
+            }
+        }
+
+        // Event listener pour l'input
+        terminalInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                executeCommand(terminalInput.value);
+                terminalInput.value = '';
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    terminalInput.value = commandHistory[historyIndex];
+                }
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    terminalInput.value = commandHistory[historyIndex];
+                } else {
+                    historyIndex = commandHistory.length;
+                    terminalInput.value = '';
+                }
+            } else if (e.key === 'Tab') {
+                e.preventDefault();
+                const value = terminalInput.value.toLowerCase();
+                const matches = Object.keys(commands).filter(cmd => cmd.startsWith(value));
+                if (matches.length === 1) {
+                    terminalInput.value = matches[0];
+                }
+            }
+        });
+
+        // Effet Matrix
+        function activateMatrix() {
+            const canvas = document.createElement('canvas');
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            canvas.style.zIndex = '99999';
+            canvas.style.pointerEvents = 'none';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const letters = 'ARTLEBOSS2•GITHUB•PORTFOLIO•HTML•CSS•JS•01•10•11•00';
+            const fontSize = 14;
+            const columns = canvas.width / fontSize;
+            const drops = Array(Math.floor(columns)).fill(1);
+
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#4ade80';
+                ctx.font = fontSize + 'px JetBrains Mono';
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = letters[Math.floor(Math.random() * letters.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+
+            const interval = setInterval(draw, 33);
+
+            // Fermer avec ESC
+            const closeMatrix = (e) => {
+                if (e.key === 'Escape') {
+                    clearInterval(interval);
+                    canvas.remove();
+                    document.removeEventListener('keydown', closeMatrix);
+                }
+            };
+            document.addEventListener('keydown', closeMatrix);
+        }
+
+        // Ouvrir le terminal automatiquement après 3 secondes
+        setTimeout(() => {
+            terminal.classList.remove('minimized');
+        }, 3000);
+
+        // ========== CURSEUR PERSONNALISÉ ==========
         const cursor = document.querySelector('.cursor');
         const follower = document.querySelector('.cursor-follower');
         let mouseX = 0, mouseY = 0;
