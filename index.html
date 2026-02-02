@@ -591,7 +591,7 @@
             <div class="social-links">
                 <a href="https://github.com/Artleboss2" target="_blank">GitHub</a>
                 <a href="https://linkedin.com/in/votre-profil" target="_blank">LinkedIn</a>
-                <a href="mailto:votre@email.com">Email</a>
+                <a href="/cdn-cgi/l/email-protection#2e58415a5c4b6e4b434f4742004d4143">Email</a>
                 <a href="https://discord.com" target="_blank">Discord</a>
             </div>
             <div class="copyright">
@@ -600,7 +600,7 @@
         </div>
     </footer>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // Curseur personnalisé
         const cursor = document.querySelector('.cursor');
         const follower = document.querySelector('.cursor-follower');
@@ -614,16 +614,18 @@
         });
 
         // Animation de clic
-        document.addEventListener('mousedown', () => {
+        document.addEventListener('mousedown', (e) => {
             cursor.classList.add('click');
-            follower.style.transform = `translate(${followerX - 20}px, ${followerY - 20}px) scale(0.8)`;
+            cursor.style.transform = `translate(${e.clientX - 4}px, ${e.clientY - 4}px)`;
+            follower.style.transition = 'all 0.15s cubic-bezier(0.23, 1, 0.32, 1)';
+            follower.style.transform = `translate(${e.clientX - 20}px, ${e.clientY - 20}px) scale(0.8)`;
         });
 
         document.addEventListener('mouseup', () => {
             setTimeout(() => {
                 cursor.classList.remove('click');
             }, 400);
-            follower.style.transform = `translate(${followerX - 20}px, ${followerY - 20}px) scale(1)`;
+            follower.style.transition = 'all 0.3s cubic-bezier(0.23, 1, 0.32, 1)';
         });
 
         // Animation du follower avec délai
@@ -733,7 +735,7 @@
         document.querySelectorAll('.project-card, .skill-category').forEach(el => {
             el.style.opacity = '0';
             el.style.transform = 'translateY(30px)';
-            el.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                el.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
             observer.observe(el);
         });
     </script>
