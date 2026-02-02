@@ -308,6 +308,35 @@
             color: var(--accent);
         }
 
+        .project-details-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .project-details-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .project-details-link:hover {
+            color: var(--accent);
+        }
+
+        .project-details-link:hover::after {
+            width: 100%;
+        }
+
         /* Section compétences */
         .skills {
             padding: 6rem 3rem;
@@ -774,6 +803,7 @@
                     <span class="tech-tag">Game Design</span>
                     <span class="tech-tag">3D Textures</span>
                 </div>
+                <a href="project-bloxd.html" class="project-details-link">Voir les détails →</a>
             </div>
 
             <div class="project-card">
@@ -786,6 +816,7 @@
                     <span class="tech-tag">Automation</span>
                     <span class="tech-tag">Windows</span>
                 </div>
+                <a href="project-batch.html" class="project-details-link">Voir les détails →</a>
             </div>
 
             <div class="project-card">
@@ -798,6 +829,7 @@
                     <span class="tech-tag">JavaScript</span>
                     <span class="tech-tag">Animations</span>
                 </div>
+                <a href="project-portfolio.html" class="project-details-link">Voir les détails →</a>
             </div>
 
             <div class="project-card">
