@@ -456,6 +456,107 @@
             box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
         }
 
+        /* Jeu Snake */
+        .snake-game-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 10, 10, 0.98);
+            border: 2px solid var(--accent);
+            padding: 2rem;
+            z-index: 10000;
+            display: none;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        .snake-game-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .snake-header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .snake-header h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+        }
+
+        .snake-score {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .snake-canvas {
+            display: grid;
+            gap: 2px;
+            background: #0a0a0a;
+            border: 1px solid var(--border);
+            margin: 0 auto;
+        }
+
+        .snake-cell {
+            width: 20px;
+            height: 20px;
+            background: transparent;
+            transition: background 0.1s;
+        }
+
+        .snake-cell.snake {
+            background: #4ade80;
+            box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+        }
+
+        .snake-cell.food {
+            background: #ef4444;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+        }
+
+        .snake-controls {
+            margin-top: 1rem;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        .snake-close {
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .snake-close button {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 0.5rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .snake-close button:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
         .terminal-container.minimized {
             transform: translateY(calc(100% - 40px));
         }
@@ -792,6 +893,21 @@
         </div>
     </div>
 
+    <!-- Jeu Snake -->
+    <div class="snake-game-container" id="snakeGame">
+        <div class="snake-header">
+            <h3>🐍 SNAKE GAME</h3>
+            <div class="snake-score">Score: <span id="snakeScore">0</span></div>
+        </div>
+        <div class="snake-canvas" id="snakeCanvas"></div>
+        <div class="snake-controls">
+            Utilisez les flèches ← ↑ → ↓ pour jouer
+        </div>
+        <div class="snake-close">
+            <button onclick="closeSnake()">Fermer (ESC)</button>
+        </div>
+    </div>
+
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // ========== TERMINAL INTERACTIF ==========
         const terminal = document.getElementById('terminal');
@@ -818,6 +934,7 @@
                     • whoami - Qui suis-je?<br>
                     • social - Liens vers mes réseaux sociaux<br>
                     • matrix - Active l'effet Matrix 🟢<br>
+                    • snake - Lance le jeu Snake 🐍<br>
                     </div>`;
                 }
             },
@@ -914,7 +1031,14 @@
                 description: 'Active l\'effet Matrix',
                 execute: () => {
                     activateMatrix();
-                    return `<div class="terminal-success">Effet Matrix activé! Appuyez sur ESC pour quitter.</div>`;
+                    return `<div class="terminal-success">Effet Matrix activé! Il s'arrêtera automatiquement après 10 secondes ou appuyez sur ESC.</div>`;
+                }
+            },
+            snake: {
+                description: 'Lance le jeu Snake',
+                execute: () => {
+                    startSnake();
+                    return `<div class="terminal-success">Lancement du jeu Snake! Utilisez les flèches pour jouer.</div>`;
                 }
             }
         };
@@ -1062,7 +1186,177 @@
                 }
             };
             document.addEventListener('keydown', closeMatrix);
+
+            // Arrêter automatiquement après 10 secondes
+            setTimeout(() => {
+                clearInterval(interval);
+                canvas.remove();
+                document.removeEventListener('keydown', closeMatrix);
+            }, 10000);
         }
+
+        // ========== JEU SNAKE ==========
+        const snakeGameContainer = document.getElementById('snakeGame');
+        const snakeCanvas = document.getElementById('snakeCanvas');
+        const snakeScoreDisplay = document.getElementById('snakeScore');
+        const gridSize = 20;
+        const cellCount = gridSize * gridSize;
+        let snake = [{x: 10, y: 10}];
+        let food = {x: 15, y: 15};
+        let direction = {x: 1, y: 0};
+        let nextDirection = {x: 1, y: 0};
+        let score = 0;
+        let gameLoop = null;
+        let gameSpeed = 150;
+
+        function startSnake() {
+            // Réinitialiser le jeu
+            snake = [{x: 10, y: 10}];
+            food = generateFood();
+            direction = {x: 1, y: 0};
+            nextDirection = {x: 1, y: 0};
+            score = 0;
+            gameSpeed = 150;
+            snakeScoreDisplay.textContent = score;
+
+            // Créer la grille
+            snakeCanvas.innerHTML = '';
+            snakeCanvas.style.gridTemplateColumns = `repeat(${gridSize}, 20px)`;
+            snakeCanvas.style.gridTemplateRows = `repeat(${gridSize}, 20px)`;
+
+            for (let i = 0; i < cellCount; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'snake-cell';
+                cell.dataset.index = i;
+                snakeCanvas.appendChild(cell);
+            }
+
+            // Afficher le jeu
+            snakeGameContainer.classList.add('active');
+
+            // Démarrer la boucle de jeu
+            if (gameLoop) clearInterval(gameLoop);
+            gameLoop = setInterval(updateSnake, gameSpeed);
+
+            renderSnake();
+        }
+
+        function closeSnake() {
+            snakeGameContainer.classList.remove('active');
+            if (gameLoop) {
+                clearInterval(gameLoop);
+                gameLoop = null;
+            }
+        }
+
+        function generateFood() {
+            let newFood;
+            do {
+                newFood = {
+                    x: Math.floor(Math.random() * gridSize),
+                    y: Math.floor(Math.random() * gridSize)
+                };
+            } while (snake.some(segment => segment.x === newFood.x && segment.y === newFood.y));
+            return newFood;
+        }
+
+        function updateSnake() {
+            direction = nextDirection;
+
+            // Nouvelle position de la tête
+            const head = {
+                x: snake[0].x + direction.x,
+                y: snake[0].y + direction.y
+            };
+
+            // Vérifier les collisions avec les murs
+            if (head.x < 0 || head.x >= gridSize || head.y < 0 || head.y >= gridSize) {
+                gameOver();
+                return;
+            }
+
+            // Vérifier les collisions avec soi-même
+            if (snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+                gameOver();
+                return;
+            }
+
+            // Ajouter la nouvelle tête
+            snake.unshift(head);
+
+            // Vérifier si on mange la nourriture
+            if (head.x === food.x && head.y === food.y) {
+                score += 10;
+                snakeScoreDisplay.textContent = score;
+                food = generateFood();
+                
+                // Augmenter la vitesse légèrement
+                if (score % 50 === 0 && gameSpeed > 50) {
+                    gameSpeed -= 10;
+                    clearInterval(gameLoop);
+                    gameLoop = setInterval(updateSnake, gameSpeed);
+                }
+            } else {
+                // Enlever la queue
+                snake.pop();
+            }
+
+            renderSnake();
+        }
+
+        function renderSnake() {
+            // Effacer toutes les cellules
+            document.querySelectorAll('.snake-cell').forEach(cell => {
+                cell.classList.remove('snake', 'food');
+            });
+
+            // Dessiner le serpent
+            snake.forEach(segment => {
+                const index = segment.y * gridSize + segment.x;
+                const cell = document.querySelector(`[data-index="${index}"]`);
+                if (cell) cell.classList.add('snake');
+            });
+
+            // Dessiner la nourriture
+            const foodIndex = food.y * gridSize + food.x;
+            const foodCell = document.querySelector(`[data-index="${foodIndex}"]`);
+            if (foodCell) foodCell.classList.add('food');
+        }
+
+        function gameOver() {
+            clearInterval(gameLoop);
+            gameLoop = null;
+            alert(`Game Over! Score final: ${score}\n\nAppuyez sur OK puis tapez "snake" dans le terminal pour rejouer!`);
+            closeSnake();
+        }
+
+        // Contrôles du snake
+        document.addEventListener('keydown', (e) => {
+            if (!snakeGameContainer.classList.contains('active')) return;
+
+            switch(e.key) {
+                case 'ArrowUp':
+                    e.preventDefault();
+                    if (direction.y === 0) nextDirection = {x: 0, y: -1};
+                    break;
+                case 'ArrowDown':
+                    e.preventDefault();
+                    if (direction.y === 0) nextDirection = {x: 0, y: 1};
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    if (direction.x === 0) nextDirection = {x: -1, y: 0};
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    if (direction.x === 0) nextDirection = {x: 1, y: 0};
+                    break;
+                case 'Escape':
+                    e.preventDefault();
+                    closeSnake();
+                    break;
+            }
+        });
 
         // Ouvrir le terminal automatiquement après 3 secondes
         setTimeout(() => {
