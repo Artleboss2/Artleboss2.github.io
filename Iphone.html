@@ -2,27 +2,31 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon App Expo en Grand</title>
+    <title>Mon iPhone Géant</title>
     <style>
-        /* Supprime les marges et centre le simulateur */
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
             width: 100%;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #000000; /* Fond noir profond */
+            justify-content: center; /* Centre horizontalement */
+            align-items: center;     /* Centre verticalement */
+            background-color: #000;  /* Fond noir pour l'immersion */
             overflow: hidden;
         }
 
-        /* Conteneur pour l'iframe */
-        .snack-container {
-            width: 100vw;   /* Largeur totale de la fenêtre */
-            height: 100vh;  /* Hauteur totale de la fenêtre */
-            border: none;
+        .iphone-frame {
+            /* On définit une taille fixe proportionnelle à un iPhone */
+            width: 450px; 
+            height: 95vh; /* Prend 95% de la hauteur de ton écran */
+            
+            /* On arrondit les bords pour simuler le téléphone */
+            border-radius: 50px;
+            border: 10px solid #222; /* Contour du téléphone */
+            box-shadow: 0 0 50px rgba(255,255,255,0.1);
+            overflow: hidden;
+            position: relative;
         }
 
         iframe {
@@ -34,11 +38,12 @@
 </head>
 <body>
 
-    <iframe 
-        src="https://snack.expo.dev/@artleboss22/to-do-list?platform=ios&theme=dark&preview=true" 
-        allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-        class="snack-container">
-    </iframe>
+    <div class="iphone-frame">
+        <iframe 
+            src="https://snack.expo.dev/@artleboss22/to-do-list?platform=ios&theme=dark&preview=true" 
+            allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb">
+        </iframe>
+    </div>
 
 </body>
 </html>
