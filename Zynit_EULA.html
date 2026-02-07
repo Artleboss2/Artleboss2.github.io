@@ -3,115 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EULA - Zynit</title>
+    <title>Zynit — Legal EULA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: 0 auto; padding: 30px; background-color: #f4f7f6; }
-        .lang-switch { text-align: right; margin-bottom: 20px; }
-        .lang-switch button { padding: 10px 20px; cursor: pointer; border: 1px solid #3498db; background: white; color: #3498db; border-radius: 5px; font-weight: bold; transition: 0.3s; }
-        .lang-switch button:hover { background: #3498db; color: white; }
-        .contract-box { border: 1px solid #ddd; padding: 40px; border-radius: 10px; background: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; font-size: 24px; }
-        h2 { color: #2980b9; font-size: 18px; margin-top: 25px; text-transform: uppercase; }
-        hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
-        .highlight { background-color: #fdf2f2; padding: 15px; border-left: 5px solid #e74c3c; font-weight: bold; margin: 20px 0; }
+        :root {
+            --bg: #0a0a0a;
+            --text: #e8e8e8;
+            --text-dim: #888;
+            --accent: #fff;
+            --border: #1a1a1a;
+            --card-bg: #0f0f0f;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        /* Grille de fond pour rester dans le thème */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 4rem auto;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 3rem;
+            position: relative;
+        }
+
+        .header-legal {
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 2rem;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .meta-info {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin: 2.5rem 0 1rem 0;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        h2::before {
+            content: '';
+            width: 20px;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        p, li {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        .warning-box {
+            border: 1px solid var(--danger);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            background: rgba(239, 68, 68, 0.05);
+            font-size: 0.85rem;
+        }
+
+        .warning-box strong {
+            color: var(--danger);
+        }
+
+        .lang-nav {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+        }
+
+        .btn-lang {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            padding: 0.5rem 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-lang:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        ul {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            margin-top: 4rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
         [lang="en"] { display: none; }
     </style>
 </head>
 <body>
 
-<div class="lang-switch">
-    <button onclick="switchLang('fr')">FRANÇAIS</button>
-    <button onclick="switchLang('en')">ENGLISH</button>
-</div>
+<div class="grid-bg"></div>
 
-<div class="contract-box">
-    <div id="content-fr" lang="fr">
-        <h1>CONTRAT DE LICENCE UTILISATEUR FINAL (CLUF) – ZYNIT</h1>
-        <p><strong>DATE DE DERNIÈRE MISE À JOUR :</strong> 7 FÉVRIER 2026</p>
-        <p><strong>PROPRIÉTAIRE ET CONCÉDANT :</strong> ARTHUR GODART</p>
-        <p><strong>JURIDICTION :</strong> MONTRÉAL, QUÉBEC, CANADA</p>
-        
-        <div class="highlight">
-            AVIS JURIDIQUE À L'UTILISATEUR : CE DOCUMENT EST UN CONTRAT LÉGAL. EN CLIQUANT SUR « J'ACCEPTE », EN CRÉANT UN COMPTE OU EN UTILISANT L'APPLICATION « ZYNIT », VOUS ACCEPTEZ D'ÊTRE LIÉ PAR TOUTES LES CONDITIONS CI-DESSOUS.
-        </div>
-
-        <hr>
-
-        <h2>ARTICLE 1. PROPRIÉTÉ EXCLUSIVE ET DROITS D'AUTEUR</h2>
-        <p>L'application Zynit, incluant sans s'y limiter son code source, son architecture, ses algorithmes, ses interfaces visuelles, ses logos, et ses bases de données, est la propriété exclusive et totale d'Arthur Godart. L'Utilisateur reconnaît que l'Application est protégée par la Loi sur le droit d'auteur du Canada et par les traités internationaux. Aucun droit, titre ou intérêt n'est transféré à l'Utilisateur, hormis le droit d'usage limité concédé par cette licence.</p>
-
-        <h2>ARTICLE 2. RESTRICTIONS ET POURSUITES JUDICIAIRES</h2>
-        <p><strong>2.1. Interdictions de copie :</strong> Il est strictement interdit de copier, reproduire, modifier, adapter, traduire ou créer des œuvres dérivées basées sur tout ou partie du code de base de Zynit.</p>
-        <p><strong>2.2. Ingénierie inverse :</strong> L'Utilisateur s'interdit de décompiler, désassembler ou pratiquer l'ingénierie inverse sur l'Application.</p>
-        <p><strong>2.3. Sanctions :</strong> Toute tentative de vol de code source ou de copie illégale fera l'objet de poursuites judiciaires immédiates devant les tribunaux compétents de Montréal pour contrefaçon, avec demande de dommages-intérêts punitifs et mesures d'injonction.</p>
-
-        <h2>ARTICLE 3. RESPONSABILITÉ DU CONTENU ET USAGE ILLÉGAL</h2>
-        <p><strong>3.1. Neutralité du Concédant :</strong> Arthur Godart n'est lié à aucune activité, aucun texte ou aucune donnée saisis par l'Utilisateur dans l'Application. L'Utilisateur est le seul responsable du contenu qu'il génère.</p>
-        <p><strong>3.2. Usage illégal :</strong> L'utilisation de Zynit pour organiser, stocker ou promouvoir des activités illégales selon les lois canadiennes est strictement interdite.</p>
-        <p><strong>3.3. Coopération judiciaire :</strong> En cas d'activité suspectée illégale, le Concédant se réserve le droit de collaborer pleinement avec les autorités judiciaires et de leur transmettre toute donnée nécessaire à l'identification de l'auteur.</p>
-
-        <h2>ARTICLE 4. COLLECTE ET PROTECTION DES DONNÉES (LOI 25)</h2>
-        <p>Conformément aux lois du Québec sur la protection des renseignements personnels, le Concédant collecte les données essentielles suivantes :</p>
-        <ul>
-            <li><strong>Identifiants :</strong> Adresse courriel (pour la gestion du compte) et Mot de passe (stocké de façon cryptée).</li>
-            <li><strong>Données Système :</strong> Type d'appareil et préférences d'affichage (pour le thème clair/sombre).</li>
-            <li><strong>Sécurité et Identification :</strong> L'adresse IP est collectée pour assurer la sécurité du compte et pour permettre d'associer une activité illégale à un utilisateur précis en cas de nécessité légale.</li>
-        </ul>
-
-        <h2>ARTICLE 5. CONDITIONS FINANCIÈRES ET REMBOURSEMENTS</h2>
-        <p><strong>5.1. Plateformes tierces :</strong> Pour tout achat via l'App Store ou Google Play, les conditions de ces plateformes s'appliquent.</p>
-        <p><strong>5.2. Achats directs et frais de gestion :</strong> Pour toute transaction traitée directement par le Concédant, l'Utilisateur accepte qu'en cas de remboursement, des frais de traitement administratif de 5% du montant total (ex: 5$ pour 100$) seront retenus par Arthur Godart.</p>
-
-        <h2>ARTICLE 6. LIMITATION DE RESPONSABILITÉ</h2>
-        <p>DANS LA MESURE PERMISE PAR LA LOI, ARTHUR GODART NE PEUT ÊTRE TENU RESPONSABLE DES DOMMAGES DIRECTS OU INDIRECTS RÉSULTANT DE L'UTILISATION DE L'APPLICATION. L'APPLICATION EST FOURNIE « TELLE QUELLE », SANS GARANTIE D'AUCUNE SORTE.</p>
-
-        <h2>ARTICLE 7. DROIT APPLICABLE ET JURIDICTION</h2>
-        <p>Le présent contrat est régi par les lois de la Province de Québec et les lois fédérales du Canada. Tout litige découlant de ce contrat sera soumis à la compétence exclusive des tribunaux du district judiciaire de Montréal, Québec.</p>
-
-        <h2>ARTICLE 8. LANGUE</h2>
-        <p>Les parties ont expressément exigé que ce contrat soit rédigé en langue française. <em>The parties have expressly required that this agreement be drafted in French.</em></p>
+<div class="container">
+    <div class="lang-nav">
+        <button class="btn-lang" onclick="setLang('fr')">FR</button>
+        <button class="btn-lang" onclick="setLang('en')">EN</button>
     </div>
 
-    <div id="content-en" lang="en">
-        <h1>END USER LICENSE AGREEMENT (EULA) – ZYNIT</h1>
-        <p><strong>LAST UPDATED:</strong> FEBRUARY 7, 2026</p>
-        <p><strong>OWNER AND LICENSOR:</strong> ARTHUR GODART</p>
-        <p><strong>JURISDICTION:</strong> MONTREAL, QUEBEC, CANADA</p>
-        
-        <div class="highlight">
-            LEGAL NOTICE: THIS IS A BINDING CONTRACT. BY CLICKING "I AGREE", CREATING AN ACCOUNT, OR USING "ZYNIT", YOU AGREE TO BE BOUND BY ALL TERMS BELOW.
+    <div id="fr-content" lang="fr">
+        <div class="header-legal">
+            <div class="meta-info">Legal Document // Zynit</div>
+            <h1>Contrat de Licence Utilisateur Final (CLUF)</h1>
+            <p>Dernière mise à jour : 7 Février 2026</p>
         </div>
 
-        <hr>
+        <div class="warning-box">
+            <strong>AVIS JURIDIQUE :</strong> Ce document est un contrat légal. En utilisant l'application « Zynit », vous acceptez d'être lié par ces conditions. Si vous n'acceptez pas, cessez immédiatement toute utilisation.
+        </div>
 
-        <h2>ARTICLE 1. EXCLUSIVE OWNERSHIP</h2>
-        <p>The Zynit application, its source code, architecture, and design are the exclusive property of Arthur Godart. It is protected by Canadian copyright laws.</p>
+        <h2>Article 1. Propriété Exclusive</h2>
+        <p>L'application Zynit, incluant son code source, architecture et interfaces, est la propriété exclusive d'Arthur Godart. Aucune reproduction ou copie n'est autorisée sous peine de poursuites judiciaires immédiates devant les tribunaux de Montréal.</p>
 
-        <h2>ARTICLE 2. RESTRICTIONS</h2>
-        <p>Copying, modifying, or reverse engineering the software is strictly prohibited. Legal action will be taken in Montreal for any theft of intellectual property.</p>
+        <h2>Article 2. Restrictions</h2>
+        <p>L'ingénierie inverse, la décompilation ou la tentative de vol de propriété intellectuelle sont strictement interdites et sanctionnées par la loi canadienne sur le droit d'auteur.</p>
 
-        <h2>ARTICLE 3. LIABILITY FOR CONTENT</h2>
-        <p>Arthur Godart is not liable for any illegal text or activity created by users. We will cooperate with law enforcement if illegal activity is suspected.</p>
+        <h2>Article 3. Responsabilité et Usage Illégal</h2>
+        <p>Arthur Godart n'est lié à aucune activité ou texte illégal saisi par l'utilisateur. En cas d'usage criminel, le concédant collaborera pleinement avec les autorités judiciaires.</p>
 
-        <h2>ARTICLE 4. DATA COLLECTION</h2>
-        <p>We collect email, encrypted passwords, system data, and IP addresses for security and identification purposes.</p>
+        <h2>Article 4. Collecte des Données (Loi 25)</h2>
+        <p>Sont collectés : Courriel, mot de passe (crypté), données système et <strong>Adresse IP</strong>. L'IP est conservée pour la sécurité et pour associer une activité illégale à une personne physique en cas de réquisition judiciaire.</p>
 
-        <h2>ARTICLE 5. REFUNDS</h2>
-        <p>A 5% administrative fee will be applied to any direct refund processed by the Owner.</p>
+        <h2>Article 5. Remboursements</h2>
+        <p>Pour tout remboursement direct, des frais de gestion administrative de 5% seront retenus.</p>
 
-        <h2>ARTICLE 6. LIMITATION OF LIABILITY</h2>
-        <p>The app is provided "AS IS" without any warranties. Arthur Godart is not liable for any damages resulting from its use.</p>
+        <h2>Article 6. Juridiction</h2>
+        <p>Ce contrat est régi par les lois de la Province de Québec. Le district judiciaire compétent est Montréal.</p>
+    </div>
 
-        <h2>ARTICLE 7. GOVERNING LAW</h2>
-        <p>This agreement is governed by the laws of Quebec, Canada. Courts of Montreal shall have exclusive jurisdiction.</p>
+    <div id="en-content" lang="en">
+        <div class="header-legal">
+            <div class="meta-info">Legal Document // Zynit</div>
+            <h1>End User License Agreement (EULA)</h1>
+            <p>Last update: February 7, 2026</p>
+        </div>
+
+        <div class="warning-box">
+            <strong>LEGAL NOTICE:</strong> This is a binding contract. By using "Zynit", you agree to these terms. If you do not agree, stop using the app immediately.
+        </div>
+
+        <h2>Article 1. Ownership</h2>
+        <p>Zynit and its source code are the exclusive property of Arthur Godart. Unauthorized copying will lead to legal action in Montreal courts.</p>
+
+        <h2>Article 2. Restrictions</h2>
+        <p>Reverse engineering or intellectual property theft is strictly prohibited under Canadian law.</p>
+
+        <h2>Article 3. Liability</h2>
+        <p>Arthur Godart is not responsible for any illegal activity or text generated by users. We will cooperate with law enforcement for any criminal investigation.</p>
+
+        <h2>Article 4. Data Collection</h2>
+        <p>We collect: Email, encrypted password, system data, and <strong>IP Address</strong>. IP is stored for security and identification purposes in case of illegal activity.</p>
+
+        <h2>Article 5. Refunds</h2>
+        <p>Direct refunds are subject to a 5% administrative processing fee.</p>
+
+        <h2>Article 6. Jurisdiction</h2>
+        <p>This agreement is governed by Quebec laws. The judicial district is Montreal.</p>
     </div>
 </div>
+
+<footer>
+    <p>Zynit — Propriété d'Arthur Godart</p>
+</footer>
 
 <script>
-    function switchLang(lang) {
-        document.getElementById('content-fr').style.display = (lang === 'fr') ? 'block' : 'none';
-        document.getElementById('content-en').style.display = (lang === 'en') ? 'block' : 'none';
-        document.documentElement.lang = lang;
+    function setLang(lang) {
+        document.getElementById('fr-content').style.display = (lang === 'fr') ? 'block' : 'none';
+        document.getElementById('en-content').style.display = (lang === 'en') ? 'block' : 'none';
     }
 </script>
 
