@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon App Expo en Grand</title>
+    <style>
+        /* Supprime les marges et centre le simulateur */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000000; /* Fond noir profond */
+            overflow: hidden;
+        }
+
+        /* Conteneur pour l'iframe */
+        .snack-container {
+            width: 100vw;   /* Largeur totale de la fenêtre */
+            height: 100vh;  /* Hauteur totale de la fenêtre */
+            border: none;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <iframe 
+        src="https://snack.expo.dev/@artleboss22/to-do-list?platform=ios&theme=dark&preview=true" 
+        allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+        class="snack-container">
+    </iframe>
+
+</body>
+</html>
