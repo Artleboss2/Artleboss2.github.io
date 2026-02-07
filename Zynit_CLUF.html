@@ -16,7 +16,7 @@
             -webkit-user-select: none;
         }
 
-        p, h1, h2, h3, li, .alert-box, .meta {
+        p, h1, h2, h3, li, .alert-box, .meta, .translatable {
             user-select: text;
             -webkit-user-select: text;
         }
@@ -334,6 +334,37 @@
             z-index: 0;
         }
 
+        /* Loading indicator */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             header {
@@ -386,6 +417,11 @@
     <!-- Grille de fond -->
     <div class="grid-bg"></div>
 
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
     <!-- En-tête -->
     <header>
         <div class="logo">ZYNIT LEGAL</div>
@@ -404,446 +440,119 @@
     <!-- Conteneur principal -->
     <div class="container">
         <div class="header-section">
-            <div class="meta" data-i18n="meta">Legal_Protocol // Zynit_Systems</div>
-            <h1 data-i18n="title">CONTRAT DE LICENCE UTILISATEUR FINAL (CLUF)</h1>
+            <div class="meta translatable">Legal_Protocol // Zynit_Systems</div>
+            <h1 class="translatable">CONTRAT DE LICENCE UTILISATEUR FINAL (CLUF)</h1>
             <div class="header-info">
-                <span data-i18n="updated">MISE À JOUR :</span> 07.02.2026<br>
-                <span data-i18n="licensor">CONCÉDANT :</span> ARTHUR GODART<br>
-                <span data-i18n="jurisdiction">JURIDICTION :</span> MONTRÉAL, QC, CA
+                <span class="translatable">MISE À JOUR :</span> 07.02.2026<br>
+                <span class="translatable">CONCÉDANT :</span> ARTHUR GODART<br>
+                <span class="translatable">JURIDICTION :</span> MONTRÉAL, QC, CA
             </div>
         </div>
 
         <div class="alert-box">
-            <div class="alert-title" data-i18n="alert.title">[AVIS JURIDIQUE]</div>
-            <p data-i18n="alert.content">CE DOCUMENT EST UN CONTRAT LÉGAL. EN CLIQUANT SUR « J'ACCEPTE », EN CRÉANT UN COMPTE OU EN UTILISANT L'APPLICATION « ZYNIT », VOUS ACCEPTEZ D'ÊTRE LIÉ PAR TOUTES LES CONDITIONS CI-DESSOUS. SI VOUS N'ACCEPTEZ PAS CES TERMES, VOUS NE DEVEZ PAS INSTALLER NI UTILISER L'APPLICATION.</p>
+            <div class="alert-title translatable">[AVIS JURIDIQUE]</div>
+            <p class="translatable">CE DOCUMENT EST UN CONTRAT LÉGAL. EN CLIQUANT SUR « J'ACCEPTE », EN CRÉANT UN COMPTE OU EN UTILISANT L'APPLICATION « ZYNIT », VOUS ACCEPTEZ D'ÊTRE LIÉ PAR TOUTES LES CONDITIONS CI-DESSOUS. SI VOUS N'ACCEPTEZ PAS CES TERMES, VOUS NE DEVEZ PAS INSTALLER NI UTILISER L'APPLICATION.</p>
         </div>
 
         <section>
-            <h3 data-i18n="article1.title">ARTICLE 1. PROPRIÉTÉ EXCLUSIVE ET DROITS D'AUTEUR</h3>
-            <p data-i18n="article1.content">L'application Zynit, incluant sans s'y limiter son code source, son architecture, ses algorithmes, ses interfaces visuelles, ses logos, et ses bases de données, est la propriété exclusive et totale d'Arthur Godart. L'Utilisateur reconnaît que l'Application est protégée par la Loi sur le droit d'auteur du Canada et par les traités internationaux. Aucun droit, titre ou intérêt n'est transféré à l'Utilisateur, hormis le droit d'usage limité concédé par cette licence.</p>
+            <h3 class="translatable">ARTICLE 1. PROPRIÉTÉ EXCLUSIVE ET DROITS D'AUTEUR</h3>
+            <p class="translatable">L'application Zynit, incluant sans s'y limiter son code source, son architecture, ses algorithmes, ses interfaces visuelles, ses logos, et ses bases de données, est la propriété exclusive et totale d'Arthur Godart. L'Utilisateur reconnaît que l'Application est protégée par la Loi sur le droit d'auteur du Canada et par les traités internationaux. Aucun droit, titre ou intérêt n'est transféré à l'Utilisateur, hormis le droit d'usage limité concédé par cette licence.</p>
         </section>
 
         <section>
-            <h3 data-i18n="article2.title">ARTICLE 2. RESTRICTIONS ET POURSUITES JUDICIAIRES</h3>
-            <p><strong data-i18n="article2.s1.title">2.1. Interdictions de copie :</strong> <span data-i18n="article2.s1.content">Il est strictement interdit de copier, reproduire, modifier, adapter, traduire ou créer des œuvres dérivées basées sur tout ou partie du code de base de Zynit.</span></p>
-            <p><strong data-i18n="article2.s2.title">2.2. Ingénierie inverse :</strong> <span data-i18n="article2.s2.content">L'Utilisateur s'interdit de décompiler, désassembler ou pratiquer l'ingénierie inverse sur l'Application.</span></p>
-            <p><strong data-i18n="article2.s3.title">2.3. Sanctions :</strong> <span data-i18n="article2.s3.content">Toute tentative de vol de code source ou de copie illégale fera l'objet de poursuites judiciaires immédiates devant les tribunaux compétents de Montréal pour contrefaçon, avec demande de dommages-intérêts punitifs et mesures d'injonction.</span></p>
+            <h3 class="translatable">ARTICLE 2. RESTRICTIONS ET POURSUITES JUDICIAIRES</h3>
+            <p><strong class="translatable">2.1. Interdictions de copie :</strong> <span class="translatable">Il est strictement interdit de copier, reproduire, modifier, adapter, traduire ou créer des œuvres dérivées basées sur tout ou partie du code de base de Zynit.</span></p>
+            <p><strong class="translatable">2.2. Ingénierie inverse :</strong> <span class="translatable">L'Utilisateur s'interdit de décompiler, désassembler ou pratiquer l'ingénierie inverse sur l'Application.</span></p>
+            <p><strong class="translatable">2.3. Sanctions :</strong> <span class="translatable">Toute tentative de vol de code source ou de copie illégale fera l'objet de poursuites judiciaires immédiates devant les tribunaux compétents de Montréal pour contrefaçon, avec demande de dommages-intérêts punitifs et mesures d'injonction.</span></p>
         </section>
 
         <section>
-            <h3 data-i18n="article3.title">ARTICLE 3. RESPONSABILITÉ ET USAGE ILLÉGAL</h3>
-            <p><strong data-i18n="article3.s1.title">3.1. Neutralité du Concédant :</strong> <span data-i18n="article3.s1.content">Arthur Godart n'est lié à aucune activité, aucun texte ou aucune donnée saisis par l'Utilisateur dans l'Application. L'Utilisateur est le seul responsable du contenu qu'il génère.</span></p>
-            <p><strong data-i18n="article3.s2.title">3.2. Usage illégal :</strong> <span data-i18n="article3.s2.content">L'utilisation de Zynit pour organiser, stocker ou promouvoir des activités illégales selon les lois canadiennes est strictement interdite.</span></p>
-            <p><strong data-i18n="article3.s3.title">3.3. Coopération judiciaire :</strong> <span data-i18n="article3.s3.content">En cas d'activité suspectée illégale, le Concédant se réserve le droit de collaborer pleinement avec les autorités judiciaires et de leur transmettre toute donnée nécessaire à l'identification de l'auteur.</span></p>
+            <h3 class="translatable">ARTICLE 3. RESPONSABILITÉ ET USAGE ILLÉGAL</h3>
+            <p><strong class="translatable">3.1. Neutralité du Concédant :</strong> <span class="translatable">Arthur Godart n'est lié à aucune activité, aucun texte ou aucune donnée saisis par l'Utilisateur dans l'Application. L'Utilisateur est le seul responsable du contenu qu'il génère.</span></p>
+            <p><strong class="translatable">3.2. Usage illégal :</strong> <span class="translatable">L'utilisation de Zynit pour organiser, stocker ou promouvoir des activités illégales selon les lois canadiennes est strictement interdite.</span></p>
+            <p><strong class="translatable">3.3. Coopération judiciaire :</strong> <span class="translatable">En cas d'activité suspectée illégale, le Concédant se réserve le droit de collaborer pleinement avec les autorités judiciaires et de leur transmettre toute donnée nécessaire à l'identification de l'auteur.</span></p>
         </section>
 
         <section>
-            <h3 data-i18n="article4.title">ARTICLE 4. COLLECTE ET PROTECTION DES DONNÉES (LOI 25)</h3>
-            <p data-i18n="article4.intro">Conformément aux lois du Québec sur la protection des renseignements personnels, le Concédant collecte les données essentielles suivantes :</p>
+            <h3 class="translatable">ARTICLE 4. COLLECTE ET PROTECTION DES DONNÉES (LOI 25)</h3>
+            <p class="translatable">Conformément aux lois du Québec sur la protection des renseignements personnels, le Concédant collecte les données essentielles suivantes :</p>
             <ul>
-                <li><strong data-i18n="article4.data1.title">Identifiants :</strong> <span data-i18n="article4.data1.content">Adresse courriel (pour la gestion du compte) et Mot de passe (stocké de façon cryptée pour l'authentification).</span></li>
-                <li><strong data-i18n="article4.data2.title">Données Système :</strong> <span data-i18n="article4.data2.content">Type d'appareil et préférences d'affichage (pour le thème clair/sombre et l'optimisation technique).</span></li>
-                <li><strong data-i18n="article4.data3.title">Sécurité :</strong> <span data-i18n="article4.data3.content">L'adresse IP est collectée pour assurer la sécurité du compte et pour permettre d'associer une activité illégale à un utilisateur précis en cas de nécessité légale.</span></li>
+                <li><strong class="translatable">Identifiants :</strong> <span class="translatable">Adresse courriel (pour la gestion du compte) et Mot de passe (stocké de façon cryptée pour l'authentification).</span></li>
+                <li><strong class="translatable">Données Système :</strong> <span class="translatable">Type d'appareil et préférences d'affichage (pour le thème clair/sombre et l'optimisation technique).</span></li>
+                <li><strong class="translatable">Sécurité :</strong> <span class="translatable">L'adresse IP est collectée pour assurer la sécurité du compte et pour permettre d'associer une activité illégale à un utilisateur précis en cas de nécessité légale.</span></li>
             </ul>
         </section>
 
         <section>
-            <h3 data-i18n="article5.title">ARTICLE 5. CONDITIONS FINANCIÈRES ET REMBOURSEMENTS</h3>
-            <p><strong data-i18n="article5.s1.title">5.1. Plateformes tierces :</strong> <span data-i18n="article5.s1.content">Pour tout achat via l'App Store ou Google Play, les conditions de ces plateformes s'appliquent.</span></p>
-            <p><strong data-i18n="article5.s2.title">5.2. Achats directs et frais de gestion :</strong> <span data-i18n="article5.s2.content">Pour toute transaction traitée directement par le Concédant, l'Utilisateur accepte qu'en cas de remboursement, des frais de traitement administratif de 5% du montant total seront retenus par Arthur Godart pour couvrir les coûts transactionnels.</span></p>
+            <h3 class="translatable">ARTICLE 5. CONDITIONS FINANCIÈRES ET REMBOURSEMENTS</h3>
+            <p><strong class="translatable">5.1. Plateformes tierces :</strong> <span class="translatable">Pour tout achat via l'App Store ou Google Play, les conditions de ces plateformes s'appliquent.</span></p>
+            <p><strong class="translatable">5.2. Achats directs et frais de gestion :</strong> <span class="translatable">Pour toute transaction traitée directement par le Concédant, l'Utilisateur accepte qu'en cas de remboursement, des frais de traitement administratif de 5% du montant total seront retenus par Arthur Godart pour couvrir les coûts transactionnels.</span></p>
         </section>
 
         <section>
-            <h3 data-i18n="article6.title">ARTICLE 6. LIMITATION DE RESPONSABILITÉ</h3>
-            <p data-i18n="article6.content">DANS LA MESURE PERMISE PAR LA LOI, ARTHUR GODART NE PEUT ÊTRE TENU RESPONSABLE DES DOMMAGES DIRECTS OU INDIRECTS RÉSULTANT DE L'UTILISATION DE L'APPLICATION. L'APPLICATION EST FOURNIE « TELLE QUELLE », SANS GARANTIE D'AUCUNE SORTE.</p>
+            <h3 class="translatable">ARTICLE 6. LIMITATION DE RESPONSABILITÉ</h3>
+            <p class="translatable">DANS LA MESURE PERMISE PAR LA LOI, ARTHUR GODART NE PEUT ÊTRE TENU RESPONSABLE DES DOMMAGES DIRECTS OU INDIRECTS RÉSULTANT DE L'UTILISATION DE L'APPLICATION. L'APPLICATION EST FOURNIE « TELLE QUELLE », SANS GARANTIE D'AUCUNE SORTE.</p>
         </section>
 
         <section>
-            <h3 data-i18n="article7.title">ARTICLE 7. JURIDICTION</h3>
-            <p data-i18n="article7.content">Le présent contrat est régi par les lois de la Province de Québec et les lois fédérales du Canada. Tout litige sera soumis à la compétence exclusive des tribunaux du district judiciaire de Montréal, Québec.</p>
+            <h3 class="translatable">ARTICLE 7. JURIDICTION</h3>
+            <p class="translatable">Le présent contrat est régi par les lois de la Province de Québec et les lois fédérales du Canada. Tout litige sera soumis à la compétence exclusive des tribunaux du district judiciaire de Montréal, Québec.</p>
         </section>
 
-        <p class="lang-footer" data-i18n="bilingual">
+        <p class="lang-footer translatable">
             Les parties ont expressément exigé que ce contrat soit rédigé en langue française. The parties have expressly required that this agreement be drafted in French.
         </p>
 
         <footer>
-            <span data-i18n="copyright">© 2026 ARTHUR GODART — TOUS DROITS RÉSERVÉS.</span>
+            <span class="translatable">© 2026 ARTHUR GODART — TOUS DROITS RÉSERVÉS.</span>
         </footer>
     </div>
 
     <script>
         // ========== SYSTÈME DE TRADUCTION ==========
         let currentLang = 'fr';
+        let originalTexts = {}; // Stocke les textes originaux en français
 
-        // Liste complète des langues disponibles
+        // Liste complète des 30 langues disponibles
         const languages = {
-            fr: { name: 'Français', flag: '🇫🇷' },
-            en: { name: 'English', flag: '🇬🇧' },
-            es: { name: 'Español', flag: '🇪🇸' },
-            de: { name: 'Deutsch', flag: '🇩🇪' },
-            it: { name: 'Italiano', flag: '🇮🇹' },
-            pt: { name: 'Português', flag: '🇵🇹' },
-            ru: { name: 'Русский', flag: '🇷🇺' },
-            zh: { name: '中文', flag: '🇨🇳' },
-            ja: { name: '日本語', flag: '🇯🇵' },
-            ko: { name: '한국어', flag: '🇰🇷' },
-            ar: { name: 'العربية', flag: '🇸🇦' },
-            hi: { name: 'हिन्दी', flag: '🇮🇳' },
-            nl: { name: 'Nederlands', flag: '🇳🇱' },
-            pl: { name: 'Polski', flag: '🇵🇱' },
-            tr: { name: 'Türkçe', flag: '🇹🇷' },
-            sv: { name: 'Svenska', flag: '🇸🇪' },
-            no: { name: 'Norsk', flag: '🇳🇴' },
-            da: { name: 'Dansk', flag: '🇩🇰' },
-            fi: { name: 'Suomi', flag: '🇫🇮' },
-            cs: { name: 'Čeština', flag: '🇨🇿' },
-            el: { name: 'Ελληνικά', flag: '🇬🇷' },
-            he: { name: 'עברית', flag: '🇮🇱' },
-            th: { name: 'ไทย', flag: '🇹🇭' },
-            vi: { name: 'Tiếng Việt', flag: '🇻🇳' },
-            id: { name: 'Bahasa Indonesia', flag: '🇮🇩' },
-            ms: { name: 'Bahasa Melayu', flag: '🇲🇾' },
-            uk: { name: 'Українська', flag: '🇺🇦' },
-            ro: { name: 'Română', flag: '🇷🇴' },
-            hu: { name: 'Magyar', flag: '🇭🇺' },
-            sk: { name: 'Slovenčina', flag: '🇸🇰' }
+            fr: { name: 'Français', flag: '🇫🇷', code: 'fr' },
+            en: { name: 'English', flag: '🇬🇧', code: 'en' },
+            es: { name: 'Español', flag: '🇪🇸', code: 'es' },
+            de: { name: 'Deutsch', flag: '🇩🇪', code: 'de' },
+            it: { name: 'Italiano', flag: '🇮🇹', code: 'it' },
+            pt: { name: 'Português', flag: '🇵🇹', code: 'pt' },
+            ru: { name: 'Русский', flag: '🇷🇺', code: 'ru' },
+            zh: { name: '中文', flag: '🇨🇳', code: 'zh-CN' },
+            ja: { name: '日本語', flag: '🇯🇵', code: 'ja' },
+            ko: { name: '한국어', flag: '🇰🇷', code: 'ko' },
+            ar: { name: 'العربية', flag: '🇸🇦', code: 'ar' },
+            hi: { name: 'हिन्दी', flag: '🇮🇳', code: 'hi' },
+            nl: { name: 'Nederlands', flag: '🇳🇱', code: 'nl' },
+            pl: { name: 'Polski', flag: '🇵🇱', code: 'pl' },
+            tr: { name: 'Türkçe', flag: '🇹🇷', code: 'tr' },
+            sv: { name: 'Svenska', flag: '🇸🇪', code: 'sv' },
+            no: { name: 'Norsk', flag: '🇳🇴', code: 'no' },
+            da: { name: 'Dansk', flag: '🇩🇰', code: 'da' },
+            fi: { name: 'Suomi', flag: '🇫🇮', code: 'fi' },
+            cs: { name: 'Čeština', flag: '🇨🇿', code: 'cs' },
+            el: { name: 'Ελληνικά', flag: '🇬🇷', code: 'el' },
+            he: { name: 'עברית', flag: '🇮🇱', code: 'he' },
+            th: { name: 'ไทย', flag: '🇹🇭', code: 'th' },
+            vi: { name: 'Tiếng Việt', flag: '🇻🇳', code: 'vi' },
+            id: { name: 'Bahasa Indonesia', flag: '🇮🇩', code: 'id' },
+            ms: { name: 'Bahasa Melayu', flag: '🇲🇾', code: 'ms' },
+            uk: { name: 'Українська', flag: '🇺🇦', code: 'uk' },
+            ro: { name: 'Română', flag: '🇷🇴', code: 'ro' },
+            hu: { name: 'Magyar', flag: '🇭🇺', code: 'hu' },
+            sk: { name: 'Slovenčina', flag: '🇸🇰', code: 'sk' }
         };
 
-        // Traductions
-        const translations = {
-            fr: {
-                meta: 'Legal_Protocol // Zynit_Systems',
-                title: 'CONTRAT DE LICENCE UTILISATEUR FINAL (CLUF)',
-                updated: 'MISE À JOUR :',
-                licensor: 'CONCÉDANT :',
-                jurisdiction: 'JURIDICTION :',
-                alert: {
-                    title: '[AVIS JURIDIQUE]',
-                    content: 'CE DOCUMENT EST UN CONTRAT LÉGAL. EN CLIQUANT SUR « J\'ACCEPTE », EN CRÉANT UN COMPTE OU EN UTILISANT L\'APPLICATION « ZYNIT », VOUS ACCEPTEZ D\'ÊTRE LIÉ PAR TOUTES LES CONDITIONS CI-DESSOUS. SI VOUS N\'ACCEPTEZ PAS CES TERMES, VOUS NE DEVEZ PAS INSTALLER NI UTILISER L\'APPLICATION.'
-                },
-                article1: {
-                    title: 'ARTICLE 1. PROPRIÉTÉ EXCLUSIVE ET DROITS D\'AUTEUR',
-                    content: 'L\'application Zynit, incluant sans s\'y limiter son code source, son architecture, ses algorithmes, ses interfaces visuelles, ses logos, et ses bases de données, est la propriété exclusive et totale d\'Arthur Godart. L\'Utilisateur reconnaît que l\'Application est protégée par la Loi sur le droit d\'auteur du Canada et par les traités internationaux. Aucun droit, titre ou intérêt n\'est transféré à l\'Utilisateur, hormis le droit d\'usage limité concédé par cette licence.'
-                },
-                article2: {
-                    title: 'ARTICLE 2. RESTRICTIONS ET POURSUITES JUDICIAIRES',
-                    s1: {
-                        title: '2.1. Interdictions de copie :',
-                        content: 'Il est strictement interdit de copier, reproduire, modifier, adapter, traduire ou créer des œuvres dérivées basées sur tout ou partie du code de base de Zynit.'
-                    },
-                    s2: {
-                        title: '2.2. Ingénierie inverse :',
-                        content: 'L\'Utilisateur s\'interdit de décompiler, désassembler ou pratiquer l\'ingénierie inverse sur l\'Application.'
-                    },
-                    s3: {
-                        title: '2.3. Sanctions :',
-                        content: 'Toute tentative de vol de code source ou de copie illégale fera l\'objet de poursuites judiciaires immédiates devant les tribunaux compétents de Montréal pour contrefaçon, avec demande de dommages-intérêts punitifs et mesures d\'injonction.'
-                    }
-                },
-                article3: {
-                    title: 'ARTICLE 3. RESPONSABILITÉ ET USAGE ILLÉGAL',
-                    s1: {
-                        title: '3.1. Neutralité du Concédant :',
-                        content: 'Arthur Godart n\'est lié à aucune activité, aucun texte ou aucune donnée saisis par l\'Utilisateur dans l\'Application. L\'Utilisateur est le seul responsable du contenu qu\'il génère.'
-                    },
-                    s2: {
-                        title: '3.2. Usage illégal :',
-                        content: 'L\'utilisation de Zynit pour organiser, stocker ou promouvoir des activités illégales selon les lois canadiennes est strictement interdite.'
-                    },
-                    s3: {
-                        title: '3.3. Coopération judiciaire :',
-                        content: 'En cas d\'activité suspectée illégale, le Concédant se réserve le droit de collaborer pleinement avec les autorités judiciaires et de leur transmettre toute donnée nécessaire à l\'identification de l\'auteur.'
-                    }
-                },
-                article4: {
-                    title: 'ARTICLE 4. COLLECTE ET PROTECTION DES DONNÉES (LOI 25)',
-                    intro: 'Conformément aux lois du Québec sur la protection des renseignements personnels, le Concédant collecte les données essentielles suivantes :',
-                    data1: {
-                        title: 'Identifiants :',
-                        content: 'Adresse courriel (pour la gestion du compte) et Mot de passe (stocké de façon cryptée pour l\'authentification).'
-                    },
-                    data2: {
-                        title: 'Données Système :',
-                        content: 'Type d\'appareil et préférences d\'affichage (pour le thème clair/sombre et l\'optimisation technique).'
-                    },
-                    data3: {
-                        title: 'Sécurité :',
-                        content: 'L\'adresse IP est collectée pour assurer la sécurité du compte et pour permettre d\'associer une activité illégale à un utilisateur précis en cas de nécessité légale.'
-                    }
-                },
-                article5: {
-                    title: 'ARTICLE 5. CONDITIONS FINANCIÈRES ET REMBOURSEMENTS',
-                    s1: {
-                        title: '5.1. Plateformes tierces :',
-                        content: 'Pour tout achat via l\'App Store ou Google Play, les conditions de ces plateformes s\'appliquent.'
-                    },
-                    s2: {
-                        title: '5.2. Achats directs et frais de gestion :',
-                        content: 'Pour toute transaction traitée directement par le Concédant, l\'Utilisateur accepte qu\'en cas de remboursement, des frais de traitement administratif de 5% du montant total seront retenus par Arthur Godart pour couvrir les coûts transactionnels.'
-                    }
-                },
-                article6: {
-                    title: 'ARTICLE 6. LIMITATION DE RESPONSABILITÉ',
-                    content: 'DANS LA MESURE PERMISE PAR LA LOI, ARTHUR GODART NE PEUT ÊTRE TENU RESPONSABLE DES DOMMAGES DIRECTS OU INDIRECTS RÉSULTANT DE L\'UTILISATION DE L\'APPLICATION. L\'APPLICATION EST FOURNIE « TELLE QUELLE », SANS GARANTIE D\'AUCUNE SORTE.'
-                },
-                article7: {
-                    title: 'ARTICLE 7. JURIDICTION',
-                    content: 'Le présent contrat est régi par les lois de la Province de Québec et les lois fédérales du Canada. Tout litige sera soumis à la compétence exclusive des tribunaux du district judiciaire de Montréal, Québec.'
-                },
-                bilingual: 'Les parties ont expressément exigé que ce contrat soit rédigé en langue française. The parties have expressly required that this agreement be drafted in French.',
-                copyright: '© 2026 ARTHUR GODART — TOUS DROITS RÉSERVÉS.'
-            },
-            en: {
-                meta: 'Legal_Protocol // Zynit_Systems',
-                title: 'END USER LICENSE AGREEMENT (EULA)',
-                updated: 'UPDATED:',
-                licensor: 'LICENSOR:',
-                jurisdiction: 'JURISDICTION:',
-                alert: {
-                    title: '[LEGAL NOTICE]',
-                    content: 'THIS DOCUMENT IS A LEGAL CONTRACT. BY CLICKING "I ACCEPT", CREATING AN ACCOUNT, OR USING THE "ZYNIT" APPLICATION, YOU AGREE TO BE BOUND BY ALL THE TERMS BELOW. IF YOU DO NOT ACCEPT THESE TERMS, YOU MUST NOT INSTALL OR USE THE APPLICATION.'
-                },
-                article1: {
-                    title: 'ARTICLE 1. EXCLUSIVE OWNERSHIP AND COPYRIGHT',
-                    content: 'The Zynit application, including but not limited to its source code, architecture, algorithms, visual interfaces, logos, and databases, is the exclusive and total property of Arthur Godart. The User acknowledges that the Application is protected by Canadian Copyright Law and international treaties. No right, title or interest is transferred to the User, except for the limited right of use granted by this license.'
-                },
-                article2: {
-                    title: 'ARTICLE 2. RESTRICTIONS AND LEGAL PROCEEDINGS',
-                    s1: {
-                        title: '2.1. Copy Prohibitions:',
-                        content: 'It is strictly forbidden to copy, reproduce, modify, adapt, translate or create derivative works based on all or part of the Zynit base code.'
-                    },
-                    s2: {
-                        title: '2.2. Reverse Engineering:',
-                        content: 'The User is prohibited from decompiling, disassembling or reverse engineering the Application.'
-                    },
-                    s3: {
-                        title: '2.3. Penalties:',
-                        content: 'Any attempt to steal source code or illegal copying will result in immediate legal action before the competent courts of Montreal for infringement, with a claim for punitive damages and injunctive measures.'
-                    }
-                },
-                article3: {
-                    title: 'ARTICLE 3. LIABILITY AND ILLEGAL USE',
-                    s1: {
-                        title: '3.1. Licensor Neutrality:',
-                        content: 'Arthur Godart is not associated with any activity, text or data entered by the User in the Application. The User is solely responsible for the content they generate.'
-                    },
-                    s2: {
-                        title: '3.2. Illegal Use:',
-                        content: 'The use of Zynit to organize, store or promote illegal activities under Canadian law is strictly prohibited.'
-                    },
-                    s3: {
-                        title: '3.3. Judicial Cooperation:',
-                        content: 'In the event of suspected illegal activity, the Licensor reserves the right to fully cooperate with judicial authorities and transmit any data necessary for the identification of the author.'
-                    }
-                },
-                article4: {
-                    title: 'ARTICLE 4. DATA COLLECTION AND PROTECTION (LAW 25)',
-                    intro: 'In accordance with Quebec laws on the protection of personal information, the Licensor collects the following essential data:',
-                    data1: {
-                        title: 'Identifiers:',
-                        content: 'Email address (for account management) and Password (stored encrypted for authentication).'
-                    },
-                    data2: {
-                        title: 'System Data:',
-                        content: 'Device type and display preferences (for light/dark theme and technical optimization).'
-                    },
-                    data3: {
-                        title: 'Security:',
-                        content: 'The IP address is collected to ensure account security and to allow linking illegal activity to a specific user in case of legal necessity.'
-                    }
-                },
-                article5: {
-                    title: 'ARTICLE 5. FINANCIAL CONDITIONS AND REFUNDS',
-                    s1: {
-                        title: '5.1. Third-Party Platforms:',
-                        content: 'For any purchase via the App Store or Google Play, the terms of these platforms apply.'
-                    },
-                    s2: {
-                        title: '5.2. Direct Purchases and Processing Fees:',
-                        content: 'For any transaction processed directly by the Licensor, the User agrees that in the event of a refund, administrative processing fees of 5% of the total amount will be retained by Arthur Godart to cover transactional costs.'
-                    }
-                },
-                article6: {
-                    title: 'ARTICLE 6. LIMITATION OF LIABILITY',
-                    content: 'TO THE EXTENT PERMITTED BY LAW, ARTHUR GODART CANNOT BE HELD LIABLE FOR DIRECT OR INDIRECT DAMAGES RESULTING FROM THE USE OF THE APPLICATION. THE APPLICATION IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.'
-                },
-                article7: {
-                    title: 'ARTICLE 7. JURISDICTION',
-                    content: 'This agreement is governed by the laws of the Province of Quebec and federal laws of Canada. Any dispute will be submitted to the exclusive jurisdiction of the courts of the judicial district of Montreal, Quebec.'
-                },
-                bilingual: 'The parties have expressly required that this agreement be drafted in French. Les parties ont expressément exigé que ce contrat soit rédigé en langue française.',
-                copyright: '© 2026 ARTHUR GODART — ALL RIGHTS RESERVED.'
-            },
-            es: {
-                meta: 'Protocolo_Legal // Sistemas_Zynit',
-                title: 'CONTRATO DE LICENCIA DE USUARIO FINAL (CLUF)',
-                updated: 'ACTUALIZACIÓN:',
-                licensor: 'LICENCIANTE:',
-                jurisdiction: 'JURISDICCIÓN:',
-                alert: {
-                    title: '[AVISO LEGAL]',
-                    content: 'ESTE DOCUMENTO ES UN CONTRATO LEGAL. AL HACER CLIC EN "ACEPTO", CREAR UNA CUENTA O USAR LA APLICACIÓN "ZYNIT", USTED ACEPTA ESTAR OBLIGADO POR TODOS LOS TÉRMINOS A CONTINUACIÓN. SI NO ACEPTA ESTOS TÉRMINOS, NO DEBE INSTALAR NI USAR LA APLICACIÓN.'
-                },
-                article1: {
-                    title: 'ARTÍCULO 1. PROPIEDAD EXCLUSIVA Y DERECHOS DE AUTOR',
-                    content: 'La aplicación Zynit, incluyendo pero no limitándose a su código fuente, arquitectura, algoritmos, interfaces visuales, logotipos y bases de datos, es propiedad exclusiva y total de Arthur Godart. El Usuario reconoce que la Aplicación está protegida por la Ley de Derechos de Autor de Canadá y por tratados internacionales. Ningún derecho, título o interés se transfiere al Usuario, excepto el derecho de uso limitado otorgado por esta licencia.'
-                },
-                article2: {
-                    title: 'ARTÍCULO 2. RESTRICCIONES Y PROCEDIMIENTOS LEGALES',
-                    s1: {
-                        title: '2.1. Prohibiciones de Copia:',
-                        content: 'Está estrictamente prohibido copiar, reproducir, modificar, adaptar, traducir o crear obras derivadas basadas en todo o parte del código base de Zynit.'
-                    },
-                    s2: {
-                        title: '2.2. Ingeniería Inversa:',
-                        content: 'El Usuario tiene prohibido descompilar, desensamblar o realizar ingeniería inversa de la Aplicación.'
-                    },
-                    s3: {
-                        title: '2.3. Sanciones:',
-                        content: 'Cualquier intento de robo de código fuente o copia ilegal resultará en acciones legales inmediatas ante los tribunales competentes de Montreal por infracción, con reclamación de daños punitivos y medidas cautelares.'
-                    }
-                },
-                article3: {
-                    title: 'ARTÍCULO 3. RESPONSABILIDAD Y USO ILEGAL',
-                    s1: {
-                        title: '3.1. Neutralidad del Licenciante:',
-                        content: 'Arthur Godart no está asociado con ninguna actividad, texto o dato ingresado por el Usuario en la Aplicación. El Usuario es el único responsable del contenido que genera.'
-                    },
-                    s2: {
-                        title: '3.2. Uso Ilegal:',
-                        content: 'El uso de Zynit para organizar, almacenar o promover actividades ilegales según las leyes canadienses está estrictamente prohibido.'
-                    },
-                    s3: {
-                        title: '3.3. Cooperación Judicial:',
-                        content: 'En caso de actividad ilegal sospechada, el Licenciante se reserva el derecho de cooperar plenamente con las autoridades judiciales y transmitir cualquier dato necesario para la identificación del autor.'
-                    }
-                },
-                article4: {
-                    title: 'ARTÍCULO 4. RECOPILACIÓN Y PROTECCIÓN DE DATOS (LEY 25)',
-                    intro: 'De acuerdo con las leyes de Quebec sobre la protección de información personal, el Licenciante recopila los siguientes datos esenciales:',
-                    data1: {
-                        title: 'Identificadores:',
-                        content: 'Dirección de correo electrónico (para gestión de cuenta) y Contraseña (almacenada encriptada para autenticación).'
-                    },
-                    data2: {
-                        title: 'Datos del Sistema:',
-                        content: 'Tipo de dispositivo y preferencias de visualización (para tema claro/oscuro y optimización técnica).'
-                    },
-                    data3: {
-                        title: 'Seguridad:',
-                        content: 'La dirección IP se recopila para garantizar la seguridad de la cuenta y permitir vincular actividad ilegal a un usuario específico en caso de necesidad legal.'
-                    }
-                },
-                article5: {
-                    title: 'ARTÍCULO 5. CONDICIONES FINANCIERAS Y REEMBOLSOS',
-                    s1: {
-                        title: '5.1. Plataformas de Terceros:',
-                        content: 'Para cualquier compra a través de App Store o Google Play, se aplican los términos de estas plataformas.'
-                    },
-                    s2: {
-                        title: '5.2. Compras Directas y Tarifas de Procesamiento:',
-                        content: 'Para cualquier transacción procesada directamente por el Licenciante, el Usuario acepta que en caso de reembolso, se retendrán tarifas administrativas de procesamiento del 5% del monto total por Arthur Godart para cubrir costos transaccionales.'
-                    }
-                },
-                article6: {
-                    title: 'ARTÍCULO 6. LIMITACIÓN DE RESPONSABILIDAD',
-                    content: 'EN LA MEDIDA PERMITIDA POR LA LEY, ARTHUR GODART NO PUEDE SER RESPONSABLE DE DAÑOS DIRECTOS O INDIRECTOS RESULTANTES DEL USO DE LA APLICACIÓN. LA APLICACIÓN SE PROPORCIONA "TAL CUAL", SIN GARANTÍA DE NINGÚN TIPO.'
-                },
-                article7: {
-                    title: 'ARTÍCULO 7. JURISDICCIÓN',
-                    content: 'Este acuerdo se rige por las leyes de la Provincia de Quebec y las leyes federales de Canadá. Cualquier disputa se someterá a la jurisdicción exclusiva de los tribunales del distrito judicial de Montreal, Quebec.'
-                },
-                bilingual: 'Las partes han requerido expresamente que este acuerdo se redacte en francés. Les parties ont expressément exigé que ce contrat soit rédigé en langue française.',
-                copyright: '© 2026 ARTHUR GODART — TODOS LOS DERECHOS RESERVADOS.'
-            },
-            de: {
-                meta: 'Rechts_Protokoll // Zynit_Systeme',
-                title: 'ENDBENUTZER-LIZENZVEREINBARUNG (EULA)',
-                updated: 'AKTUALISIERT:',
-                licensor: 'LIZENZGEBER:',
-                jurisdiction: 'GERICHTSBARKEIT:',
-                alert: {
-                    title: '[RECHTLICHER HINWEIS]',
-                    content: 'DIESES DOKUMENT IST EIN RECHTSVERBINDLICHER VERTRAG. DURCH KLICKEN AUF "ICH AKZEPTIERE", ERSTELLEN EINES KONTOS ODER VERWENDUNG DER ANWENDUNG "ZYNIT" STIMMEN SIE ZU, AN ALLE UNTENSTEHENDEN BEDINGUNGEN GEBUNDEN ZU SEIN. WENN SIE DIESE BEDINGUNGEN NICHT AKZEPTIEREN, DÜRFEN SIE DIE ANWENDUNG NICHT INSTALLIEREN ODER VERWENDEN.'
-                },
-                article1: {
-                    title: 'ARTIKEL 1. AUSSCHLIESSLICHES EIGENTUM UND URHEBERRECHT',
-                    content: 'Die Zynit-Anwendung, einschließlich aber nicht beschränkt auf ihren Quellcode, Architektur, Algorithmen, visuelle Schnittstellen, Logos und Datenbanken, ist ausschließliches und vollständiges Eigentum von Arthur Godart. Der Benutzer erkennt an, dass die Anwendung durch das kanadische Urheberrechtsgesetz und internationale Verträge geschützt ist. Kein Recht, Titel oder Interesse wird auf den Benutzer übertragen, außer dem durch diese Lizenz gewährten eingeschränkten Nutzungsrecht.'
-                },
-                article2: {
-                    title: 'ARTIKEL 2. BESCHRÄNKUNGEN UND GERICHTSVERFAHREN',
-                    s1: {
-                        title: '2.1. Kopierverbote:',
-                        content: 'Es ist strengstens verboten, den Zynit-Basiscode ganz oder teilweise zu kopieren, zu reproduzieren, zu modifizieren, anzupassen, zu übersetzen oder abgeleitete Werke zu erstellen.'
-                    },
-                    s2: {
-                        title: '2.2. Reverse Engineering:',
-                        content: 'Dem Benutzer ist es untersagt, die Anwendung zu dekompilieren, zu disassemblieren oder Reverse Engineering durchzuführen.'
-                    },
-                    s3: {
-                        title: '2.3. Strafen:',
-                        content: 'Jeder Versuch, Quellcode zu stehlen oder illegal zu kopieren, führt zu sofortigen rechtlichen Schritten vor den zuständigen Gerichten in Montreal wegen Verletzung, mit Anspruch auf Strafschadenersatz und einstweilige Verfügungen.'
-                    }
-                },
-                article3: {
-                    title: 'ARTIKEL 3. HAFTUNG UND ILLEGALE NUTZUNG',
-                    s1: {
-                        title: '3.1. Neutralität des Lizenzgebers:',
-                        content: 'Arthur Godart ist nicht mit Aktivitäten, Texten oder Daten verbunden, die vom Benutzer in der Anwendung eingegeben werden. Der Benutzer ist allein verantwortlich für die Inhalte, die er generiert.'
-                    },
-                    s2: {
-                        title: '3.2. Illegale Nutzung:',
-                        content: 'Die Verwendung von Zynit zur Organisation, Speicherung oder Förderung illegaler Aktivitäten nach kanadischem Recht ist strengstens verboten.'
-                    },
-                    s3: {
-                        title: '3.3. Justizielle Zusammenarbeit:',
-                        content: 'Im Falle vermuteter illegaler Aktivitäten behält sich der Lizenzgeber das Recht vor, vollständig mit den Justizbehörden zusammenzuarbeiten und alle zur Identifizierung des Urhebers erforderlichen Daten zu übermitteln.'
-                    }
-                },
-                article4: {
-                    title: 'ARTIKEL 4. DATENERFASSUNG UND -SCHUTZ (GESETZ 25)',
-                    intro: 'In Übereinstimmung mit den Gesetzen von Quebec zum Schutz personenbezogener Daten erfasst der Lizenzgeber folgende wesentliche Daten:',
-                    data1: {
-                        title: 'Kennungen:',
-                        content: 'E-Mail-Adresse (für Kontoverwaltung) und Passwort (verschlüsselt gespeichert zur Authentifizierung).'
-                    },
-                    data2: {
-                        title: 'Systemdaten:',
-                        content: 'Gerätetyp und Anzeigeeinstellungen (für Licht-/Dunkel-Thema und technische Optimierung).'
-                    },
-                    data3: {
-                        title: 'Sicherheit:',
-                        content: 'Die IP-Adresse wird erfasst, um die Kontosicherheit zu gewährleisten und illegale Aktivitäten im Falle rechtlicher Notwendigkeit einem bestimmten Benutzer zuzuordnen.'
-                    }
-                },
-                article5: {
-                    title: 'ARTIKEL 5. FINANZIELLE BEDINGUNGEN UND RÜCKERSTATTUNGEN',
-                    s1: {
-                        title: '5.1. Drittanbieter-Plattformen:',
-                        content: 'Für jeden Kauf über den App Store oder Google Play gelten die Bedingungen dieser Plattformen.'
-                    },
-                    s2: {
-                        title: '5.2. Direkte Käufe und Bearbeitungsgebühren:',
-                        content: 'Bei jeder vom Lizenzgeber direkt verarbeiteten Transaktion akzeptiert der Benutzer, dass im Falle einer Rückerstattung administrative Bearbeitungsgebühren von 5% des Gesamtbetrags von Arthur Godart einbehalten werden, um Transaktionskosten zu decken.'
-                    }
-                },
-                article6: {
-                    title: 'ARTIKEL 6. HAFTUNGSBESCHRÄNKUNG',
-                    content: 'SOWEIT GESETZLICH ZULÄSSIG, KANN ARTHUR GODART NICHT FÜR DIREKTE ODER INDIREKTE SCHÄDEN HAFTBAR GEMACHT WERDEN, DIE AUS DER NUTZUNG DER ANWENDUNG RESULTIEREN. DIE ANWENDUNG WIRD "WIE BESEHEN" BEREITGESTELLT, OHNE GARANTIE JEGLICHER ART.'
-                },
-                article7: {
-                    title: 'ARTIKEL 7. GERICHTSBARKEIT',
-                    content: 'Diese Vereinbarung unterliegt den Gesetzen der Provinz Quebec und den Bundesgesetzen Kanadas. Jeder Rechtsstreit wird der ausschließlichen Zuständigkeit der Gerichte des Gerichtsbezirks Montreal, Quebec, unterliegen.'
-                },
-                bilingual: 'Die Parteien haben ausdrücklich verlangt, dass diese Vereinbarung auf Französisch verfasst wird. Les parties ont expressément exigé que ce contrat soit rédigé en langue française.',
-                copyright: '© 2026 ARTHUR GODART — ALLE RECHTE VORBEHALTEN.'
-            },
-            // Ajoutez d'autres langues selon vos besoins...
-            // Pour les autres langues, vous pouvez utiliser un service de traduction automatique
-            // ou faire traduire professionnellement le contenu
-        };
+        // Sauvegarder les textes originaux au chargement
+        function saveOriginalTexts() {
+            document.querySelectorAll('.translatable').forEach((element, index) => {
+                originalTexts[index] = element.textContent;
+            });
+        }
 
         // Génération du dropdown de langues
         function generateLangDropdown() {
@@ -879,16 +588,56 @@
             }
         });
 
-        function changeLang(lang) {
-            if (!translations[lang]) {
-                alert('Cette traduction n\'est pas encore disponible. / This translation is not yet available.');
-                return;
+        // Traduction via Google Translate API (client-side)
+        async function translateText(text, targetLang) {
+            // Utilise Google Translate via l'API gratuite MyMemory
+            // Alternative: vous pouvez intégrer Google Translate API officielle avec votre clé
+            try {
+                const response = await fetch(
+                    `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=fr|${targetLang}`
+                );
+                const data = await response.json();
+                return data.responseData.translatedText || text;
+            } catch (error) {
+                console.error('Erreur de traduction:', error);
+                return text; // Retourne le texte original en cas d'erreur
             }
-            
+        }
+
+        async function changeLang(lang) {
+            if (lang === currentLang) return;
+
+            // Afficher le loading
+            document.getElementById('loadingOverlay').classList.add('active');
+
             currentLang = lang;
             document.getElementById('currentFlag').textContent = languages[lang].flag;
             document.getElementById('currentLang').textContent = languages[lang].name;
-            updateContent();
+
+            // Si on revient au français, restaurer les textes originaux
+            if (lang === 'fr') {
+                document.querySelectorAll('.translatable').forEach((element, index) => {
+                    element.textContent = originalTexts[index];
+                });
+                document.getElementById('loadingOverlay').classList.remove('active');
+            } else {
+                // Traduire tous les éléments
+                const translatableElements = document.querySelectorAll('.translatable');
+                const targetLangCode = languages[lang].code;
+
+                for (let i = 0; i < translatableElements.length; i++) {
+                    const element = translatableElements[i];
+                    const originalText = originalTexts[i];
+                    const translatedText = await translateText(originalText, targetLangCode);
+                    element.textContent = translatedText;
+                    
+                    // Petit délai pour éviter de surcharger l'API
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+
+                document.getElementById('loadingOverlay').classList.remove('active');
+            }
+
             generateLangDropdown();
             toggleLangDropdown();
             
@@ -896,33 +645,14 @@
             localStorage.setItem('preferredLang', currentLang);
         }
 
-        function updateContent() {
-            const t = translations[currentLang];
-            
-            document.querySelectorAll('[data-i18n]').forEach(element => {
-                const key = element.getAttribute('data-i18n');
-                const keys = key.split('.');
-                let translation = t;
-                
-                for (const k of keys) {
-                    translation = translation[k];
-                }
-                
-                if (translation) {
-                    element.textContent = translation;
-                }
-            });
-        }
-
         // Charger la langue préférée au démarrage
         window.addEventListener('DOMContentLoaded', () => {
+            saveOriginalTexts();
             generateLangDropdown();
             
             const savedLang = localStorage.getItem('preferredLang');
-            if (savedLang && translations[savedLang]) {
+            if (savedLang && languages[savedLang] && savedLang !== 'fr') {
                 changeLang(savedLang);
-            } else {
-                updateContent();
             }
             
             // Animation d'apparition des sections
