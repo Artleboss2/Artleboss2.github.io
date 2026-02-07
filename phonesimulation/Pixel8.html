@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulation Android - Pixel 8</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        /* Style de l'iframe pour qu'elle s'intègre bien */
+        iframe {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.8);
+            background: #000;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Simulateur Android (Pixel 8)</h2>
+        
+        <iframe 
+            src="https://appetize.io/embed/demo?device=pixel8&osVersion=14.0&autoplay=false&deviceColor=black&scale=80" 
+            width="400px" 
+            height="850px" 
+            scrolling="no">
+        </iframe>
+
+        <p style="margin-top: 15px; font-size: 0.8em; opacity: 0.6;">
+            Cliquez sur "Tap to Play" pour lancer la simulation.
+        </p>
+    </div>
+
+</body>
+</html>
