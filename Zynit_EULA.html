@@ -18,15 +18,14 @@
             --font-mono: 'JetBrains Mono', monospace;
         }
 
-        /* --- STYLE DU CURSEUR PORTFOLIO --- */
+        /* --- STYLE DU CURSEUR --- */
         * {
             cursor: none !important;
             user-select: none;
             -webkit-user-select: none;
         }
 
-        /* Permettre la sélection dans le texte pour la lecture */
-        p, h1, h3, li, .alert-box {
+        p, h1, h2, h3, li, .alert-box, .meta {
             user-select: text;
             -webkit-user-select: text;
         }
@@ -66,15 +65,15 @@
             .cursor, .cursor-follower { display: none; }
             body { cursor: auto; }
         }
-        /* ---------------------------------- */
 
+        /* --- LAYOUT --- */
         body {
             background-color: var(--bg);
             color: var(--primary);
             font-family: var(--font-main);
             line-height: 1.6;
             margin: 0;
-            padding: 40px 20px;
+            padding: 60px 20px;
             display: flex;
             justify-content: center;
             overflow-x: hidden;
@@ -98,51 +97,63 @@
             font-size: 0.85rem;
             color: var(--secondary);
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         h1 {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 700;
-            margin: 1rem 0 0.5rem 0;
+            margin: 1.5rem 0 0.5rem 0;
+            letter-spacing: -0.5px;
         }
 
         .alert-box {
-            background-color: rgba(239, 68, 68, 0.1);
+            background-color: rgba(239, 68, 68, 0.05);
             border: 1px solid var(--danger);
             padding: 1.5rem;
             margin-bottom: 3rem;
+            font-size: 0.95rem;
         }
 
-        section { margin-bottom: 2.5rem; }
+        section { margin-bottom: 3rem; }
 
         h3 {
             font-family: var(--font-mono);
             font-size: 1.1rem;
-            border-left: 2px solid var(--primary);
-            padding-left: 1rem;
-            margin-bottom: 1rem;
+            font-weight: 600;
+            border-left: 3px solid var(--primary);
+            padding-left: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
         }
 
         p, li {
             color: var(--secondary);
             font-size: 1rem;
+            margin-bottom: 1rem;
         }
 
-        .sub-clause { margin-bottom: 1.5rem; }
-        .sub-clause strong { color: var(--primary); }
+        strong { color: var(--primary); }
 
-        ul { list-style: none; padding-left: 1rem; }
-        ul li { position: relative; margin-bottom: 0.5rem; }
+        ul { list-style: none; padding-left: 1.5rem; }
+        ul li { position: relative; margin-bottom: 0.8rem; }
         ul li::before {
-            content: ">";
+            content: "->";
             color: var(--primary);
             position: absolute;
-            left: -1.2rem;
+            left: -1.5rem;
             font-family: var(--font-mono);
+            font-weight: bold;
+        }
+
+        .lang-footer {
+            font-style: italic;
+            opacity: 0.7;
+            margin-top: 2rem;
         }
 
         footer {
-            margin-top: 5rem;
+            margin-top: 6rem;
             padding-top: 2rem;
             border-top: 1px solid var(--accent);
             font-size: 0.8rem;
@@ -159,58 +170,69 @@
 
     <div class="container">
         <header>
-            <div class="meta">Legal_Doc // Zynit_OS</div>
+            <div class="meta">Legal_Protocol // Zynit_Systems</div>
             <h1>CONTRAT DE LICENCE UTILISATEUR FINAL (CLUF)</h1>
             <p style="font-size: 0.85rem; margin: 0; font-family: var(--font-mono);">
-                DATE : 07.02.2026<br>
-                PROPRIÉTAIRE : ARTHUR GODART<br>
-                LOC : MONTRÉAL, QC
+                MISE À JOUR : 07.02.2026<br>
+                CONCÉDANT : ARTHUR GODART<br>
+                JURIDICTION : MONTRÉAL, QC, CA
             </p>
         </header>
 
         <div class="alert-box">
-            <strong style="color: var(--danger); font-family: var(--font-mono);">[ATTENTION]</strong><br>
-            CE DOCUMENT EST UN CONTRAT LÉGAL. EN UTILISANT L'APPLICATION « ZYNIT », VOUS ACCEPTEZ D'ÊTRE LIÉ PAR TOUTES LES CONDITIONS CI-DESSOUS. SI VOUS N'ACCEPTEZ PAS CES TERMES, CESSEZ TOUTE UTILISATION.
+            <strong style="color: var(--danger); font-family: var(--font-mono);">[AVIS JURIDIQUE]</strong><br>
+            CE DOCUMENT EST UN CONTRAT LÉGAL. EN CLIQUANT SUR « J'ACCEPTE », EN CRÉANT UN COMPTE OU EN UTILISANT L'APPLICATION « ZYNIT », VOUS ACCEPTEZ D'ÊTRE LIÉ PAR TOUTES LES CONDITIONS CI-DESSOUS. SI VOUS N'ACCEPTEZ PAS CES TERMES, VOUS NE DEVEZ PAS INSTALLER NI UTILISER L'APPLICATION.
         </div>
 
         <section>
-            <h3>ARTICLE 1. PROPRIÉTÉ EXCLUSIVE</h3>
-            <p>L'application Zynit (code, architecture, interface) est la propriété exclusive et totale d'Arthur Godart. Aucun droit n'est transféré à l'Utilisateur, hormis une licence d'usage limitée.</p>
+            <h3>ARTICLE 1. PROPRIÉTÉ EXCLUSIVE ET DROITS D'AUTEUR</h3>
+            <p>L'application Zynit, incluant sans s'y limiter son code source, son architecture, ses algorithmes, ses interfaces visuelles, ses logos, et ses bases de données, est la <strong>propriété exclusive et totale d'Arthur Godart</strong>.</p>
+            <p>L'Utilisateur reconnaît que l'Application est protégée par la Loi sur le droit d'auteur du Canada et par les traités internationaux. Aucun droit, titre ou intérêt n'est transféré à l'Utilisateur, hormis le droit d'usage limité concédé par cette licence.</p>
         </section>
 
         <section>
-            <h3>ARTICLE 2. RESTRICTIONS ET POURSUITES</h3>
-            <div class="sub-clause">
-                <p><strong>2.1. Copie :</strong> Interdiction stricte de reproduire ou modifier le code source.</p>
-                <p><strong>2.2. Reverse Engineering :</strong> Interdiction de décompiler ou désassembler l'Application.</p>
-                <p><strong>2.3. Sanctions :</strong> Tout vol de code fera l'objet de poursuites immédiates devant les tribunaux de Montréal pour contrefaçon.</p>
-            </div>
+            <h3>ARTICLE 2. RESTRICTIONS ET POURSUITES JUDICIAIRES</h3>
+            <p><strong>2.1. Interdictions de copie :</strong> Il est strictement interdit de copier, reproduire, modifier, adapter, traduire ou créer des œuvres dérivées basées sur tout ou partie du code de base de Zynit.</p>
+            <p><strong>2.2. Ingénierie inverse :</strong> L'Utilisateur s'interdit de décompiler, désassembler ou pratiquer l'ingénierie inverse sur l'Application.</p>
+            <p><strong>2.3. Sanctions :</strong> Toute tentative de vol de code source ou de copie illégale fera l'objet de poursuites judiciaires immédiates devant les tribunaux compétents de Montréal pour contrefaçon, avec demande de dommages-intérêts punitifs et mesures d'injonction.</p>
         </section>
 
         <section>
-            <h3>ARTICLE 3. RESPONSABILITÉ ET USAGE</h3>
-            <p>Arthur Godart n'est responsable d'aucun contenu généré par l'Utilisateur. L'usage pour des activités illégales entraîne la résiliation immédiate et la coopération avec les autorités.</p>
+            <h3>ARTICLE 3. RESPONSABILITÉ ET USAGE ILLÉGAL</h3>
+            <p><strong>3.1. Neutralité du Concédant :</strong> Arthur Godart n'est lié à aucune activité, aucun texte ou aucune donnée saisis par l'Utilisateur dans l'Application. L'Utilisateur est le seul responsable du contenu qu'il génère.</p>
+            <p><strong>3.2. Usage illégal :</strong> L'utilisation de Zynit pour organiser, stocker ou promouvoir des activités illégales selon les lois canadiennes est strictement interdite.</p>
+            <p><strong>3.3. Coopération judiciaire :</strong> En cas d'activité suspectée illégale, le Concédant se réserve le droit de collaborer pleinement avec les autorités judiciaires et de leur transmettre toute donnée nécessaire à l'identification de l'auteur.</p>
         </section>
 
         <section>
-            <h3>ARTICLE 4. DONNÉES (LOI 25)</h3>
-            <p>Données collectées pour la sécurité et le fonctionnement :</p>
+            <h3>ARTICLE 4. COLLECTE ET PROTECTION DES DONNÉES (LOI 25)</h3>
+            <p>Conformément aux lois du Québec sur la protection des renseignements personnels, le Concédant collecte les données essentielles suivantes :</p>
             <ul>
-                <li>Email et Mot de passe (crypté).</li>
-                <li>Adresse IP (sécurité et conformité légale).</li>
-                <li>Préférences système.</li>
+                <li><strong>Identifiants :</strong> Adresse courriel (gestion du compte) et Mot de passe (crypté).</li>
+                <li><strong>Données Système :</strong> Type d'appareil et préférences d'affichage (optimisation technique).</li>
+                <li><strong>Sécurité :</strong> L'adresse IP est collectée pour assurer la sécurité et l'association légale en cas de nécessité.</li>
             </ul>
         </section>
 
         <section>
-            <h3>ARTICLE 5. CONDITIONS FINANCIÈRES</h3>
-            <p>Pour tout remboursement direct, des frais de gestion de 5% seront retenus par Arthur Godart pour couvrir les coûts administratifs et transactionnels.</p>
+            <h3>ARTICLE 5. CONDITIONS FINANCIÈRES ET REMBOURSEMENTS</h3>
+            <p><strong>5.1. Plateformes tierces :</strong> Pour tout achat via l'App Store ou Google Play, les conditions de ces plateformes s'appliquent.</p>
+            <p><strong>5.2. Achats directs et frais de gestion :</strong> Pour toute transaction traitée directement par le Concédant, l'Utilisateur accepte qu'en cas de remboursement, des <strong>frais de traitement administratif de 5%</strong> du montant total seront retenus par Arthur Godart pour couvrir les coûts transactionnels.</p>
         </section>
 
         <section>
-            <h3>ARTICLE 6. JURIDICTION</h3>
-            <p>Ce contrat est régi par les lois du Québec. Tout litige sera soumis au district judiciaire de Montréal.</p>
+            <h3>ARTICLE 6. LIMITATION DE RESPONSABILITÉ</h3>
+            <p>DANS LA MESURE PERMISE PAR LA LOI, ARTHUR GODART NE PEUT ÊTRE TENU RESPONSABLE DES DOMMAGES DIRECTS OU INDIRECTS RÉSULTANT DE L'UTILISATION DE L'APPLICATION. L'APPLICATION EST FOURNIE <strong>« TELLE QUELLE »</strong>, SANS GARANTIE D'AUCUNE SORTE.</p>
         </section>
+
+        <section>
+            <h3>ARTICLE 7. JURIDICTION</h3>
+            <p>Le présent contrat est régi par les lois de la Province de Québec et les lois fédérales du Canada. Tout litige sera soumis à la compétence exclusive des tribunaux du district judiciaire de <strong>Montréal, Québec</strong>.</p>
+        </section>
+
+        <p class="lang-footer">
+            Les parties ont expressément exigé que ce contrat soit rédigé en langue française. The parties have expressly required that this agreement be drafted in French.
+        </p>
 
         <footer>
             &copy; 2026 ARTHUR GODART — TOUS DROITS RÉSERVÉS.
@@ -220,29 +242,22 @@
     <script>
         const cursor = document.querySelector('.cursor');
         const follower = document.querySelector('.cursor-follower');
-        const interactiveElements = document.querySelectorAll('h3, .alert-box, header, footer, strong');
+        const interactiveElements = document.querySelectorAll('h3, .alert-box, header, footer, strong, li');
 
         document.addEventListener('mousemove', (e) => {
             const posX = e.clientX;
             const posY = e.clientY;
 
-            // Le point suit directement
             cursor.style.left = `${posX}px`;
             cursor.style.top = `${posY}px`;
 
-            // Le follower suit avec l'inertie du CSS transition
             follower.style.left = `${posX}px`;
             follower.style.top = `${posY}px`;
         });
 
-        // Effet de survol (hover)
         interactiveElements.forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                follower.classList.add('hover');
-            });
-            el.addEventListener('mouseleave', () => {
-                follower.classList.remove('hover');
-            });
+            el.addEventListener('mouseenter', () => follower.classList.add('hover'));
+            el.addEventListener('mouseleave', () => follower.classList.remove('hover'));
         });
     </script>
 </body>
