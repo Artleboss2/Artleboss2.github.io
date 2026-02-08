@@ -12,10 +12,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
         }
 
         /* Permettre la sélection uniquement dans le terminal input */
@@ -42,20 +38,26 @@
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
-            cursor: none;
+            cursor: none !important;
+        }
+
+        /* Cacher tous les curseurs par défaut */
+        *, *::before, *::after {
+            cursor: none !important;
         }
 
         /* Curseur personnalisé */
         .cursor {
-            width: 8px;
-            height: 8px;
+            width: 12px;
+            height: 12px;
             background: var(--accent);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
             z-index: 9999;
             mix-blend-mode: difference;
-            transition: transform 0.15s ease-out;
+            transition: transform 0.1s ease-out;
+            transform: translate(-50%, -50%);
         }
 
         .cursor-follower {
@@ -66,11 +68,16 @@
             position: fixed;
             pointer-events: none;
             z-index: 9998;
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: all 0.15s ease-out;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor.hover {
+            transform: translate(-50%, -50%) scale(1.8);
         }
 
         .cursor-follower.hover {
-            transform: scale(1.5);
+            transform: translate(-50%, -50%) scale(1.5);
             border-color: rgba(255, 255, 255, 0.6);
         }
 
@@ -134,7 +141,6 @@
             padding: 0.4rem 0.8rem;
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.75rem;
-            cursor: pointer;
             transition: all 0.3s;
             font-weight: 600;
             letter-spacing: 0.05em;
@@ -370,7 +376,6 @@
             border-bottom: 1px solid var(--border);
             font-size: 1rem;
             transition: all 0.3s;
-            cursor: default;
         }
 
         .skill-category li:hover {
@@ -580,7 +585,6 @@
             color: var(--accent);
             padding: 0.5rem 1.5rem;
             font-family: 'JetBrains Mono', monospace;
-            cursor: pointer;
             transition: all 0.3s;
         }
 
@@ -611,8 +615,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            cursor: pointer;
-            user-select: none;
         }
 
         .terminal-title {
@@ -638,7 +640,6 @@
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            cursor: pointer;
             transition: opacity 0.2s;
         }
 
@@ -751,8 +752,8 @@
                 display: none;
             }
 
-            body {
-                cursor: auto;
+            body, *, *::before, *::after {
+                cursor: auto !important;
             }
         }
     </style>
@@ -768,6 +769,7 @@
         <nav>
             <a href="#projets" data-i18n="nav.projects">Projets</a>
             <a href="#competences" data-i18n="nav.skills">Compétences</a>
+            <a href="ressources.html" data-i18n="nav.resources">Ressources</a>
             <a href="#contact" data-i18n="nav.contact">Contact</a>
             <button class="lang-switcher" id="langSwitcher" onclick="toggleLanguage()">
                 <span id="langIcon">FR</span>
@@ -980,6 +982,7 @@
                 nav: {
                     projects: 'Projets',
                     skills: 'Compétences',
+                    resources: 'Ressources',
                     contact: 'Contact'
                 },
                 hero: {
@@ -1067,6 +1070,7 @@
                 nav: {
                     projects: 'Projects',
                     skills: 'Skills',
+                    resources: 'Resources',
                     contact: 'Contact'
                 },
                 hero: {
@@ -1688,26 +1692,28 @@
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
-            cursor.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px)`;
+            cursor.style.left = mouseX + 'px';
+            cursor.style.top = mouseY + 'px';
         });
 
         function animateFollower() {
-            followerX += (mouseX - followerX) * 0.1;
-            followerY += (mouseY - followerY) * 0.1;
-            follower.style.transform = `translate(${followerX - 20}px, ${followerY - 20}px)`;
+            followerX += (mouseX - followerX) * 0.15;
+            followerY += (mouseY - followerY) * 0.15;
+            follower.style.left = followerX + 'px';
+            follower.style.top = followerY + 'px';
             requestAnimationFrame(animateFollower);
         }
         animateFollower();
 
-        const interactiveElements = document.querySelectorAll('a, .project-card, .tech-tag, .skill-category li');
+        const interactiveElements = document.querySelectorAll('a, button, .project-card, .tech-tag, .skill-category li, .terminal-btn');
         interactiveElements.forEach(el => {
             el.addEventListener('mouseenter', () => {
+                cursor.classList.add('hover');
                 follower.classList.add('hover');
-                cursor.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px) scale(1.5)`;
             });
             el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hover');
                 follower.classList.remove('hover');
-                cursor.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px) scale(1)`;
             });
         });
 
