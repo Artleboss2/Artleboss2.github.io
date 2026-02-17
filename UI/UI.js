@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initDecodeText();
     initMagneticButtons();
     initTiltCards();
+    initNavigationLinks(); // Ajout de la gestion des nouveaux liens
 });
 
 // 1. SMOOTH SCROLL (Lenis)
@@ -29,6 +30,7 @@ function initLenis() {
 // 2. 3D PARTICLES BACKGROUND (Three.js)
 function initThreeJS() {
     const canvas = document.querySelector('#canvas-3d');
+    if (!canvas) return;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -90,6 +92,7 @@ function initThreeJS() {
 function initCustomCursor() {
     const cursor = document.querySelector('.cursor');
     const follower = document.querySelector('.cursor-follower');
+    if (!cursor || !follower) return;
 
     window.addEventListener('mousemove', (e) => {
         gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0 });
@@ -97,7 +100,7 @@ function initCustomCursor() {
     });
 
     // Hover effect
-    const links = document.querySelectorAll('.magnetic-btn, .component-card');
+    const links = document.querySelectorAll('a, button, .component-card, .nav-btn');
     links.forEach(link => {
         link.addEventListener('mouseenter', () => {
             gsap.to(follower, { scale: 1.5, background: 'rgba(0, 255, 136, 0.1)', duration: 0.3 });
@@ -138,7 +141,8 @@ function initMagneticButtons() {
     const magneticAreas = document.querySelectorAll('.magnetic-area');
     
     magneticAreas.forEach(area => {
-        const btn = area.querySelector('.magnetic-btn');
+        const btn = area.querySelector('.magnetic-btn, .nav-btn');
+        if (!btn) return;
         
         area.addEventListener('mousemove', (e) => {
             const rect = area.getBoundingClientRect();
@@ -164,7 +168,6 @@ function initTiltCards() {
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
 
-            // Set custom properties for glow
             card.style.setProperty('--x', `${x}px`);
             card.style.setProperty('--y', `${y}px`);
 
@@ -191,14 +194,12 @@ function initTiltCards() {
 function initGSAPAnimations() {
     gsap.registerPlugin(ScrollTrigger);
 
-    // Hero timeline
     const tl = gsap.timeline();
     tl.to('body', { opacity: 1, duration: 0.5 })
       .from('.decode-text', { y: 100, opacity: 0, duration: 1, ease: "power4.out" })
       .from('.hero-subline', { opacity: 0, duration: 1 }, "-=0.5")
       .from('.magnetic-btn', { scale: 0, opacity: 0, duration: 0.8, ease: "back.out(1.7)" }, "-=0.5");
 
-    // Scroll reveal
     gsap.utils.toArray('.reveal').forEach(elem => {
         gsap.from(elem, {
             scrollTrigger: {
@@ -210,6 +211,21 @@ function initGSAPAnimations() {
             opacity: 0,
             duration: 1,
             ease: "power3.out"
+        });
+    });
+}
+
+// 8. NAVIGATION LOGIC
+function initNavigationLinks() {
+    // Gestion de la transition de page fluide si nécessaire
+    const navButtons = document.querySelectorAll('.nav-btn');
+    navButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const href = btn.getAttribute('href');
+            gsap.to('main', { opacity: 0, y: -20, duration: 0.5, onComplete: () => {
+                window.location.href = href;
+            }});
         });
     });
 }
