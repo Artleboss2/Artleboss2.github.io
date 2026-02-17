@@ -1,0 +1,14 @@
+body { margin: 0; background: #001220; color: #4ade80; font-family: sans-serif; }
+.water-surface {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#distort {
+    font-size: 10vw;
+    filter: url(#wave);
+    text-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
+}
+.nav { margin-top: 50px; color: white; text-decoration: none; border-bottom: 1px solid white; }
