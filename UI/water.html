@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Water Distortion | Interactive Lab</title>
+    <link rel="stylesheet" href="water.css">
+</head>
+<body>
+    <div class="water-surface">
+        <h1 id="distort">LIQUID_DATA</h1>
+        <svg style="display:none;">
+            <filter id="wave">
+                <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="noise">
+                    <animate attributeName="baseFrequency" values="0.01;0.015;0.01" dur="5s" repeatCount="indefinite" />
+                </feTurbulence>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="50" />
+            </filter>
+        </svg>
+        <a href="index.html" class="nav">Home</a>
+    </div>
+    <script src="water.js"></script>
+</body>
+</html>
