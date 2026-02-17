@@ -1,131 +1,82 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. Initialisation de Lenis pour le Smooth Scroll
-    const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        smoothWheel: true
-    });
-
+    // 1. Smooth Scroll Initialisation
+    const lenis = new Lenis();
     function raf(time) {
         lenis.raf(time);
         requestAnimationFrame(raf);
     }
     requestAnimationFrame(raf);
 
-    // Synchronisation GSAP avec Lenis
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => {
-        lenis.raf(time * 1000);
+    // 2. GSAP Config
+    gsap.registerPlugin(ScrollTrigger);
+
+    // 3. Hero Animations (One-time reveal)
+    gsap.from('.reveal-text', {
+        y: 60,
+        opacity: 0,
+        duration: 1.5,
+        stagger: 0.3,
+        ease: 'power4.out'
     });
 
-    // 2. Animations Hero (Reveal Text)
-    const tlHero = gsap.timeline();
-    if (document.querySelector('.reveal-text')) {
-        tlHero.from('.reveal-text', {
-            y: 100,
+    // 4. Scroll-Triggered Reveal (Correction : attend le scroll)
+    const revealItems = gsap.utils.toArray('.reveal-item, .service-card');
+    revealItems.forEach(item => {
+        gsap.from(item, {
+            scrollTrigger: {
+                trigger: item,
+                start: 'top 85%', // Se déclenche quand l'élément entre dans la vue
+                toggleActions: 'play none none reverse'
+            },
+            y: 50,
             opacity: 0,
             duration: 1.2,
-            ease: 'power4.out',
-            stagger: 0.2
-        }).from('.reveal-text-sub', {
-            opacity: 0,
-            y: 20,
-            duration: 0.8
-        }, "-=0.8");
-    }
-
-    // 3. Reverse-Scroll Parallax & Mask Reveal
-    // Animation pour les cartes de service
-    const serviceCards = gsap.utils.toArray('.service-card');
-    serviceCards.forEach((card) => {
-        const image = card.querySelector('img');
-        const mask = card.querySelector('.card-image-mask');
-        
-        if (image) {
-            gsap.fromTo(image, 
-                { scale: 1.2, y: '10%' }, 
-                {
-                    scale: 1,
-                    y: '-10%',
-                    ease: 'none',
-                    scrollTrigger: {
-                        trigger: card,
-                        start: 'top bottom',
-                        end: 'bottom top',
-                        scrub: true
-                    }
-                }
-            );
-        }
-
-        // Mask Reveal corrigé
-        if (mask) {
-            gsap.fromTo(mask, {
-                clipPath: 'inset(100% 0% 0% 0%)',
-                y: 100,
-                opacity: 0
-            }, {
-                clipPath: 'inset(0% 0% 0% 0%)',
-                y: 0,
-                opacity: 1,
-                duration: 1.5,
-                ease: 'power4.out',
-                scrollTrigger: {
-                    trigger: card,
-                    start: 'top 90%',
-                    end: 'top 60%',
-                    toggleActions: 'play reverse play reverse' 
-                }
-            });
-        }
+            ease: 'power3.out'
+        });
     });
 
-    // 4. Compteur de l'Héritage
-    const counterElement = document.getElementById('year-counter');
-    if (counterElement) {
-        const counterObj = { value: 2024 };
-        gsap.to(counterObj, {
-            value: 1937,
-            duration: 3,
-            ease: 'power2.inOut',
+    // 5. Parallax sur les images des services
+    gsap.utils.toArray('.card-image-mask img').forEach(img => {
+        gsap.to(img, {
+            scrollTrigger: {
+                trigger: img,
+                scrub: true
+            },
+            y: -40,
+            ease: 'none'
+        });
+    });
+
+    // 6. Compteur (Déclenché uniquement au scroll)
+    const counter = document.getElementById('year-counter');
+    if (counter) {
+        const obj = { val: 2024 };
+        gsap.to(obj, {
+            val: 1937,
             scrollTrigger: {
                 trigger: '.heritage',
-                start: 'top 70%',
+                start: 'top 70%'
             },
+            duration: 2.5,
             onUpdate: () => {
-                counterElement.innerText = Math.round(counterObj.value);
+                counter.innerText = Math.floor(obj.val);
             }
         });
     }
 
-    // 5. Effet Magnétique sur les boutons
-    const magneticBtns = document.querySelectorAll('.btn-magnetic');
-    magneticBtns.forEach(btn => {
+    // 7. Effet Magnétique (Optimisé)
+    const btns = document.querySelectorAll('.btn-magnetic');
+    btns.forEach(btn => {
         btn.addEventListener('mousemove', (e) => {
-            const rect = btn.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            
-            gsap.to(btn, {
-                x: x * 0.4,
-                y: y * 0.4,
-                duration: 0.3,
-                ease: 'power2.out'
-            });
+            const { clientX: x, clientY: y } = e;
+            const { left, top, width, height } = btn.getBoundingClientRect();
+            const moveX = (x - left - width/2) * 0.4;
+            const moveY = (y - top - height/2) * 0.4;
+            gsap.to(btn, { x: moveX, y: moveY, duration: 0.3 });
         });
-        
         btn.addEventListener('mouseleave', () => {
-            gsap.to(btn, {
-                x: 0,
-                y: 0,
-                duration: 0.6,
-                ease: 'elastic.out(1, 0.3)'
-            });
+            gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.3)' });
         });
     });
-
-    // 6. Rafraîchissement global pour éviter les bugs de calcul de hauteur
-    ScrollTrigger.refresh();
 });
