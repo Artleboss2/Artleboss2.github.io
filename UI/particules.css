@@ -1,0 +1,22 @@
+body { margin: 0; background: #000; overflow: hidden; font-family: sans-serif; }
+#p-canvas { position: fixed; top: 0; left: 0; }
+.ui {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #00ff88;
+    pointer-events: none;
+}
+h1 { font-size: 6vw; margin: 0; pointer-events: auto; }
+.btn {
+    pointer-events: auto;
+    margin-top: 20px;
+    padding: 15px 30px;
+    border: 1px solid #00ff88;
+    color: #00ff88;
+    text-decoration: none;
+    border-radius: 50px;
+}
