@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>St-Mars E L Inc | Excellence en Plomberie depuis 1937</title>
+    
+    <!-- Polices -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Icones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="plomberie.css">
+</head>
+<body>
+
+    <!-- Smooth Scroll Wrapper -->
+    <div id="smooth-wrapper">
+        <div id="smooth-content">
+
+            <!-- Navigation -->
+            <nav class="nav-bar">
+                <div class="nav-logo">ST-MARS</div>
+                <div class="nav-links">
+                    <a href="#heritage">Héritage</a>
+                    <a href="#services">Services</a>
+                    <a href="#contact" class="btn-magnetic">Contact</a>
+                </div>
+            </nav>
+
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="hero-overlay"></div>
+                <div class="hero-video-container">
+                    <!-- Remplacement par une image placeholder élégante ou vidéo réelle si disponible -->
+                    <div class="video-placeholder"></div>
+                </div>
+                <div class="hero-content">
+                    <h1 class="reveal-text">Quatre générations de maîtrise.</h1>
+                    <p class="reveal-text-sub">L'excellence en plomberie à Montréal depuis 1937.</p>
+                    <a href="#contact" class="cta-button btn-magnetic">Demander une intervention d'expert</a>
+                </div>
+            </section>
+
+            <!-- Heritage Counter Section -->
+            <section id="heritage" class="heritage">
+                <div class="container">
+                    <div class="heritage-grid">
+                        <div class="heritage-text">
+                            <h2 class="section-title">Notre Histoire</h2>
+                            <p>Depuis plus de 80 ans, la famille St-Mars veille sur le confort des Montréalais. Un héritage de précision technique et de réactivité premium.</p>
+                        </div>
+                        <div class="counter-box">
+                            <span class="counter-prefix">Depuis</span>
+                            <div id="year-counter" class="counter-number">1937</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="parallax-bg" id="heritage-bg"></div>
+            </section>
+
+            <!-- Services Premium -->
+            <section id="services" class="services">
+                <h2 class="section-title text-center">Services Premium</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="card-image-mask">
+                            <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800" alt="Plomberie">
+                        </div>
+                        <h3>Plomberie Résidentielle</h3>
+                        <p>Interventions délicates et installations durables.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="card-image-mask">
+                            <img src="https://images.unsplash.com/photo-1621905252507-b354bcadcabc?auto=format&fit=crop&w=800" alt="Chauffage">
+                        </div>
+                        <h3>Chauffage Haute Performance</h3>
+                        <p>Optimisation thermique pour les hivers québécois.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="card-image-mask">
+                            <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=800" alt="Gaz Naturel">
+                        </div>
+                        <h3>Solutions Gaz Naturel</h3>
+                        <p>Expertise certifiée pour une sécurité absolue.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Social Proof -->
+            <section class="testimonials">
+                <div class="container">
+                    <div class="testimonial-slider">
+                        <div class="testimonial-item">
+                            <div class="stars">★★★★★</div>
+                            <p>"Une réactivité exemplaire et une gentillesse rare. On sent le poids de l'expérience familiale."</p>
+                            <span class="client-name">— Client résidentiel, NDG</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact & Footer -->
+            <footer id="contact" class="footer">
+                <div class="footer-grid">
+                    <div class="footer-info">
+                        <h2>Parlons de votre projet</h2>
+                        <p><i class="fas fa-map-marker-alt"></i> 5000 Av. Gilmore, Montréal, QC H4E 4N3</p>
+                        <p><i class="fas fa-phone"></i> (514) 933-8411</p>
+                        <p><i class="fas fa-clock"></i> Fermeture à 17h</p>
+                    </div>
+                    <div class="footer-map">
+                        <div id="map-container" class="glass-card">
+                            <!-- Map placeholder -->
+                            <div class="map-mock">CARTE INTERACTIVE (MODE SOMBRE)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 St-Mars E L Inc. Tous droits réservés.</p>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script src="plomberie.js"></script>
+</body>
+</html>
