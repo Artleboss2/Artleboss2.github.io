@@ -7,25 +7,36 @@
     <link rel="stylesheet" href="glass.css">
 </head>
 <body>
-    <div class="background-blobs">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <div class="background-elements">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
     </div>
     
     <main>
         <div class="glass-container">
-            <h1>GLASS_MORPH</h1>
-            <p>Exploration de la réfraction et des transparences multicouches.</p>
+            <!-- Texte avec effet glass (flou interne) -->
+            <h1 class="glass-text">GLASS</h1>
+            
             <div class="glass-card">
                 <div class="content">
-                    <span>Alpha 0.05</span>
+                    <span class="label">PROTOCOLE_01</span>
                     <div class="divider"></div>
-                    <p>Flou gaussien de 20px avec bordures dynamiques.</p>
+                    <p>Interface ultra-transparente avec réfraction dynamique. Le flou s'adapte à la profondeur des objets en mouvement.</p>
                 </div>
             </div>
-            <a href="index.html" class="back-link">Retour au Lab</a>
+
+            <div class="magnetic-area">
+                <a href="UI.html" class="back-btn">
+                    <span class="btn-label">RETOUR AU LAB</span>
+                    <div class="btn-hover-bg"></div>
+                </a>
+            </div>
         </div>
     </main>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="glass.js"></script>
 </body>
