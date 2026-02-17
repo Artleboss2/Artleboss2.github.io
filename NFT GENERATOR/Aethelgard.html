@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="fr" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aethelgard NFT | AI Generative Engine 4.5.2-PRO</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        :root {
+            --athel-bg: #000000;
+            --athel-surface: #0a0a0a;
+            --athel-surface-light: #1c1c1e;
+            --athel-primary: #ffffff;
+            --athel-secondary: #86868b;
+            --athel-accent: #0071e3;
+            --athel-border: rgba(255, 255, 255, 0.08);
+            --athel-font-sans: 'Inter', sans-serif;
+            --athel-font-mono: 'JetBrains Mono', monospace;
+            --athel-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: var(--athel-bg);
+            color: var(--athel-primary);
+            font-family: var(--athel-font-sans);
+            overflow-x: hidden; 
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- LOADER --- */
+        .athel-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            pointer-events: all;
+        }
+
+        .loader-svg { width: 120px; height: 120px; overflow: visible; }
+        .loader-path {
+            fill: none;
+            stroke: white;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 400;
+            stroke-dashoffset: 400;
+        }
+        .loader-crossbar { opacity: 0; stroke: white; stroke-width: 2; }
+        .loader-text {
+            margin-top: 30px;
+            font-family: var(--athel-font-mono);
+            font-size: 9px;
+            letter-spacing: 0.4em;
+            color: var(--athel-secondary);
+            text-transform: uppercase;
+        }
+
+        /* --- NAV --- */
+        .athel-nav {
+            position: fixed;
+            top: 0; width: 100%; height: 52px; z-index: 1000;
+            border-bottom: 1px solid var(--athel-border);
+            backdrop-filter: blur(20px);
+            background: rgba(0, 0, 0, 0.7);
+            opacity: 0; transform: translateY(-10px);
+        }
+        .athel-nav__container {
+            max-width: 1440px; margin: 0 auto; height: 100%;
+            padding: 0 40px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .athel-nav__logo { font-weight: 600; font-size: 14px; letter-spacing: 1px; }
+
+        /* --- STUDIO LAYOUT --- */
+        .athel-studio {
+            max-width: 1440px; margin: 0 auto;
+            padding: 120px 40px 60px;
+            display: grid; grid-template-columns: 1fr 380px; gap: 80px;
+            min-height: 100vh;
+            opacity: 0;
+        }
+
+        .athel-studio__preview {
+            background: #050505; border-radius: 24px; border: 1px solid var(--athel-border);
+            aspect-ratio: 1; position: relative; overflow: hidden;
+            box-shadow: 0 40px 100px -40px rgba(0,0,0,0.9);
+        }
+        canvas { width: 100% !important; height: 100% !important; display: block; }
+
+        .hash-tag {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            font-family: var(--athel-font-mono);
+            font-size: 10px;
+            color: var(--athel-secondary);
+            background: rgba(0,0,0,0.5);
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid var(--athel-border);
+        }
+
+        /* --- UI CONTROLS --- */
+        .athel-panel { display: flex; flex-direction: column; gap: 40px; }
+        .athel-group h3 { font-size: 10px; color: var(--athel-secondary); text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 24px; }
+        
+        .athel-control { margin-bottom: 24px; }
+        .athel-control label { font-size: 12px; display: flex; justify-content: space-between; margin-bottom: 12px; }
+        .athel-control label span { font-family: var(--athel-font-mono); color: var(--athel-primary); font-size: 11px; }
+
+        input[type=range] { 
+            -webkit-appearance: none; 
+            width: 100%; 
+            background: transparent; 
+            cursor: pointer;
+            height: 20px;
+        }
+        input[type=range]::-webkit-slider-runnable-track { height: 2px; background: var(--athel-surface-light); }
+        input[type=range]::-webkit-slider-thumb { 
+            -webkit-appearance: none; 
+            height: 16px; width: 16px; 
+            border-radius: 50%; 
+            background: white; 
+            margin-top: -7px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .athel-btn {
+            border: none; padding: 18px; border-radius: 14px; font-size: 13px; cursor: pointer;
+            transition: 0.4s var(--athel-ease); font-family: inherit; width: 100%; margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            background: white; color: black; font-weight: 600;
+        }
+        .athel-btn--ai { background: transparent; border: 1px solid var(--athel-border); color: white; }
+        .athel-btn:disabled { opacity: 0.5; cursor: wait; }
+        .athel-btn:hover:not(:disabled) { transform: translateY(-3px); opacity: 0.9; }
+
+        #ai-analysis { 
+            margin-top: 50px; border-top: 1px solid var(--athel-border); padding-top: 40px; 
+            display: none; 
+        }
+        #ai-name { font-size: 36px; font-weight: 700; margin-bottom: 4px; }
+        #ai-valuation { 
+            font-family: var(--athel-font-mono); 
+            color: #34c759; 
+            font-size: 18px; 
+            margin-bottom: 24px; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+        }
+        #ai-lore { font-size: 16px; color: var(--athel-secondary); line-height: 1.6; font-weight: 300; }
+
+        /* --- COMMUNITY FEED --- */
+        .athel-feed {
+            max-width: 1440px; margin: 0 auto; padding: 0 40px 100px;
+        }
+        .athel-feed h2 { font-size: 12px; color: var(--athel-secondary); text-transform: uppercase; letter-spacing: 0.3em; margin-bottom: 40px; border-bottom: 1px solid var(--athel-border); padding-bottom: 20px; }
+        .athel-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px;
+        }
+        .feed-item {
+            background: var(--athel-surface); border: 1px solid var(--athel-border); border-radius: 16px; padding: 24px;
+            transition: transform 0.3s ease;
+        }
+        .feed-item:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.2); }
+        .feed-item__name { font-weight: 600; font-size: 16px; margin-bottom: 8px; }
+        .feed-item__hash { font-family: var(--athel-font-mono); font-size: 10px; color: var(--athel-secondary); margin-bottom: 12px; }
+        .feed-item__val { font-family: var(--athel-font-mono); color: #34c759; font-size: 14px; }
+
+        @media (max-width: 1100px) {
+            .athel-studio { grid-template-columns: 1fr; padding: 100px 24px; gap: 40px; }
+            .athel-feed { padding: 40px 24px; }
+            body { overflow-y: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader" class="athel-loader">
+        <svg class="loader-svg" viewBox="0 0 100 100">
+            <path id="main-path" class="loader-path" d="M 10 50 L 90 50" />
+            <line id="crossbar" class="loader-crossbar" x1="35" y1="65" x2="65" y2="65" />
+        </svg>
+        <div id="loader-text" class="loader-text">Nettoyage du Chemin Database...</div>
+    </div>
+
+    <nav id="nav" class="athel-nav">
+        <div class="athel-nav__container">
+            <div class="athel-nav__logo">AETHELGARD</div>
+            <div id="user-status" style="font-size: 9px; opacity: 0.3; font-family: var(--athel-font-mono);">SYNCING...</div>
+        </div>
+    </nav>
+
+    <main id="main-content" class="athel-studio">
+        <section>
+            <div class="athel-studio__preview">
+                <canvas id="art-canvas"></canvas>
+                <div id="art-hash" class="hash-tag">0x0000000000000000</div>
+            </div>
+            <div id="ai-analysis">
+                <div style="font-family:var(--athel-font-mono); font-size:10px; color:var(--athel-accent); margin-bottom:20px; text-transform:uppercase;">Rapport d'Analyse d'Artefact</div>
+                <div id="ai-name">--</div>
+                <div id="ai-valuation">-- ETH</div>
+                <div id="ai-lore">--</div>
+            </div>
+        </section>
+
+        <aside class="athel-panel">
+            <div class="athel-group">
+                <h3>NFT Paramètres</h3>
+                <div class="athel-control">
+                    <label>Complexité Structurelle <span id="val-complexity">100</span></label>
+                    <input type="range" id="complexity" min="20" max="400" value="100">
+                </div>
+                <div class="athel-control">
+                    <label>Intensité Chroma <span id="val-chroma">80%</span></label>
+                    <input type="range" id="chroma" min="0" max="100" value="80">
+                </div>
+            </div>
+
+            <div class="athel-actions">
+                <button id="btn-generate" class="athel-btn">Minter un Unique Artifact</button>
+                <button id="btn-ai-analyze" class="athel-btn athel-btn--ai">AI Evaluation & Cloud Sync</button>
+            </div>
+        </aside>
+    </main>
+
+    <div class="athel-feed">
+        <h2>Onglet : NFT GENERATOR</h2>
+        <div id="community-grid" class="athel-grid">
+            <!-- Items injectés par Realtime Database -->
+        </div>
+    </div>
+
+    <!-- Firebase SDK (Version 11.6.1) -->
+    <script type="importmap">
+    {
+      "imports": {
+        "firebase/app": "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js",
+        "firebase/auth": "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js",
+        "firebase/database": "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js"
+      }
+    }
+    </script>
+
+    <script type="module">
+        import { initializeApp } from 'firebase/app';
+        import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
+        import { getDatabase, ref, push, set, onValue, serverTimestamp } from 'firebase/database';
+
+        // Configuration Globale
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+        
+        // CORRECTION : Nettoyage de l'appId pour enlever les caractères interdits par Realtime Database (., #, $, [, ])
+        const rawAppId = typeof __app_id !== 'undefined' ? __app_id : 'aethelgard-nft';
+        const safeAppId = rawAppId.replace(/[\.\#\$\/\[\]]/g, '-');
+        
+        // Nom du dossier dans la base de données avec le chemin sécurisé
+        const DB_PATH = `artifacts/${safeAppId}/public/data/NFT_GENERATOR`;
+
+        const geminiApiKey = "";
+        const geminiBaseUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent";
+
+        let currentUser = null;
+
+        class AethelEngine {
+            constructor() {
+                this.canvas = document.getElementById('art-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.canvas.width = 1600; 
+                this.canvas.height = 1600;
+                this.complexity = 100;
+                this.chroma = 80;
+                this.currentHash = "";
+                this.seed = 0;
+                this.palettes = [
+                    ['#ffffff', '#86868b', '#222222'],
+                    ['#0071e3', '#2997ff', '#ffffff'],
+                    ['#af52de', '#ffffff', '#5e5ce6'],
+                    ['#ff9f0a', '#ffffff', '#ff453a']
+                ];
+            }
+
+            seededRandom() {
+                this.seed = (this.seed * 9301 + 49297) % 233280;
+                return this.seed / 233280;
+            }
+
+            generateNewHash() {
+                const chars = 'ABCDEF0123456789';
+                let result = '0x';
+                for (let i = 0; i < 16; i++) {
+                    result += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                this.currentHash = result;
+                this.seed = parseInt(result.substring(2), 16) % 1000000;
+                document.getElementById('art-hash').innerText = result;
+            }
+
+            generate() {
+                const initialSeed = parseInt(this.currentHash.substring(2), 16) % 1000000;
+                this.seed = initialSeed;
+                const paletteIdx = Math.floor(this.seededRandom() * this.palettes.length);
+                const palette = this.palettes[paletteIdx];
+                this.ctx.fillStyle = '#050505';
+                this.ctx.fillRect(0, 0, 1600, 1600);
+                for(let i = 0; i < this.complexity; i++) {
+                    this.ctx.save();
+                    this.ctx.translate(800, 800);
+                    this.ctx.rotate(this.seededRandom() * Math.PI * 2);
+                    const dist = this.seededRandom() * 700;
+                    this.ctx.translate(dist, 0);
+                    this.ctx.globalAlpha = (this.seededRandom() * 0.4) * (this.chroma / 100);
+                    this.ctx.fillStyle = palette[Math.floor(this.seededRandom() * palette.length)];
+                    const w = this.seededRandom() * 400 + 50;
+                    const h = this.seededRandom() * 3 + 1;
+                    if(this.seededRandom() > 0.5) {
+                        this.ctx.fillRect(-w/2, -h/2, w, h);
+                    } else {
+                        this.ctx.beginPath();
+                        this.ctx.arc(0, 0, w/10, 0, Math.PI * 2);
+                        this.ctx.fill();
+                    }
+                    this.ctx.restore();
+                }
+            }
+        }
+
+        const engine = new AethelEngine();
+
+        // --- REALTIME DATABASE LOGIC ---
+        async function setupDatabase() {
+            try {
+                await signInAnonymously(auth);
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        currentUser = user;
+                        document.getElementById('user-status').innerText = `NODE_ACTIVE: ${user.uid.substring(0,8)}`;
+                        listenToFeed();
+                    }
+                });
+            } catch (err) {
+                console.error("Auth Error:", err);
+                document.getElementById('user-status').innerText = "DB_OFFLINE";
+            }
+        }
+
+        function listenToFeed() {
+            try {
+                const dbRef = ref(db, DB_PATH);
+                onValue(dbRef, (snapshot) => {
+                    const data = snapshot.val();
+                    const grid = document.getElementById('community-grid');
+                    grid.innerHTML = '';
+                    
+                    if (data) {
+                        const items = Object.keys(data).map(key => ({
+                            id: key,
+                            ...data[key]
+                        })).sort((a, b) => b.createdAt - a.createdAt).slice(0, 12);
+
+                        items.forEach(item => {
+                            const el = document.createElement('div');
+                            el.className = 'feed-item';
+                            el.innerHTML = `
+                                <div class="feed-item__name">${item.nom}</div>
+                                <div class="feed-item__hash">${item.hash}</div>
+                                <div class="feed-item__val">${item.eth_value ? item.eth_value.toFixed(3) : '0.000'} ETH</div>
+                            `;
+                            grid.appendChild(el);
+                        });
+                    }
+                }, (error) => {
+                    console.error("Database Read Error:", error);
+                });
+            } catch (e) {
+                console.error("Ref Creation Error:", e);
+            }
+        }
+
+        async function saveToRealtime(data) {
+            if (!currentUser) return;
+            try {
+                const dbRef = ref(db, DB_PATH);
+                const newEntryRef = push(dbRef);
+                await set(newEntryRef, {
+                    ...data,
+                    userId: currentUser.uid,
+                    createdAt: serverTimestamp()
+                });
+            } catch (err) {
+                console.error("Save Error:", err);
+            }
+        }
+
+        // --- APP INITIALIZATION ---
+        function initApp() {
+            const tl = gsap.timeline();
+            tl.to("#main-path", { strokeDashoffset: 0, duration: 1.2, ease: "power2.inOut" });
+            tl.to("#main-path", { attr: { d: "M 50 25 L 20 80 M 50 25 L 80 80" }, duration: 0.8, ease: "expo.out" }, "+=0.2");
+            tl.to("#crossbar", { opacity: 1, duration: 0.3 }, "-=0.3");
+            tl.to("#loader", { 
+                opacity: 0, 
+                duration: 0.6, 
+                delay: 0.4,
+                onComplete: () => {
+                    document.getElementById('loader').style.display = 'none';
+                    document.body.style.overflowY = "auto";
+                }
+            });
+            tl.to("#nav", { opacity: 1, y: 0, duration: 0.5 }, "-=0.3");
+            tl.to("#main-content", { 
+                opacity: 1, 
+                duration: 0.8,
+                onStart: () => {
+                    engine.generateNewHash();
+                    engine.generate();
+                }
+            }, "-=0.5");
+            setupDatabase();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initApp();
+
+            document.getElementById('btn-generate').addEventListener('click', () => {
+                document.getElementById('ai-analysis').style.display = 'none';
+                gsap.to("#art-canvas", { opacity: 0, duration: 0.2, onComplete: () => {
+                    engine.generateNewHash();
+                    engine.generate();
+                    gsap.to("#art-canvas", { opacity: 1, duration: 0.4 });
+                }});
+            });
+
+            document.getElementById('complexity').addEventListener('input', (e) => {
+                engine.complexity = parseInt(e.target.value);
+                document.getElementById('val-complexity').innerText = e.target.value;
+                engine.generate();
+            });
+
+            document.getElementById('chroma').addEventListener('input', (e) => {
+                engine.chroma = parseInt(e.target.value);
+                document.getElementById('val-chroma').innerText = e.target.value + '%';
+                engine.generate();
+            });
+
+            document.getElementById('btn-ai-analyze').addEventListener('click', async () => {
+                const btn = document.getElementById('btn-ai-analyze');
+                btn.disabled = true;
+                btn.innerText = "Synchronisation Cloud...";
+                
+                const prompt = `Analyse cet artefact NFT (Hash: ${engine.currentHash}). Calcule sa valeur en ETH (0.1 à 15). Donne un nom mystique et un court lore en français.`;
+
+                try {
+                    const response = await fetch(`${geminiBaseUrl}?key=${geminiApiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: prompt }] }],
+                            generationConfig: { 
+                                responseMimeType: "application/json",
+                                responseSchema: {
+                                    type: "OBJECT",
+                                    properties: { 
+                                        nom: { type: "STRING" }, 
+                                        eth_value: { type: "NUMBER" }, 
+                                        lore: { type: "STRING" } 
+                                    },
+                                    required: ["nom", "eth_value", "lore"]
+                                }
+                            }
+                        })
+                    });
+                    
+                    const resJson = await response.json();
+                    const res = JSON.parse(resJson.candidates[0].content.parts[0].text);
+                    
+                    document.getElementById('ai-name').innerText = res.nom;
+                    document.getElementById('ai-valuation').innerText = res.eth_value.toFixed(3) + " ETH";
+                    document.getElementById('ai-lore').innerText = res.lore;
+                    document.getElementById('ai-analysis').style.display = 'block';
+                    
+                    gsap.fromTo("#ai-analysis", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 });
+                    
+                    await saveToRealtime({
+                        nom: res.nom,
+                        eth_value: res.eth_value,
+                        lore: res.lore,
+                        hash: engine.currentHash,
+                        complexity: engine.complexity,
+                        chroma: engine.chroma
+                    });
+
+                    btn.innerText = "Données Gravées";
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.innerText = "AI Evaluation & Cloud Sync";
+                    }, 2000);
+                } catch (e) {
+                    btn.innerText = "Erreur de Gravure";
+                    btn.disabled = false;
+                    console.error(e);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
