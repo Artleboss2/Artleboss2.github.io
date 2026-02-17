@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Component Lab | Expérience Immersive</title>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="UI.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="loading">
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- 3D Canvas Background -->
+    <canvas id="canvas-3d"></canvas>
+
+    <!-- Smooth Scroll Container -->
+    <main data-lenis-prevent>
+        
+        <!-- Hero Section -->
+        <header class="hero">
+            <div class="container">
+                <h1 class="decode-text" data-value="FUTURE_LAB">FUTURE_LAB</h1>
+                <p class="hero-subline">Exploration des micro-interactions de nouvelle génération.</p>
+                <div class="magnetic-area">
+                    <button class="magnetic-btn">Explorer le Lab</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Components Grid -->
+        <section class="components-section">
+            <div class="container">
+                <div class="grid">
+                    <!-- Card 1 -->
+                    <div class="component-card reveal">
+                        <div class="card-inner" id="card-1">
+                            <div class="card-glow"></div>
+                            <i class="fa-solid fa-microchip icon"></i>
+                            <h3>Neural Core</h3>
+                            <p>Interface haptique virtuelle avec feedback visuel en temps réel.</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="component-card reveal">
+                        <div class="card-inner" id="card-2">
+                            <div class="card-glow"></div>
+                            <i class="fa-solid fa-atom icon"></i>
+                            <h3>Quantum UI</h3>
+                            <p>Composants basés sur des états probabilistes et transitions fluides.</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="component-card reveal">
+                        <div class="card-inner" id="card-3">
+                            <div class="card-glow"></div>
+                            <i class="fa-solid fa-shield-halved icon"></i>
+                            <h3>Secure Data</h3>
+                            <p>Cryptographie visuelle intégrée aux éléments de navigation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>© 2024 Interactive Component Lab. Propulsé par GSAP & Three.js.</p>
+        </footer>
+    </main>
+
+    <!-- Scripts CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.27/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="UI.js"></script>
+</body>
+</html>
