@@ -29,4 +29,4 @@ Pour voir le projet en local :
 Ou visitez la version live ici : [Artleboss2.github.io](https://artleboss2.github.io/)
 
 ## 📄 Licence
-Ce projet est sous licence **MIT** - voir le fichier [LICENSE](license.md) pour plus de détails.
+Ce projet est sous licence **MIT** - voir le fichier [LICENSE](License.md) pour plus de détails.
