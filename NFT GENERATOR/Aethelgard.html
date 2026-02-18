@@ -222,10 +222,8 @@
         const DB_PATH = "NFT_GENERATOR";
         let db, auth;
 
-        // --- IP ENGINE (Amélioré) ---
         async function getIP() {
             try {
-                // On utilise plusieurs sources au cas où l'une est bloquée
                 const response = await fetch('https://api.ipify.org?format=json').catch(() => fetch('https://ipapi.co/json/'));
                 const data = await response.json();
                 return data.ip || data.ip_address || "Hidden Node";
@@ -250,15 +248,29 @@
             generate() {
                 let s = this.initialSeed % 1000000;
                 const rnd = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+                
                 this.ctx.fillStyle = '#050505';
                 this.ctx.fillRect(0, 0, 1600, 1600);
+
                 for(let i = 0; i < this.complexity; i++) {
                     this.ctx.save();
                     this.ctx.translate(800, 800);
                     this.ctx.rotate(rnd() * Math.PI * 2);
-                    this.ctx.globalAlpha = (rnd() * 0.4) * (this.chroma / 100);
-                    this.ctx.fillStyle = rnd() > 0.5 ? '#ffffff' : '#0071e3';
-                    this.ctx.fillRect(rnd() * 600, 0, rnd() * 400 + 50, 2);
+                    
+                    // --- GÉNÉRATION DE COULEUR ALÉATOIRE TOTALE ---
+                    // Hue: 0-360 (Toutes les couleurs sur Terre)
+                    // Saturation: Basée sur le slider Chroma
+                    // Lightness: 50% pour des couleurs vives
+                    const hue = rnd() * 360; 
+                    const saturation = this.chroma; 
+                    const color = `hsl(${hue}, ${saturation}%, 50%)`;
+
+                    this.ctx.globalAlpha = rnd() * 0.6;
+                    this.ctx.fillStyle = color;
+                    this.ctx.shadowBlur = 15;
+                    this.ctx.shadowColor = color;
+
+                    this.ctx.fillRect(rnd() * 600, 0, rnd() * 400 + 50, rnd() * 4 + 1);
                     this.ctx.restore();
                 }
             }
@@ -272,7 +284,6 @@
                 grid.innerHTML = '';
                 if (!data) return;
 
-                // Conversion et Tri par date décroissante
                 const items = Object.entries(data)
                     .map(([id, val]) => ({ id, ...val }))
                     .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))
@@ -336,7 +347,7 @@
 
                     document.getElementById('ai-name').innerText = name;
                     document.getElementById('ai-valuation').innerText = val.toFixed(3) + " ETH";
-                    document.getElementById('ai-lore').innerText = `Authentification réseau réussie. Origine détectée sur le nœud : ${userIP}`;
+                    document.getElementById('ai-lore').innerText = `Artefact chromatique complet détecté. Fréquence de couleur infinie synchronisée depuis ${userIP}.`;
                     document.getElementById('ai-analysis').style.display = 'block';
                     btn.innerText = "Synchronisé";
                 } catch (e) { btn.innerText = "Erreur Cloud"; }
@@ -358,7 +369,7 @@
             
             document.getElementById('btn-download').onclick = () => {
                 const a = document.createElement('a');
-                a.download = `Aethel_${engine.currentHash}.png`;
+                a.download = `Aethel_FullChroma_${engine.currentHash}.png`;
                 a.href = engine.canvas.toDataURL();
                 a.click();
             };
