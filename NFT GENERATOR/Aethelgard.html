@@ -41,6 +41,15 @@
         .athel-studio__preview { background: #050505; border-radius: 24px; border: 1px solid var(--athel-border); aspect-ratio: 1; position: relative; overflow: hidden; }
         canvas { width: 100% !important; height: 100% !important; display: block; }
 
+        .slider { -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer;}
+        .slider::-webkit-slider-runnable-track {background: rgba(255, 255, 255, 0.1); height: 4px; border-radius: 2px; transition: background 0.3s ease;}
+        .slider::-moz-range-track {background: rgba(255, 255, 255, 0.1); height: 4px; border-radius: 2px;}
+        .slider::-webkit-slider-thumb {-webkit-appearance: none; height: 18px; width: 18px; background: #ffffff; border-radius: 50%; margin-top: -7px; box-shadow: 0 0 0 0px rgba(0, 113, 227, 0); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(0,0,0,0.1);}
+        .slider::-moz-range-thumb {height: 18px; width: 18px; background: #ffffff; border-radius: 50%; border: none; transition: all 0.2s ease;}
+        .slider:hover::-webkit-slider-runnable-track {background: rgba(255, 255, 255, 0.2);}
+        .slider:active::-webkit-slider-thumb {transform: scale(1.2); box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); background: var(--athel-accent);}
+        .slider:focus {outline: none;}
+        
         .gallery-section { max-width: 1440px; margin: 80px auto; padding: 60px 40px 100px; border-top: 1px solid var(--athel-border); }
         .gallery-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .gallery-title { font-size: 10px; color: var(--athel-secondary); text-transform: uppercase; letter-spacing: 3px; }
@@ -108,9 +117,9 @@
                 <div style="margin-bottom:40px">
                     <h3 style="font-size:10px; color:var(--athel-secondary); text-transform:uppercase; letter-spacing:2px; margin-bottom:20px">Générateur Chromatique</h3>
                     <label style="font-size:11px; color:var(--athel-secondary)">Complexité</label>
-                    <input type="range" id="complexity" min="20" max="600" value="200" style="width:100%; margin: 10px 0 20px;">
+                    <input class="slider" type="range" id="complexity" min="20" max="600" value="200" style="width:100%; margin: 10px 0 20px;">
                     <label style="font-size:11px; color:var(--athel-secondary)">Intensité Chroma</label>
-                    <input type="range" id="chroma" min="0" max="100" value="85" style="width:100%; margin: 10px 0;">
+                    <input class="slider" type="range" id="chroma" min="0" max="100" value="85" style="width:100%; margin: 10px 0;">
                 </div>
                 <button id="btn-generate" class="athel-btn">Minter un Artifact</button>
                 <button id="btn-save" class="athel-btn athel-btn--outline">Synchroniser (Cloud)</button>
