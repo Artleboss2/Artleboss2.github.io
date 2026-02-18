@@ -142,6 +142,7 @@
             background: white; color: black; font-weight: 600;
         }
         .athel-btn--ai { background: transparent; border: 1px solid var(--athel-border); color: white; }
+        .athel-btn--download { background: #1c1c1e; color: white; border: 1px solid var(--athel-border); }
         .athel-btn:disabled { opacity: 0.5; cursor: wait; }
         .athel-btn:hover:not(:disabled) { transform: translateY(-3px); opacity: 0.9; }
 
@@ -232,6 +233,7 @@
             <div class="athel-actions">
                 <button id="btn-generate" class="athel-btn">Minter un Unique Artifact</button>
                 <button id="btn-ai-analyze" class="athel-btn athel-btn--ai">AI Evaluation & Cloud Sync</button>
+                <button id="btn-download" class="athel-btn athel-btn--download">Télécharger l'Artifact (PNG)</button>
             </div>
         </aside>
     </main>
@@ -239,8 +241,7 @@
     <div class="athel-feed">
         <h2>Onglet : NFT GENERATOR</h2>
         <div id="community-grid" class="athel-grid">
-            <!-- Items injectés par Realtime Database -->
-        </div>
+            </div>
     </div>
 
     <script type="importmap">
@@ -426,6 +427,14 @@
         window.addEventListener('DOMContentLoaded', () => {
             initApp();
 
+            // EVENT: TELECHARGER
+            document.getElementById('btn-download').addEventListener('click', () => {
+                const link = document.createElement('a');
+                link.download = `Aethelgard_${engine.currentHash}.png`;
+                link.href = engine.canvas.toDataURL("image/png");
+                link.click();
+            });
+
             document.getElementById('btn-generate').addEventListener('click', () => {
                 document.getElementById('ai-analysis').style.display = 'none';
                 gsap.to("#art-canvas", { opacity: 0, duration: 0.2, onComplete: () => {
@@ -449,7 +458,6 @@
 
             document.getElementById('btn-ai-analyze').addEventListener('click', async () => {
                 if (!geminiApiKey) {
-                    // Simulation si pas de clé API Gemini pour GitHub Pages
                     const btn = document.getElementById('btn-ai-analyze');
                     btn.innerText = "Clé API manquante";
                     return;
