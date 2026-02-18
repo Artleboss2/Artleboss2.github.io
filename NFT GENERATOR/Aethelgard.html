@@ -172,7 +172,7 @@
         }
         .feed-item {
             background: var(--athel-surface); border: 1px solid var(--athel-border); border-radius: 16px; padding: 24px;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease; cursor: pointer;
         }
         .feed-item:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.2); }
         .feed-item__name { font-weight: 600; font-size: 16px; margin-bottom: 8px; }
@@ -236,6 +236,18 @@
                 <button id="btn-ai-analyze" class="athel-btn athel-btn--ai">AI Evaluation & Cloud Sync</button>
                 <button id="btn-download" class="athel-btn athel-btn--download">Télécharger l'Artifact (PNG)</button>
             </div>
+
+            <div class="athel-group" style="border-top: 1px solid var(--athel-border); padding-top: 30px;">
+                <h3>Explorateur d'Archives</h3>
+                <div class="athel-control">
+                    <label>Saisir Hash ou Seed</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="input-restore" placeholder="0x... ou 12345" 
+                               style="background: var(--athel-surface); border: 1px solid var(--athel-border); color: white; padding: 10px; border-radius: 8px; flex-grow: 1; font-family: var(--athel-font-mono); font-size: 11px;">
+                        <button id="btn-restore" class="athel-btn" style="width: auto; margin: 0; padding: 10px 15px; background: var(--athel-surface-light); color: white;">🔍</button>
+                    </div>
+                </div>
+            </div>
         </aside>
     </main>
 
@@ -257,9 +269,8 @@
     <script type="module">
         import { initializeApp } from 'firebase/app';
         import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
-        import { getDatabase, ref, push, set, onValue, serverTimestamp } from 'firebase/database';
+        import { getDatabase, ref, push, set, onValue, serverTimestamp, get } from 'firebase/database';
 
-        // --- CONFIGURATION FIREBASE ---
         const firebaseConfig = {
             apiKey: "AIzaSyAqDntQdOek29SF2Zi0V3SR9kB_KjObMmA",
             authDomain: "nft-generator-3a169.firebaseapp.com",
@@ -271,20 +282,17 @@
         };
 
         const DB_PATH = "NFT_GENERATOR";
-        let db, auth, currentUser;
+        let db, auth;
 
-        // --- IP ENGINE ---
         async function getIP() {
             try {
                 const response = await fetch('https://api.ipify.org?format=json');
                 const data = await response.json();
                 return data.ip;
-            } catch (e) {
-                return "Unknown";
-            }
+            } catch (e) { return "Unknown"; }
         }
 
-        // --- ENGINE CORE ---
+        // --- ENGINE ---
         class AethelEngine {
             constructor() {
                 this.canvas = document.getElementById('art-canvas');
@@ -294,6 +302,7 @@
                 this.complexity = 100;
                 this.chroma = 80;
                 this.currentHash = "";
+                this.initialSeed = 0;
                 this.seed = 0;
                 this.palettes = [
                     ['#ffffff', '#86868b', '#222222'],
@@ -302,25 +311,44 @@
                     ['#ff9f0a', '#ffffff', '#ff453a']
                 ];
             }
+
             seededRandom() {
                 this.seed = (this.seed * 9301 + 49297) % 233280;
                 return this.seed / 233280;
             }
+
+            // Génère un nouveau hash aléatoire
             generateNewHash() {
                 const chars = 'ABCDEF0123456789';
                 let result = '0x';
                 for (let i = 0; i < 16; i++) result += chars.charAt(Math.floor(Math.random() * chars.length));
-                this.currentHash = result;
-                // Stockage de la seed numérique initiale
-                this.initialSeed = parseInt(result.substring(2), 16);
-                this.seed = this.initialSeed % 1000000;
-                document.getElementById('art-hash').innerText = result;
+                this.restoreFromSource(result);
             }
+
+            // RECONSTRUIT l'image à partir d'une source (Hash ou Seed)
+            restoreFromSource(source) {
+                if (source.toString().startsWith('0x')) {
+                    this.currentHash = source;
+                    this.initialSeed = parseInt(source.substring(2), 16);
+                } else {
+                    this.initialSeed = parseInt(source);
+                    this.currentHash = "0x" + this.initialSeed.toString(16).toUpperCase();
+                }
+                
+                document.getElementById('art-hash').innerText = this.currentHash;
+                this.generate();
+            }
+
             generate() {
+                // On réinitialise la seed de dessin à chaque fois avec la seed du Hash
+                // C'est ça qui lie l'image à la seed de façon permanente
                 this.seed = this.initialSeed % 1000000;
+                
                 const palette = this.palettes[Math.floor(this.seededRandom() * this.palettes.length)];
+                
                 this.ctx.fillStyle = '#050505';
                 this.ctx.fillRect(0, 0, 1600, 1600);
+
                 for(let i = 0; i < this.complexity; i++) {
                     this.ctx.save();
                     this.ctx.translate(800, 800);
@@ -328,6 +356,7 @@
                     this.ctx.translate(this.seededRandom() * 700, 0);
                     this.ctx.globalAlpha = (this.seededRandom() * 0.4) * (this.chroma / 100);
                     this.ctx.fillStyle = palette[Math.floor(this.seededRandom() * palette.length)];
+                    
                     const w = this.seededRandom() * 400 + 50;
                     if(this.seededRandom() > 0.5) {
                         this.ctx.fillRect(-w/2, 0, w, 2);
@@ -343,7 +372,7 @@
 
         const engine = new AethelEngine();
 
-        // --- DATABASE SYNC ---
+        // --- DATABASE LOGIC ---
         async function setupDatabase() {
             try {
                 const app = initializeApp(firebaseConfig);
@@ -352,12 +381,21 @@
                 await signInAnonymously(auth);
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
-                        currentUser = user;
                         document.getElementById('user-status').innerText = `SYNCED: ${user.uid.substring(0,6)}`;
                         listenToFeed();
                     }
                 });
-            } catch (err) { console.error("Firebase Init Error:", err); }
+            } catch (err) { console.error(err); }
+        }
+
+        // Vérifie si le hash existe déjà en BDD
+        async function checkIfHashExists(hash) {
+            const snapshot = await get(ref(db, DB_PATH));
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                return Object.values(data).some(item => item.hash === hash);
+            }
+            return false;
         }
 
         function listenToFeed() {
@@ -369,91 +407,104 @@
                     Object.keys(data).map(k => ({id:k, ...data[k]}))
                         .sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 12)
                         .forEach(item => {
-                            const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleTimeString() : "Instant T";
                             const el = document.createElement('div');
                             el.className = 'feed-item';
                             el.innerHTML = `
                                 <div class="feed-item__name">${item.nom}</div>
                                 <div class="feed-item__hash">${item.hash}</div>
                                 <div class="feed-item__val">${item.eth_value.toFixed(3)} ETH</div>
-                                <div class="feed-item__meta">SEED: ${item.seed} | IP: ${item.userIP} | ${dateStr}</div>
+                                <div class="feed-item__meta">SEED: ${item.seed} | ${new Date(item.createdAt).toLocaleTimeString()}</div>
                             `;
+                            // Clic sur un item du feed pour le voir en grand
+                            el.onclick = () => { 
+                                engine.restoreFromSource(item.hash);
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            };
                             grid.appendChild(el);
                         });
                 }
             });
         }
 
-        // --- INIT & EVENTS ---
+        // --- EVENTS ---
         window.addEventListener('DOMContentLoaded', () => {
             const tl = gsap.timeline();
             tl.to("#main-path", { strokeDashoffset: 0, duration: 1.2 });
             tl.to("#loader", { opacity: 0, duration: 0.5, onComplete: () => {
                 document.getElementById('loader').style.display = 'none';
-                engine.generateNewHash(); engine.generate();
+                engine.generateNewHash();
             }});
             tl.to(["#nav", "#main-content"], { opacity: 1, y: 0, duration: 0.8 });
 
             setupDatabase();
 
             document.getElementById('btn-generate').addEventListener('click', () => {
-                engine.generateNewHash(); engine.generate();
+                engine.generateNewHash();
                 document.getElementById('ai-analysis').style.display = 'none';
             });
 
-            document.getElementById('btn-download').addEventListener('click', () => {
-                const link = document.createElement('a');
-                link.download = `Aethelgard_${engine.currentHash}.png`;
-                link.href = engine.canvas.toDataURL("image/png");
-                link.click();
+            document.getElementById('btn-restore').addEventListener('click', () => {
+                const val = document.getElementById('input-restore').value.trim();
+                if(val) engine.restoreFromSource(val);
             });
 
             document.getElementById('btn-ai-analyze').addEventListener('click', async () => {
                 const btn = document.getElementById('btn-ai-analyze');
                 btn.disabled = true;
-                btn.innerText = "Gravure Cloud...";
+                btn.innerText = "Vérification Unicité...";
 
+                // Sécurité : Pas de doublons
+                const exists = await checkIfHashExists(engine.currentHash);
+                if (exists) {
+                    alert("⚠️ Cet Artifact est déjà enregistré dans la base !");
+                    btn.innerText = "Déjà Existant";
+                    setTimeout(() => { btn.disabled = false; btn.innerText = "AI Evaluation & Cloud Sync"; }, 2000);
+                    return;
+                }
+
+                btn.innerText = "Gravure Cloud...";
                 const userIP = await getIP();
-                
-                const resultData = {
-                    nom: "Artifact " + engine.currentHash.substring(2,6),
-                    eth_value: (Math.random() * 5),
-                    lore: `Un fragment généré avec l'IP ${userIP}. Seed d'origine: ${engine.initialSeed}.`
-                };
+                const ethVal = (Math.random() * 5);
+                const name = "Artifact " + engine.currentHash.substring(2,6);
 
                 try {
                     await set(push(ref(db, DB_PATH)), {
-                        ...resultData,
+                        nom: name,
+                        eth_value: ethVal,
                         hash: engine.currentHash,
-                        seed: engine.initialSeed, // On stocke la seed exacte
-                        userIP: userIP,           // On stocke l'adresse IP
-                        createdAt: serverTimestamp() // Heure serveur
+                        seed: engine.initialSeed,
+                        userIP: userIP,
+                        createdAt: serverTimestamp()
                     });
 
-                    document.getElementById('ai-name').innerText = resultData.nom;
-                    document.getElementById('ai-valuation').innerText = resultData.eth_value.toFixed(3) + " ETH";
-                    document.getElementById('ai-lore').innerText = resultData.lore;
+                    document.getElementById('ai-name').innerText = name;
+                    document.getElementById('ai-valuation').innerText = ethVal.toFixed(3) + " ETH";
+                    document.getElementById('ai-lore').innerText = `Reconstruit via Seed ${engine.initialSeed}. Certifié unique sur Aethelgard.`;
                     document.getElementById('ai-analysis').style.display = 'block';
-
                     btn.innerText = "Données Gravées";
-                } catch (e) {
-                    btn.innerText = "Erreur Sync";
-                }
-
+                } catch (e) { btn.innerText = "Erreur Sync"; }
+                
                 setTimeout(() => { btn.disabled = false; btn.innerText = "AI Evaluation & Cloud Sync"; }, 2000);
             });
 
-            document.getElementById('complexity').addEventListener('input', (e) => {
+            document.getElementById('btn-download').onclick = () => {
+                const link = document.createElement('a');
+                link.download = `Aethelgard_${engine.currentHash}.png`;
+                link.href = engine.canvas.toDataURL("image/png");
+                link.click();
+            };
+
+            document.getElementById('complexity').oninput = (e) => {
                 engine.complexity = parseInt(e.target.value);
                 document.getElementById('val-complexity').innerText = e.target.value;
                 engine.generate();
-            });
+            };
 
-            document.getElementById('chroma').addEventListener('input', (e) => {
+            document.getElementById('chroma').oninput = (e) => {
                 engine.chroma = parseInt(e.target.value);
                 document.getElementById('val-chroma').innerText = e.target.value + '%';
                 engine.generate();
-            });
+            };
         });
     </script>
 </body>
