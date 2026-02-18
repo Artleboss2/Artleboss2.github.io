@@ -178,6 +178,7 @@
         .feed-item__name { font-weight: 600; font-size: 16px; margin-bottom: 8px; }
         .feed-item__hash { font-family: var(--athel-font-mono); font-size: 10px; color: var(--athel-secondary); margin-bottom: 12px; }
         .feed-item__val { font-family: var(--athel-font-mono); color: #34c759; font-size: 14px; }
+        .feed-item__meta { font-size: 9px; color: #444; margin-top: 10px; text-transform: uppercase; font-family: var(--athel-font-mono); }
 
         @media (max-width: 1100px) {
             .athel-studio { grid-template-columns: 1fr; padding: 100px 24px; gap: 40px; }
@@ -266,15 +267,22 @@
             projectId: "nft-generator-3a169",
             storageBucket: "nft-generator-3a169.firebasestorage.app",
             messagingSenderId: "986920134203",
-            appId: "1:986920134203:web:557d0a7f58ad89e36dde1e",
-            measurementId: "G-W74VT12FZ4"
+            appId: "1:986920134203:web:557d0a7f58ad89e36dde1e"
         };
 
         const DB_PATH = "NFT_GENERATOR";
-        const geminiApiKey = ""; // Mets ta clé ici si tu veux l'IA
-        const geminiBaseUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
-
         let db, auth, currentUser;
+
+        // --- IP ENGINE ---
+        async function getIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (e) {
+                return "Unknown";
+            }
+        }
 
         // --- ENGINE CORE ---
         class AethelEngine {
@@ -303,11 +311,13 @@
                 let result = '0x';
                 for (let i = 0; i < 16; i++) result += chars.charAt(Math.floor(Math.random() * chars.length));
                 this.currentHash = result;
-                this.seed = parseInt(result.substring(2), 16) % 1000000;
+                // Stockage de la seed numérique initiale
+                this.initialSeed = parseInt(result.substring(2), 16);
+                this.seed = this.initialSeed % 1000000;
                 document.getElementById('art-hash').innerText = result;
             }
             generate() {
-                this.seed = parseInt(this.currentHash.substring(2), 16) % 1000000;
+                this.seed = this.initialSeed % 1000000;
                 const palette = this.palettes[Math.floor(this.seededRandom() * this.palettes.length)];
                 this.ctx.fillStyle = '#050505';
                 this.ctx.fillRect(0, 0, 1600, 1600);
@@ -357,14 +367,16 @@
                 grid.innerHTML = '';
                 if (data) {
                     Object.keys(data).map(k => ({id:k, ...data[k]}))
-                        .sort((a,b) => b.createdAt - a.createdAt).slice(0, 12)
+                        .sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 12)
                         .forEach(item => {
+                            const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleTimeString() : "Instant T";
                             const el = document.createElement('div');
                             el.className = 'feed-item';
                             el.innerHTML = `
                                 <div class="feed-item__name">${item.nom}</div>
                                 <div class="feed-item__hash">${item.hash}</div>
                                 <div class="feed-item__val">${item.eth_value.toFixed(3)} ETH</div>
+                                <div class="feed-item__meta">SEED: ${item.seed} | IP: ${item.userIP} | ${dateStr}</div>
                             `;
                             grid.appendChild(el);
                         });
@@ -399,34 +411,35 @@
             document.getElementById('btn-ai-analyze').addEventListener('click', async () => {
                 const btn = document.getElementById('btn-ai-analyze');
                 btn.disabled = true;
-                btn.innerText = "Synchronisation...";
+                btn.innerText = "Gravure Cloud...";
 
-                let resultData;
+                const userIP = await getIP();
+                
+                const resultData = {
+                    nom: "Artifact " + engine.currentHash.substring(2,6),
+                    eth_value: (Math.random() * 5),
+                    lore: `Un fragment généré avec l'IP ${userIP}. Seed d'origine: ${engine.initialSeed}.`
+                };
 
-                if (geminiApiKey) {
-                    // Logique AI réelle (si clé présente)
-                    // ... fetch gemini ...
-                } else {
-                    // Simulation si pas de clé pour éviter l'erreur
-                    resultData = {
-                        nom: "Artifact " + engine.currentHash.substring(2,6),
-                        eth_value: Math.random() * 5,
-                        lore: "Un fragment d'Aethelgard généré dynamiquement via le moteur neuronal."
-                    };
+                try {
+                    await set(push(ref(db, DB_PATH)), {
+                        ...resultData,
+                        hash: engine.currentHash,
+                        seed: engine.initialSeed, // On stocke la seed exacte
+                        userIP: userIP,           // On stocke l'adresse IP
+                        createdAt: serverTimestamp() // Heure serveur
+                    });
+
+                    document.getElementById('ai-name').innerText = resultData.nom;
+                    document.getElementById('ai-valuation').innerText = resultData.eth_value.toFixed(3) + " ETH";
+                    document.getElementById('ai-lore').innerText = resultData.lore;
+                    document.getElementById('ai-analysis').style.display = 'block';
+
+                    btn.innerText = "Données Gravées";
+                } catch (e) {
+                    btn.innerText = "Erreur Sync";
                 }
 
-                await set(push(ref(db, DB_PATH)), {
-                    ...resultData,
-                    hash: engine.currentHash,
-                    createdAt: serverTimestamp()
-                });
-
-                document.getElementById('ai-name').innerText = resultData.nom;
-                document.getElementById('ai-valuation').innerText = resultData.eth_value.toFixed(3) + " ETH";
-                document.getElementById('ai-lore').innerText = resultData.lore;
-                document.getElementById('ai-analysis').style.display = 'block';
-
-                btn.innerText = "Données Gravées";
                 setTimeout(() => { btn.disabled = false; btn.innerText = "AI Evaluation & Cloud Sync"; }, 2000);
             });
 
