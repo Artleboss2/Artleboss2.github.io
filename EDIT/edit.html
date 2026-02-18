@@ -1,40 +1,16 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scroll Edit Animation</title>
-    <link rel="stylesheet" href="edit.css">
-</head>
-<body>
-
-    <section class="hero">
-        <h1 class="reveal-text">L'ART DU SCROLL</h1>
-        <div class="overlay"></div>
-    </section>
-
-    <section class="content">
-        <div class="card left">
-            <img src="https://picsum.photos/600/400?random=1" alt="Image 1">
-            <div class="text">
-                <h2>LE MOUVEMENT</h2>
-                <p>La fluidité est la clé d'un bon edit.</p>
-            </div>
+<section class="scroll-container">
+    <div class="sticky-wrapper">
+        <h1 id="instruction">Scrollez pour mélanger...</h1>
+        
+        <div class="deck" id="deck">
+            <div class="card" style="--i:1"></div>
+            <div class="card" style="--i:2"></div>
+            <div class="card" style="--i:3"></div>
+            <div class="card" style="--i:4"></div>
+            <div class="card" style="--i:5"></div>
+            <div class="card choice" id="c1" onclick="reveal(this)"><span>?</span></div>
+            <div class="card choice" id="c2" onclick="reveal(this)"><span>?</span></div>
+            <div class="card choice" id="c3" onclick="reveal(this)"><span>?</span></div>
         </div>
-
-        <div class="card right">
-            <div class="text">
-                <h2>LA PRÉCISION</h2>
-                <p>Chaque pixel compte lors du défilement.</p>
-            </div>
-            <img src="https://picsum.photos/600/400?random=2" alt="Image 2">
-        </div>
-    </section>
-
-    <section class="footer">
-        <h2 class="zoom-text">FIN DU MONTAGE</h2>
-    </section>
-
-    <script src="edit.js"></script>
-</body>
-</html>
+    </div>
+</section>
