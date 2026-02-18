@@ -35,25 +35,12 @@
 
         /* --- LOADER --- */
         .athel-loader {
-            position: fixed;
-            inset: 0;
-            z-index: 10000;
-            background: #000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            position: fixed; inset: 0; z-index: 10000; background: #000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
-
         .loader-svg { width: 120px; height: 120px; overflow: visible; }
-        .loader-path {
-            fill: none; stroke: white; stroke-width: 2; stroke-linecap: round;
-            stroke-dasharray: 400; stroke-dashoffset: 400;
-        }
-        .loader-text {
-            margin-top: 30px; font-family: var(--athel-font-mono); font-size: 9px;
-            letter-spacing: 0.4em; color: var(--athel-secondary); text-transform: uppercase;
-        }
+        .loader-path { fill: none; stroke: white; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 400; stroke-dashoffset: 400; }
+        .loader-text { margin-top: 30px; font-family: var(--athel-font-mono); font-size: 9px; letter-spacing: 0.4em; color: var(--athel-secondary); text-transform: uppercase; }
 
         /* --- NAV --- */
         .athel-nav {
@@ -61,68 +48,61 @@
             border-bottom: 1px solid var(--athel-border); backdrop-filter: blur(20px);
             background: rgba(0, 0, 0, 0.7); opacity: 0; transform: translateY(-10px);
         }
-        .athel-nav__container {
-            max-width: 1440px; margin: 0 auto; height: 100%;
-            padding: 0 40px; display: flex; justify-content: space-between; align-items: center;
-        }
+        .athel-nav__container { max-width: 1440px; margin: 0 auto; height: 100%; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; }
+        .athel-nav__logo { font-weight: 600; font-size: 14px; letter-spacing: 1px; }
 
-        /* --- STUDIO LAYOUT --- */
+        /* --- STUDIO --- */
         .athel-studio {
-            max-width: 1440px; margin: 0 auto;
-            padding: 120px 40px 60px;
-            display: grid; grid-template-columns: 1fr 380px; gap: 80px;
-            min-height: 100vh; opacity: 0;
+            max-width: 1440px; margin: 0 auto; padding: 120px 40px 60px;
+            display: grid; grid-template-columns: 1fr 380px; gap: 80px; min-height: 100vh; opacity: 0;
         }
-
         .athel-studio__preview {
             background: #050505; border-radius: 24px; border: 1px solid var(--athel-border);
             aspect-ratio: 1; position: relative; overflow: hidden;
             box-shadow: 0 40px 100px -40px rgba(0,0,0,0.9);
         }
         canvas { width: 100% !important; height: 100% !important; display: block; }
-
-        .hash-tag {
-            position: absolute; top: 24px; right: 24px;
-            font-family: var(--athel-font-mono); font-size: 10px;
-            color: var(--athel-secondary); background: rgba(0,0,0,0.5);
-            padding: 4px 8px; border-radius: 4px; border: 1px solid var(--athel-border);
-        }
+        .hash-tag { position: absolute; top: 24px; right: 24px; font-family: var(--athel-font-mono); font-size: 10px; color: var(--athel-secondary); background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--athel-border); }
 
         /* --- UI --- */
         .athel-panel { display: flex; flex-direction: column; gap: 40px; }
         .athel-group h3 { font-size: 10px; color: var(--athel-secondary); text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 24px; }
-        
         .athel-control { margin-bottom: 24px; }
         .athel-control label { font-size: 12px; display: flex; justify-content: space-between; margin-bottom: 12px; }
-
+        
         .athel-btn {
             border: none; padding: 18px; border-radius: 14px; font-size: 13px; cursor: pointer;
             transition: 0.4s var(--athel-ease); font-family: inherit; width: 100%; margin-bottom: 12px;
             display: flex; align-items: center; justify-content: center; gap: 10px;
             background: white; color: black; font-weight: 600;
         }
-        .athel-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .athel-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .athel-btn--download { background: #1c1c1e; color: white; border: 1px solid var(--athel-border); }
 
-        #ai-analysis { margin-top: 30px; border-top: 1px solid var(--athel-border); padding-top: 30px; display: none; }
-        #ai-name { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
-        #ai-valuation { font-family: var(--athel-font-mono); color: #34c759; font-size: 16px; margin-bottom: 15px; }
+        #ai-analysis { margin-top: 50px; border-top: 1px solid var(--athel-border); padding-top: 40px; display: none; }
+        #ai-name { font-size: 36px; font-weight: 700; }
+        #ai-valuation { font-family: var(--athel-font-mono); color: #34c759; font-size: 18px; margin-bottom: 10px; }
 
-        /* --- GRID --- */
+        /* --- TOP 3 & GRID --- */
         .athel-feed { max-width: 1440px; margin: 0 auto; padding: 0 40px 100px; }
+        .section-title { font-size: 10px; color: var(--athel-secondary); text-transform: uppercase; letter-spacing: 0.3em; margin-bottom: 20px; display: block;}
+        
+        .top-three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 60px; }
+        .top-item { background: linear-gradient(145deg, #111, #000); border: 1px solid gold; border-radius: 16px; padding: 20px; position: relative; overflow: hidden; }
+        .top-item::after { content: "TOP VALUE"; position: absolute; top: 10px; right: 10px; font-size: 8px; color: gold; font-family: var(--athel-font-mono); }
+        
         .athel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .feed-item {
-            background: var(--athel-surface); border: 1px solid var(--athel-border); border-radius: 16px; padding: 20px;
-            cursor: pointer; transition: 0.3s;
-        }
-        .feed-item:hover { transform: translateY(-5px); border-color: white; }
+        .feed-item { background: var(--athel-surface); border: 1px solid var(--athel-border); border-radius: 12px; padding: 20px; transition: 0.3s; cursor: pointer;}
+        .feed-item:hover { border-color: white; transform: translateY(-5px); }
+        .feed-item__name { font-weight: 600; font-size: 14px; }
+        .feed-item__val { color: #34c759; font-family: var(--athel-font-mono); font-size: 13px; margin-top: 5px;}
     </style>
 </head>
 <body>
 
     <div id="loader" class="athel-loader">
         <svg class="loader-svg" viewBox="0 0 100 100"><path id="main-path" class="loader-path" d="M 10 50 L 90 50" /></svg>
-        <div class="loader-text">Securing Network...</div>
+        <div class="loader-text">Securing Aethelgard...</div>
     </div>
 
     <nav id="nav" class="athel-nav">
@@ -136,35 +116,35 @@
         <section>
             <div class="athel-studio__preview">
                 <canvas id="art-canvas"></canvas>
-                <div id="art-hash" class="hash-tag">0x0000000000000000</div>
+                <div id="art-hash" class="hash-tag">0x00000000</div>
             </div>
             <div id="ai-analysis">
                 <div id="ai-name">--</div>
                 <div id="ai-valuation">-- ETH</div>
-                <div id="ai-lore" style="font-size: 14px; color: var(--athel-secondary);">Archived on Aethelgard.</div>
+                <div id="ai-lore" style="color: var(--athel-secondary); font-size: 14px;">Artifact validé sur la blockchain Aethelgard.</div>
             </div>
         </section>
 
         <aside class="athel-panel">
             <div class="athel-group">
-                <h3>Actions</h3>
-                <button id="btn-mint" class="athel-btn">Minter & Synchroniser l'Artifact</button>
-                <button id="btn-download" class="athel-btn athel-btn--download">Télécharger (PNG)</button>
-            </div>
-
-            <div class="athel-group" style="border-top: 1px solid var(--athel-border); padding-top: 30px;">
-                <h3>Rechercher un Artifact</h3>
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="input-restore" placeholder="Saisir Hash ou Seed" 
-                           style="background: var(--athel-surface); border: 1px solid var(--athel-border); color: white; padding: 10px; border-radius: 8px; flex-grow: 1; font-family: var(--athel-font-mono); font-size: 11px;">
-                    <button id="btn-restore" class="athel-btn" style="width: auto; margin: 0; padding: 10px 15px; background: var(--athel-surface-light); color: white;">🔍</button>
+                <h3>Paramètres</h3>
+                <div class="athel-control">
+                    <label>Complexité <span id="val-complexity">100</span></label>
+                    <input type="range" id="complexity" min="50" max="300" value="100">
                 </div>
+            </div>
+            <div class="athel-actions">
+                <button id="btn-mint" class="athel-btn">Minter & Synchroniser l'Artifact</button>
+                <button id="btn-download" class="athel-btn athel-btn--download">Télécharger PNG</button>
             </div>
         </aside>
     </main>
 
     <div class="athel-feed">
-        <h2 style="font-size: 12px; margin-bottom: 20px; opacity: 0.5;">LIVE NETWORK FEED</h2>
+        <span class="section-title">🏆 Hall of Fame (Most Valuable)</span>
+        <div id="top-three" class="top-three"></div>
+
+        <span class="section-title">🕒 Recent Artifacts</span>
         <div id="community-grid" class="athel-grid"></div>
     </div>
 
@@ -181,7 +161,7 @@
     <script type="module">
         import { initializeApp } from 'firebase/app';
         import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
-        import { getDatabase, ref, push, set, onValue, serverTimestamp, get } from 'firebase/database';
+        import { getDatabase, ref, push, set, onValue, serverTimestamp, get, query, orderByChild, limitToLast } from 'firebase/database';
 
         const firebaseConfig = {
             apiKey: "AIzaSyAqDntQdOek29SF2Zi0V3SR9kB_KjObMmA",
@@ -202,42 +182,26 @@
                 this.canvas = document.getElementById('art-canvas');
                 this.ctx = this.canvas.getContext('2d');
                 this.canvas.width = 1600; this.canvas.height = 1600;
+                this.complexity = 100;
                 this.currentHash = "";
-                this.initialSeed = 0;
-                this.seed = 0;
             }
-
-            seededRandom() {
-                this.seed = (this.seed * 9301 + 49297) % 233280;
-                return this.seed / 233280;
-            }
-
-            restoreFromSource(source) {
-                if (source.toString().startsWith('0x')) {
-                    this.currentHash = source;
-                    this.initialSeed = parseInt(source.substring(2), 16);
-                } else {
-                    this.initialSeed = parseInt(source);
-                    this.currentHash = "0x" + this.initialSeed.toString(16).toUpperCase();
-                }
-                document.getElementById('art-hash').innerText = this.currentHash;
-                this.generate();
-            }
-
-            generate() {
-                this.seed = this.initialSeed % 1000000;
-                const palette = ['#ffffff', '#0071e3', '#af52de', '#ff9f0a'][this.initialSeed % 4];
+            generateFromHash(hash) {
+                this.currentHash = hash;
+                let seed = parseInt(hash.substring(2), 16);
+                document.getElementById('art-hash').innerText = hash;
+                
                 this.ctx.fillStyle = '#050505';
                 this.ctx.fillRect(0, 0, 1600, 1600);
-                for(let i = 0; i < 150; i++) {
+                
+                for(let i = 0; i < this.complexity; i++) {
+                    seed = (seed * 9301 + 49297) % 233280;
+                    let rnd = seed / 233280;
                     this.ctx.save();
                     this.ctx.translate(800, 800);
-                    this.ctx.rotate(this.seededRandom() * Math.PI * 2);
-                    this.ctx.translate(this.seededRandom() * 700, 0);
+                    this.ctx.rotate(rnd * Math.PI * 2);
                     this.ctx.globalAlpha = 0.3;
-                    this.ctx.fillStyle = palette;
-                    const w = this.seededRandom() * 400 + 50;
-                    this.ctx.fillRect(-w/2, 0, w, 2);
+                    this.ctx.fillStyle = rnd > 0.5 ? '#ffffff' : '#0071e3';
+                    this.ctx.fillRect(rnd * 600, 0, rnd * 300, 2);
                     this.ctx.restore();
                 }
             }
@@ -245,114 +209,108 @@
 
         const engine = new AethelEngine();
 
-        // --- DATABASE SYNC ---
-        async function setupDatabase() {
-            const app = initializeApp(firebaseConfig);
-            db = getDatabase(app);
-            auth = getAuth(app);
-            await signInAnonymously(auth);
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    document.getElementById('user-status').innerText = `NETWORK: ONLINE (${user.uid.substring(0,4)})`;
-                    listenToFeed();
-                }
-            });
-        }
-
+        // --- CORE FUNCTIONS ---
         async function isUnique(hash) {
             const snapshot = await get(ref(db, DB_PATH));
             if (!snapshot.exists()) return true;
-            const data = snapshot.val();
-            return !Object.values(data).some(item => item.hash === hash);
+            return !Object.values(snapshot.val()).some(item => item.hash === hash);
         }
 
-        function listenToFeed() {
-            onValue(ref(db, DB_PATH), (snapshot) => {
-                const grid = document.getElementById('community-grid');
-                grid.innerHTML = '';
-                const data = snapshot.val();
-                if (data) {
-                    Object.values(data).sort((a,b) => b.createdAt - a.createdAt).slice(0, 12).forEach(item => {
-                        const el = document.createElement('div');
-                        el.className = 'feed-item';
-                        el.innerHTML = `<div style="font-weight:bold">${item.nom}</div><div style="font-size:9px;opacity:0.5">${item.hash}</div><div style="color:#34c759;font-family:monospace">${item.eth_value.toFixed(2)} ETH</div>`;
-                        el.onclick = () => engine.restoreFromSource(item.hash);
-                        grid.appendChild(el);
-                    });
-                }
-            });
-        }
-
-        // --- MAIN MINT FUNCTION ---
-        async function mintArtifact() {
+        async function mintAction() {
             const btn = document.getElementById('btn-mint');
             btn.disabled = true;
-            btn.innerText = "Mining & Verifying...";
+            btn.innerText = "Verification d'unicité...";
 
-            let unique = false;
             let newHash = "";
+            let unique = false;
 
-            // Boucle de sécurité pour l'unicité
-            while (!unique) {
-                const chars = 'ABCDEF0123456789';
-                newHash = '0x';
-                for (let i = 0; i < 16; i++) newHash += chars.charAt(Math.floor(Math.random() * chars.length));
-                
+            while(!unique) {
+                newHash = "0x" + Math.random().toString(16).slice(2, 10).toUpperCase();
                 unique = await isUnique(newHash);
-                if (!unique) console.log("Collision détectée, régénération...");
             }
 
-            // Génération visuelle
-            engine.restoreFromSource(newHash);
+            engine.generateFromHash(newHash);
+            const ethVal = (Math.random() * 5);
+            const name = "Artifact " + newHash.substring(2,6);
 
-            // Enregistrement Cloud
             try {
-                const ethVal = Math.random() * 5;
-                const name = "Artifact " + newHash.substring(2,6);
-                
                 await set(push(ref(db, DB_PATH)), {
                     nom: name,
                     hash: newHash,
-                    seed: engine.initialSeed,
                     eth_value: ethVal,
                     createdAt: serverTimestamp()
                 });
-
+                
                 document.getElementById('ai-name').innerText = name;
                 document.getElementById('ai-valuation').innerText = ethVal.toFixed(3) + " ETH";
                 document.getElementById('ai-analysis').style.display = 'block';
-                btn.innerText = "Mint Successful";
+                btn.innerText = "Minté avec succès";
             } catch (e) {
-                btn.innerText = "Sync Error";
+                btn.innerText = "Erreur de sync";
             }
 
-            setTimeout(() => { btn.disabled = false; btn.innerText = "Minter & Synchroniser l'Artifact"; }, 1500);
+            setTimeout(() => { btn.disabled = false; btn.innerText = "Minter & Synchroniser l'Artifact"; }, 2000);
+        }
+
+        function updateFeeds() {
+            onValue(ref(db, DB_PATH), (snapshot) => {
+                const data = snapshot.val();
+                if (!data) return;
+                const items = Object.values(data);
+
+                // TOP 3
+                const top3 = [...items].sort((a,b) => b.eth_value - a.eth_value).slice(0, 3);
+                const topContainer = document.getElementById('top-three');
+                topContainer.innerHTML = top3.map(item => `
+                    <div class="top-item">
+                        <div class="feed-item__name">${item.nom}</div>
+                        <div class="feed-item__val">${item.eth_value.toFixed(3)} ETH</div>
+                        <div style="font-size:9px; opacity:0.4; font-family:monospace">${item.hash}</div>
+                    </div>
+                `).join('');
+
+                // RECENT
+                const recent = [...items].sort((a,b) => b.createdAt - a.createdAt).slice(0, 12);
+                const grid = document.getElementById('community-grid');
+                grid.innerHTML = '';
+                recent.forEach(item => {
+                    const el = document.createElement('div');
+                    el.className = 'feed-item';
+                    el.innerHTML = `<div class="feed-item__name">${item.nom}</div><div class="feed-item__val">${item.eth_value.toFixed(3)} ETH</div>`;
+                    el.onclick = () => engine.generateFromHash(item.hash);
+                    grid.appendChild(el);
+                });
+            });
         }
 
         // --- INIT ---
-        window.addEventListener('DOMContentLoaded', () => {
-            gsap.to("#main-path", { strokeDashoffset: 0, duration: 1.2, onComplete: () => {
-                gsap.to("#loader", { opacity: 0, duration: 0.5, onComplete: () => {
-                    document.getElementById('loader').style.display = 'none';
-                    mintArtifact(); // Mint un premier au chargement
-                }});
-            }});
-            gsap.to(["#nav", "#main-content"], { opacity: 1, y: 0, delay: 1, duration: 0.8 });
-
-            setupDatabase();
-
-            document.getElementById('btn-mint').addEventListener('click', mintArtifact);
+        window.addEventListener('DOMContentLoaded', async () => {
+            const app = initializeApp(firebaseConfig);
+            db = getDatabase(app);
+            auth = getAuth(app);
             
-            document.getElementById('btn-restore').onclick = () => {
-                const v = document.getElementById('input-restore').value.trim();
-                if(v) engine.restoreFromSource(v);
-            };
+            await signInAnonymously(auth);
+            document.getElementById('user-status').innerText = "NETWORK: ONLINE";
+            updateFeeds();
 
+            gsap.to("#main-path", { strokeDashoffset: 0, duration: 1 });
+            gsap.to("#loader", { opacity: 0, delay: 1, onComplete: () => {
+                document.getElementById('loader').style.display = 'none';
+                engine.generateFromHash("0xABCDEF12"); 
+            }});
+            gsap.to(["#nav", "#main-content"], { opacity: 1, y: 0, delay: 1 });
+
+            document.getElementById('btn-mint').onclick = mintAction;
+            document.getElementById('complexity').oninput = (e) => {
+                engine.complexity = e.target.value;
+                document.getElementById('val-complexity').innerText = e.target.value;
+                if(engine.currentHash) engine.generateFromHash(engine.currentHash);
+            };
             document.getElementById('btn-download').onclick = () => {
-                const link = document.createElement('a');
-                link.download = `Aethel_${engine.currentHash}.png`;
-                link.href = engine.canvas.toDataURL();
-                link.click();
+                const a = document.createElement('a');
+                a.download = `Aethel_${engine.currentHash}.png`;
+                a.href = engine.canvas.toDataURL();
+                a.click();
             };
         });
     </script>
