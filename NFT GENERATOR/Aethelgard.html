@@ -52,6 +52,7 @@
         .athel-btn { border: none; padding: 16px; border-radius: 12px; font-size: 13px; cursor: pointer; transition: 0.4s; font-family: inherit; width: 100%; margin-bottom: 10px; background: white; color: black; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .athel-btn--outline { background: transparent; border: 1px solid var(--athel-border); color: white; }
         .athel-btn--small { padding: 8px 15px; width: auto; font-size: 10px; margin-bottom: 0; }
+        .error-msg { color: #ff3b30; font-size: 11px; margin-bottom: 15px; font-family: var(--athel-font-mono); }
         .hash-tag { position: absolute; top: 24px; right: 24px; font-family: var(--athel-font-mono); font-size: 10px; color: var(--athel-secondary); background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--athel-border); }
 
         .athel-loader { position: fixed; inset: 0; z-index: 10000; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
@@ -76,7 +77,22 @@
         </div>
     </nav>
 
-    <main id="view-studio" class="view-section view-active">
+    <div id="view-login" class="view-section">
+        <div class="auth-container">
+            <h2>Accès Node</h2>
+            <div style="margin-bottom: 20px;">
+                <input type="email" id="email-input" class="auth-input" placeholder="Email">
+                <input type="password" id="pass-input" class="auth-input" placeholder="Mot de passe">
+                <button id="btn-email-login" class="athel-btn">Se connecter / Créer</button>
+            </div>
+            <div style="margin:20px 0; font-size:10px; color:var(--athel-secondary); letter-spacing:2px">OU PASSERELLE SOCIALE</div>
+            <button id="btn-google" class="athel-btn athel-btn--outline">Google Gateway</button>
+            <button id="btn-github" class="athel-btn athel-btn--outline">GitHub Node</button>
+            <p id="auth-error" class="error-msg"></p>
+        </div>
+    </div>
+
+    <main id="view-studio" class="view-section">
         <div class="studio-grid">
             <section>
                 <div class="athel-studio__preview">
@@ -107,14 +123,6 @@
         </section>
     </main>
 
-    <div id="view-login" class="view-section">
-        <div class="auth-container">
-            <h2>Accès Node</h2>
-            <button id="btn-google" class="athel-btn athel-btn--outline">Google Gateway</button>
-            <button id="btn-github" class="athel-btn athel-btn--outline">GitHub Node</button>
-        </div>
-    </div>
-
     <script type="importmap">
     {
       "imports": {
@@ -127,7 +135,10 @@
 
     <script type="module">
         import { initializeApp } from 'firebase/app';
-        import { getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, onAuthStateChanged, signOut } from 'firebase/auth';
+        import { 
+            getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, 
+            onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword 
+        } from 'firebase/auth';
         import { getDatabase, ref, push, set, onValue, query, orderByChild, equalTo, serverTimestamp, limitToLast } from 'firebase/database';
 
         const firebaseConfig = {
@@ -143,7 +154,7 @@
         const db = getDatabase(app);
         let currentMode = "global";
 
-        // --- AUTH ---
+        // --- AUTH LOGIC ---
         onAuthStateChanged(auth, async (user) => {
             const authGroup = document.getElementById('nav-auth-group');
             const userGroup = document.getElementById('nav-user-group');
@@ -166,8 +177,37 @@
             document.getElementById('loader').style.display='none';
         });
 
-        document.getElementById('btn-google').onclick = () => signInWithPopup(auth, new GoogleAuthProvider());
-        document.getElementById('btn-github').onclick = () => signInWithPopup(auth, new GithubAuthProvider());
+        // SOCIAL CLICKS
+        const handleAuthError = (e) => {
+            console.error(e);
+            let msg = e.code === "auth/invalid-action-code" ? "Configuration Firebase incomplète (Email de support ?)" : e.message;
+            document.getElementById('auth-error').innerText = msg;
+            if(e.code === "auth/unauthorized-domain") alert("Ajoutez " + window.location.hostname + " aux domaines autorisés Firebase !");
+        };
+
+        document.getElementById('btn-google').onclick = () => {
+            const provider = new GoogleAuthProvider();
+            signInWithPopup(auth, provider).catch(handleAuthError);
+        };
+
+        document.getElementById('btn-github').onclick = () => {
+            const provider = new GithubAuthProvider();
+            signInWithPopup(auth, provider).catch(handleAuthError);
+        };
+
+        // EMAIL LOGIN/SIGNUP (Fallback)
+        document.getElementById('btn-email-login').onclick = async () => {
+            const email = document.getElementById('email-input').value;
+            const pass = document.getElementById('pass-input').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+            } catch (e) {
+                if(e.code === "auth/user-not-found" || e.code === "auth/invalid-credential") {
+                    try { await createUserWithEmailAndPassword(auth, email, pass); } catch(err) { handleAuthError(err); }
+                } else { handleAuthError(e); }
+            }
+        };
+
         document.getElementById('btn-logout').onclick = () => signOut(auth);
 
         // --- ENGINE ---
@@ -212,7 +252,7 @@
         document.getElementById('complexity').oninput = (e) => { engine.complexity = e.target.value; engine.generate(); };
         document.getElementById('chroma').oninput = (e) => { engine.chroma = e.target.value; engine.generate(); };
 
-        // --- CLOUD ---
+        // --- DATABASE ---
         document.getElementById('btn-save').onclick = async () => {
             if(!auth.currentUser) return;
             const btn = document.getElementById('btn-save');
@@ -228,12 +268,9 @@
         };
 
         function loadGallery() {
-            let nftRef = ref(db, "NFTS");
-            if(currentMode === "mine") {
-                nftRef = query(ref(db, "NFTS"), orderByChild("creatorId"), equalTo(auth.currentUser.uid));
-            } else {
-                nftRef = query(ref(db, "NFTS"), limitToLast(20));
-            }
+            let nftRef = (currentMode === "mine") 
+                ? query(ref(db, "NFTS"), orderByChild("creatorId"), equalTo(auth.currentUser.uid))
+                : query(ref(db, "NFTS"), limitToLast(20));
 
             onValue(nftRef, (snap) => {
                 const container = document.getElementById('gallery-container');
@@ -248,8 +285,6 @@
                         engine.seed = parseInt(data.hash.substring(2, 10), 16);
                         engine.generate();
                         document.getElementById('art-hash').innerText = data.hash;
-                        
-                        // Sécurité download
                         const dlBtn = document.getElementById('btn-download');
                         if(auth.currentUser && data.creatorId === auth.currentUser.uid) {
                             dlBtn.style.display = 'block';
@@ -259,9 +294,7 @@
                                 link.href = engine.canvas.toDataURL();
                                 link.click();
                             };
-                        } else {
-                            dlBtn.style.display = 'none';
-                        }
+                        } else { dlBtn.style.display = 'none'; }
                     };
                     container.prepend(card);
                 });
@@ -277,8 +310,11 @@
 
         window.showView = (id) => {
             document.querySelectorAll('.view-section').forEach(v => { v.style.display = 'none'; v.classList.remove('view-active'); });
-            document.getElementById(id).style.display = 'block';
-            setTimeout(() => document.getElementById(id).classList.add('view-active'), 10);
+            const target = document.getElementById(id);
+            if(target) {
+                target.style.display = 'block';
+                setTimeout(() => target.classList.add('view-active'), 10);
+            }
         };
     </script>
 </body>
