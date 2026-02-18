@@ -1,16 +1,31 @@
-<section class="scroll-container">
-    <div class="sticky-wrapper">
-        <h1 id="instruction">Scrollez pour mélanger...</h1>
-        
-        <div class="deck" id="deck">
-            <div class="card" style="--i:1"></div>
-            <div class="card" style="--i:2"></div>
-            <div class="card" style="--i:3"></div>
-            <div class="card" style="--i:4"></div>
-            <div class="card" style="--i:5"></div>
-            <div class="card choice" id="c1" onclick="reveal(this)"><span>?</span></div>
-            <div class="card choice" id="c2" onclick="reveal(this)"><span>?</span></div>
-            <div class="card choice" id="c3" onclick="reveal(this)"><span>?</span></div>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Shuffle Edit</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main class="scroll-wrapper">
+        <div class="sticky-scene">
+            <h1 id="instruction">SCROLLEZ POUR RÉVÉLER</h1>
+            
+            <div class="deck" id="card-deck">
+                <div class="card deco" style="--i:1"></div>
+                <div class="card deco" style="--i:2"></div>
+                <div class="card deco" style="--i:3"></div>
+                <div class="card deco" style="--i:4"></div>
+                <div class="card deco" style="--i:5"></div>
+                
+                <div class="card choice" id="c1" onclick="selectCard(this)"><span>?</span></div>
+                <div class="card choice" id="c2" onclick="selectCard(this)"><span>?</span></div>
+                <div class="card choice" id="c3" onclick="selectCard(this)"><span>?</span></div>
+            </div>
         </div>
-    </div>
-</section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
