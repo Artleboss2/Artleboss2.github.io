@@ -41,24 +41,26 @@
         .nav-link:hover { color: white; }
 
         /* --- PAGES / VIEWS --- */
-        .view-section { display: none; min-height: 100vh; padding-top: 100px; opacity: 0; }
+        .view-section { display: none; min-height: 100vh; padding-top: 100px; opacity: 0; transition: opacity 0.4s ease; }
         .view-active { display: grid; opacity: 1; }
 
         /* --- AUTH PAGES --- */
-        .auth-container { max-width: 400px; margin: 0 auto; padding: 40px; background: var(--athel-surface); border: 1px solid var(--athel-border); border-radius: 24px; text-align: center; }
-        .auth-container h2 { margin-bottom: 30px; font-weight: 300; letter-spacing: -1px; }
-        .auth-input { width: 100%; padding: 14px; background: #161617; border: 1px solid var(--athel-border); border-radius: 12px; color: white; margin-bottom: 12px; font-family: var(--athel-font-mono); }
+        .auth-container { max-width: 400px; margin: 10vh auto; padding: 40px; background: var(--athel-surface); border: 1px solid var(--athel-border); border-radius: 24px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+        .auth-container h2 { margin-bottom: 30px; font-weight: 300; letter-spacing: -1px; font-size: 28px; }
+        .auth-input { width: 100%; padding: 14px; background: #161617; border: 1px solid var(--athel-border); border-radius: 12px; color: white; margin-bottom: 12px; font-family: var(--athel-font-mono); outline: none; }
+        .auth-input:focus { border-color: var(--athel-accent); }
         
         /* --- STUDIO (Générateur) --- */
-        .athel-studio { max-width: 1440px; margin: 0 auto; padding: 120px 40px 60px; grid-template-columns: 1fr 380px; gap: 80px; }
+        .athel-studio { max-width: 1440px; margin: 0 auto; padding: 80px 40px 60px; grid-template-columns: 1fr 380px; gap: 80px; }
         .athel-studio__preview { background: #050505; border-radius: 24px; border: 1px solid var(--athel-border); aspect-ratio: 1; position: relative; overflow: hidden; box-shadow: 0 40px 100px -40px rgba(0,0,0,0.9); }
         canvas { width: 100% !important; height: 100% !important; display: block; }
 
         /* --- UI ELEMENTS --- */
         .athel-btn { border: none; padding: 16px; border-radius: 12px; font-size: 13px; cursor: pointer; transition: 0.4s var(--athel-ease); font-family: inherit; width: 100%; margin-bottom: 10px; background: white; color: black; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .athel-btn--outline { background: transparent; border: 1px solid var(--athel-border); color: white; }
+        .athel-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
         .hash-tag { position: absolute; top: 24px; right: 24px; font-family: var(--athel-font-mono); font-size: 10px; color: var(--athel-secondary); background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--athel-border); }
-        .error-msg { color: #ff3b30; font-size: 11px; margin-top: 10px; font-family: var(--athel-font-mono); }
+        .error-msg { color: #ff3b30; font-size: 11px; margin-top: 10px; font-family: var(--athel-font-mono); min-height: 1.2em; }
 
         /* --- LOADER --- */
         .athel-loader { position: fixed; inset: 0; z-index: 10000; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
@@ -70,7 +72,7 @@
 
     <div id="loader" class="athel-loader">
         <svg class="loader-svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40"/></svg>
-        <div style="margin-top:20px; font-size:9px; letter-spacing:3px; color:var(--athel-secondary)">CORE LOADING...</div>
+        <div style="margin-top:20px; font-size:9px; letter-spacing:3px; color:var(--athel-secondary)">INIT SESSION...</div>
     </div>
 
     <nav class="athel-nav">
@@ -81,8 +83,8 @@
                 <span class="nav-link" onclick="showView('view-signup')" style="color:white; border:1px solid var(--athel-border); padding:5px 12px; border-radius:20px">S'inscrire</span>
             </div>
             <div id="nav-user-group" style="display:none;">
-                <span id="user-display" class="nav-link">User</span>
-                <span class="nav-link" id="btn-logout" style="margin-left:15px; opacity:0.5">Quitter</span>
+                <span id="user-display" class="nav-link" style="color:white">--</span>
+                <span class="nav-link" id="btn-logout" style="margin-left:15px; opacity:0.5; font-size:10px">LOGOUT</span>
             </div>
         </div>
     </nav>
@@ -96,22 +98,26 @@
         </section>
         <aside>
             <div style="margin-bottom:40px">
-                <h3 style="font-size:10px; color:var(--athel-secondary); text-transform:uppercase; letter-spacing:2px; margin-bottom:20px">Paramètres Artifact</h3>
-                <input type="range" id="complexity" min="20" max="500" value="150" style="width:100%; margin-bottom:20px">
-                <input type="range" id="chroma" min="0" max="100" value="80" style="width:100%">
+                <h3 style="font-size:10px; color:var(--athel-secondary); text-transform:uppercase; letter-spacing:2px; margin-bottom:20px">Générateur Chromatique</h3>
+                
+                <label style="font-size:11px; color:var(--athel-secondary)">Complexité</label>
+                <input type="range" id="complexity" min="20" max="600" value="200" style="width:100%; margin: 10px 0 20px;">
+                
+                <label style="font-size:11px; color:var(--athel-secondary)">Intensité Chroma</label>
+                <input type="range" id="chroma" min="0" max="100" value="85" style="width:100%; margin: 10px 0;">
             </div>
-            <button id="btn-generate" class="athel-btn">Générer Nouvel Artifact</button>
-            <button id="btn-save" class="athel-btn athel-btn--outline">Synchroniser sur le Cloud</button>
+            <button id="btn-generate" class="athel-btn">Minter un Artifact</button>
+            <button id="btn-save" class="athel-btn athel-btn--outline">Synchroniser (Cloud)</button>
         </aside>
     </main>
 
     <div id="view-login" class="view-section">
         <div class="auth-container">
-            <h2>Connexion</h2>
+            <h2>Bienvenue</h2>
             <input type="email" id="login-email" class="auth-input" placeholder="Email">
             <input type="password" id="login-pass" class="auth-input" placeholder="Mot de passe">
-            <button id="do-login" class="athel-btn">Entrer</button>
-            <div style="margin:20px 0; font-size:10px; color:var(--athel-secondary)">OU</div>
+            <button id="do-login" class="athel-btn">Se connecter</button>
+            <div style="margin:20px 0; font-size:10px; color:var(--athel-secondary); letter-spacing:2px">OU ACCÈS SOCIAL</div>
             <button id="btn-google" class="athel-btn athel-btn--outline">Google Gateway</button>
             <button id="btn-github" class="athel-btn athel-btn--outline">GitHub Node</button>
             <p id="login-error" class="error-msg"></p>
@@ -120,11 +126,14 @@
 
     <div id="view-signup" class="view-section">
         <div class="auth-container">
-            <h2>Créer un compte</h2>
+            <h2>Nouveau Nœud</h2>
             <input type="email" id="signup-email" class="auth-input" placeholder="Email">
             <input type="password" id="signup-pass" class="auth-input" placeholder="Mot de passe">
-            <button id="do-signup" class="athel-btn">S'enregistrer</button>
+            <button id="do-signup" class="athel-btn">Créer le compte</button>
             <p id="signup-error" class="error-msg"></p>
+            <p style="margin-top:20px; font-size:11px; color:var(--athel-secondary)">
+                Déjà inscrit ? <span onclick="showView('view-login')" style="color:white; cursor:pointer; text-decoration:underline">Connexion</span>
+            </p>
         </div>
     </div>
 
@@ -155,55 +164,71 @@
         const auth = getAuth(app);
         const db = getDatabase(app);
 
-        // --- NAVIGATION LOGIQUE ---
+        // --- NAVIGATION ENGINE ---
         window.showView = (viewId) => {
-            document.querySelectorAll('.view-section').forEach(v => {
+            const views = document.querySelectorAll('.view-section');
+            views.forEach(v => {
                 v.classList.remove('view-active');
                 v.style.display = 'none';
             });
-            const activeView = document.getElementById(viewId);
-            activeView.style.display = viewId === 'view-studio' ? 'grid' : 'block';
-            setTimeout(() => activeView.classList.add('view-active'), 50);
+            
+            const target = document.getElementById(viewId);
+            target.style.display = (viewId === 'view-studio') ? 'grid' : 'block';
+            
+            // Petit délai pour déclencher l'animation CSS d'opacité
+            requestAnimationFrame(() => {
+                target.classList.add('view-active');
+            });
         };
 
-        // --- AUTH LOGIQUE ---
+        // --- AUTH LOGIC ---
         onAuthStateChanged(auth, (user) => {
             const authGroup = document.getElementById('nav-auth-group');
             const userGroup = document.getElementById('nav-user-group');
+            const userDisplay = document.getElementById('user-display');
+
             if (user) {
                 authGroup.style.display = 'none';
                 userGroup.style.display = 'flex';
-                document.getElementById('user-display').innerText = user.email.split('@')[0].toUpperCase();
+                userDisplay.innerText = user.displayName || user.email.split('@')[0].toUpperCase();
                 showView('view-studio');
             } else {
                 authGroup.style.display = 'flex';
                 userGroup.style.display = 'none';
+                showView('view-login'); // Par défaut vers login si déconnecté
             }
-            gsap.to("#loader", {opacity: 0, duration: 1, onComplete: () => document.getElementById('loader').remove()});
+            
+            // Masquer le loader une fois que Firebase a répondu
+            gsap.to("#loader", {opacity: 0, duration: 0.8, delay:0.5, onComplete: () => {
+                const l = document.getElementById('loader');
+                if(l) l.style.display = 'none';
+            }});
         });
 
-        // Email Auth
+        // Handlers
         document.getElementById('do-login').onclick = () => {
-            signInWithEmailAndPassword(auth, document.getElementById('login-email').value, document.getElementById('login-pass').value)
-                .catch(e => document.getElementById('login-error').innerText = e.message);
-        };
-        document.getElementById('do-signup').onclick = () => {
-            createUserWithEmailAndPassword(auth, document.getElementById('signup-email').value, document.getElementById('signup-pass').value)
-                .catch(e => document.getElementById('signup-error').innerText = e.message);
+            const e = document.getElementById('login-email').value;
+            const p = document.getElementById('login-pass').value;
+            signInWithEmailAndPassword(auth, e, p).catch(err => document.getElementById('login-error').innerText = err.message);
         };
 
-        // Social Auth
+        document.getElementById('do-signup').onclick = () => {
+            const e = document.getElementById('signup-email').value;
+            const p = document.getElementById('signup-pass').value;
+            createUserWithEmailAndPassword(auth, e, p).catch(err => document.getElementById('signup-error').innerText = err.message);
+        };
+
         document.getElementById('btn-google').onclick = () => signInWithPopup(auth, new GoogleAuthProvider());
         document.getElementById('btn-github').onclick = () => signInWithPopup(auth, new GithubAuthProvider());
         document.getElementById('btn-logout').onclick = () => signOut(auth);
 
-        // --- ENGINE GENERATIF ---
+        // --- ART ENGINE (Toutes couleurs possibles) ---
         class AethelEngine {
             constructor() {
                 this.canvas = document.getElementById('art-canvas');
                 this.ctx = this.canvas.getContext('2d');
                 this.canvas.width = 1600; this.canvas.height = 1600;
-                this.complexity = 150; this.chroma = 80;
+                this.complexity = 200; this.chroma = 85;
                 this.generateNewHash();
             }
             generateNewHash() {
@@ -214,6 +239,7 @@
             generate() {
                 let s = this.seed;
                 const rnd = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+                
                 this.ctx.fillStyle = '#050505';
                 this.ctx.fillRect(0, 0, 1600, 1600);
 
@@ -222,17 +248,20 @@
                     this.ctx.translate(800, 800);
                     this.ctx.rotate(rnd() * Math.PI * 2);
                     
-                    // Couleur aléatoire totale (HSL)
-                    const h = rnd() * 360;
-                    const color = `hsl(${h}, ${this.chroma}%, 50%)`;
+                    // COULEUR ALÉATOIRE TOTALE : Hue de 0 à 360
+                    const hue = rnd() * 360;
+                    const color = `hsl(${hue}, ${this.chroma}%, 55%)`;
                     
                     this.ctx.strokeStyle = color;
-                    this.ctx.lineWidth = rnd() * 3;
-                    this.ctx.globalAlpha = rnd() * 0.7;
+                    this.ctx.shadowBlur = 10;
+                    this.ctx.shadowColor = color;
+                    this.ctx.lineWidth = rnd() * 2 + 0.5;
+                    this.ctx.globalAlpha = rnd() * 0.6 + 0.1;
                     
                     this.ctx.beginPath();
-                    this.ctx.moveTo(rnd() * 500, 0);
-                    this.ctx.lineTo(rnd() * 800 + 100, rnd() * 100);
+                    const length = rnd() * 600 + 100;
+                    this.ctx.moveTo(rnd() * 300, 0);
+                    this.ctx.lineTo(length, (rnd() - 0.5) * 200);
                     this.ctx.stroke();
                     this.ctx.restore();
                 }
@@ -242,6 +271,7 @@
         const engine = new AethelEngine();
         engine.generate();
 
+        // Control Bindings
         document.getElementById('btn-generate').onclick = () => { engine.generateNewHash(); engine.generate(); };
         document.getElementById('complexity').oninput = (e) => { engine.complexity = e.target.value; engine.generate(); };
         document.getElementById('chroma').oninput = (e) => { engine.chroma = e.target.value; engine.generate(); };
@@ -250,13 +280,17 @@
             if(!auth.currentUser) return showView('view-login');
             const btn = document.getElementById('btn-save');
             btn.innerText = "Syncing...";
-            await set(push(ref(db, "GALLERY")), {
-                hash: engine.currentHash,
-                creator: auth.currentUser.email,
-                timestamp: serverTimestamp()
-            });
-            btn.innerText = "Synchronisé !";
-            setTimeout(() => btn.innerText = "Synchroniser sur le Cloud", 2000);
+            try {
+                await set(push(ref(db, "GALLERY")), {
+                    hash: engine.currentHash,
+                    creator: auth.currentUser.email,
+                    timestamp: serverTimestamp()
+                });
+                btn.innerText = "Synchronisé !";
+            } catch(e) {
+                btn.innerText = "Erreur Sync";
+            }
+            setTimeout(() => btn.innerText = "Synchroniser (Cloud)", 2000);
         };
     </script>
 </body>
