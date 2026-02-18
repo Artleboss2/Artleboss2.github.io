@@ -52,10 +52,13 @@
         .athel-btn { border: none; padding: 16px; border-radius: 12px; font-size: 13px; cursor: pointer; transition: 0.4s; font-family: inherit; width: 100%; margin-bottom: 10px; background: white; color: black; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .athel-btn--outline { background: transparent; border: 1px solid var(--athel-border); color: white; }
         .athel-btn--small { padding: 8px 15px; width: auto; font-size: 10px; margin-bottom: 0; }
-        .error-msg { color: #ff3b30; font-size: 11px; margin-bottom: 15px; font-family: var(--athel-font-mono); }
+        .error-msg { color: #ff3b30; font-size: 11px; margin-bottom: 15px; font-family: var(--athel-font-mono); min-height: 1.2em; }
         .hash-tag { position: absolute; top: 24px; right: 24px; font-family: var(--athel-font-mono); font-size: 10px; color: var(--athel-secondary); background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--athel-border); }
 
         .athel-loader { position: fixed; inset: 0; z-index: 10000; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        
+        .forgot-pass { font-size: 10px; color: var(--athel-secondary); cursor: pointer; text-decoration: underline; margin-top: 10px; display: inline-block; }
+        .forgot-pass:hover { color: white; }
     </style>
 </head>
 <body>
@@ -83,12 +86,13 @@
             <div style="margin-bottom: 20px;">
                 <input type="email" id="email-input" class="auth-input" placeholder="Email">
                 <input type="password" id="pass-input" class="auth-input" placeholder="Mot de passe">
+                <p id="auth-error" class="error-msg"></p>
                 <button id="btn-email-login" class="athel-btn">Se connecter / Créer</button>
+                <span id="btn-forgot" class="forgot-pass">Mot de passe oublié ?</span>
             </div>
             <div style="margin:20px 0; font-size:10px; color:var(--athel-secondary); letter-spacing:2px">OU PASSERELLE SOCIALE</div>
             <button id="btn-google" class="athel-btn athel-btn--outline">Google Gateway</button>
             <button id="btn-github" class="athel-btn athel-btn--outline">GitHub Node</button>
-            <p id="auth-error" class="error-msg"></p>
         </div>
     </div>
 
@@ -137,9 +141,10 @@
         import { initializeApp } from 'firebase/app';
         import { 
             getAuth, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, 
-            onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword 
+            onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+            sendPasswordResetEmail
         } from 'firebase/auth';
-        import { getDatabase, ref, push, set, onValue, query, orderByChild, equalTo, serverTimestamp, limitToLast } from 'firebase/database';
+        import { getDatabase, ref, get, set, onValue, query, orderByChild, equalTo, serverTimestamp, limitToLast } from 'firebase/database';
 
         const firebaseConfig = {
             apiKey: "AIzaSyAqDntQdOek29SF2Zi0V3SR9kB_KjObMmA",
@@ -177,35 +182,51 @@
             document.getElementById('loader').style.display='none';
         });
 
-        // SOCIAL CLICKS
-        const handleAuthError = (e) => {
-            console.error(e);
-            let msg = e.code === "auth/invalid-action-code" ? "Configuration Firebase incomplète (Email de support ?)" : e.message;
-            document.getElementById('auth-error').innerText = msg;
-            if(e.code === "auth/unauthorized-domain") alert("Ajoutez " + window.location.hostname + " aux domaines autorisés Firebase !");
+        // AUTH HANDLERS
+        const showError = (msg) => {
+            const errEl = document.getElementById('auth-error');
+            errEl.innerText = msg;
+            setTimeout(() => { errEl.innerText = ""; }, 5000);
         };
 
-        document.getElementById('btn-google').onclick = () => {
-            const provider = new GoogleAuthProvider();
-            signInWithPopup(auth, provider).catch(handleAuthError);
-        };
+        document.getElementById('btn-google').onclick = () => signInWithPopup(auth, new GoogleAuthProvider()).catch(e => showError(e.message));
+        document.getElementById('btn-github').onclick = () => signInWithPopup(auth, new GithubAuthProvider()).catch(e => showError(e.message));
 
-        document.getElementById('btn-github').onclick = () => {
-            const provider = new GithubAuthProvider();
-            signInWithPopup(auth, provider).catch(handleAuthError);
-        };
-
-        // EMAIL LOGIN/SIGNUP (Fallback)
+        // CONNEXION / CRÉATION LOGIQUE
         document.getElementById('btn-email-login').onclick = async () => {
             const email = document.getElementById('email-input').value;
             const pass = document.getElementById('pass-input').value;
+            
+            if(!email || !pass) return showError("Email et mot de passe requis.");
+
             try {
+                // On tente d'abord la connexion
                 await signInWithEmailAndPassword(auth, email, pass);
             } catch (e) {
+                // Si l'utilisateur n'existe pas, on le crée
                 if(e.code === "auth/user-not-found" || e.code === "auth/invalid-credential") {
-                    try { await createUserWithEmailAndPassword(auth, email, pass); } catch(err) { handleAuthError(err); }
-                } else { handleAuthError(e); }
+                    try { 
+                        await createUserWithEmailAndPassword(auth, email, pass); 
+                    } catch(err) { 
+                        if(err.code === "auth/email-already-in-use") showError("Mot de passe incorrect.");
+                        else if(err.code === "auth/weak-password") showError("Mot de passe trop court (6 min).");
+                        else showError(err.message);
+                    }
+                } else if(e.code === "auth/wrong-password") {
+                    showError("Mot de passe incorrect.");
+                } else {
+                    showError(e.message);
+                }
             }
+        };
+
+        // MOT DE PASSE OUBLIÉ
+        document.getElementById('btn-forgot').onclick = () => {
+            const email = document.getElementById('email-input').value;
+            if(!email) return showError("Entrez votre email d'abord.");
+            sendPasswordResetEmail(auth, email)
+                .then(() => alert("E-mail de récupération envoyé !"))
+                .catch(e => showError(e.message));
         };
 
         document.getElementById('btn-logout').onclick = () => signOut(auth);
@@ -224,6 +245,8 @@
                 this.seed = parseInt(this.currentHash.substring(2, 10), 16);
                 document.getElementById('art-hash').innerText = this.currentHash;
                 document.getElementById('btn-download').style.display = 'none';
+                document.getElementById('btn-save').disabled = false;
+                document.getElementById('btn-save').innerText = "Synchroniser (Cloud)";
             }
             generate() {
                 let s = this.seed;
@@ -252,25 +275,37 @@
         document.getElementById('complexity').oninput = (e) => { engine.complexity = e.target.value; engine.generate(); };
         document.getElementById('chroma').oninput = (e) => { engine.chroma = e.target.value; engine.generate(); };
 
-        // --- DATABASE ---
+        // --- CLOUD LOGIC (ANTI-DUPLICATE) ---
         document.getElementById('btn-save').onclick = async () => {
             if(!auth.currentUser) return;
             const btn = document.getElementById('btn-save');
-            btn.innerText = "Syncing...";
-            await set(push(ref(db, "NFTS")), {
-                hash: engine.currentHash,
-                creatorId: auth.currentUser.uid,
-                creatorEmail: auth.currentUser.email,
-                timestamp: serverTimestamp()
-            });
-            btn.innerText = "Sauvegardé !";
-            setTimeout(() => btn.innerText = "Synchroniser (Cloud)", 2000);
+            const currentHash = engine.currentHash;
+            
+            btn.innerText = "Vérification...";
+            btn.disabled = true;
+
+            const nftRef = ref(db, "NFTS/" + currentHash);
+            const snapshot = await get(nftRef);
+
+            if (snapshot.exists()) {
+                btn.innerText = "Déjà synchronisé !";
+                setTimeout(() => { btn.disabled = false; btn.innerText = "Synchroniser (Cloud)"; }, 2000);
+            } else {
+                btn.innerText = "Syncing...";
+                await set(nftRef, {
+                    hash: currentHash,
+                    creatorId: auth.currentUser.uid,
+                    creatorEmail: auth.currentUser.email,
+                    timestamp: serverTimestamp()
+                });
+                btn.innerText = "Sauvegardé !";
+            }
         };
 
         function loadGallery() {
             let nftRef = (currentMode === "mine") 
                 ? query(ref(db, "NFTS"), orderByChild("creatorId"), equalTo(auth.currentUser.uid))
-                : query(ref(db, "NFTS"), limitToLast(20));
+                : query(ref(db, "NFTS"), limitToLast(30));
 
             onValue(nftRef, (snap) => {
                 const container = document.getElementById('gallery-container');
@@ -285,6 +320,9 @@
                         engine.seed = parseInt(data.hash.substring(2, 10), 16);
                         engine.generate();
                         document.getElementById('art-hash').innerText = data.hash;
+                        document.getElementById('btn-save').innerText = "Enregistré dans le Cloud";
+                        document.getElementById('btn-save').disabled = true;
+
                         const dlBtn = document.getElementById('btn-download');
                         if(auth.currentUser && data.creatorId === auth.currentUser.uid) {
                             dlBtn.style.display = 'block';
