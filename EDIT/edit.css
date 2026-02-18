@@ -1,0 +1,83 @@
+:root {
+    --bg-color: #050505;
+    --accent-color: #ff0055;
+    --text-color: #ffffff;
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg-color);
+    font-family: 'Inter', sans-serif;
+    color: var(--text-color);
+    overflow-x: hidden;
+}
+
+section {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* Intro Animation */
+.reveal-text {
+    font-size: 5rem;
+    letter-spacing: 10px;
+    filter: blur(20px);
+    opacity: 0;
+    transition: all 1.5s ease-out;
+}
+
+.reveal-text.active {
+    filter: blur(0);
+    opacity: 1;
+    letter-spacing: 2px;
+}
+
+/* Cards Animation */
+.content {
+    flex-direction: column;
+    height: auto;
+    padding: 100px 0;
+}
+
+.card {
+    display: flex;
+    align-items: center;
+    width: 80%;
+    margin-bottom: 200px;
+    opacity: 0;
+    transform: translateY(100px);
+    transition: all 0.8s ease-in-out;
+}
+
+.card img {
+    width: 500px;
+    filter: grayscale(100%);
+    transition: 0.5s;
+}
+
+.card.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.card.active img {
+    filter: grayscale(0%);
+}
+
+.left { align-self: flex-start; margin-left: 5%; }
+.right { align-self: flex-end; margin-right: 5%; flex-direction: row-reverse; }
+
+.text { padding: 40px; }
+
+/* Zoom effect on footer */
+.zoom-text {
+    font-size: 2rem;
+    transition: transform 2s ease-out;
+}
+
+.zoom-text.active {
+    transform: scale(3);
+}
