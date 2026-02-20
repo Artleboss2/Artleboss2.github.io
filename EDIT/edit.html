@@ -1,31 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Card Shuffle Edit</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <main class="scroll-wrapper">
-        <div class="sticky-scene">
-            <h1 id="instruction">SCROLLEZ POUR RÉVÉLER</h1>
-            
-            <div class="deck" id="card-deck">
-                <div class="card deco" style="--i:1"></div>
-                <div class="card deco" style="--i:2"></div>
-                <div class="card deco" style="--i:3"></div>
-                <div class="card deco" style="--i:4"></div>
-                <div class="card deco" style="--i:5"></div>
-                
-                <div class="card choice" id="c1" onclick="selectCard(this)"><span>?</span></div>
-                <div class="card choice" id="c2" onclick="selectCard(this)"><span>?</span></div>
-                <div class="card choice" id="c3" onclick="selectCard(this)"><span>?</span></div>
-            </div>
+      <div class="sticky-scene">
+        <h1 id="instruction">SCROLLEZ POUR RÉVÉLER</h1>
+
+        <div class="deck" id="card-deck">
+          <div class="card deco" style="--i: 1"></div>
+          <div class="card deco" style="--i: 2"></div>
+          <div class="card deco" style="--i: 3"></div>
+          <div class="card deco" style="--i: 4"></div>
+          <div class="card deco" style="--i: 5"></div>
+
+          <div class="card choice" id="c1" onclick="selectCard(this)">
+            <span>?</span>
+          </div>
+          <div class="card choice" id="c2" onclick="selectCard(this)">
+            <span>?</span>
+          </div>
+          <div class="card choice" id="c3" onclick="selectCard(this)">
+            <span>?</span>
+          </div>
         </div>
+      </div>
     </main>
 
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

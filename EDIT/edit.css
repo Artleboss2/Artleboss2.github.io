@@ -1,84 +1,87 @@
 :root {
-    --gold: #ffcc00;
-    --dark: #0a0a0a;
-    --card-w: 220px;
-    --card-h: 320px;
+  --gold: #ffcc00;
+  --dark: #0a0a0a;
+  --card-w: 220px;
+  --card-h: 320px;
 }
 
 body {
-    margin: 0;
-    background-color: var(--dark);
-    color: white;
-    font-family: 'Inter', sans-serif;
-    overflow-x: hidden;
+  margin: 0;
+  background-color: var(--dark);
+  color: white;
+  font-family: "Inter", sans-serif;
+  overflow-x: hidden;
 }
 
 .scroll-wrapper {
-    height: 400vh; /* Longueur totale du scroll */
+  height: 400vh; /* Longueur totale du scroll */
 }
 
 .sticky-scene {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    perspective: 1500px;
-    overflow: hidden;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  perspective: 1500px;
+  overflow: hidden;
 }
 
 #instruction {
-    position: absolute;
-    top: 10%;
-    font-size: 1.5rem;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    transition: opacity 0.5s;
+  position: absolute;
+  top: 10%;
+  font-size: 1.5rem;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  transition: opacity 0.5s;
 }
 
 /* Le Paquet */
 .deck {
-    position: relative;
-    width: var(--card-w);
-    height: var(--card-h);
-    transform-style: preserve-3d;
+  position: relative;
+  width: var(--card-w);
+  height: var(--card-h);
+  transform-style: preserve-3d;
 }
 
 .card {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
-    border: 2px solid #333;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-    font-weight: bold;
-    color: var(--gold);
-    transition: transform 0.1s linear, opacity 0.5s, border-color 0.3s;
-    user-select: none;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
+  border: 2px solid #333;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--gold);
+  transition:
+    transform 0.1s linear,
+    opacity 0.5s,
+    border-color 0.3s;
+  user-select: none;
 }
 
 /* Style spécifique aux cartes de choix */
 .card.choice {
-    border-color: var(--gold);
-    cursor: pointer;
-    z-index: 100;
+  border-color: var(--gold);
+  cursor: pointer;
+  z-index: 100;
 }
 
 .card.choice:hover {
-    box-shadow: 0 0 20px var(--gold);
-    background: #1a1a1a;
+  box-shadow: 0 0 20px var(--gold);
+  background: #1a1a1a;
 }
 
 /* État final après clic */
 .card.revealed {
-    background: var(--gold);
-    color: black;
-    transform: scale(1.2) rotateY(180deg) !important;
-    box-shadow: 0 0 50px var(--gold);
+  background: var(--gold);
+  color: black;
+  transform: scale(1.2) rotateY(180deg) !important;
+  box-shadow: 0 0 50px var(--gold);
 }

@@ -1,795 +1,1810 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Portfolio — Développeur</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&family=Playfair+Display:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        .terminal-input, .terminal-output { user-select: text; -webkit-user-select: text; -moz-user-select: text; -ms-user-select: text; }
-        :root { --bg: #0a0a0a; --text: #e8e8e8; --text-dim: #888; --accent: #fff; --border: #1a1a1a; --card-bg: #0f0f0f; }
-        body { font-family: 'JetBrains Mono', monospace; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; cursor: none !important; }
-        *, *::before, *::after { cursor: none !important; }
-        .cursor { width: 12px; height: 12px; background: var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; mix-blend-mode: difference; transition: transform 0.1s ease-out; transform: translate(-50%, -50%); }
-        .cursor-follower { width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; transition: all 0.15s ease-out; transform: translate(-50%, -50%); }
-        .cursor.hover { transform: translate(-50%, -50%) scale(1.8); }
-        .cursor-follower.hover { transform: translate(-50%, -50%) scale(1.5); border-color: rgba(255,255,255,0.6); }
-        header { position: fixed; top: 0; width: 100%; padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; z-index: 100; background: rgba(10,10,10,0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
-        .logo { font-size: 0.9rem; font-weight: 600; letter-spacing: -0.02em; }
-        nav { display: flex; gap: 2rem; }
-        nav a { color: var(--text-dim); text-decoration: none; font-size: 0.85rem; transition: color 0.3s; position: relative; }
-        nav a:hover { color: var(--accent); }
-        nav a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: var(--accent); transition: width 0.3s cubic-bezier(0.4,0,0.2,1); }
-        nav a:hover::after { width: 100%; }
-        .lang-switcher { background: transparent; border: 1px solid var(--text-dim); color: var(--text-dim); padding: 0.4rem 0.8rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; transition: all 0.3s; font-weight: 600; letter-spacing: 0.05em; }
-        .lang-switcher:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
-        .hero { min-height: 100vh; display: flex; align-items: center; padding: 0 3rem; position: relative; overflow: hidden; }
-        .hero-content { max-width: 900px; position: relative; z-index: 2; }
-        .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 8vw, 6rem); font-weight: 400; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -0.03em; opacity: 0; animation: fadeInUp 1s forwards 0.3s; }
-        .hero p { font-size: 1.1rem; color: var(--text-dim); max-width: 600px; margin-bottom: 2.5rem; opacity: 0; animation: fadeInUp 1s forwards 0.5s; }
-        .cta { display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; border: 1px solid var(--accent); color: var(--accent); text-decoration: none; font-size: 0.9rem; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); opacity: 0; animation: fadeInUp 1s forwards 0.7s; }
-        .cta:hover { background: var(--accent); color: var(--bg); transform: translateY(-2px); }
-        .grid-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 50px 50px; mask-image: radial-gradient(ellipse 80% 50% at 50% 50%, black 40%, transparent 80%); pointer-events: none; }
-        .projects { padding: 8rem 3rem; position: relative; }
-        .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 400; margin-bottom: 4rem; letter-spacing: -0.02em; }
-        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; }
-        .project-card { background: var(--card-bg); border: 1px solid var(--border); padding: 2.5rem; transition: all 0.4s cubic-bezier(0.4,0,0.2,1); position: relative; overflow: hidden; }
-        .project-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent); transition: left 0.6s; }
-        .project-card:hover::before { left: 100%; }
-        .project-card:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-4px); }
-        .project-number { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 1rem; font-weight: 300; }
-        .project-card h3 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 400; margin-bottom: 1rem; letter-spacing: -0.01em; }
-        .project-card p { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.7; }
-        .tech-stack { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
-        .tech-tag { font-size: 0.75rem; padding: 0.4rem 0.8rem; border: 1px solid var(--border); color: var(--text-dim); transition: all 0.3s; }
-        .tech-tag:hover { border-color: var(--accent); color: var(--accent); }
-        .project-details-link { display: inline-block; margin-top: 1.5rem; color: var(--text-dim); text-decoration: none; font-size: 0.85rem; transition: all 0.3s; position: relative; }
-        .project-details-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 1px; background: var(--accent); transition: width 0.3s; }
-        .project-details-link:hover { color: var(--accent); }
-        .project-details-link:hover::after { width: 100%; }
-        .skills { padding: 6rem 3rem; background: var(--card-bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; margin-top: 3rem; }
-        .skill-category h4 { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
-        .skill-category ul { list-style: none; }
-        .skill-category li { padding: 0.75rem 0; border-bottom: 1px solid var(--border); font-size: 1rem; transition: all 0.3s; }
-        .skill-category li:hover { padding-left: 1rem; color: var(--accent); border-color: var(--accent); }
-        footer { padding: 4rem 3rem; border-top: 1px solid var(--border); }
-        .footer-content { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
-        .social-links { display: flex; gap: 2rem; }
-        .social-links a { color: var(--text-dim); text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
-        .social-links a:hover { color: var(--accent); }
-        .copyright { color: var(--text-dim); font-size: 0.85rem; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-        .particle { position: absolute; width: 2px; height: 2px; background: rgba(255,255,255,0.5); border-radius: 50%; pointer-events: none; }
-        @media (max-width: 768px) {
-            header { padding: 1rem 1.5rem; }
-            .hero { padding: 0 1.5rem; }
-            nav { gap: 1rem; }
-            .projects { padding: 4rem 1.5rem; }
-            .projects-grid { grid-template-columns: 1fr; }
-            .skills { padding: 4rem 1.5rem; }
-            footer { padding: 3rem 1.5rem; }
-            .footer-content { flex-direction: column; gap: 2rem; text-align: center; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .terminal-input,
+      .terminal-output {
+        user-select: text;
+        -webkit-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+      }
+      :root {
+        --bg: #0a0a0a;
+        --text: #e8e8e8;
+        --text-dim: #888;
+        --accent: #fff;
+        --border: #1a1a1a;
+        --card-bg: #0f0f0f;
+      }
+      body {
+        font-family: "JetBrains Mono", monospace;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+        overflow-x: hidden;
+        cursor: none !important;
+      }
+      *,
+      *::before,
+      *::after {
+        cursor: none !important;
+      }
+      .cursor {
+        width: 12px;
+        height: 12px;
+        background: var(--accent);
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        mix-blend-mode: difference;
+        transition: transform 0.1s ease-out;
+        transform: translate(-50%, -50%);
+      }
+      .cursor-follower {
+        width: 40px;
+        height: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 9998;
+        transition: all 0.15s ease-out;
+        transform: translate(-50%, -50%);
+      }
+      .cursor.hover {
+        transform: translate(-50%, -50%) scale(1.8);
+      }
+      .cursor-follower.hover {
+        transform: translate(-50%, -50%) scale(1.5);
+        border-color: rgba(255, 255, 255, 0.6);
+      }
+      header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        padding: 1.5rem 3rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 100;
+        background: rgba(10, 10, 10, 0.8);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border);
+      }
+      .logo {
+        font-size: 0.9rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+      nav {
+        display: flex;
+        gap: 2rem;
+      }
+      nav a {
+        color: var(--text-dim);
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: color 0.3s;
+        position: relative;
+      }
+      nav a:hover {
+        color: var(--accent);
+      }
+      nav a::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background: var(--accent);
+        transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      nav a:hover::after {
+        width: 100%;
+      }
+      .lang-switcher {
+        background: transparent;
+        border: 1px solid var(--text-dim);
+        color: var(--text-dim);
+        padding: 0.4rem 0.8rem;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.75rem;
+        transition: all 0.3s;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+      }
+      .lang-switcher:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        transform: translateY(-2px);
+      }
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 0 3rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero-content {
+        max-width: 900px;
+        position: relative;
+        z-index: 2;
+      }
+      .hero h1 {
+        font-family: "Playfair Display", serif;
+        font-size: clamp(3rem, 8vw, 6rem);
+        font-weight: 400;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.03em;
+        opacity: 0;
+        animation: fadeInUp 1s forwards 0.3s;
+      }
+      .hero p {
+        font-size: 1.1rem;
+        color: var(--text-dim);
+        max-width: 600px;
+        margin-bottom: 2.5rem;
+        opacity: 0;
+        animation: fadeInUp 1s forwards 0.5s;
+      }
+      .cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 2rem;
+        border: 1px solid var(--accent);
+        color: var(--accent);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        opacity: 0;
+        animation: fadeInUp 1s forwards 0.7s;
+      }
+      .cta:hover {
+        background: var(--accent);
+        color: var(--bg);
+        transform: translateY(-2px);
+      }
+      .grid-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 50px 50px;
+        mask-image: radial-gradient(
+          ellipse 80% 50% at 50% 50%,
+          black 40%,
+          transparent 80%
+        );
+        pointer-events: none;
+      }
+      .projects {
+        padding: 8rem 3rem;
+        position: relative;
+      }
+      .section-title {
+        font-family: "Playfair Display", serif;
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 400;
+        margin-bottom: 4rem;
+        letter-spacing: -0.02em;
+      }
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 2rem;
+      }
+      .project-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        padding: 2.5rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+      .project-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.05),
+          transparent
+        );
+        transition: left 0.6s;
+      }
+      .project-card:hover::before {
+        left: 100%;
+      }
+      .project-card:hover {
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-4px);
+      }
+      .project-number {
+        font-size: 0.75rem;
+        color: var(--text-dim);
+        margin-bottom: 1rem;
+        font-weight: 300;
+      }
+      .project-card h3 {
+        font-family: "Playfair Display", serif;
+        font-size: 1.8rem;
+        font-weight: 400;
+        margin-bottom: 1rem;
+        letter-spacing: -0.01em;
+      }
+      .project-card p {
+        color: var(--text-dim);
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.7;
+      }
+      .tech-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
+      }
+      .tech-tag {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.8rem;
+        border: 1px solid var(--border);
+        color: var(--text-dim);
+        transition: all 0.3s;
+      }
+      .tech-tag:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .project-details-link {
+        display: inline-block;
+        margin-top: 1.5rem;
+        color: var(--text-dim);
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: all 0.3s;
+        position: relative;
+      }
+      .project-details-link::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background: var(--accent);
+        transition: width 0.3s;
+      }
+      .project-details-link:hover {
+        color: var(--accent);
+      }
+      .project-details-link:hover::after {
+        width: 100%;
+      }
+      .skills {
+        padding: 6rem 3rem;
+        background: var(--card-bg);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 3rem;
+        margin-top: 3rem;
+      }
+      .skill-category h4 {
+        font-size: 0.85rem;
+        color: var(--text-dim);
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-weight: 600;
+      }
+      .skill-category ul {
+        list-style: none;
+      }
+      .skill-category li {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 1rem;
+        transition: all 0.3s;
+      }
+      .skill-category li:hover {
+        padding-left: 1rem;
+        color: var(--accent);
+        border-color: var(--accent);
+      }
+      footer {
+        padding: 4rem 3rem;
+        border-top: 1px solid var(--border);
+      }
+      .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      .social-links {
+        display: flex;
+        gap: 2rem;
+      }
+      .social-links a {
+        color: var(--text-dim);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s;
+      }
+      .social-links a:hover {
+        color: var(--accent);
+      }
+      .copyright {
+        color: var(--text-dim);
+        font-size: 0.85rem;
+      }
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
         }
-        .terminal-container { position: fixed; bottom: 0; right: 2rem; width: 500px; max-width: calc(100vw - 4rem); background: rgba(15,15,15,0.95); border: 1px solid var(--border); border-bottom: none; backdrop-filter: blur(10px); z-index: 1000; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 -10px 40px rgba(0,0,0,0.5); }
-        .snake-game-container { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(10,10,10,0.98); border: 2px solid var(--accent); padding: 2rem; z-index: 10000; display: none; box-shadow: 0 20px 60px rgba(0,0,0,0.8); }
-        .snake-game-container.active { display: block; animation: fadeIn 0.3s ease-out; }
-        .snake-header { text-align: center; margin-bottom: 1rem; }
-        .snake-header h3 { font-family: 'JetBrains Mono', monospace; font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--accent); }
-        .snake-score { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--text-dim); }
-        .snake-canvas { display: grid; gap: 2px; background: #0a0a0a; border: 1px solid var(--border); margin: 0 auto; }
-        .snake-cell { width: 20px; height: 20px; background: transparent; transition: background 0.1s; }
-        .snake-cell.snake { background: #4ade80; box-shadow: 0 0 10px rgba(74,222,128,0.5); }
-        .snake-cell.food { background: #ef4444; box-shadow: 0 0 10px rgba(239,68,68,0.5); }
-        .snake-controls { margin-top: 1rem; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-dim); }
-        .snake-close { margin-top: 1rem; text-align: center; }
-        .snake-close button { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 0.5rem 1.5rem; font-family: 'JetBrains Mono', monospace; transition: all 0.3s; }
-        .snake-close button:hover { background: var(--accent); color: var(--bg); }
-        @keyframes fadeIn { from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
-        .terminal-container.minimized { transform: translateY(calc(100% - 40px)); }
-        .terminal-header { padding: 0.75rem 1rem; background: rgba(20,20,20,0.8); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .terminal-title { font-size: 0.85rem; color: var(--text); display: flex; align-items: center; gap: 0.5rem; }
-        .terminal-title::before { content: '●'; color: #4ade80; font-size: 1rem; }
-        .terminal-controls { display: flex; gap: 0.5rem; }
-        .terminal-btn { width: 12px; height: 12px; border-radius: 50%; transition: opacity 0.2s; }
-        .terminal-btn:hover { opacity: 0.7; }
-        .terminal-btn.close { background: #ef4444; }
-        .terminal-btn.minimize { background: #fbbf24; }
-        .terminal-output { padding: 1rem; height: 250px; overflow-y: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.6; color: var(--text); }
-        .terminal-output::-webkit-scrollbar { width: 8px; }
-        .terminal-output::-webkit-scrollbar-track { background: transparent; }
-        .terminal-output::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-        .terminal-line { margin-bottom: 0.5rem; }
-        .terminal-prompt { color: #4ade80; }
-        .terminal-command { color: #60a5fa; }
-        .terminal-error { color: #ef4444; }
-        .terminal-success { color: #4ade80; }
-        .terminal-info { color: var(--text-dim); }
-        .terminal-input-container { padding: 0.75rem 1rem; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 0.5rem; background: rgba(10,10,10,0.5); }
-        .terminal-input { flex: 1; background: transparent; border: none; color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; outline: none; }
-        .terminal-container.hidden { display: none; }
-        @media (max-width: 768px) {
-            .terminal-container { right: 1rem; width: calc(100vw - 2rem); }
-            .terminal-output { height: 200px; font-size: 0.75rem; }
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
-        @media (hover: none) {
-            .cursor, .cursor-follower { display: none; }
-            body, *, *::before, *::after { cursor: auto !important; }
+      }
+      .particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+      }
+      .particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        pointer-events: none;
+      }
+      @media (max-width: 768px) {
+        header {
+          padding: 1rem 1.5rem;
         }
+        .hero {
+          padding: 0 1.5rem;
+        }
+        nav {
+          gap: 1rem;
+        }
+        .projects {
+          padding: 4rem 1.5rem;
+        }
+        .projects-grid {
+          grid-template-columns: 1fr;
+        }
+        .skills {
+          padding: 4rem 1.5rem;
+        }
+        footer {
+          padding: 3rem 1.5rem;
+        }
+        .footer-content {
+          flex-direction: column;
+          gap: 2rem;
+          text-align: center;
+        }
+      }
+      .terminal-container {
+        position: fixed;
+        bottom: 0;
+        right: 2rem;
+        width: 500px;
+        max-width: calc(100vw - 4rem);
+        background: rgba(15, 15, 15, 0.95);
+        border: 1px solid var(--border);
+        border-bottom: none;
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+      }
+      .snake-game-container {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(10, 10, 10, 0.98);
+        border: 2px solid var(--accent);
+        padding: 2rem;
+        z-index: 10000;
+        display: none;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      }
+      .snake-game-container.active {
+        display: block;
+        animation: fadeIn 0.3s ease-out;
+      }
+      .snake-header {
+        text-align: center;
+        margin-bottom: 1rem;
+      }
+      .snake-header h3 {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        color: var(--accent);
+      }
+      .snake-score {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.9rem;
+        color: var(--text-dim);
+      }
+      .snake-canvas {
+        display: grid;
+        gap: 2px;
+        background: #0a0a0a;
+        border: 1px solid var(--border);
+        margin: 0 auto;
+      }
+      .snake-cell {
+        width: 20px;
+        height: 20px;
+        background: transparent;
+        transition: background 0.1s;
+      }
+      .snake-cell.snake {
+        background: #4ade80;
+        box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+      }
+      .snake-cell.food {
+        background: #ef4444;
+        box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+      }
+      .snake-controls {
+        margin-top: 1rem;
+        text-align: center;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.85rem;
+        color: var(--text-dim);
+      }
+      .snake-close {
+        margin-top: 1rem;
+        text-align: center;
+      }
+      .snake-close button {
+        background: transparent;
+        border: 1px solid var(--accent);
+        color: var(--accent);
+        padding: 0.5rem 1.5rem;
+        font-family: "JetBrains Mono", monospace;
+        transition: all 0.3s;
+      }
+      .snake-close button:hover {
+        background: var(--accent);
+        color: var(--bg);
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1);
+        }
+      }
+      .terminal-container.minimized {
+        transform: translateY(calc(100% - 40px));
+      }
+      .terminal-header {
+        padding: 0.75rem 1rem;
+        background: rgba(20, 20, 20, 0.8);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .terminal-title {
+        font-size: 0.85rem;
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .terminal-title::before {
+        content: "●";
+        color: #4ade80;
+        font-size: 1rem;
+      }
+      .terminal-controls {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .terminal-btn {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        transition: opacity 0.2s;
+      }
+      .terminal-btn:hover {
+        opacity: 0.7;
+      }
+      .terminal-btn.close {
+        background: #ef4444;
+      }
+      .terminal-btn.minimize {
+        background: #fbbf24;
+      }
+      .terminal-output {
+        padding: 1rem;
+        height: 250px;
+        overflow-y: auto;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        color: var(--text);
+      }
+      .terminal-output::-webkit-scrollbar {
+        width: 8px;
+      }
+      .terminal-output::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .terminal-output::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 4px;
+      }
+      .terminal-line {
+        margin-bottom: 0.5rem;
+      }
+      .terminal-prompt {
+        color: #4ade80;
+      }
+      .terminal-command {
+        color: #60a5fa;
+      }
+      .terminal-error {
+        color: #ef4444;
+      }
+      .terminal-success {
+        color: #4ade80;
+      }
+      .terminal-info {
+        color: var(--text-dim);
+      }
+      .terminal-input-container {
+        padding: 0.75rem 1rem;
+        border-top: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(10, 10, 10, 0.5);
+      }
+      .terminal-input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: var(--text);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.85rem;
+        outline: none;
+      }
+      .terminal-container.hidden {
+        display: none;
+      }
+      @media (max-width: 768px) {
+        .terminal-container {
+          right: 1rem;
+          width: calc(100vw - 2rem);
+        }
+        .terminal-output {
+          height: 200px;
+          font-size: 0.75rem;
+        }
+      }
+      @media (hover: none) {
+        .cursor,
+        .cursor-follower {
+          display: none;
+        }
+        body,
+        *,
+        *::before,
+        *::after {
+          cursor: auto !important;
+        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="cursor"></div>
     <div class="cursor-follower"></div>
 
     <header>
-        <div class="logo">PORTFOLIO</div>
-        <nav>
-            <a href="#projets" data-i18n="nav.projects">Projets</a>
-            <a href="#competences" data-i18n="nav.skills">Compétences</a>
-            <a href="ressources.html" data-i18n="nav.resources">Ressources</a>
-            <a href="#contact" data-i18n="nav.contact">Contact</a>
-            <button class="lang-switcher" id="langSwitcher" onclick="toggleLanguage()">
-                <span id="langIcon">FR</span>
-            </button>
-        </nav>
+      <div class="logo">PORTFOLIO</div>
+      <nav>
+        <a href="#projets" data-i18n="nav.projects">Projets</a>
+        <a href="#competences" data-i18n="nav.skills">Compétences</a>
+        <a href="ressources.html" data-i18n="nav.resources">Ressources</a>
+        <a href="#contact" data-i18n="nav.contact">Contact</a>
+        <button
+          class="lang-switcher"
+          id="langSwitcher"
+          onclick="toggleLanguage()"
+        >
+          <span id="langIcon">FR</span>
+        </button>
+      </nav>
     </header>
 
     <section class="hero">
-        <div class="grid-bg"></div>
-        <div class="particles" id="particles"></div>
-        <div class="hero-content">
-            <h1 data-i18n="hero.title">Développeur passionné par le gaming et la création</h1>
-            <p data-i18n="hero.description">Je développe des applications, texture packs et outils créatifs pour la communauté gaming. Spécialisé dans la customisation de jeux, les applications mobiles et l'automatisation système.</p>
-            <a href="#projets" class="cta">
-                <span data-i18n="hero.cta">Découvrir mes projets</span>
-                <span>→</span>
-            </a>
-        </div>
+      <div class="grid-bg"></div>
+      <div class="particles" id="particles"></div>
+      <div class="hero-content">
+        <h1 data-i18n="hero.title">
+          Développeur passionné par le gaming et la création
+        </h1>
+        <p data-i18n="hero.description">
+          Je développe des applications, texture packs et outils créatifs pour
+          la communauté gaming. Spécialisé dans la customisation de jeux, les
+          applications mobiles et l'automatisation système.
+        </p>
+        <a href="#projets" class="cta">
+          <span data-i18n="hero.cta">Découvrir mes projets</span>
+          <span>→</span>
+        </a>
+      </div>
     </section>
 
     <section class="projects" id="projets">
-        <h2 class="section-title" data-i18n="projects.title">Projets sélectionnés</h2>
-        <div class="projects-grid">
-
-            <!-- EXISTING PROJECTS -->
-            <div class="project-card">
-                <div class="project-number">01</div>
-                <h3 data-i18n="projects.project1.title">Zynit — To-Do List App</h3>
-                <p data-i18n="projects.project1.description">Application mobile de gestion de tâches avec interface moderne et intuitive. Système de catégorisation, rappels et synchronisation multi-plateforme. Développée avec des standards juridiques complets (CLUF) et conformité aux lois canadiennes sur la protection des données.</p>
-                <div class="tech-stack">
-                    <span class="tech-tag">React Native</span>
-                    <span class="tech-tag">Mobile App</span>
-                    <span class="tech-tag">UI/UX Design</span>
-                    <span class="tech-tag">Legal Compliance</span>
-                </div>
-                <a href="https://github.com/Artleboss2/Zynit" target="_blank" class="project-details-link">Voir sur GitHub →</a>
-            </div>
-
-            <div class="project-card">
-                <div class="project-number">02</div>
-                <h3 data-i18n="projects.project2.title">Bloxd Texture Pack</h3>
-                <p data-i18n="projects.project2.description">Texture pack personnalisé pour Bloxd.io permettant de modifier l'apparence des blocs, skybox, items et modèles 3D. Système de customisation CSS avancé pour personnaliser l'interface du jeu.</p>
-                <div class="tech-stack">
-                    <span class="tech-tag">CSS</span>
-                    <span class="tech-tag">WebGL</span>
-                    <span class="tech-tag">Game Design</span>
-                    <span class="tech-tag">3D Textures</span>
-                </div>
-                <a href="https://github.com/Artleboss2/Bloxd-Texture-Pack" target="_blank" class="project-details-link">Voir sur GitHub →</a>
-            </div>
-
-            <div class="project-card">
-                <div class="project-number">03</div>
-                <h3 data-i18n="projects.project3.title">Batch Multitool</h3>
-                <p data-i18n="projects.project3.description">Outil multifonction développé en Batch pour automatiser des tâches basiques système. Interface en ligne de commande intuitive pour faciliter l'administration Windows.</p>
-                <div class="tech-stack">
-                    <span class="tech-tag">Batchfile</span>
-                    <span class="tech-tag">CLI</span>
-                    <span class="tech-tag">Automation</span>
-                    <span class="tech-tag">Windows</span>
-                </div>
-                <a href="https://github.com/Artleboss2/Batch-Multitool" target="_blank" class="project-details-link">Voir sur GitHub →</a>
-            </div>
-
-            <div class="project-card">
-                <div class="project-number">04</div>
-                <h3 data-i18n="projects.project4.title">Portfolio GitHub</h3>
-                <p data-i18n="projects.project4.description">Portfolio professionnel interactif avec animations réactives au curseur, particules génératives et design moderne. Terminal interactif intégré et jeu Snake. Optimisé pour les performances et l'expérience utilisateur.</p>
-                <div class="tech-stack">
-                    <span class="tech-tag">HTML5</span>
-                    <span class="tech-tag">CSS3</span>
-                    <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">Animations</span>
-                </div>
-                <a href="https://github.com/Artleboss2" target="_blank" class="project-details-link">Voir sur GitHub →</a>
-            </div>
-
-            <!-- NEW PROJECTS -->
-            <div class="project-card">
-                <div class="project-number">05</div>
-                <h3 data-i18n="projects.project5.title">St-Mars E L Inc — Refonte Web</h3>
-                <p data-i18n="projects.project5.description">Refonte numérique premium pour une entreprise familiale de plomberie et chauffage à Montréal, fondée en 1937. Design «Luxe Industriel» avec animations de scroll inversé, effets parallaxe et identité visuelle modernisée sur 4 générations.</p>
-                <div class="tech-stack">
-                    <span class="tech-tag">HTML5</span>
-                    <span class="tech-tag">CSS3</span>
-                    <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">Scroll Animations</span>
-                    <span class="tech-tag">UI/UX</span>
-                </div>
-                <a href="https://artleboss2.github.io/Plomberie/" target="_blank" class="project-details-link">Voir le projet →</a>
-            </div>
-
-            <div class="project-card">
-                <div class="project-number">06</div>
-                <h3 data-i18n="projects.project6.title">NFT Generator</h3>
-                <p data-i18n="projects.project6.description">Générateur d'NFT interactif permettant de créer et visualiser des actifs numériques uniques directement dans le navigateur. Interface web moderne avec génération algorithmique de combinaisons d'attributs et prévisualisation en temps réel.</p>
-                <div class="tech-stack">
-                    <span class="tech-tag">HTML5</span>
-                    <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">Canvas API</span>
-                    <span class="tech-tag">Web3</span>
-                    <span class="tech-tag">Generative Art</span>
-                </div>
-                <a href="https://artleboss2.github.io/NFT%20GENERATOR/" target="_blank" class="project-details-link">Voir le projet →</a>
-            </div>
-
-            <div class="project-card">
-                <div class="project-number">07</div>
-                <h3 data-i18n="projects.project7.title">Phone Simulation</h3>
-                <p data-i18n="projects.project7.description">Simulation interactive d'interface smartphone dans le navigateur. Reproduction fidèle des interactions tactiles, notifications, applications et gestes courants d'un téléphone moderne. Expérience immersive entièrement construite en technologies web.</p>
-                <div class="tech-stack">
-                    <span class="tech-tag">HTML5</span>
-                    <span class="tech-tag">CSS3</span>
-                    <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">Mobile UI</span>
-                    <span class="tech-tag">Touch Events</span>
-                </div>
-                <a href="https://artleboss2.github.io/phonesimulation/" target="_blank" class="project-details-link">Voir le projet →</a>
-            </div>
-
-            <div class="project-card">
-                <div class="project-number">08</div>
-                <h3 data-i18n="projects.project8.title">UI Components Library</h3>
-                <p data-i18n="projects.project8.description">Collection de composants et maquettes d'interfaces utilisateur modernes. Ensemble de designs réutilisables incluant boutons, cartes, modales et layouts avancés. Vitrine de compétences en design system et cohérence visuelle.</p>
-                <div class="tech-stack">
-                    <span class="tech-tag">HTML5</span>
-                    <span class="tech-tag">CSS3</span>
-                    <span class="tech-tag">Design System</span>
-                    <span class="tech-tag">UI Components</span>
-                </div>
-                <a href="https://artleboss2.github.io/UI/" target="_blank" class="project-details-link">Voir le projet →</a>
-            </div>
-
-            <div class="project-card">
-                <div class="project-number">09</div>
-                <h3 data-i18n="projects.project9.title">Music Page</h3>
-                <p data-i18n="projects.project9.description">Page musicale interactive avec lecteur audio personnalisé, gestion de licences et notices légales intégrées. Interface immersive dédiée à la découverte et l'écoute de créations musicales, avec documentation complète des droits d'auteur.</p>
-                <div class="tech-stack">
-                    <span class="tech-tag">HTML5</span>
-                    <span class="tech-tag">CSS3</span>
-                    <span class="tech-tag">Audio API</span>
-                    <span class="tech-tag">Music</span>
-                    <span class="tech-tag">Licensing</span>
-                </div>
-                <a href="https://artleboss2.github.io/music.html" target="_blank" class="project-details-link">Voir le projet →</a>
-            </div>
-
+      <h2 class="section-title" data-i18n="projects.title">
+        Projets sélectionnés
+      </h2>
+      <div class="projects-grid">
+        <!-- EXISTING PROJECTS -->
+        <div class="project-card">
+          <div class="project-number">01</div>
+          <h3 data-i18n="projects.project1.title">Zynit — To-Do List App</h3>
+          <p data-i18n="projects.project1.description">
+            Application mobile de gestion de tâches avec interface moderne et
+            intuitive. Système de catégorisation, rappels et synchronisation
+            multi-plateforme. Développée avec des standards juridiques complets
+            (CLUF) et conformité aux lois canadiennes sur la protection des
+            données.
+          </p>
+          <div class="tech-stack">
+            <span class="tech-tag">React Native</span>
+            <span class="tech-tag">Mobile App</span>
+            <span class="tech-tag">UI/UX Design</span>
+            <span class="tech-tag">Legal Compliance</span>
+          </div>
+          <a
+            href="https://github.com/Artleboss2/Zynit"
+            target="_blank"
+            class="project-details-link"
+            >Voir sur GitHub →</a
+          >
         </div>
+
+        <div class="project-card">
+          <div class="project-number">02</div>
+          <h3 data-i18n="projects.project2.title">Bloxd Texture Pack</h3>
+          <p data-i18n="projects.project2.description">
+            Texture pack personnalisé pour Bloxd.io permettant de modifier
+            l'apparence des blocs, skybox, items et modèles 3D. Système de
+            customisation CSS avancé pour personnaliser l'interface du jeu.
+          </p>
+          <div class="tech-stack">
+            <span class="tech-tag">CSS</span>
+            <span class="tech-tag">WebGL</span>
+            <span class="tech-tag">Game Design</span>
+            <span class="tech-tag">3D Textures</span>
+          </div>
+          <a
+            href="https://github.com/Artleboss2/Bloxd-Texture-Pack"
+            target="_blank"
+            class="project-details-link"
+            >Voir sur GitHub →</a
+          >
+        </div>
+
+        <div class="project-card">
+          <div class="project-number">03</div>
+          <h3 data-i18n="projects.project3.title">Batch Multitool</h3>
+          <p data-i18n="projects.project3.description">
+            Outil multifonction développé en Batch pour automatiser des tâches
+            basiques système. Interface en ligne de commande intuitive pour
+            faciliter l'administration Windows.
+          </p>
+          <div class="tech-stack">
+            <span class="tech-tag">Batchfile</span>
+            <span class="tech-tag">CLI</span>
+            <span class="tech-tag">Automation</span>
+            <span class="tech-tag">Windows</span>
+          </div>
+          <a
+            href="https://github.com/Artleboss2/Batch-Multitool"
+            target="_blank"
+            class="project-details-link"
+            >Voir sur GitHub →</a
+          >
+        </div>
+
+        <div class="project-card">
+          <div class="project-number">04</div>
+          <h3 data-i18n="projects.project4.title">Portfolio GitHub</h3>
+          <p data-i18n="projects.project4.description">
+            Portfolio professionnel interactif avec animations réactives au
+            curseur, particules génératives et design moderne. Terminal
+            interactif intégré et jeu Snake. Optimisé pour les performances et
+            l'expérience utilisateur.
+          </p>
+          <div class="tech-stack">
+            <span class="tech-tag">HTML5</span>
+            <span class="tech-tag">CSS3</span>
+            <span class="tech-tag">JavaScript</span>
+            <span class="tech-tag">Animations</span>
+          </div>
+          <a
+            href="https://github.com/Artleboss2"
+            target="_blank"
+            class="project-details-link"
+            >Voir sur GitHub →</a
+          >
+        </div>
+
+        <!-- NEW PROJECTS -->
+        <div class="project-card">
+          <div class="project-number">05</div>
+          <h3 data-i18n="projects.project5.title">
+            St-Mars E L Inc — Refonte Web
+          </h3>
+          <p data-i18n="projects.project5.description">
+            Refonte numérique premium pour une entreprise familiale de plomberie
+            et chauffage à Montréal, fondée en 1937. Design «Luxe Industriel»
+            avec animations de scroll inversé, effets parallaxe et identité
+            visuelle modernisée sur 4 générations.
+          </p>
+          <div class="tech-stack">
+            <span class="tech-tag">HTML5</span>
+            <span class="tech-tag">CSS3</span>
+            <span class="tech-tag">JavaScript</span>
+            <span class="tech-tag">Scroll Animations</span>
+            <span class="tech-tag">UI/UX</span>
+          </div>
+          <a
+            href="https://artleboss2.github.io/Plomberie/"
+            target="_blank"
+            class="project-details-link"
+            >Voir le projet →</a
+          >
+        </div>
+
+        <div class="project-card">
+          <div class="project-number">06</div>
+          <h3 data-i18n="projects.project6.title">NFT Generator</h3>
+          <p data-i18n="projects.project6.description">
+            Générateur d'NFT interactif permettant de créer et visualiser des
+            actifs numériques uniques directement dans le navigateur. Interface
+            web moderne avec génération algorithmique de combinaisons
+            d'attributs et prévisualisation en temps réel.
+          </p>
+          <div class="tech-stack">
+            <span class="tech-tag">HTML5</span>
+            <span class="tech-tag">JavaScript</span>
+            <span class="tech-tag">Canvas API</span>
+            <span class="tech-tag">Web3</span>
+            <span class="tech-tag">Generative Art</span>
+          </div>
+          <a
+            href="https://artleboss2.github.io/NFT%20GENERATOR/"
+            target="_blank"
+            class="project-details-link"
+            >Voir le projet →</a
+          >
+        </div>
+
+        <div class="project-card">
+          <div class="project-number">07</div>
+          <h3 data-i18n="projects.project7.title">Phone Simulation</h3>
+          <p data-i18n="projects.project7.description">
+            Simulation interactive d'interface smartphone dans le navigateur.
+            Reproduction fidèle des interactions tactiles, notifications,
+            applications et gestes courants d'un téléphone moderne. Expérience
+            immersive entièrement construite en technologies web.
+          </p>
+          <div class="tech-stack">
+            <span class="tech-tag">HTML5</span>
+            <span class="tech-tag">CSS3</span>
+            <span class="tech-tag">JavaScript</span>
+            <span class="tech-tag">Mobile UI</span>
+            <span class="tech-tag">Touch Events</span>
+          </div>
+          <a
+            href="https://artleboss2.github.io/phonesimulation/"
+            target="_blank"
+            class="project-details-link"
+            >Voir le projet →</a
+          >
+        </div>
+
+        <div class="project-card">
+          <div class="project-number">08</div>
+          <h3 data-i18n="projects.project8.title">UI Components Library</h3>
+          <p data-i18n="projects.project8.description">
+            Collection de composants et maquettes d'interfaces utilisateur
+            modernes. Ensemble de designs réutilisables incluant boutons,
+            cartes, modales et layouts avancés. Vitrine de compétences en design
+            system et cohérence visuelle.
+          </p>
+          <div class="tech-stack">
+            <span class="tech-tag">HTML5</span>
+            <span class="tech-tag">CSS3</span>
+            <span class="tech-tag">Design System</span>
+            <span class="tech-tag">UI Components</span>
+          </div>
+          <a
+            href="https://artleboss2.github.io/UI/"
+            target="_blank"
+            class="project-details-link"
+            >Voir le projet →</a
+          >
+        </div>
+
+        <div class="project-card">
+          <div class="project-number">09</div>
+          <h3 data-i18n="projects.project9.title">Music Page</h3>
+          <p data-i18n="projects.project9.description">
+            Page musicale interactive avec lecteur audio personnalisé, gestion
+            de licences et notices légales intégrées. Interface immersive dédiée
+            à la découverte et l'écoute de créations musicales, avec
+            documentation complète des droits d'auteur.
+          </p>
+          <div class="tech-stack">
+            <span class="tech-tag">HTML5</span>
+            <span class="tech-tag">CSS3</span>
+            <span class="tech-tag">Audio API</span>
+            <span class="tech-tag">Music</span>
+            <span class="tech-tag">Licensing</span>
+          </div>
+          <a
+            href="https://artleboss2.github.io/music.html"
+            target="_blank"
+            class="project-details-link"
+            >Voir le projet →</a
+          >
+        </div>
+      </div>
     </section>
 
     <section class="skills" id="competences">
-        <h2 class="section-title" data-i18n="skills.title">Expertise technique</h2>
-        <div class="skills-grid">
-            <div class="skill-category">
-                <h4 data-i18n="skills.frontend.title">Frontend & Design</h4>
-                <ul>
-                    <li>HTML5 / CSS3</li>
-                    <li>JavaScript (Vanilla)</li>
-                    <li>React Native</li>
-                    <li data-i18n="skills.frontend.item3">Web Animations</li>
-                    <li>Responsive Design</li>
-                    <li>UI/UX Design</li>
-                </ul>
-            </div>
-            <div class="skill-category">
-                <h4 data-i18n="skills.gamedev.title">Game Development</h4>
-                <ul>
-                    <li>Texture Packs</li>
-                    <li data-i18n="skills.gamedev.item2">3D Modeling (GLB)</li>
-                    <li>WebGL / Graphics</li>
-                    <li data-i18n="skills.gamedev.item4">Game Customization</li>
-                    <li>Bloxd.io Modding</li>
-                </ul>
-            </div>
-            <div class="skill-category">
-                <h4 data-i18n="skills.mobile.title">Mobile Development</h4>
-                <ul>
-                    <li>React Native</li>
-                    <li data-i18n="skills.mobile.item2">Cross-Platform Apps</li>
-                    <li data-i18n="skills.mobile.item3">Mobile UI/UX</li>
-                    <li data-i18n="skills.mobile.item4">App Architecture</li>
-                    <li data-i18n="skills.mobile.item5">Data Management</li>
-                </ul>
-            </div>
-            <div class="skill-category">
-                <h4 data-i18n="skills.automation.title">System & Automation</h4>
-                <ul>
-                    <li>Batch Scripting</li>
-                    <li>Windows CLI</li>
-                    <li data-i18n="skills.automation.item3">Task Automation</li>
-                    <li data-i18n="skills.automation.item4">System Administration</li>
-                    <li>Shell Scripting</li>
-                </ul>
-            </div>
-            <div class="skill-category">
-                <h4 data-i18n="skills.tools.title">Outils & Technologies</h4>
-                <ul>
-                    <li>Git / GitHub</li>
-                    <li>VS Code</li>
-                    <li data-i18n="skills.tools.item3">Image Editing</li>
-                    <li data-i18n="skills.tools.item4">File Management</li>
-                    <li>Web Hosting</li>
-                    <li data-i18n="skills.tools.item6">Legal Documentation</li>
-                </ul>
-            </div>
+      <h2 class="section-title" data-i18n="skills.title">
+        Expertise technique
+      </h2>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <h4 data-i18n="skills.frontend.title">Frontend & Design</h4>
+          <ul>
+            <li>HTML5 / CSS3</li>
+            <li>JavaScript (Vanilla)</li>
+            <li>React Native</li>
+            <li data-i18n="skills.frontend.item3">Web Animations</li>
+            <li>Responsive Design</li>
+            <li>UI/UX Design</li>
+          </ul>
         </div>
+        <div class="skill-category">
+          <h4 data-i18n="skills.gamedev.title">Game Development</h4>
+          <ul>
+            <li>Texture Packs</li>
+            <li data-i18n="skills.gamedev.item2">3D Modeling (GLB)</li>
+            <li>WebGL / Graphics</li>
+            <li data-i18n="skills.gamedev.item4">Game Customization</li>
+            <li>Bloxd.io Modding</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h4 data-i18n="skills.mobile.title">Mobile Development</h4>
+          <ul>
+            <li>React Native</li>
+            <li data-i18n="skills.mobile.item2">Cross-Platform Apps</li>
+            <li data-i18n="skills.mobile.item3">Mobile UI/UX</li>
+            <li data-i18n="skills.mobile.item4">App Architecture</li>
+            <li data-i18n="skills.mobile.item5">Data Management</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h4 data-i18n="skills.automation.title">System & Automation</h4>
+          <ul>
+            <li>Batch Scripting</li>
+            <li>Windows CLI</li>
+            <li data-i18n="skills.automation.item3">Task Automation</li>
+            <li data-i18n="skills.automation.item4">System Administration</li>
+            <li>Shell Scripting</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h4 data-i18n="skills.tools.title">Outils & Technologies</h4>
+          <ul>
+            <li>Git / GitHub</li>
+            <li>VS Code</li>
+            <li data-i18n="skills.tools.item3">Image Editing</li>
+            <li data-i18n="skills.tools.item4">File Management</li>
+            <li>Web Hosting</li>
+            <li data-i18n="skills.tools.item6">Legal Documentation</li>
+          </ul>
+        </div>
+      </div>
     </section>
 
     <footer id="contact">
-        <div class="footer-content">
-            <div class="social-links">
-                <a href="https://github.com/Artleboss2" target="_blank">GitHub</a>
-                <a href="https://linkedin.com/in/votre-profil" target="_blank">LinkedIn</a>
-                <a href="mailto:contact@artleboss.com">Email</a>
-                <a href="https://discord.com" target="_blank">Discord</a>
-            </div>
-            <div class="copyright">
-                <span data-i18n="footer.copyright">© 2026 — Conçu et développé avec passion</span>
-            </div>
+      <div class="footer-content">
+        <div class="social-links">
+          <a href="https://github.com/Artleboss2" target="_blank">GitHub</a>
+          <a href="https://linkedin.com/in/votre-profil" target="_blank"
+            >LinkedIn</a
+          >
+          <a href="mailto:contact@artleboss.com">Email</a>
+          <a href="https://discord.com" target="_blank">Discord</a>
         </div>
+        <div class="copyright">
+          <span data-i18n="footer.copyright"
+            >© 2026 — Conçu et développé avec passion</span
+          >
+        </div>
+      </div>
     </footer>
 
     <div class="terminal-container minimized" id="terminal">
-        <div class="terminal-header" onclick="toggleTerminal()">
-            <div class="terminal-title">terminal@artleboss2</div>
-            <div class="terminal-controls">
-                <div class="terminal-btn minimize" onclick="event.stopPropagation(); toggleTerminal()"></div>
-                <div class="terminal-btn close" onclick="event.stopPropagation(); closeTerminal()"></div>
-            </div>
+      <div class="terminal-header" onclick="toggleTerminal()">
+        <div class="terminal-title">terminal@artleboss2</div>
+        <div class="terminal-controls">
+          <div
+            class="terminal-btn minimize"
+            onclick="
+              event.stopPropagation();
+              toggleTerminal();
+            "
+          ></div>
+          <div
+            class="terminal-btn close"
+            onclick="
+              event.stopPropagation();
+              closeTerminal();
+            "
+          ></div>
         </div>
-        <div class="terminal-output" id="terminalOutput">
-            <div class="terminal-line">
-                <span class="terminal-success" data-i18n="terminal.welcome">Bienvenue dans le terminal interactif!</span>
-            </div>
-            <div class="terminal-line terminal-info" data-i18n="terminal.helpPrompt">
-                Tapez 'help' pour voir les commandes disponibles.
-            </div>
-            <div class="terminal-line"></div>
+      </div>
+      <div class="terminal-output" id="terminalOutput">
+        <div class="terminal-line">
+          <span class="terminal-success" data-i18n="terminal.welcome"
+            >Bienvenue dans le terminal interactif!</span
+          >
         </div>
-        <div class="terminal-input-container">
-            <span class="terminal-prompt">$</span>
-            <input type="text" class="terminal-input" id="terminalInput" placeholder="Tapez une commande..." autocomplete="off" spellcheck="false">
+        <div
+          class="terminal-line terminal-info"
+          data-i18n="terminal.helpPrompt"
+        >
+          Tapez 'help' pour voir les commandes disponibles.
         </div>
+        <div class="terminal-line"></div>
+      </div>
+      <div class="terminal-input-container">
+        <span class="terminal-prompt">$</span>
+        <input
+          type="text"
+          class="terminal-input"
+          id="terminalInput"
+          placeholder="Tapez une commande..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
     </div>
 
     <div class="snake-game-container" id="snakeGame">
-        <div class="snake-header">
-            <h3>🐍 SNAKE GAME</h3>
-            <div class="snake-score">Score: <span id="snakeScore">0</span></div>
-        </div>
-        <div class="snake-canvas" id="snakeCanvas"></div>
-        <div class="snake-controls">Utilisez les flèches ← ↑ → ↓ pour jouer</div>
-        <div class="snake-close"><button onclick="closeSnake()">Fermer (ESC)</button></div>
+      <div class="snake-header">
+        <h3>🐍 SNAKE GAME</h3>
+        <div class="snake-score">Score: <span id="snakeScore">0</span></div>
+      </div>
+      <div class="snake-canvas" id="snakeCanvas"></div>
+      <div class="snake-controls">Utilisez les flèches ← ↑ → ↓ pour jouer</div>
+      <div class="snake-close">
+        <button onclick="closeSnake()">Fermer (ESC)</button>
+      </div>
     </div>
 
     <script>
-        let currentLang = 'fr';
+      let currentLang = "fr";
 
-        const translations = {
-            fr: {
-                nav: { projects: 'Projets', skills: 'Compétences', resources: 'Ressources', contact: 'Contact' },
-                hero: {
-                    title: 'Développeur passionné par le gaming et la création',
-                    description: 'Je développe des applications, texture packs et outils créatifs pour la communauté gaming. Spécialisé dans la customisation de jeux, les applications mobiles et l\'automatisation système.',
-                    cta: 'Découvrir mes projets'
-                },
-                projects: {
-                    title: 'Projets sélectionnés',
-                    project1: { title: 'Zynit — To-Do List App', description: 'Application mobile de gestion de tâches avec interface moderne et intuitive. Système de catégorisation, rappels et synchronisation multi-plateforme. Développée avec des standards juridiques complets (CLUF) et conformité aux lois canadiennes sur la protection des données.' },
-                    project2: { title: 'Bloxd Texture Pack', description: 'Texture pack personnalisé pour Bloxd.io permettant de modifier l\'apparence des blocs, skybox, items et modèles 3D. Système de customisation CSS avancé pour personnaliser l\'interface du jeu.' },
-                    project3: { title: 'Batch Multitool', description: 'Outil multifonction développé en Batch pour automatiser des tâches basiques système. Interface en ligne de commande intuitive pour faciliter l\'administration Windows.' },
-                    project4: { title: 'Portfolio GitHub', description: 'Portfolio professionnel interactif avec animations réactives au curseur, particules génératives et design moderne. Terminal interactif intégré et jeu Snake. Optimisé pour les performances et l\'expérience utilisateur.' },
-                    project5: { title: 'St-Mars E L Inc — Refonte Web', description: 'Refonte numérique premium pour une entreprise familiale de plomberie et chauffage à Montréal, fondée en 1937. Design «Luxe Industriel» avec animations de scroll inversé, effets parallaxe et identité visuelle modernisée sur 4 générations.' },
-                    project6: { title: 'NFT Generator', description: 'Générateur d\'NFT interactif permettant de créer et visualiser des actifs numériques uniques directement dans le navigateur. Interface web moderne avec génération algorithmique de combinaisons d\'attributs et prévisualisation en temps réel.' },
-                    project7: { title: 'Phone Simulation', description: 'Simulation interactive d\'interface smartphone dans le navigateur. Reproduction fidèle des interactions tactiles, notifications, applications et gestes courants d\'un téléphone moderne. Expérience immersive entièrement construite en technologies web.' },
-                    project8: { title: 'UI Components Library', description: 'Collection de composants et maquettes d\'interfaces utilisateur modernes. Ensemble de designs réutilisables incluant boutons, cartes, modales et layouts avancés. Vitrine de compétences en design system et cohérence visuelle.' },
-                    project9: { title: 'Music Page', description: 'Page musicale interactive avec lecteur audio personnalisé, gestion de licences et notices légales intégrées. Interface immersive dédiée à la découverte et l\'écoute de créations musicales, avec documentation complète des droits d\'auteur.' }
-                },
-                skills: {
-                    title: 'Expertise technique',
-                    frontend: { title: 'Frontend & Design', item3: 'Animations Web' },
-                    gamedev: { title: 'Game Development', item2: 'Modélisation 3D (GLB)', item4: 'Customisation de jeux' },
-                    mobile: { title: 'Mobile Development', item2: 'Applications Cross-Platform', item3: 'UI/UX Mobile', item4: 'Architecture d\'applications', item5: 'Gestion de données' },
-                    automation: { title: 'Système & Automation', item3: 'Automatisation de tâches', item4: 'Administration système' },
-                    tools: { title: 'Outils & Technologies', item3: 'Édition d\'images', item4: 'Gestion de fichiers', item6: 'Documentation juridique' }
-                },
-                footer: { copyright: '© 2026 — Conçu et développé avec passion' },
-                terminal: {
-                    welcome: 'Bienvenue dans le terminal interactif!',
-                    helpPrompt: 'Tapez \'help\' pour voir les commandes disponibles.',
-                    helpTitle: 'Commandes disponibles:',
-                    help: '• help - Affiche cette aide',
-                    about: '• about - À propos de moi',
-                    skills: '• skills - Liste mes compétences',
-                    projects: '• projects - Liste mes projets',
-                    contact: '• contact - Informations de contact',
-                    github: '• github - Ouvre mon GitHub',
-                    clear: '• clear - Efface le terminal',
-                    date: '• date - Affiche la date actuelle',
-                    whoami: '• whoami - Qui suis-je?',
-                    social: '• social - Liens vers mes réseaux sociaux',
-                    matrix: '• matrix - Active l\'effet Matrix 🟢',
-                    snake: '• snake - Lance le jeu Snake 🐍',
-                    whatismyip: '• whatismyip - Affiche votre adresse IP',
-                    snakeControls: 'Utilisez les flèches ← ↑ → ↓ pour jouer',
-                    snakeClose: 'Fermer (ESC)',
-                    snakeScore: 'Score:',
-                    gameOver: 'Game Over!',
-                    finalScore: 'Score final:'
-                }
+      const translations = {
+        fr: {
+          nav: {
+            projects: "Projets",
+            skills: "Compétences",
+            resources: "Ressources",
+            contact: "Contact",
+          },
+          hero: {
+            title: "Développeur passionné par le gaming et la création",
+            description:
+              "Je développe des applications, texture packs et outils créatifs pour la communauté gaming. Spécialisé dans la customisation de jeux, les applications mobiles et l'automatisation système.",
+            cta: "Découvrir mes projets",
+          },
+          projects: {
+            title: "Projets sélectionnés",
+            project1: {
+              title: "Zynit — To-Do List App",
+              description:
+                "Application mobile de gestion de tâches avec interface moderne et intuitive. Système de catégorisation, rappels et synchronisation multi-plateforme. Développée avec des standards juridiques complets (CLUF) et conformité aux lois canadiennes sur la protection des données.",
             },
-            en: {
-                nav: { projects: 'Projects', skills: 'Skills', resources: 'Resources', contact: 'Contact' },
-                hero: {
-                    title: 'Developer passionate about gaming and creation',
-                    description: 'I develop applications, texture packs and creative tools for the gaming community. Specialized in game customization, mobile applications and system automation.',
-                    cta: 'Discover my projects'
-                },
-                projects: {
-                    title: 'Selected Projects',
-                    project1: { title: 'Zynit — To-Do List App', description: 'Mobile task management application with modern and intuitive interface. Categorization system, reminders and multi-platform synchronization. Developed with complete legal standards (EULA) and compliance with Canadian data protection laws.' },
-                    project2: { title: 'Bloxd Texture Pack', description: 'Custom texture pack for Bloxd.io allowing to modify the appearance of blocks, skybox, items and 3D models. Advanced CSS customization system to personalize the game interface.' },
-                    project3: { title: 'Batch Multitool', description: 'Multifunction tool developed in Batch to automate basic system tasks. Intuitive command-line interface to facilitate Windows administration.' },
-                    project4: { title: 'GitHub Portfolio', description: 'Interactive professional portfolio with cursor-reactive animations, generative particles and modern design. Integrated interactive terminal and Snake game. Optimized for performance and user experience.' },
-                    project5: { title: 'St-Mars E L Inc — Web Redesign', description: 'Premium digital redesign for a family-owned plumbing and heating company in Montreal, founded in 1937. "Luxury Industrial" design with reverse scroll animations, parallax effects and modernized visual identity spanning 4 generations.' },
-                    project6: { title: 'NFT Generator', description: 'Interactive NFT generator allowing you to create and visualize unique digital assets directly in the browser. Modern web interface with algorithmic generation of attribute combinations and real-time preview.' },
-                    project7: { title: 'Phone Simulation', description: 'Interactive smartphone interface simulation in the browser. Faithful reproduction of touch interactions, notifications, apps and common gestures of a modern phone. Fully immersive experience built with web technologies.' },
-                    project8: { title: 'UI Components Library', description: 'Collection of modern user interface components and mockups. Set of reusable designs including buttons, cards, modals and advanced layouts. Showcase of design system skills and visual consistency.' },
-                    project9: { title: 'Music Page', description: 'Interactive music page with custom audio player, license management and integrated legal notices. Immersive interface dedicated to discovering and listening to musical creations, with complete copyright documentation.' }
-                },
-                skills: {
-                    title: 'Technical Expertise',
-                    frontend: { title: 'Frontend & Design', item3: 'Web Animations' },
-                    gamedev: { title: 'Game Development', item2: '3D Modeling (GLB)', item4: 'Game Customization' },
-                    mobile: { title: 'Mobile Development', item2: 'Cross-Platform Apps', item3: 'Mobile UI/UX', item4: 'App Architecture', item5: 'Data Management' },
-                    automation: { title: 'System & Automation', item3: 'Task Automation', item4: 'System Administration' },
-                    tools: { title: 'Tools & Technologies', item3: 'Image Editing', item4: 'File Management', item6: 'Legal Documentation' }
-                },
-                footer: { copyright: '© 2026 — Designed and developed with passion' },
-                terminal: {
-                    welcome: 'Welcome to the interactive terminal!',
-                    helpPrompt: 'Type \'help\' to see available commands.',
-                    helpTitle: 'Available commands:',
-                    help: '• help - Shows this help',
-                    about: '• about - About me',
-                    skills: '• skills - List my skills',
-                    projects: '• projects - List my projects',
-                    contact: '• contact - Contact information',
-                    github: '• github - Open my GitHub',
-                    clear: '• clear - Clear the terminal',
-                    date: '• date - Show current date',
-                    whoami: '• whoami - Who am I?',
-                    social: '• social - Links to my social networks',
-                    matrix: '• matrix - Activate Matrix effect 🟢',
-                    snake: '• snake - Launch Snake game 🐍',
-                    whatismyip: '• whatismyip - Show your IP address',
-                    snakeControls: 'Use arrow keys ← ↑ → ↓ to play',
-                    snakeClose: 'Close (ESC)',
-                    snakeScore: 'Score:',
-                    gameOver: 'Game Over!',
-                    finalScore: 'Final score:'
-                }
-            }
-        };
+            project2: {
+              title: "Bloxd Texture Pack",
+              description:
+                "Texture pack personnalisé pour Bloxd.io permettant de modifier l'apparence des blocs, skybox, items et modèles 3D. Système de customisation CSS avancé pour personnaliser l'interface du jeu.",
+            },
+            project3: {
+              title: "Batch Multitool",
+              description:
+                "Outil multifonction développé en Batch pour automatiser des tâches basiques système. Interface en ligne de commande intuitive pour faciliter l'administration Windows.",
+            },
+            project4: {
+              title: "Portfolio GitHub",
+              description:
+                "Portfolio professionnel interactif avec animations réactives au curseur, particules génératives et design moderne. Terminal interactif intégré et jeu Snake. Optimisé pour les performances et l'expérience utilisateur.",
+            },
+            project5: {
+              title: "St-Mars E L Inc — Refonte Web",
+              description:
+                "Refonte numérique premium pour une entreprise familiale de plomberie et chauffage à Montréal, fondée en 1937. Design «Luxe Industriel» avec animations de scroll inversé, effets parallaxe et identité visuelle modernisée sur 4 générations.",
+            },
+            project6: {
+              title: "NFT Generator",
+              description:
+                "Générateur d'NFT interactif permettant de créer et visualiser des actifs numériques uniques directement dans le navigateur. Interface web moderne avec génération algorithmique de combinaisons d'attributs et prévisualisation en temps réel.",
+            },
+            project7: {
+              title: "Phone Simulation",
+              description:
+                "Simulation interactive d'interface smartphone dans le navigateur. Reproduction fidèle des interactions tactiles, notifications, applications et gestes courants d'un téléphone moderne. Expérience immersive entièrement construite en technologies web.",
+            },
+            project8: {
+              title: "UI Components Library",
+              description:
+                "Collection de composants et maquettes d'interfaces utilisateur modernes. Ensemble de designs réutilisables incluant boutons, cartes, modales et layouts avancés. Vitrine de compétences en design system et cohérence visuelle.",
+            },
+            project9: {
+              title: "Music Page",
+              description:
+                "Page musicale interactive avec lecteur audio personnalisé, gestion de licences et notices légales intégrées. Interface immersive dédiée à la découverte et l'écoute de créations musicales, avec documentation complète des droits d'auteur.",
+            },
+          },
+          skills: {
+            title: "Expertise technique",
+            frontend: { title: "Frontend & Design", item3: "Animations Web" },
+            gamedev: {
+              title: "Game Development",
+              item2: "Modélisation 3D (GLB)",
+              item4: "Customisation de jeux",
+            },
+            mobile: {
+              title: "Mobile Development",
+              item2: "Applications Cross-Platform",
+              item3: "UI/UX Mobile",
+              item4: "Architecture d'applications",
+              item5: "Gestion de données",
+            },
+            automation: {
+              title: "Système & Automation",
+              item3: "Automatisation de tâches",
+              item4: "Administration système",
+            },
+            tools: {
+              title: "Outils & Technologies",
+              item3: "Édition d'images",
+              item4: "Gestion de fichiers",
+              item6: "Documentation juridique",
+            },
+          },
+          footer: { copyright: "© 2026 — Conçu et développé avec passion" },
+          terminal: {
+            welcome: "Bienvenue dans le terminal interactif!",
+            helpPrompt: "Tapez 'help' pour voir les commandes disponibles.",
+            helpTitle: "Commandes disponibles:",
+            help: "• help - Affiche cette aide",
+            about: "• about - À propos de moi",
+            skills: "• skills - Liste mes compétences",
+            projects: "• projects - Liste mes projets",
+            contact: "• contact - Informations de contact",
+            github: "• github - Ouvre mon GitHub",
+            clear: "• clear - Efface le terminal",
+            date: "• date - Affiche la date actuelle",
+            whoami: "• whoami - Qui suis-je?",
+            social: "• social - Liens vers mes réseaux sociaux",
+            matrix: "• matrix - Active l'effet Matrix 🟢",
+            snake: "• snake - Lance le jeu Snake 🐍",
+            whatismyip: "• whatismyip - Affiche votre adresse IP",
+            snakeControls: "Utilisez les flèches ← ↑ → ↓ pour jouer",
+            snakeClose: "Fermer (ESC)",
+            snakeScore: "Score:",
+            gameOver: "Game Over!",
+            finalScore: "Score final:",
+          },
+        },
+        en: {
+          nav: {
+            projects: "Projects",
+            skills: "Skills",
+            resources: "Resources",
+            contact: "Contact",
+          },
+          hero: {
+            title: "Developer passionate about gaming and creation",
+            description:
+              "I develop applications, texture packs and creative tools for the gaming community. Specialized in game customization, mobile applications and system automation.",
+            cta: "Discover my projects",
+          },
+          projects: {
+            title: "Selected Projects",
+            project1: {
+              title: "Zynit — To-Do List App",
+              description:
+                "Mobile task management application with modern and intuitive interface. Categorization system, reminders and multi-platform synchronization. Developed with complete legal standards (EULA) and compliance with Canadian data protection laws.",
+            },
+            project2: {
+              title: "Bloxd Texture Pack",
+              description:
+                "Custom texture pack for Bloxd.io allowing to modify the appearance of blocks, skybox, items and 3D models. Advanced CSS customization system to personalize the game interface.",
+            },
+            project3: {
+              title: "Batch Multitool",
+              description:
+                "Multifunction tool developed in Batch to automate basic system tasks. Intuitive command-line interface to facilitate Windows administration.",
+            },
+            project4: {
+              title: "GitHub Portfolio",
+              description:
+                "Interactive professional portfolio with cursor-reactive animations, generative particles and modern design. Integrated interactive terminal and Snake game. Optimized for performance and user experience.",
+            },
+            project5: {
+              title: "St-Mars E L Inc — Web Redesign",
+              description:
+                'Premium digital redesign for a family-owned plumbing and heating company in Montreal, founded in 1937. "Luxury Industrial" design with reverse scroll animations, parallax effects and modernized visual identity spanning 4 generations.',
+            },
+            project6: {
+              title: "NFT Generator",
+              description:
+                "Interactive NFT generator allowing you to create and visualize unique digital assets directly in the browser. Modern web interface with algorithmic generation of attribute combinations and real-time preview.",
+            },
+            project7: {
+              title: "Phone Simulation",
+              description:
+                "Interactive smartphone interface simulation in the browser. Faithful reproduction of touch interactions, notifications, apps and common gestures of a modern phone. Fully immersive experience built with web technologies.",
+            },
+            project8: {
+              title: "UI Components Library",
+              description:
+                "Collection of modern user interface components and mockups. Set of reusable designs including buttons, cards, modals and advanced layouts. Showcase of design system skills and visual consistency.",
+            },
+            project9: {
+              title: "Music Page",
+              description:
+                "Interactive music page with custom audio player, license management and integrated legal notices. Immersive interface dedicated to discovering and listening to musical creations, with complete copyright documentation.",
+            },
+          },
+          skills: {
+            title: "Technical Expertise",
+            frontend: { title: "Frontend & Design", item3: "Web Animations" },
+            gamedev: {
+              title: "Game Development",
+              item2: "3D Modeling (GLB)",
+              item4: "Game Customization",
+            },
+            mobile: {
+              title: "Mobile Development",
+              item2: "Cross-Platform Apps",
+              item3: "Mobile UI/UX",
+              item4: "App Architecture",
+              item5: "Data Management",
+            },
+            automation: {
+              title: "System & Automation",
+              item3: "Task Automation",
+              item4: "System Administration",
+            },
+            tools: {
+              title: "Tools & Technologies",
+              item3: "Image Editing",
+              item4: "File Management",
+              item6: "Legal Documentation",
+            },
+          },
+          footer: { copyright: "© 2026 — Designed and developed with passion" },
+          terminal: {
+            welcome: "Welcome to the interactive terminal!",
+            helpPrompt: "Type 'help' to see available commands.",
+            helpTitle: "Available commands:",
+            help: "• help - Shows this help",
+            about: "• about - About me",
+            skills: "• skills - List my skills",
+            projects: "• projects - List my projects",
+            contact: "• contact - Contact information",
+            github: "• github - Open my GitHub",
+            clear: "• clear - Clear the terminal",
+            date: "• date - Show current date",
+            whoami: "• whoami - Who am I?",
+            social: "• social - Links to my social networks",
+            matrix: "• matrix - Activate Matrix effect 🟢",
+            snake: "• snake - Launch Snake game 🐍",
+            whatismyip: "• whatismyip - Show your IP address",
+            snakeControls: "Use arrow keys ← ↑ → ↓ to play",
+            snakeClose: "Close (ESC)",
+            snakeScore: "Score:",
+            gameOver: "Game Over!",
+            finalScore: "Final score:",
+          },
+        },
+      };
 
-        function toggleLanguage() {
-            currentLang = currentLang === 'fr' ? 'en' : 'fr';
-            document.getElementById('langIcon').textContent = currentLang === 'fr' ? 'EN' : 'FR';
-            updateContent();
-            localStorage.setItem('preferredLang', currentLang);
-        }
+      function toggleLanguage() {
+        currentLang = currentLang === "fr" ? "en" : "fr";
+        document.getElementById("langIcon").textContent =
+          currentLang === "fr" ? "EN" : "FR";
+        updateContent();
+        localStorage.setItem("preferredLang", currentLang);
+      }
 
-        function updateContent() {
-            document.querySelectorAll('[data-i18n]').forEach(element => {
-                const key = element.getAttribute('data-i18n');
-                const keys = key.split('.');
-                let translation = translations[currentLang];
-                for (const k of keys) { translation = translation[k]; }
-                if (translation) element.textContent = translation;
-            });
-            updateTerminalLanguage();
-        }
+      function updateContent() {
+        document.querySelectorAll("[data-i18n]").forEach((element) => {
+          const key = element.getAttribute("data-i18n");
+          const keys = key.split(".");
+          let translation = translations[currentLang];
+          for (const k of keys) {
+            translation = translation[k];
+          }
+          if (translation) element.textContent = translation;
+        });
+        updateTerminalLanguage();
+      }
 
-        function updateTerminalLanguage() {
+      function updateTerminalLanguage() {
+        const t = translations[currentLang].terminal;
+        document.querySelector(".snake-controls").textContent = t.snakeControls;
+        document.querySelector(".snake-close button").textContent =
+          t.snakeClose;
+        document.querySelector(".snake-score").innerHTML =
+          `${t.snakeScore} <span id="snakeScore">0</span>`;
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        const savedLang = localStorage.getItem("preferredLang");
+        if (savedLang && savedLang !== currentLang) toggleLanguage();
+      });
+
+      // ========== TERMINAL ==========
+      const terminal = document.getElementById("terminal");
+      const terminalOutput = document.getElementById("terminalOutput");
+      const terminalInput = document.getElementById("terminalInput");
+      let commandHistory = [];
+      let historyIndex = -1;
+
+      const commands = {
+        help: {
+          execute: () => {
             const t = translations[currentLang].terminal;
-            document.querySelector('.snake-controls').textContent = t.snakeControls;
-            document.querySelector('.snake-close button').textContent = t.snakeClose;
-            document.querySelector('.snake-score').innerHTML = `${t.snakeScore} <span id="snakeScore">0</span>`;
-        }
+            return `<div class="terminal-success">${t.helpTitle}</div><div class="terminal-info">${t.help}<br>${t.about}<br>${t.skills}<br>${t.projects}<br>${t.contact}<br>${t.github}<br>${t.clear}<br>${t.date}<br>${t.whoami}<br>${t.social}<br>${t.whatismyip}<br>${t.matrix}<br>${t.snake}</div>`;
+          },
+        },
+        about: {
+          execute: () =>
+            `<div class="terminal-success">À propos de moi:</div><div class="terminal-info">Développeur passionné par le gaming et la création.<br>Applications mobiles, texture packs, outils d'automatisation,<br>redesigns web et projets créatifs.<br><br>Spécialités: Mobile Dev, Web Dev, Game Modding, Automation</div>`,
+        },
+        skills: {
+          execute: () =>
+            `<div class="terminal-success">Compétences principales:</div><div class="terminal-info">Frontend: HTML5, CSS3, JavaScript, React Native<br>Mobile: Cross-platform Apps, UI/UX Design<br>Game Dev: Texture Packs, WebGL, 3D Modeling<br>Automation: Batch, Shell Scripting<br>Tools: Git, VS Code, GitHub Pages</div>`,
+        },
+        projects: {
+          execute: () =>
+            `<div class="terminal-success">Projets (9):</div><div class="terminal-info">01. Zynit - Application mobile de to-do list<br>02. Bloxd Texture Pack - Customisation CSS pour Bloxd.io<br>03. Batch Multitool - Automatisation Windows<br>04. Portfolio GitHub - Ce site!<br>05. St-Mars E L Inc - Refonte web plomberie Montréal<br>06. NFT Generator - Générateur d'actifs numériques<br>07. Phone Simulation - Simulation d'interface mobile<br>08. UI Components - Bibliothèque de composants UI<br>09. Music Page - Lecteur musical interactif<br><br>Visitez github.com/Artleboss2 pour plus de détails.</div>`,
+        },
+        contact: {
+          execute: () =>
+            `<div class="terminal-success">Contact:</div><div class="terminal-info">GitHub: github.com/Artleboss2<br>Email: contact@artleboss.com<br>Discord: Disponible sur demande<br>LinkedIn: À venir</div>`,
+        },
+        github: {
+          execute: () => {
+            window.open("https://github.com/Artleboss2", "_blank");
+            return `<div class="terminal-success">Ouverture de GitHub dans un nouvel onglet...</div>`;
+          },
+        },
+        clear: {
+          execute: () => {
+            terminalOutput.innerHTML = "";
+            return "";
+          },
+        },
+        date: {
+          execute: () => {
+            const now = new Date();
+            const locale = currentLang === "fr" ? "fr-FR" : "en-US";
+            return `<div class="terminal-info">${now.toLocaleString(locale, { weekday: "long", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit", timeZoneName: "short" })}</div>`;
+          },
+        },
+        whoami: {
+          execute: () =>
+            `<div class="terminal-info">artleboss2 - Développeur & Créateur</div>`,
+        },
+        social: {
+          execute: () =>
+            `<div class="terminal-success">Réseaux sociaux:</div><div class="terminal-info">🐙 GitHub: github.com/Artleboss2<br>💼 LinkedIn: À venir<br>💬 Discord: Disponible sur demande<br>📧 Email: contact@artleboss.com</div>`,
+        },
+        matrix: {
+          execute: () => {
+            activateMatrix();
+            return `<div class="terminal-success">Effet Matrix activé! Il s'arrêtera après 10 secondes ou appuyez sur ESC.</div>`;
+          },
+        },
+        snake: {
+          execute: () => {
+            startSnake();
+            return `<div class="terminal-success">Lancement du jeu Snake! Utilisez les flèches pour jouer.</div>`;
+          },
+        },
+        whatismyip: {
+          execute: async () => {
+            try {
+              const r = await fetch("https://api.ipify.org?format=json");
+              const d = await r.json();
+              const r2 = await fetch(`https://ipapi.co/${d.ip}/json/`);
+              const info = await r2.json();
+              return `<div class="terminal-success">Votre adresse IP:</div><div class="terminal-info">IP: ${d.ip}<br>Ville: ${info.city || "Inconnue"}<br>Région: ${info.region || "Inconnue"}<br>Pays: ${info.country_name || "Inconnu"}<br>FAI: ${info.org || "Inconnu"}</div>`;
+            } catch (e) {
+              return `<div class="terminal-error">Erreur lors de la récupération de l'IP.</div>`;
+            }
+          },
+        },
+      };
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedLang = localStorage.getItem('preferredLang');
-            if (savedLang && savedLang !== currentLang) toggleLanguage();
+      const easterEggs = {
+        hello: "Hello! 👋 Bienvenue sur mon portfolio!",
+        hi: "Salut! Comment puis-je vous aider?",
+        bonjour: 'Bonjour! Tapez "help" pour voir les commandes.',
+        sudo: "Désolé, vous n'avez pas les permissions sudo ici 😄",
+        hack: "Accès refusé. Mais j'apprécie la tentative! 🔒",
+        ls: "portfolio.html  zynit/  bloxd-texture-pack/  batch-multitool/  plomberie/  nft-generator/  phonesimulation/  ui/  music.html",
+        pwd: "/home/artleboss2/portfolio",
+        exit: "Vous ne pouvez pas quitter le terminal, mais vous pouvez le fermer! 😉",
+        konami:
+          "Code Konami détecté! Mais je n'ai pas encore d'easter egg pour ça... 🎮",
+      };
+
+      function toggleTerminal() {
+        terminal.classList.toggle("minimized");
+        if (!terminal.classList.contains("minimized")) terminalInput.focus();
+      }
+      function closeTerminal() {
+        terminal.classList.add("hidden");
+      }
+      function addToOutput(content) {
+        const line = document.createElement("div");
+        line.className = "terminal-line";
+        line.innerHTML = content;
+        terminalOutput.appendChild(line);
+        terminalOutput.scrollTop = terminalOutput.scrollHeight;
+      }
+
+      function executeCommand(cmd) {
+        const trimmedCmd = cmd.trim().toLowerCase();
+        if (trimmedCmd) {
+          commandHistory.push(cmd);
+          historyIndex = commandHistory.length;
+        }
+        addToOutput(
+          `<span class="terminal-prompt">$</span> <span class="terminal-command">${cmd}</span>`,
+        );
+        if (!trimmedCmd) return;
+        if (easterEggs[trimmedCmd]) {
+          addToOutput(
+            `<div class="terminal-info">${easterEggs[trimmedCmd]}</div>`,
+          );
+          return;
+        }
+        if (commands[trimmedCmd]) {
+          const result = commands[trimmedCmd].execute();
+          if (result instanceof Promise) {
+            addToOutput(`<div class="terminal-info">⏳ Chargement...</div>`);
+            result.then((output) => {
+              const lines = terminalOutput.querySelectorAll(".terminal-line");
+              lines[lines.length - 1].remove();
+              if (output) addToOutput(output);
+            });
+          } else if (result) {
+            addToOutput(result);
+          }
+        } else {
+          addToOutput(
+            `<div class="terminal-error">Commande inconnue: "${cmd}". Tapez "help" pour voir les commandes disponibles.</div>`,
+          );
+        }
+      }
+
+      terminalInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          executeCommand(terminalInput.value);
+          terminalInput.value = "";
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          if (historyIndex > 0) {
+            historyIndex--;
+            terminalInput.value = commandHistory[historyIndex];
+          }
+        } else if (e.key === "ArrowDown") {
+          e.preventDefault();
+          if (historyIndex < commandHistory.length - 1) {
+            historyIndex++;
+            terminalInput.value = commandHistory[historyIndex];
+          } else {
+            historyIndex = commandHistory.length;
+            terminalInput.value = "";
+          }
+        } else if (e.key === "Tab") {
+          e.preventDefault();
+          const v = terminalInput.value.toLowerCase();
+          const m = Object.keys(commands).filter((c) => c.startsWith(v));
+          if (m.length === 1) terminalInput.value = m[0];
+        }
+      });
+
+      function activateMatrix() {
+        const canvas = document.createElement("canvas");
+        Object.assign(canvas.style, {
+          position: "fixed",
+          top: "0",
+          left: "0",
+          width: "100%",
+          height: "100%",
+          zIndex: "99999",
+          pointerEvents: "none",
         });
-
-        // ========== TERMINAL ==========
-        const terminal = document.getElementById('terminal');
-        const terminalOutput = document.getElementById('terminalOutput');
-        const terminalInput = document.getElementById('terminalInput');
-        let commandHistory = [];
-        let historyIndex = -1;
-
-        const commands = {
-            help: { execute: () => {
-                const t = translations[currentLang].terminal;
-                return `<div class="terminal-success">${t.helpTitle}</div><div class="terminal-info">${t.help}<br>${t.about}<br>${t.skills}<br>${t.projects}<br>${t.contact}<br>${t.github}<br>${t.clear}<br>${t.date}<br>${t.whoami}<br>${t.social}<br>${t.whatismyip}<br>${t.matrix}<br>${t.snake}</div>`;
-            }},
-            about: { execute: () => `<div class="terminal-success">À propos de moi:</div><div class="terminal-info">Développeur passionné par le gaming et la création.<br>Applications mobiles, texture packs, outils d'automatisation,<br>redesigns web et projets créatifs.<br><br>Spécialités: Mobile Dev, Web Dev, Game Modding, Automation</div>` },
-            skills: { execute: () => `<div class="terminal-success">Compétences principales:</div><div class="terminal-info">Frontend: HTML5, CSS3, JavaScript, React Native<br>Mobile: Cross-platform Apps, UI/UX Design<br>Game Dev: Texture Packs, WebGL, 3D Modeling<br>Automation: Batch, Shell Scripting<br>Tools: Git, VS Code, GitHub Pages</div>` },
-            projects: { execute: () => `<div class="terminal-success">Projets (9):</div><div class="terminal-info">01. Zynit - Application mobile de to-do list<br>02. Bloxd Texture Pack - Customisation CSS pour Bloxd.io<br>03. Batch Multitool - Automatisation Windows<br>04. Portfolio GitHub - Ce site!<br>05. St-Mars E L Inc - Refonte web plomberie Montréal<br>06. NFT Generator - Générateur d'actifs numériques<br>07. Phone Simulation - Simulation d'interface mobile<br>08. UI Components - Bibliothèque de composants UI<br>09. Music Page - Lecteur musical interactif<br><br>Visitez github.com/Artleboss2 pour plus de détails.</div>` },
-            contact: { execute: () => `<div class="terminal-success">Contact:</div><div class="terminal-info">GitHub: github.com/Artleboss2<br>Email: contact@artleboss.com<br>Discord: Disponible sur demande<br>LinkedIn: À venir</div>` },
-            github: { execute: () => { window.open('https://github.com/Artleboss2', '_blank'); return `<div class="terminal-success">Ouverture de GitHub dans un nouvel onglet...</div>`; }},
-            clear: { execute: () => { terminalOutput.innerHTML = ''; return ''; }},
-            date: { execute: () => {
-                const now = new Date();
-                const locale = currentLang === 'fr' ? 'fr-FR' : 'en-US';
-                return `<div class="terminal-info">${now.toLocaleString(locale, { weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit', timeZoneName:'short' })}</div>`;
-            }},
-            whoami: { execute: () => `<div class="terminal-info">artleboss2 - Développeur & Créateur</div>` },
-            social: { execute: () => `<div class="terminal-success">Réseaux sociaux:</div><div class="terminal-info">🐙 GitHub: github.com/Artleboss2<br>💼 LinkedIn: À venir<br>💬 Discord: Disponible sur demande<br>📧 Email: contact@artleboss.com</div>` },
-            matrix: { execute: () => { activateMatrix(); return `<div class="terminal-success">Effet Matrix activé! Il s'arrêtera après 10 secondes ou appuyez sur ESC.</div>`; }},
-            snake: { execute: () => { startSnake(); return `<div class="terminal-success">Lancement du jeu Snake! Utilisez les flèches pour jouer.</div>`; }},
-            whatismyip: { execute: async () => {
-                try {
-                    const r = await fetch('https://api.ipify.org?format=json');
-                    const d = await r.json();
-                    const r2 = await fetch(`https://ipapi.co/${d.ip}/json/`);
-                    const info = await r2.json();
-                    return `<div class="terminal-success">Votre adresse IP:</div><div class="terminal-info">IP: ${d.ip}<br>Ville: ${info.city||'Inconnue'}<br>Région: ${info.region||'Inconnue'}<br>Pays: ${info.country_name||'Inconnu'}<br>FAI: ${info.org||'Inconnu'}</div>`;
-                } catch(e) {
-                    return `<div class="terminal-error">Erreur lors de la récupération de l'IP.</div>`;
-                }
-            }}
+        document.body.appendChild(canvas);
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const letters =
+          "ARTLEBOSS2•ZYNIT•GITHUB•PORTFOLIO•HTML•CSS•JS•01•10•11•00";
+        const fontSize = 14,
+          columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+        function draw() {
+          ctx.fillStyle = "rgba(0,0,0,0.05)";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = "#4ade80";
+          ctx.font = fontSize + "px JetBrains Mono";
+          for (let i = 0; i < drops.length; i++) {
+            ctx.fillText(
+              letters[Math.floor(Math.random() * letters.length)],
+              i * fontSize,
+              drops[i] * fontSize,
+            );
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975)
+              drops[i] = 0;
+            drops[i]++;
+          }
+        }
+        const interval = setInterval(draw, 33);
+        const closeMatrix = (e) => {
+          if (e.key === "Escape") {
+            clearInterval(interval);
+            canvas.remove();
+            document.removeEventListener("keydown", closeMatrix);
+          }
         };
+        document.addEventListener("keydown", closeMatrix);
+        setTimeout(() => {
+          clearInterval(interval);
+          canvas.remove();
+          document.removeEventListener("keydown", closeMatrix);
+        }, 10000);
+      }
 
-        const easterEggs = {
-            'hello':'Hello! 👋 Bienvenue sur mon portfolio!','hi':'Salut! Comment puis-je vous aider?',
-            'bonjour':'Bonjour! Tapez "help" pour voir les commandes.',
-            'sudo':'Désolé, vous n\'avez pas les permissions sudo ici 😄',
-            'hack':'Accès refusé. Mais j\'apprécie la tentative! 🔒',
-            'ls':'portfolio.html  zynit/  bloxd-texture-pack/  batch-multitool/  plomberie/  nft-generator/  phonesimulation/  ui/  music.html',
-            'pwd':'/home/artleboss2/portfolio',
-            'exit':'Vous ne pouvez pas quitter le terminal, mais vous pouvez le fermer! 😉',
-            'konami':'Code Konami détecté! Mais je n\'ai pas encore d\'easter egg pour ça... 🎮'
+      // ========== SNAKE ==========
+      const snakeGameContainer = document.getElementById("snakeGame");
+      const snakeCanvas = document.getElementById("snakeCanvas");
+      let snakeScoreDisplay = document.getElementById("snakeScore");
+      const gridSize = 20;
+      let snake = [{ x: 10, y: 10 }],
+        food = { x: 15, y: 15 },
+        direction = { x: 1, y: 0 },
+        nextDirection = { x: 1, y: 0 };
+      let score = 0,
+        gameLoop = null,
+        gameSpeed = 150;
+
+      function startSnake() {
+        snake = [{ x: 10, y: 10 }];
+        food = generateFood();
+        direction = { x: 1, y: 0 };
+        nextDirection = { x: 1, y: 0 };
+        score = 0;
+        gameSpeed = 150;
+        snakeScoreDisplay = document.getElementById("snakeScore");
+        if (snakeScoreDisplay) snakeScoreDisplay.textContent = score;
+        snakeCanvas.innerHTML = "";
+        snakeCanvas.style.gridTemplateColumns = `repeat(${gridSize}, 20px)`;
+        snakeCanvas.style.gridTemplateRows = `repeat(${gridSize}, 20px)`;
+        for (let i = 0; i < gridSize * gridSize; i++) {
+          const cell = document.createElement("div");
+          cell.className = "snake-cell";
+          cell.dataset.index = i;
+          snakeCanvas.appendChild(cell);
+        }
+        snakeGameContainer.classList.add("active");
+        if (gameLoop) clearInterval(gameLoop);
+        gameLoop = setInterval(updateSnake, gameSpeed);
+        renderSnake();
+      }
+
+      function closeSnake() {
+        snakeGameContainer.classList.remove("active");
+        if (gameLoop) {
+          clearInterval(gameLoop);
+          gameLoop = null;
+        }
+      }
+      function generateFood() {
+        let f;
+        do {
+          f = {
+            x: Math.floor(Math.random() * gridSize),
+            y: Math.floor(Math.random() * gridSize),
+          };
+        } while (snake.some((s) => s.x === f.x && s.y === f.y));
+        return f;
+      }
+
+      function updateSnake() {
+        direction = nextDirection;
+        const head = {
+          x: snake[0].x + direction.x,
+          y: snake[0].y + direction.y,
         };
-
-        function toggleTerminal() { terminal.classList.toggle('minimized'); if (!terminal.classList.contains('minimized')) terminalInput.focus(); }
-        function closeTerminal() { terminal.classList.add('hidden'); }
-        function addToOutput(content) {
-            const line = document.createElement('div');
-            line.className = 'terminal-line';
-            line.innerHTML = content;
-            terminalOutput.appendChild(line);
-            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        if (
+          head.x < 0 ||
+          head.x >= gridSize ||
+          head.y < 0 ||
+          head.y >= gridSize
+        ) {
+          gameOver();
+          return;
         }
-
-        function executeCommand(cmd) {
-            const trimmedCmd = cmd.trim().toLowerCase();
-            if (trimmedCmd) { commandHistory.push(cmd); historyIndex = commandHistory.length; }
-            addToOutput(`<span class="terminal-prompt">$</span> <span class="terminal-command">${cmd}</span>`);
-            if (!trimmedCmd) return;
-            if (easterEggs[trimmedCmd]) { addToOutput(`<div class="terminal-info">${easterEggs[trimmedCmd]}</div>`); return; }
-            if (commands[trimmedCmd]) {
-                const result = commands[trimmedCmd].execute();
-                if (result instanceof Promise) {
-                    addToOutput(`<div class="terminal-info">⏳ Chargement...</div>`);
-                    result.then(output => {
-                        const lines = terminalOutput.querySelectorAll('.terminal-line');
-                        lines[lines.length - 1].remove();
-                        if (output) addToOutput(output);
-                    });
-                } else if (result) { addToOutput(result); }
-            } else {
-                addToOutput(`<div class="terminal-error">Commande inconnue: "${cmd}". Tapez "help" pour voir les commandes disponibles.</div>`);
-            }
+        if (snake.some((s) => s.x === head.x && s.y === head.y)) {
+          gameOver();
+          return;
         }
-
-        terminalInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') { executeCommand(terminalInput.value); terminalInput.value = ''; }
-            else if (e.key === 'ArrowUp') { e.preventDefault(); if (historyIndex > 0) { historyIndex--; terminalInput.value = commandHistory[historyIndex]; } }
-            else if (e.key === 'ArrowDown') { e.preventDefault(); if (historyIndex < commandHistory.length - 1) { historyIndex++; terminalInput.value = commandHistory[historyIndex]; } else { historyIndex = commandHistory.length; terminalInput.value = ''; } }
-            else if (e.key === 'Tab') { e.preventDefault(); const v = terminalInput.value.toLowerCase(); const m = Object.keys(commands).filter(c => c.startsWith(v)); if (m.length === 1) terminalInput.value = m[0]; }
-        });
-
-        function activateMatrix() {
-            const canvas = document.createElement('canvas');
-            Object.assign(canvas.style, { position:'fixed', top:'0', left:'0', width:'100%', height:'100%', zIndex:'99999', pointerEvents:'none' });
-            document.body.appendChild(canvas);
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            const letters = 'ARTLEBOSS2•ZYNIT•GITHUB•PORTFOLIO•HTML•CSS•JS•01•10•11•00';
-            const fontSize = 14, columns = canvas.width / fontSize;
-            const drops = Array(Math.floor(columns)).fill(1);
-            function draw() {
-                ctx.fillStyle = 'rgba(0,0,0,0.05)'; ctx.fillRect(0,0,canvas.width,canvas.height);
-                ctx.fillStyle = '#4ade80'; ctx.font = fontSize + 'px JetBrains Mono';
-                for (let i = 0; i < drops.length; i++) {
-                    ctx.fillText(letters[Math.floor(Math.random()*letters.length)], i*fontSize, drops[i]*fontSize);
-                    if (drops[i]*fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                    drops[i]++;
-                }
-            }
-            const interval = setInterval(draw, 33);
-            const closeMatrix = (e) => { if (e.key === 'Escape') { clearInterval(interval); canvas.remove(); document.removeEventListener('keydown', closeMatrix); } };
-            document.addEventListener('keydown', closeMatrix);
-            setTimeout(() => { clearInterval(interval); canvas.remove(); document.removeEventListener('keydown', closeMatrix); }, 10000);
-        }
-
-        // ========== SNAKE ==========
-        const snakeGameContainer = document.getElementById('snakeGame');
-        const snakeCanvas = document.getElementById('snakeCanvas');
-        let snakeScoreDisplay = document.getElementById('snakeScore');
-        const gridSize = 20;
-        let snake = [{x:10,y:10}], food = {x:15,y:15}, direction = {x:1,y:0}, nextDirection = {x:1,y:0};
-        let score = 0, gameLoop = null, gameSpeed = 150;
-
-        function startSnake() {
-            snake = [{x:10,y:10}]; food = generateFood(); direction = {x:1,y:0}; nextDirection = {x:1,y:0}; score = 0; gameSpeed = 150;
-            snakeScoreDisplay = document.getElementById('snakeScore');
-            if (snakeScoreDisplay) snakeScoreDisplay.textContent = score;
-            snakeCanvas.innerHTML = '';
-            snakeCanvas.style.gridTemplateColumns = `repeat(${gridSize}, 20px)`;
-            snakeCanvas.style.gridTemplateRows = `repeat(${gridSize}, 20px)`;
-            for (let i = 0; i < gridSize*gridSize; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'snake-cell'; cell.dataset.index = i;
-                snakeCanvas.appendChild(cell);
-            }
-            snakeGameContainer.classList.add('active');
-            if (gameLoop) clearInterval(gameLoop);
+        snake.unshift(head);
+        if (head.x === food.x && head.y === food.y) {
+          score += 10;
+          const sd = document.getElementById("snakeScore");
+          if (sd) sd.textContent = score;
+          food = generateFood();
+          if (score % 50 === 0 && gameSpeed > 50) {
+            gameSpeed -= 10;
+            clearInterval(gameLoop);
             gameLoop = setInterval(updateSnake, gameSpeed);
-            renderSnake();
+          }
+        } else {
+          snake.pop();
         }
+        renderSnake();
+      }
 
-        function closeSnake() { snakeGameContainer.classList.remove('active'); if (gameLoop) { clearInterval(gameLoop); gameLoop = null; } }
-        function generateFood() {
-            let f;
-            do { f = {x:Math.floor(Math.random()*gridSize), y:Math.floor(Math.random()*gridSize)}; }
-            while (snake.some(s => s.x===f.x && s.y===f.y));
-            return f;
-        }
+      function renderSnake() {
+        document
+          .querySelectorAll(".snake-cell")
+          .forEach((c) => c.classList.remove("snake", "food"));
+        snake.forEach((s) => {
+          const c = document.querySelector(
+            `[data-index="${s.y * gridSize + s.x}"]`,
+          );
+          if (c) c.classList.add("snake");
+        });
+        const fc = document.querySelector(
+          `[data-index="${food.y * gridSize + food.x}"]`,
+        );
+        if (fc) fc.classList.add("food");
+      }
 
-        function updateSnake() {
-            direction = nextDirection;
-            const head = {x:snake[0].x+direction.x, y:snake[0].y+direction.y};
-            if (head.x<0||head.x>=gridSize||head.y<0||head.y>=gridSize) { gameOver(); return; }
-            if (snake.some(s => s.x===head.x && s.y===head.y)) { gameOver(); return; }
-            snake.unshift(head);
-            if (head.x===food.x && head.y===food.y) {
-                score += 10;
-                const sd = document.getElementById('snakeScore');
-                if (sd) sd.textContent = score;
-                food = generateFood();
-                if (score%50===0 && gameSpeed>50) { gameSpeed-=10; clearInterval(gameLoop); gameLoop=setInterval(updateSnake,gameSpeed); }
-            } else { snake.pop(); }
-            renderSnake();
-        }
+      function gameOver() {
+        clearInterval(gameLoop);
+        gameLoop = null;
+        const t = translations[currentLang].terminal;
+        closeSnake();
+        if (terminal.classList.contains("minimized"))
+          terminal.classList.remove("minimized");
+        addToOutput(`<div class="terminal-error">🐍 ${t.gameOver}</div>`);
+        addToOutput(
+          `<div class="terminal-success">${t.finalScore} ${score}</div>`,
+        );
+        addToOutput(
+          `<div class="terminal-info">Tapez "snake" pour rejouer!</div>`,
+        );
+        terminalInput.focus();
+      }
 
-        function renderSnake() {
-            document.querySelectorAll('.snake-cell').forEach(c => c.classList.remove('snake','food'));
-            snake.forEach(s => { const c = document.querySelector(`[data-index="${s.y*gridSize+s.x}"]`); if(c) c.classList.add('snake'); });
-            const fc = document.querySelector(`[data-index="${food.y*gridSize+food.x}"]`);
-            if (fc) fc.classList.add('food');
-        }
-
-        function gameOver() {
-            clearInterval(gameLoop); gameLoop = null;
-            const t = translations[currentLang].terminal;
+      document.addEventListener("keydown", (e) => {
+        if (!snakeGameContainer.classList.contains("active")) return;
+        switch (e.key) {
+          case "ArrowUp":
+            e.preventDefault();
+            if (direction.y === 0) nextDirection = { x: 0, y: -1 };
+            break;
+          case "ArrowDown":
+            e.preventDefault();
+            if (direction.y === 0) nextDirection = { x: 0, y: 1 };
+            break;
+          case "ArrowLeft":
+            e.preventDefault();
+            if (direction.x === 0) nextDirection = { x: -1, y: 0 };
+            break;
+          case "ArrowRight":
+            e.preventDefault();
+            if (direction.x === 0) nextDirection = { x: 1, y: 0 };
+            break;
+          case "Escape":
+            e.preventDefault();
             closeSnake();
-            if (terminal.classList.contains('minimized')) terminal.classList.remove('minimized');
-            addToOutput(`<div class="terminal-error">🐍 ${t.gameOver}</div>`);
-            addToOutput(`<div class="terminal-success">${t.finalScore} ${score}</div>`);
-            addToOutput(`<div class="terminal-info">Tapez "snake" pour rejouer!</div>`);
-            terminalInput.focus();
+            break;
         }
+      });
 
-        document.addEventListener('keydown', (e) => {
-            if (!snakeGameContainer.classList.contains('active')) return;
-            switch(e.key) {
-                case 'ArrowUp': e.preventDefault(); if(direction.y===0) nextDirection={x:0,y:-1}; break;
-                case 'ArrowDown': e.preventDefault(); if(direction.y===0) nextDirection={x:0,y:1}; break;
-                case 'ArrowLeft': e.preventDefault(); if(direction.x===0) nextDirection={x:-1,y:0}; break;
-                case 'ArrowRight': e.preventDefault(); if(direction.x===0) nextDirection={x:1,y:0}; break;
-                case 'Escape': e.preventDefault(); closeSnake(); break;
+      setTimeout(() => {
+        terminal.classList.remove("minimized");
+      }, 3000);
+
+      // ========== CURSOR ==========
+      const cursor = document.querySelector(".cursor");
+      const follower = document.querySelector(".cursor-follower");
+      let mouseX = 0,
+        mouseY = 0,
+        followerX = 0,
+        followerY = 0;
+
+      document.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursor.style.left = mouseX + "px";
+        cursor.style.top = mouseY + "px";
+      });
+
+      function animateFollower() {
+        followerX += (mouseX - followerX) * 0.15;
+        followerY += (mouseY - followerY) * 0.15;
+        follower.style.left = followerX + "px";
+        follower.style.top = followerY + "px";
+        requestAnimationFrame(animateFollower);
+      }
+      animateFollower();
+
+      document
+        .querySelectorAll(
+          "a, button, .project-card, .tech-tag, .skill-category li, .terminal-btn",
+        )
+        .forEach((el) => {
+          el.addEventListener("mouseenter", () => {
+            cursor.classList.add("hover");
+            follower.classList.add("hover");
+          });
+          el.addEventListener("mouseleave", () => {
+            cursor.classList.remove("hover");
+            follower.classList.remove("hover");
+          });
+        });
+
+      const particlesContainer = document.getElementById("particles");
+      let particles = [];
+
+      function createParticle(x, y) {
+        if (particles.length > 20) {
+          const o = particles.shift();
+          o.remove();
+        }
+        const particle = document.createElement("div");
+        particle.className = "particle";
+        particle.style.left = x + "px";
+        particle.style.top = y + "px";
+        const angle = Math.random() * Math.PI * 2,
+          velocity = Math.random() * 2 + 1;
+        const vx = Math.cos(angle) * velocity,
+          vy = Math.sin(angle) * velocity;
+        particlesContainer.appendChild(particle);
+        particles.push(particle);
+        let opacity = 1,
+          posX = x,
+          posY = y;
+        function animate() {
+          opacity -= 0.02;
+          posX += vx;
+          posY += vy;
+          particle.style.opacity = opacity;
+          particle.style.transform = `translate(${posX - x}px,${posY - y}px)`;
+          if (opacity > 0) requestAnimationFrame(animate);
+          else {
+            particle.remove();
+            particles = particles.filter((p) => p !== particle);
+          }
+        }
+        animate();
+      }
+
+      let particleInterval;
+      document.addEventListener("mousemove", (e) => {
+        clearInterval(particleInterval);
+        particleInterval = setInterval(
+          () => createParticle(e.clientX, e.clientY),
+          50,
+        );
+      });
+
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target)
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      });
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.style.opacity = "1";
+              entry.target.style.transform = "translateY(0)";
             }
-        });
+          });
+        },
+        { threshold: 0.1, rootMargin: "0px 0px -100px 0px" },
+      );
 
-        setTimeout(() => { terminal.classList.remove('minimized'); }, 3000);
-
-        // ========== CURSOR ==========
-        const cursor = document.querySelector('.cursor');
-        const follower = document.querySelector('.cursor-follower');
-        let mouseX=0, mouseY=0, followerX=0, followerY=0;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX=e.clientX; mouseY=e.clientY;
-            cursor.style.left=mouseX+'px'; cursor.style.top=mouseY+'px';
-        });
-
-        function animateFollower() {
-            followerX += (mouseX-followerX)*0.15; followerY += (mouseY-followerY)*0.15;
-            follower.style.left=followerX+'px'; follower.style.top=followerY+'px';
-            requestAnimationFrame(animateFollower);
-        }
-        animateFollower();
-
-        document.querySelectorAll('a, button, .project-card, .tech-tag, .skill-category li, .terminal-btn').forEach(el => {
-            el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); follower.classList.add('hover'); });
-            el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); follower.classList.remove('hover'); });
-        });
-
-        const particlesContainer = document.getElementById('particles');
-        let particles = [];
-
-        function createParticle(x, y) {
-            if (particles.length > 20) { const o = particles.shift(); o.remove(); }
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left=x+'px'; particle.style.top=y+'px';
-            const angle=Math.random()*Math.PI*2, velocity=Math.random()*2+1;
-            const vx=Math.cos(angle)*velocity, vy=Math.sin(angle)*velocity;
-            particlesContainer.appendChild(particle); particles.push(particle);
-            let opacity=1, posX=x, posY=y;
-            function animate() {
-                opacity-=0.02; posX+=vx; posY+=vy;
-                particle.style.opacity=opacity;
-                particle.style.transform=`translate(${posX-x}px,${posY-y}px)`;
-                if (opacity>0) requestAnimationFrame(animate);
-                else { particle.remove(); particles=particles.filter(p=>p!==particle); }
-            }
-            animate();
-        }
-
-        let particleInterval;
-        document.addEventListener('mousemove', (e) => {
-            clearInterval(particleInterval);
-            particleInterval = setInterval(() => createParticle(e.clientX, e.clientY), 50);
-        });
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
-            });
-        });
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) { entry.target.style.opacity='1'; entry.target.style.transform='translateY(0)'; }
-            });
-        }, {threshold:0.1, rootMargin:'0px 0px -100px 0px'});
-
-        document.querySelectorAll('.project-card, .skill-category').forEach(el => {
-            el.style.opacity='0'; el.style.transform='translateY(30px)';
-            el.style.transition='all 0.6s cubic-bezier(0.4,0,0.2,1)';
-            observer.observe(el);
+      document
+        .querySelectorAll(".project-card, .skill-category")
+        .forEach((el) => {
+          el.style.opacity = "0";
+          el.style.transform = "translateY(30px)";
+          el.style.transition = "all 0.6s cubic-bezier(0.4,0,0.2,1)";
+          observer.observe(el);
         });
     </script>
-</body>
+  </body>
 </html>

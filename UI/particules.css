@@ -1,17 +1,62 @@
-body { margin: 0; background: #050505; overflow: hidden; font-family: 'Inter', sans-serif; cursor: none; }
-#p-canvas { position: fixed; top: 0; left: 0; z-index: 1; }
-.cursor { width: 10px; height: 10px; background: #00ff88; position: fixed; border-radius: 50%; pointer-events: none; z-index: 100; mix-blend-mode: difference; }
+body {
+  margin: 0;
+  background: #050505;
+  overflow: hidden;
+  font-family: "Inter", sans-serif;
+  cursor: none;
+}
+#p-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+.cursor {
+  width: 10px;
+  height: 10px;
+  background: #00ff88;
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 100;
+  mix-blend-mode: difference;
+}
 .ui {
-    position: relative; z-index: 10; height: 100vh;
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-    color: white; pointer-events: none;
+  position: relative;
+  z-index: 10;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  pointer-events: none;
 }
-h1 { font-size: 8vw; color: #00ff88; font-weight: 900; margin: 0; opacity: 0.8; }
-.magnetic-area { pointer-events: auto; margin-top: 40px; padding: 30px; }
+h1 {
+  font-size: 8vw;
+  color: #00ff88;
+  font-weight: 900;
+  margin: 0;
+  opacity: 0.8;
+}
+.magnetic-area {
+  pointer-events: auto;
+  margin-top: 40px;
+  padding: 30px;
+}
 .back-btn {
-    padding: 15px 40px; border: 1px solid rgba(255,255,255,0.1);
-    background: rgba(255,255,255,0.05); color: white;
-    border-radius: 100px; text-decoration: none; font-weight: 600;
-    transition: all 0.3s; display: block;
+  padding: 15px 40px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border-radius: 100px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s;
+  display: block;
 }
-.back-btn:hover { background: #00ff88; color: #050505; border-color: #00ff88; }
+.back-btn:hover {
+  background: #00ff88;
+  color: #050505;
+  border-color: #00ff88;
+}

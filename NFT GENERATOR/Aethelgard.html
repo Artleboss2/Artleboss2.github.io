@@ -1,354 +1,729 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr" class="no-js">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Aethelgard NFT | Generative Engine 4.7.0</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@300;500&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
-        :root {
-            --athel-bg: #000000;
-            --athel-surface: #0a0a0a;
-            --athel-primary: #ffffff;
-            --athel-secondary: #86868b;
-            --athel-accent: #0071e3;
-            --athel-like: #ff3b30;
-            --athel-border: rgba(255, 255, 255, 0.08);
-            --athel-font-sans: 'Inter', sans-serif;
-            --athel-font-mono: 'JetBrains Mono', monospace;
-        }
+      :root {
+        --athel-bg: #000000;
+        --athel-surface: #0a0a0a;
+        --athel-primary: #ffffff;
+        --athel-secondary: #86868b;
+        --athel-accent: #0071e3;
+        --athel-like: #ff3b30;
+        --athel-border: rgba(255, 255, 255, 0.08);
+        --athel-font-sans: "Inter", sans-serif;
+        --athel-font-mono: "JetBrains Mono", monospace;
+      }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--athel-bg); color: var(--athel-primary); font-family: var(--athel-font-sans); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: var(--athel-bg);
+        color: var(--athel-primary);
+        font-family: var(--athel-font-sans);
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
 
-        /* Navigation */
-        .athel-nav { position: fixed; top: 0; width: 100%; height: 52px; z-index: 1000; border-bottom: 1px solid var(--athel-border); backdrop-filter: blur(20px); background: rgba(0, 0, 0, 0.7); }
-        .athel-nav__container { max-width: 1440px; margin: 0 auto; height: 100%; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; }
-        .athel-nav__logo { font-weight: 600; font-size: 14px; letter-spacing: 1px; cursor: pointer; }
-        .nav-links { display: flex; gap: 20px; align-items: center; }
-        .nav-link { font-size: 11px; color: var(--athel-secondary); text-decoration: none; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s; }
+      /* Navigation */
+      .athel-nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 52px;
+        z-index: 1000;
+        border-bottom: 1px solid var(--athel-border);
+        backdrop-filter: blur(20px);
+        background: rgba(0, 0, 0, 0.7);
+      }
+      .athel-nav__container {
+        max-width: 1440px;
+        margin: 0 auto;
+        height: 100%;
+        padding: 0 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .athel-nav__logo {
+        font-weight: 600;
+        font-size: 14px;
+        letter-spacing: 1px;
+        cursor: pointer;
+      }
+      .nav-links {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+      }
+      .nav-link {
+        font-size: 11px;
+        color: var(--athel-secondary);
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
 
-        /* Vues */
-        .view-section { display: none; min-height: 100vh; padding-top: 100px; opacity: 0; transition: opacity 0.4s ease; }
-        .view-active { display: block; opacity: 1; }
-        .studio-grid { display: grid; grid-template-columns: 1fr 380px; gap: 80px; max-width: 1440px; margin: 0 auto; padding: 0 40px; }
+      /* Vues */
+      .view-section {
+        display: none;
+        min-height: 100vh;
+        padding-top: 100px;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+      .view-active {
+        display: block;
+        opacity: 1;
+      }
+      .studio-grid {
+        display: grid;
+        grid-template-columns: 1fr 380px;
+        gap: 80px;
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 0 40px;
+      }
 
-        /* Auth */
-        .auth-container { max-width: 400px; margin: 5vh auto; padding: 40px; background: var(--athel-surface); border: 1px solid var(--athel-border); border-radius: 24px; text-align: center; }
-        .auth-input { width: 100%; padding: 14px; background: #161617; border: 1px solid var(--athel-border); border-radius: 12px; color: white; margin-bottom: 12px; font-family: var(--athel-font-mono); outline: none; }
+      /* Auth */
+      .auth-container {
+        max-width: 400px;
+        margin: 5vh auto;
+        padding: 40px;
+        background: var(--athel-surface);
+        border: 1px solid var(--athel-border);
+        border-radius: 24px;
+        text-align: center;
+      }
+      .auth-input {
+        width: 100%;
+        padding: 14px;
+        background: #161617;
+        border: 1px solid var(--athel-border);
+        border-radius: 12px;
+        color: white;
+        margin-bottom: 12px;
+        font-family: var(--athel-font-mono);
+        outline: none;
+      }
 
-        /* Studio & UI */
-        .athel-studio__preview { background: #050505; border-radius: 24px; border: 1px solid var(--athel-border); aspect-ratio: 1; position: relative; overflow: hidden; }
-        canvas { width: 100% !important; height: 100% !important; display: block; }
-        .control-group { margin-bottom: 25px; }
-        label { font-size: 11px; color: var(--athel-secondary); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px; }
+      /* Studio & UI */
+      .athel-studio__preview {
+        background: #050505;
+        border-radius: 24px;
+        border: 1px solid var(--athel-border);
+        aspect-ratio: 1;
+        position: relative;
+        overflow: hidden;
+      }
+      canvas {
+        width: 100% !important;
+        height: 100% !important;
+        display: block;
+      }
+      .control-group {
+        margin-bottom: 25px;
+      }
+      label {
+        font-size: 11px;
+        color: var(--athel-secondary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: block;
+        margin-bottom: 8px;
+      }
 
-        .slider { -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer; }
-        .slider::-webkit-slider-runnable-track { background: rgba(255, 255, 255, 0.1); height: 4px; border-radius: 2px; }
-        .slider::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; background: #fff; border-radius: 50%; margin-top: -7px; border: 1px solid rgba(0,0,0,0.1); }
+      .slider {
+        -webkit-appearance: none;
+        width: 100%;
+        background: transparent;
+        cursor: pointer;
+      }
+      .slider::-webkit-slider-runnable-track {
+        background: rgba(255, 255, 255, 0.1);
+        height: 4px;
+        border-radius: 2px;
+      }
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 18px;
+        width: 18px;
+        background: #fff;
+        border-radius: 50%;
+        margin-top: -7px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
 
-        .color-picker-wrapper { display: flex; align-items: center; gap: 15px; background: #161617; padding: 10px; border-radius: 12px; border: 1px solid var(--athel-border); }
-        input[type="color"] { -webkit-appearance: none; border: none; width: 24px; height: 24px; cursor: pointer; background: none; }
+      .color-picker-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        background: #161617;
+        padding: 10px;
+        border-radius: 12px;
+        border: 1px solid var(--athel-border);
+      }
+      input[type="color"] {
+        -webkit-appearance: none;
+        border: none;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        background: none;
+      }
 
-        /* Galerie */
-        .gallery-section { max-width: 1440px; margin: 80px auto; padding: 60px 40px; border-top: 1px solid var(--athel-border); }
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; margin-top: 30px; }
-        
-        .nft-card { background: var(--athel-surface); border: 1px solid var(--athel-border); padding: 12px; border-radius: 20px; position: relative; transition: 0.3s; display: flex; flex-direction: column; gap: 10px; }
-        .nft-card:hover { border-color: var(--athel-accent); transform: translateY(-5px); }
-        .nft-card canvas { width: 100% !important; height: auto !important; aspect-ratio: 1; border-radius: 12px; cursor: pointer; }
+      /* Galerie */
+      .gallery-section {
+        max-width: 1440px;
+        margin: 80px auto;
+        padding: 60px 40px;
+        border-top: 1px solid var(--athel-border);
+      }
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 24px;
+        margin-top: 30px;
+      }
 
-        .nft-footer { display: flex; justify-content: space-between; align-items: center; padding: 0 4px; }
-        .nft-meta { font-family: var(--athel-font-mono); font-size: 9px; color: var(--athel-secondary); }
-        
-        /* Like Button */
-        .like-btn { 
-            background: rgba(255,255,255,0.05); border: 1px solid var(--athel-border); color: white;
-            padding: 6px 10px; border-radius: 10px; cursor: pointer; font-size: 10px; display: flex; align-items: center; gap: 6px; transition: 0.2s;
-        }
-        .like-btn.active { background: var(--athel-like); border-color: var(--athel-like); }
-        .like-btn:hover { transform: scale(1.05); }
+      .nft-card {
+        background: var(--athel-surface);
+        border: 1px solid var(--athel-border);
+        padding: 12px;
+        border-radius: 20px;
+        position: relative;
+        transition: 0.3s;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .nft-card:hover {
+        border-color: var(--athel-accent);
+        transform: translateY(-5px);
+      }
+      .nft-card canvas {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 1;
+        border-radius: 12px;
+        cursor: pointer;
+      }
 
-        /* Boutons Généraux */
-        .athel-btn { border: none; padding: 16px; border-radius: 12px; font-size: 13px; cursor: pointer; transition: 0.4s; font-family: inherit; width: 100%; margin-bottom: 10px; background: white; color: black; font-weight: 600; display: flex; align-items: center; justify-content: center; }
-        .athel-btn--outline { background: transparent; border: 1px solid var(--athel-border); color: white; }
-        .athel-loader { position: fixed; inset: 0; z-index: 10000; background: #000; display: flex; justify-content: center; align-items: center; font-size: 10px; letter-spacing: 2px; }
-        .hash-tag { position: absolute; top: 24px; right: 24px; font-family: var(--athel-font-mono); font-size: 10px; color: var(--athel-secondary); background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 4px; }
+      .nft-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 4px;
+      }
+      .nft-meta {
+        font-family: var(--athel-font-mono);
+        font-size: 9px;
+        color: var(--athel-secondary);
+      }
+
+      /* Like Button */
+      .like-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--athel-border);
+        color: white;
+        padding: 6px 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: 0.2s;
+      }
+      .like-btn.active {
+        background: var(--athel-like);
+        border-color: var(--athel-like);
+      }
+      .like-btn:hover {
+        transform: scale(1.05);
+      }
+
+      /* Boutons Généraux */
+      .athel-btn {
+        border: none;
+        padding: 16px;
+        border-radius: 12px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: 0.4s;
+        font-family: inherit;
+        width: 100%;
+        margin-bottom: 10px;
+        background: white;
+        color: black;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .athel-btn--outline {
+        background: transparent;
+        border: 1px solid var(--athel-border);
+        color: white;
+      }
+      .athel-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        background: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 10px;
+        letter-spacing: 2px;
+      }
+      .hash-tag {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        font-family: var(--athel-font-mono);
+        font-size: 10px;
+        color: var(--athel-secondary);
+        background: rgba(0, 0, 0, 0.5);
+        padding: 4px 8px;
+        border-radius: 4px;
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <div id="loader" class="athel-loader">SYSTEM_SYNC...</div>
 
     <nav class="athel-nav">
-        <div class="athel-nav__container">
-            <div class="athel-nav__logo" onclick="showView('view-studio')">AETHELGARD</div>
-            <div id="nav-auth-group"><span class="nav-link" onclick="showView('view-login')">Accès</span></div>
-            <div id="nav-user-group" style="display:none;">
-                <span id="user-display" class="nav-link" style="color:white">--</span>
-                <span class="nav-link" id="btn-logout" style="margin-left:15px; opacity:0.5">LOGOUT</span>
-            </div>
+      <div class="athel-nav__container">
+        <div class="athel-nav__logo" onclick="showView('view-studio')">
+          AETHELGARD
         </div>
+        <div id="nav-auth-group">
+          <span class="nav-link" onclick="showView('view-login')">Accès</span>
+        </div>
+        <div id="nav-user-group" style="display: none">
+          <span id="user-display" class="nav-link" style="color: white"
+            >--</span
+          >
+          <span
+            class="nav-link"
+            id="btn-logout"
+            style="margin-left: 15px; opacity: 0.5"
+            >LOGOUT</span
+          >
+        </div>
+      </div>
     </nav>
 
     <div id="view-login" class="view-section">
-        <div class="auth-container">
-            <h2 style="margin-bottom:20px">Gateway Access</h2>
-            <input type="email" id="email-input" class="auth-input" placeholder="Email">
-            <input type="password" id="pass-input" class="auth-input" placeholder="Password">
-            <button id="btn-email-login" class="athel-btn">Entrer</button>
-            <button id="btn-google" class="athel-btn athel-btn--outline">Google Connect</button>
-        </div>
+      <div class="auth-container">
+        <h2 style="margin-bottom: 20px">Gateway Access</h2>
+        <input
+          type="email"
+          id="email-input"
+          class="auth-input"
+          placeholder="Email"
+        />
+        <input
+          type="password"
+          id="pass-input"
+          class="auth-input"
+          placeholder="Password"
+        />
+        <button id="btn-email-login" class="athel-btn">Entrer</button>
+        <button id="btn-google" class="athel-btn athel-btn--outline">
+          Google Connect
+        </button>
+      </div>
     </div>
 
     <main id="view-studio" class="view-section">
-        <div class="studio-grid">
-            <section>
-                <div class="athel-studio__preview">
-                    <canvas id="art-canvas"></canvas>
-                    <div id="art-hash" class="hash-tag">0x...</div>
-                </div>
-            </section>
-            <aside>
-                <div class="control-group">
-                    <label>Fond Chromatique</label>
-                    <div class="color-picker-wrapper">
-                        <input type="color" id="bg-color" value="#050505">
-                        <span id="bg-hex" style="font-family:var(--athel-font-mono); font-size:12px">#050505</span>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label>Complexité</label>
-                    <input class="slider" type="range" id="complexity" min="50" max="800" value="250">
-                </div>
-                
-                <div class="control-group">
-                    <label>Chroma</label>
-                    <input class="slider" type="range" id="chroma" min="0" max="100" value="80">
-                </div>
-
-                <button id="btn-generate" class="athel-btn">Muter l'Artefact</button>
-                <button id="btn-save" class="athel-btn athel-btn--outline">Synchroniser Cloud</button>
-                <button id="btn-download" class="athel-btn" style="background:var(--athel-accent); color:white; display:none;">Télécharger PNG</button>
-            </aside>
-        </div>
-
-        <section class="gallery-section">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h2 id="gallery-title" style="font-size:10px; letter-spacing:3px; color:var(--athel-secondary)">ARCHIVES GLOBALES</h2>
-                <button id="toggle-gallery" class="athel-btn athel-btn--outline" style="width:auto; padding:8px 15px; font-size:10px">Filtrer Collection</button>
-            </div>
-            <div id="gallery-container" class="gallery-grid"></div>
+      <div class="studio-grid">
+        <section>
+          <div class="athel-studio__preview">
+            <canvas id="art-canvas"></canvas>
+            <div id="art-hash" class="hash-tag">0x...</div>
+          </div>
         </section>
+        <aside>
+          <div class="control-group">
+            <label>Fond Chromatique</label>
+            <div class="color-picker-wrapper">
+              <input type="color" id="bg-color" value="#050505" />
+              <span
+                id="bg-hex"
+                style="font-family: var(--athel-font-mono); font-size: 12px"
+                >#050505</span
+              >
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label>Complexité</label>
+            <input
+              class="slider"
+              type="range"
+              id="complexity"
+              min="50"
+              max="800"
+              value="250"
+            />
+          </div>
+
+          <div class="control-group">
+            <label>Chroma</label>
+            <input
+              class="slider"
+              type="range"
+              id="chroma"
+              min="0"
+              max="100"
+              value="80"
+            />
+          </div>
+
+          <button id="btn-generate" class="athel-btn">Muter l'Artefact</button>
+          <button id="btn-save" class="athel-btn athel-btn--outline">
+            Synchroniser Cloud
+          </button>
+          <button
+            id="btn-download"
+            class="athel-btn"
+            style="background: var(--athel-accent); color: white; display: none"
+          >
+            Télécharger PNG
+          </button>
+        </aside>
+      </div>
+
+      <section class="gallery-section">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <h2
+            id="gallery-title"
+            style="
+              font-size: 10px;
+              letter-spacing: 3px;
+              color: var(--athel-secondary);
+            "
+          >
+            ARCHIVES GLOBALES
+          </h2>
+          <button
+            id="toggle-gallery"
+            class="athel-btn athel-btn--outline"
+            style="width: auto; padding: 8px 15px; font-size: 10px"
+          >
+            Filtrer Collection
+          </button>
+        </div>
+        <div id="gallery-container" class="gallery-grid"></div>
+      </section>
     </main>
 
     <script type="importmap">
-    {
-      "imports": {
-        "firebase/app": "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js",
-        "firebase/auth": "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js",
-        "firebase/database": "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js"
+      {
+        "imports": {
+          "firebase/app": "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js",
+          "firebase/auth": "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js",
+          "firebase/database": "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js"
+        }
       }
-    }
     </script>
 
     <script type="module">
-        import { initializeApp } from 'firebase/app';
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-        import { getDatabase, ref, set, update, onValue, query, orderByChild, equalTo, limitToLast, serverTimestamp, runTransaction } from 'firebase/database';
+      import { initializeApp } from "firebase/app";
+      import {
+        getAuth,
+        signInWithPopup,
+        GoogleAuthProvider,
+        onAuthStateChanged,
+        signOut,
+        signInWithEmailAndPassword,
+        createUserWithEmailAndPassword,
+      } from "firebase/auth";
+      import {
+        getDatabase,
+        ref,
+        set,
+        update,
+        onValue,
+        query,
+        orderByChild,
+        equalTo,
+        limitToLast,
+        serverTimestamp,
+        runTransaction,
+      } from "firebase/database";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAqDntQdOek29SF2Zi0V3SR9kB_KjObMmA",
-            authDomain: "nft-generator-3a169.firebaseapp.com",
-            databaseURL: "https://nft-generator-3a169-default-rtdb.firebaseio.com",
-            projectId: "nft-generator-3a169",
-            storageBucket: "nft-generator-3a169.firebasestorage.app"
+      const firebaseConfig = {
+        apiKey: "AIzaSyAqDntQdOek29SF2Zi0V3SR9kB_KjObMmA",
+        authDomain: "nft-generator-3a169.firebaseapp.com",
+        databaseURL: "https://nft-generator-3a169-default-rtdb.firebaseio.com",
+        projectId: "nft-generator-3a169",
+        storageBucket: "nft-generator-3a169.firebasestorage.app",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getDatabase(app);
+      let currentMode = "global";
+
+      // --- ENGINE ---
+      class AethelEngine {
+        constructor() {
+          this.canvas = document.getElementById("art-canvas");
+          this.ctx = this.canvas.getContext("2d");
+          this.canvas.width = 1600;
+          this.canvas.height = 1600;
+          this.complexity = 250;
+          this.chroma = 80;
+          this.bgColor = "#050505";
+          this.generateNewHash();
+        }
+        generateNewHash() {
+          this.currentHash =
+            "0x" + Math.random().toString(16).slice(2, 18).toUpperCase();
+          this.seed = parseInt(this.currentHash.substring(2, 10), 16);
+          document.getElementById("art-hash").innerText = this.currentHash;
+          document.getElementById("btn-save").disabled = false;
+          document.getElementById("btn-save").innerText = "Synchroniser Cloud";
+          document.getElementById("btn-download").style.display = "none";
+        }
+        generate() {
+          let s = this.seed;
+          const rnd = () => {
+            s = (s * 9301 + 49297) % 233280;
+            return s / 233280;
+          };
+          this.ctx.fillStyle = this.bgColor;
+          this.ctx.fillRect(0, 0, 1600, 1600);
+          for (let i = 0; i < this.complexity; i++) {
+            this.ctx.save();
+            this.ctx.translate(800, 800);
+            this.ctx.rotate(rnd() * Math.PI * 2);
+            this.ctx.strokeStyle = `hsl(${rnd() * 360}, ${this.chroma}%, 55%)`;
+            this.ctx.globalAlpha = rnd() * 0.4;
+            this.ctx.beginPath();
+            this.ctx.moveTo(rnd() * 300, 0);
+            this.ctx.lineTo(rnd() * 800, (rnd() - 0.5) * 200);
+            this.ctx.stroke();
+            this.ctx.restore();
+          }
+        }
+      }
+      const engine = new AethelEngine();
+      engine.generate();
+
+      function renderThumb(canvas, hash, background) {
+        const ctx = canvas.getContext("2d");
+        let s = parseInt(hash.substring(2, 10), 16);
+        const rnd = () => {
+          s = (s * 9301 + 49297) % 233280;
+          return s / 233280;
         };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getDatabase(app);
-        let currentMode = "global";
-
-        // --- ENGINE ---
-        class AethelEngine {
-            constructor() {
-                this.canvas = document.getElementById('art-canvas');
-                this.ctx = this.canvas.getContext('2d');
-                this.canvas.width = 1600; this.canvas.height = 1600;
-                this.complexity = 250; this.chroma = 80;
-                this.bgColor = "#050505";
-                this.generateNewHash();
-            }
-            generateNewHash() {
-                this.currentHash = '0x' + Math.random().toString(16).slice(2, 18).toUpperCase();
-                this.seed = parseInt(this.currentHash.substring(2, 10), 16);
-                document.getElementById('art-hash').innerText = this.currentHash;
-                document.getElementById('btn-save').disabled = false;
-                document.getElementById('btn-save').innerText = "Synchroniser Cloud";
-                document.getElementById('btn-download').style.display = 'none';
-            }
-            generate() {
-                let s = this.seed;
-                const rnd = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
-                this.ctx.fillStyle = this.bgColor;
-                this.ctx.fillRect(0, 0, 1600, 1600);
-                for(let i = 0; i < this.complexity; i++) {
-                    this.ctx.save(); this.ctx.translate(800, 800); this.ctx.rotate(rnd() * Math.PI * 2);
-                    this.ctx.strokeStyle = `hsl(${rnd() * 360}, ${this.chroma}%, 55%)`;
-                    this.ctx.globalAlpha = rnd() * 0.4;
-                    this.ctx.beginPath(); this.ctx.moveTo(rnd() * 300, 0); this.ctx.lineTo(rnd() * 800, (rnd() - 0.5) * 200);
-                    this.ctx.stroke(); this.ctx.restore();
-                }
-            }
+        ctx.fillStyle = background || "#050505";
+        ctx.fillRect(0, 0, 400, 400);
+        for (let i = 0; i < 100; i++) {
+          ctx.save();
+          ctx.translate(200, 200);
+          ctx.rotate(rnd() * Math.PI * 2);
+          ctx.strokeStyle = `hsl(${rnd() * 360}, 70%, 60%)`;
+          ctx.globalAlpha = 0.3;
+          ctx.beginPath();
+          ctx.moveTo(rnd() * 80, 0);
+          ctx.lineTo(rnd() * 180, (rnd() - 0.5) * 40);
+          ctx.stroke();
+          ctx.restore();
         }
-        const engine = new AethelEngine();
-        engine.generate();
+      }
 
-        function renderThumb(canvas, hash, background) {
-            const ctx = canvas.getContext('2d');
-            let s = parseInt(hash.substring(2, 10), 16);
-            const rnd = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
-            ctx.fillStyle = background || "#050505";
-            ctx.fillRect(0, 0, 400, 400);
-            for(let i = 0; i < 100; i++) {
-                ctx.save(); ctx.translate(200, 200); ctx.rotate(rnd() * Math.PI * 2);
-                ctx.strokeStyle = `hsl(${rnd() * 360}, 70%, 60%)`; ctx.globalAlpha = 0.3;
-                ctx.beginPath(); ctx.moveTo(rnd() * 80, 0); ctx.lineTo(rnd() * 180, (rnd() - 0.5) * 40);
-                ctx.stroke(); ctx.restore();
+      // --- LIKE SYSTEM ---
+      async function toggleLike(nftHash) {
+        if (!auth.currentUser) return;
+        const uid = auth.currentUser.uid;
+        const nftRef = ref(db, `NFTS/${nftHash}`);
+
+        await runTransaction(nftRef, (currentData) => {
+          if (currentData) {
+            if (!currentData.likedBy) currentData.likedBy = {};
+            if (currentData.likedBy[uid]) {
+              currentData.likes--;
+              delete currentData.likedBy[uid];
+            } else {
+              currentData.likes = (currentData.likes || 0) + 1;
+              currentData.likedBy[uid] = true;
             }
-        }
+          }
+          return currentData;
+        });
+      }
 
-        // --- LIKE SYSTEM ---
-        async function toggleLike(nftHash) {
-            if(!auth.currentUser) return;
-            const uid = auth.currentUser.uid;
-            const nftRef = ref(db, `NFTS/${nftHash}`);
-            
-            await runTransaction(nftRef, (currentData) => {
-                if (currentData) {
-                    if (!currentData.likedBy) currentData.likedBy = {};
-                    if (currentData.likedBy[uid]) {
-                        currentData.likes--;
-                        delete currentData.likedBy[uid];
-                    } else {
-                        currentData.likes = (currentData.likes || 0) + 1;
-                        currentData.likedBy[uid] = true;
-                    }
-                }
-                return currentData;
-            });
-        }
+      // --- GALLERY ---
+      function loadGallery() {
+        const container = document.getElementById("gallery-container");
+        let nftRef =
+          currentMode === "mine"
+            ? query(
+                ref(db, "NFTS"),
+                orderByChild("creatorId"),
+                equalTo(auth.currentUser.uid),
+              )
+            : query(ref(db, "NFTS"), limitToLast(30));
 
-        // --- GALLERY ---
-        function loadGallery() {
-            const container = document.getElementById('gallery-container');
-            let nftRef = (currentMode === "mine") 
-                ? query(ref(db, "NFTS"), orderByChild("creatorId"), equalTo(auth.currentUser.uid))
-                : query(ref(db, "NFTS"), limitToLast(30));
+        onValue(nftRef, (snap) => {
+          container.innerHTML = "";
+          snap.forEach((child) => {
+            const data = child.val();
+            const card = document.createElement("div");
+            card.className = "nft-card";
 
-            onValue(nftRef, (snap) => {
-                container.innerHTML = "";
-                snap.forEach(child => {
-                    const data = child.val();
-                    const card = document.createElement('div');
-                    card.className = "nft-card";
-                    
-                    const cvs = document.createElement('canvas');
-                    cvs.width = 400; cvs.height = 400;
-                    
-                    const isLiked = data.likedBy && data.likedBy[auth.currentUser?.uid];
-                    
-                    card.innerHTML = `
+            const cvs = document.createElement("canvas");
+            cvs.width = 400;
+            cvs.height = 400;
+
+            const isLiked = data.likedBy && data.likedBy[auth.currentUser?.uid];
+
+            card.innerHTML = `
                         <div class="nft-footer">
                             <div class="nft-meta">
-                                <div>${data.hash.substring(0,10)}...</div>
-                                <div style="color:gray">By ${data.creatorEmail.split('@')[0]}</div>
+                                <div>${data.hash.substring(0, 10)}...</div>
+                                <div style="color:gray">By ${data.creatorEmail.split("@")[0]}</div>
                             </div>
-                            <button class="like-btn ${isLiked ? 'active' : ''}" onclick="event.stopPropagation(); window.handleLike('${data.hash}')">
+                            <button class="like-btn ${isLiked ? "active" : ""}" onclick="event.stopPropagation(); window.handleLike('${data.hash}')">
                                 <span>❤</span> ${data.likes || 0}
                             </button>
                         </div>
                     `;
-                    card.prepend(cvs);
-                    renderThumb(cvs, data.hash, data.bgColor);
-                    
-                    cvs.onclick = () => {
-                        engine.currentHash = data.hash;
-                        engine.seed = parseInt(data.hash.substring(2, 10), 16);
-                        engine.bgColor = data.bgColor || "#050505";
-                        document.getElementById('bg-color').value = engine.bgColor;
-                        document.getElementById('bg-hex').innerText = engine.bgColor.toUpperCase();
-                        engine.generate();
-                        document.getElementById('art-hash').innerText = data.hash;
-                        document.getElementById('btn-save').disabled = true;
-                        document.getElementById('btn-save').innerText = "Artefact Chargé";
-                    };
-                    container.prepend(card);
-                });
-            });
-        }
+            card.prepend(cvs);
+            renderThumb(cvs, data.hash, data.bgColor);
 
-        window.handleLike = toggleLike;
-
-        // --- APP LOGIC ---
-        onAuthStateChanged(auth, (user) => {
-            document.getElementById('loader').style.display = 'none';
-            if (user) {
-                document.getElementById('nav-auth-group').style.display = 'none';
-                document.getElementById('nav-user-group').style.display = 'flex';
-                document.getElementById('user-display').innerText = user.email.split('@')[0].toUpperCase();
-                showView('view-studio'); loadGallery();
-            } else { showView('view-login'); }
+            cvs.onclick = () => {
+              engine.currentHash = data.hash;
+              engine.seed = parseInt(data.hash.substring(2, 10), 16);
+              engine.bgColor = data.bgColor || "#050505";
+              document.getElementById("bg-color").value = engine.bgColor;
+              document.getElementById("bg-hex").innerText =
+                engine.bgColor.toUpperCase();
+              engine.generate();
+              document.getElementById("art-hash").innerText = data.hash;
+              document.getElementById("btn-save").disabled = true;
+              document.getElementById("btn-save").innerText = "Artefact Chargé";
+            };
+            container.prepend(card);
+          });
         });
+      }
 
-        document.getElementById('bg-color').oninput = (e) => {
-            engine.bgColor = e.target.value;
-            document.getElementById('bg-hex').innerText = e.target.value.toUpperCase();
-            engine.generate();
-        };
+      window.handleLike = toggleLike;
 
-        document.getElementById('btn-save').onclick = async () => {
-            if(!auth.currentUser) return;
-            const btn = document.getElementById('btn-save');
-            await set(ref(db, "NFTS/" + engine.currentHash), {
-                hash: engine.currentHash,
-                creatorId: auth.currentUser.uid,
-                creatorEmail: auth.currentUser.email,
-                bgColor: engine.bgColor,
-                likes: 0,
-                timestamp: serverTimestamp()
-            });
-            btn.innerText = "Synchronisé !"; btn.disabled = true;
-        };
+      // --- APP LOGIC ---
+      onAuthStateChanged(auth, (user) => {
+        document.getElementById("loader").style.display = "none";
+        if (user) {
+          document.getElementById("nav-auth-group").style.display = "none";
+          document.getElementById("nav-user-group").style.display = "flex";
+          document.getElementById("user-display").innerText = user.email
+            .split("@")[0]
+            .toUpperCase();
+          showView("view-studio");
+          loadGallery();
+        } else {
+          showView("view-login");
+        }
+      });
 
-        document.getElementById('btn-email-login').onclick = async () => {
-            const email = document.getElementById('email-input').value;
-            const pass = document.getElementById('pass-input').value;
-            try { await signInWithEmailAndPassword(auth, email, pass); }
-            catch { try { await createUserWithEmailAndPassword(auth, email, pass); } catch(e) { alert(e.message); } }
-        };
+      document.getElementById("bg-color").oninput = (e) => {
+        engine.bgColor = e.target.value;
+        document.getElementById("bg-hex").innerText =
+          e.target.value.toUpperCase();
+        engine.generate();
+      };
 
-        document.getElementById('btn-generate').onclick = () => { engine.generateNewHash(); engine.generate(); };
-        document.getElementById('complexity').oninput = (e) => { engine.complexity = e.target.value; engine.generate(); };
-        document.getElementById('chroma').oninput = (e) => { engine.chroma = e.target.value; engine.generate(); };
-        document.getElementById('btn-logout').onclick = () => signOut(auth);
-        document.getElementById('btn-google').onclick = () => signInWithPopup(auth, new GoogleAuthProvider());
-        document.getElementById('toggle-gallery').onclick = () => {
-            currentMode = (currentMode === "global") ? "mine" : "global";
-            document.getElementById('gallery-title').innerText = currentMode === "global" ? "ARCHIVES GLOBALES" : "MES ARTEFACTS";
-            loadGallery();
-        };
+      document.getElementById("btn-save").onclick = async () => {
+        if (!auth.currentUser) return;
+        const btn = document.getElementById("btn-save");
+        await set(ref(db, "NFTS/" + engine.currentHash), {
+          hash: engine.currentHash,
+          creatorId: auth.currentUser.uid,
+          creatorEmail: auth.currentUser.email,
+          bgColor: engine.bgColor,
+          likes: 0,
+          timestamp: serverTimestamp(),
+        });
+        btn.innerText = "Synchronisé !";
+        btn.disabled = true;
+      };
 
-        window.showView = (id) => {
-            document.querySelectorAll('.view-section').forEach(v => { v.style.display = 'none'; v.classList.remove('view-active'); });
-            const t = document.getElementById(id);
-            if(t) { t.style.display = 'block'; setTimeout(() => t.classList.add('view-active'), 50); }
-        };
+      document.getElementById("btn-email-login").onclick = async () => {
+        const email = document.getElementById("email-input").value;
+        const pass = document.getElementById("pass-input").value;
+        try {
+          await signInWithEmailAndPassword(auth, email, pass);
+        } catch {
+          try {
+            await createUserWithEmailAndPassword(auth, email, pass);
+          } catch (e) {
+            alert(e.message);
+          }
+        }
+      };
+
+      document.getElementById("btn-generate").onclick = () => {
+        engine.generateNewHash();
+        engine.generate();
+      };
+      document.getElementById("complexity").oninput = (e) => {
+        engine.complexity = e.target.value;
+        engine.generate();
+      };
+      document.getElementById("chroma").oninput = (e) => {
+        engine.chroma = e.target.value;
+        engine.generate();
+      };
+      document.getElementById("btn-logout").onclick = () => signOut(auth);
+      document.getElementById("btn-google").onclick = () =>
+        signInWithPopup(auth, new GoogleAuthProvider());
+      document.getElementById("toggle-gallery").onclick = () => {
+        currentMode = currentMode === "global" ? "mine" : "global";
+        document.getElementById("gallery-title").innerText =
+          currentMode === "global" ? "ARCHIVES GLOBALES" : "MES ARTEFACTS";
+        loadGallery();
+      };
+
+      window.showView = (id) => {
+        document.querySelectorAll(".view-section").forEach((v) => {
+          v.style.display = "none";
+          v.classList.remove("view-active");
+        });
+        const t = document.getElementById(id);
+        if (t) {
+          t.style.display = "block";
+          setTimeout(() => t.classList.add("view-active"), 50);
+        }
+      };
     </script>
-</body>
+  </body>
 </html>

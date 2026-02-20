@@ -1,21 +1,55 @@
-body { margin: 0; background: #050505; color: #00ff88; font-family: 'Inter', sans-serif; overflow: hidden; cursor: none; }
-.cursor { width: 10px; height: 10px; background: #00ff88; position: fixed; border-radius: 50%; pointer-events: none; z-index: 100; }
+body {
+  margin: 0;
+  background: #050505;
+  color: #00ff88;
+  font-family: "Inter", sans-serif;
+  overflow: hidden;
+  cursor: none;
+}
+.cursor {
+  width: 10px;
+  height: 10px;
+  background: #00ff88;
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 100;
+}
 .water-container {
-    height: 100vh; display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 #liquid-text {
-    font-size: 10vw; font-weight: 900;
-    filter: url(#liquid-filter);
-    text-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
-    user-select: none;
+  font-size: 10vw;
+  font-weight: 900;
+  filter: url(#liquid-filter);
+  text-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+  user-select: none;
 }
-.distort-filter { position: absolute; width: 0; height: 0; }
-.magnetic-area { margin-top: 60px; padding: 30px; }
+.distort-filter {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+.magnetic-area {
+  margin-top: 60px;
+  padding: 30px;
+}
 .back-btn {
-    padding: 15px 40px; border: 1px solid rgba(0,255,136,0.2);
-    background: rgba(0,255,136,0.05); color: white;
-    border-radius: 100px; text-decoration: none; font-weight: 600;
-    transition: all 0.3s;
+  padding: 15px 40px;
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  background: rgba(0, 255, 136, 0.05);
+  color: white;
+  border-radius: 100px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s;
 }
-.back-btn:hover { background: #00ff88; color: #050505; box-shadow: 0 0 20px rgba(0,255,136,0.4); }
+.back-btn:hover {
+  background: #00ff88;
+  color: #050505;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+}

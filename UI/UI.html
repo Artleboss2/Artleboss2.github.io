@@ -1,91 +1,98 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Interactive Component Lab | UI</title>
-    <link rel="stylesheet" href="UI.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body class="loading">
-
+    <link rel="stylesheet" href="UI.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body class="loading">
     <div class="cursor"></div>
     <div class="cursor-follower"></div>
 
     <canvas id="canvas-3d"></canvas>
 
     <main>
-        <!-- Hero -->
-        <header class="hero">
-            <div class="container">
-                <h1 class="decode-text" data-value="FUTURE_LAB">FUTURE_LAB</h1>
-                <p class="hero-subline">Laboratoire d'expérimentations visuelles et interactives.</p>
-                
-                <!-- Grille de navigation vers les fichiers satellites -->
-                <div class="nav-grid">
-                    <div class="magnetic-area">
-                        <a href="glass.html" class="nav-btn glass-link">
-                            <span class="btn-label">GLASS</span>
-                            <div class="btn-hover-bg"></div>
-                        </a>
-                    </div>
-                    <div class="magnetic-area">
-                        <a href="particules.html" class="nav-btn particle-link">
-                            <span class="btn-label">PARTICULES</span>
-                            <div class="btn-hover-bg"></div>
-                        </a>
-                    </div>
-                    <div class="magnetic-area">
-                        <a href="gyroscope.html" class="nav-btn gyro-link">
-                            <span class="btn-label">GYROSCOPE</span>
-                            <div class="btn-hover-bg"></div>
-                        </a>
-                    </div>
-                    <div class="magnetic-area">
-                        <a href="water.html" class="nav-btn water-link">
-                            <span class="btn-label">WATER</span>
-                            <div class="btn-hover-bg"></div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </header>
+      <!-- Hero -->
+      <header class="hero">
+        <div class="container">
+          <h1 class="decode-text" data-value="FUTURE_LAB">FUTURE_LAB</h1>
+          <p class="hero-subline">
+            Laboratoire d'expérimentations visuelles et interactives.
+          </p>
 
-        <!-- Components Grid -->
-        <section class="components-section">
-            <div class="container">
-                <div class="grid">
-                    <div class="component-card reveal">
-                        <div class="card-inner">
-                            <div class="card-glow"></div>
-                            <i class="fa-solid fa-microchip icon"></i>
-                            <h3>Neural Core</h3>
-                            <p>Interface haptique virtuelle avec feedback visuel en temps réel.</p>
-                        </div>
-                    </div>
-                    <div class="component-card reveal">
-                        <div class="card-inner">
-                            <div class="card-glow"></div>
-                            <i class="fa-solid fa-atom icon"></i>
-                            <h3>Quantum UI</h3>
-                            <p>Composants basés sur des états probabilistes.</p>
-                        </div>
-                    </div>
-                    <div class="component-card reveal">
-                        <div class="card-inner">
-                            <div class="card-glow"></div>
-                            <i class="fa-solid fa-shield-halved icon"></i>
-                            <h3>Secure Data</h3>
-                            <p>Cryptographie visuelle intégrée.</p>
-                        </div>
-                    </div>
-                </div>
+          <!-- Grille de navigation vers les fichiers satellites -->
+          <div class="nav-grid">
+            <div class="magnetic-area">
+              <a href="glass.html" class="nav-btn glass-link">
+                <span class="btn-label">GLASS</span>
+                <div class="btn-hover-bg"></div>
+              </a>
             </div>
-        </section>
+            <div class="magnetic-area">
+              <a href="particules.html" class="nav-btn particle-link">
+                <span class="btn-label">PARTICULES</span>
+                <div class="btn-hover-bg"></div>
+              </a>
+            </div>
+            <div class="magnetic-area">
+              <a href="gyroscope.html" class="nav-btn gyro-link">
+                <span class="btn-label">GYROSCOPE</span>
+                <div class="btn-hover-bg"></div>
+              </a>
+            </div>
+            <div class="magnetic-area">
+              <a href="water.html" class="nav-btn water-link">
+                <span class="btn-label">WATER</span>
+                <div class="btn-hover-bg"></div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
 
-        <footer>
-            <p>© 2024 Interactive Component Lab. Propulsé par GSAP & Three.js.</p>
-        </footer>
+      <!-- Components Grid -->
+      <section class="components-section">
+        <div class="container">
+          <div class="grid">
+            <div class="component-card reveal">
+              <div class="card-inner">
+                <div class="card-glow"></div>
+                <i class="fa-solid fa-microchip icon"></i>
+                <h3>Neural Core</h3>
+                <p>
+                  Interface haptique virtuelle avec feedback visuel en temps
+                  réel.
+                </p>
+              </div>
+            </div>
+            <div class="component-card reveal">
+              <div class="card-inner">
+                <div class="card-glow"></div>
+                <i class="fa-solid fa-atom icon"></i>
+                <h3>Quantum UI</h3>
+                <p>Composants basés sur des états probabilistes.</p>
+              </div>
+            </div>
+            <div class="component-card reveal">
+              <div class="card-inner">
+                <div class="card-glow"></div>
+                <i class="fa-solid fa-shield-halved icon"></i>
+                <h3>Secure Data</h3>
+                <p>Cryptographie visuelle intégrée.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <p>© 2024 Interactive Component Lab. Propulsé par GSAP & Three.js.</p>
+      </footer>
     </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -93,5 +100,5 @@
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.27/dist/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="UI.js"></script>
-</body>
+  </body>
 </html>

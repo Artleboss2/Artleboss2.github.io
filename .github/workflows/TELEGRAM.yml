@@ -13,11 +13,11 @@ jobs:
           format: html
           message: |
             <b>🚀 Nouveau Push sur le dépôt !</b>
-            
+
             👤 <b>Auteur :</b> <code>${{ github.actor }}</code>
             💬 <b>Message :</b> <i>${{ github.event.head_commit.message }}</i>
-            
+
             📂 <b>Fichiers modifiés :</b>
             <code>${{ join(github.event.head_commit.modified, ', ') }}</code>
-            
+
             🔗 <a href="${{ github.event.head_commit.url }}">Voir les changements</a>
