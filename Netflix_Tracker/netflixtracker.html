@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Netflix Tracker — 18 000+ Titres</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="netflixtracker.css">
+</head>
+<body>
+
+<header>
+  <div class="hrow1">
+    <div class="logo">🎬 Netflix Tracker</div>
+    <div class="stats">
+      <div class="stat-block"><div class="stat-n" id="wCount">0</div><div class="stat-l">Vus</div></div>
+      <div class="stat-block"><div class="stat-n" id="mCount">0</div><div class="stat-l">Films</div></div>
+      <div class="stat-block"><div class="stat-n blue" id="sCount">0</div><div class="stat-l">Séries</div></div>
+      <div class="stat-block"><div class="stat-n" id="tCount">0</div><div class="stat-l">Total</div></div>
+      <div class="stat-block"><div class="stat-n" id="rCount">0</div><div class="stat-l">Restants</div></div>
+    </div>
+  </div>
+  <div class="prog-wrap">
+    <div class="prog-top">
+      <span class="prog-label">Progression — Catalogue complet Netflix</span>
+      <span class="prog-pct" id="pPct">0%</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="pFill"></div></div>
+  </div>
+</header>
+
+<div class="controls">
+  <input class="search" type="text" placeholder="🔍 Rechercher titre, genre..." id="searchInput">
+  <div class="sep"></div>
+  <button class="btn on" data-f="all">Tous</button>
+  <button class="btn" data-f="watched">✓ Vus</button>
+  <button class="btn" data-f="unwatched">À voir</button>
+  <div class="sep"></div>
+  <button class="btn on" data-k="all">Films + Séries</button>
+  <button class="btn" data-k="movie">🎥 Films</button>
+  <button class="btn" data-k="series">📺 Séries</button>
+  <div class="sep"></div>
+  <button class="btn btn-reset" id="resetBtn">⟳ Reset</button>
+</div>
+
+<div class="catalogue">
+  <div class="grid" id="mainGrid"></div>
+  <div class="no-res" id="noRes">Aucun résultat 😕</div>
+</div>
+
+<script src="netflixtracker.js"></script>
+</body>
+</html>
