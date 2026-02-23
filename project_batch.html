@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Batch Multitool — Artleboss2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&family=Playfair+Display:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+      <link rel="stylesheet" href="project_batch.css">
+</head>
+  <body>
+    <!-- Curseur personnalisé -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <header>
+      <a href="index.html" class="back-btn">
+        <span>←</span>
+        <span data-i18n="back">Retour au portfolio</span>
+      </a>
+      <div class="logo">PROJET 02</div>
+      <button
+        class="lang-switcher"
+        id="langSwitcher"
+        onclick="toggleLanguage()"
+      >
+        <span id="langIcon">EN</span>
+      </button>
+    </header>
+
+    <section class="project-hero">
+      <div class="project-hero-content">
+        <div class="project-number" data-i18n="projectLabel">PROJET #02</div>
+        <h1>Batch Multitool</h1>
+        <p data-i18n="heroDesc">
+          Outil multifonction en ligne de commande pour l'automatisation de
+          tâches système Windows avec interface intuitive.
+        </p>
+
+        <div class="project-meta">
+          <div class="meta-item">
+            <div class="meta-label" data-i18n="metaType">Type</div>
+            <div class="meta-value">System Automation</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label" data-i18n="metaYear">Année</div>
+            <div class="meta-value">2024</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label" data-i18n="metaTech">Technologies</div>
+            <div class="tech-stack">
+              <span class="tech-tag">Batch</span>
+              <span class="tech-tag">PowerShell</span>
+              <span class="tech-tag">Windows CLI</span>
+              <span class="tech-tag">Automation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="project-content">
+      <section class="content-section">
+        <h2 data-i18n="titleOverview">Vue d'ensemble</h2>
+        <p data-i18n="overviewP1">
+          Batch Multitool est une suite d'outils en ligne de commande conçue
+          pour simplifier et automatiser les tâches courantes d'administration
+          système Windows. Le projet combine la puissance des scripts Batch avec
+          une interface utilisateur accessible, permettant même aux utilisateurs
+          novices d'effectuer des opérations système complexes.
+        </p>
+        <p data-i18n="overviewP2">
+          L'outil a été développé avec un accent sur la sécurité, la fiabilité
+          et la facilité d'utilisation, tout en offrant des fonctionnalités
+          avancées pour les utilisateurs expérimentés.
+        </p>
+      </section>
+
+      <section class="content-section">
+        <h2 data-i18n="titleFeatures">Fonctionnalités principales</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <h3 data-i18n="feat1Title">🔧 Nettoyage système</h3>
+            <p data-i18n="feat1Desc">
+              Suppression automatique des fichiers temporaires, cache et données
+              inutiles avec options de nettoyage personnalisables.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3 data-i18n="feat2Title">📊 Diagnostics</h3>
+            <p data-i18n="feat2Desc">
+              Analyse complète du système avec rapports détaillés sur
+              l'utilisation du disque, RAM, CPU et réseau.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3 data-i18n="feat3Title">⚡ Optimisation</h3>
+            <p data-i18n="feat3Desc">
+              Scripts d'optimisation pour améliorer les performances Windows,
+              désactiver les services inutiles et gérer le démarrage.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3 data-i18n="feat4Title">🔒 Sécurité</h3>
+            <p data-i18n="feat4Desc">
+              Vérification des permissions, scan de sécurité basique et gestion
+              des pare-feu avec logs détaillés.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3 data-i18n="feat5Title">📁 Gestion fichiers</h3>
+            <p data-i18n="feat5Desc">
+              Opérations batch sur fichiers : renommage en masse, organisation
+              automatique, recherche avancée.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3 data-i18n="feat6Title">🌐 Réseau</h3>
+            <p data-i18n="feat6Desc">
+              Outils de diagnostic réseau, test de connectivité, affichage
+              configuration IP et gestion Wi-Fi.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2 data-i18n="titleArchi">Architecture</h2>
+        <p data-i18n="archiDesc">
+          Le multitool est structuré en modules indépendants, chacun responsable
+          d'un domaine spécifique de l'administration système :
+        </p>
+        <div class="code-block">
+          <code>
+            @echo off<br />
+            title Batch Multitool v1.0<br />
+            <br />
+            :menu<br />
+            cls<br />
+            echo ================================<br />
+            echo BATCH MULTITOOL<br />
+            echo ================================<br />
+            echo [1] Nettoyage système<br />
+            echo [2] Diagnostics<br />
+            echo [3] Optimisation<br />
+            echo [4] Sécurité<br />
+            echo [5] Gestion fichiers<br />
+            echo [6] Outils réseau<br />
+            echo [0] Quitter<br />
+            echo ================================<br />
+            set /p choice="Votre choix: "
+          </code>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2 data-i18n="titleChallenges">Défis techniques</h2>
+        <ul>
+          <li data-i18n="challenge1">
+            Gestion des privilèges administrateur avec détection automatique et
+            élévation
+          </li>
+          <li data-i18n="challenge2">
+            Compatibilité entre différentes versions de Windows (7, 8, 10, 11)
+          </li>
+          <li data-i18n="challenge3">
+            Validation des entrées utilisateur pour éviter les erreurs système
+            critiques
+          </li>
+          <li data-i18n="challenge4">
+            Logging complet des opérations pour faciliter le débogage
+          </li>
+          <li data-i18n="challenge5">
+            Interface en couleur dans CMD sans dépendances externes
+          </li>
+          <li data-i18n="challenge6">
+            Gestion d'erreurs robuste avec rollback automatique en cas de
+            problème
+          </li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2 data-i18n="titleUseCases">Cas d'usage</h2>
+        <p data-i18n="useCasesIntro">
+          Le Batch Multitool est particulièrement utile pour :
+        </p>
+        <ul>
+          <li data-i18n="useCase1">
+            Maintenance régulière de systèmes Windows personnels ou
+            professionnels
+          </li>
+          <li data-i18n="useCase2">
+            Support technique à distance avec génération de rapports
+            automatiques
+          </li>
+          <li data-i18n="useCase3">
+            Préparation de machines avant déploiement ou vente
+          </li>
+          <li data-i18n="useCase4">
+            Automatisation de tâches répétitives d'administration
+          </li>
+          <li data-i18n="useCase5">
+            Formation aux concepts de scripting et d'administration système
+          </li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2 data-i18n="titleLearnings">Apprentissages clés</h2>
+        <p data-i18n="learningsIntro">
+          Ce projet m'a permis de développer une expertise approfondie en :
+        </p>
+        <ul>
+          <li data-i18n="learning1">
+            Scripting Batch avancé et bonnes pratiques de développement CLI
+          </li>
+          <li data-i18n="learning2">
+            Architecture modulaire et maintenable pour les scripts shell
+          </li>
+          <li data-i18n="learning3">
+            Sécurité et validation des opérations système critiques
+          </li>
+          <li data-i18n="learning4">
+            Gestion d'erreurs et logging dans les environnements de production
+          </li>
+          <li data-i18n="learning5">
+            Design d'interfaces utilisateur textuelles intuitives
+          </li>
+        </ul>
+      </section>
+
+      <div class="project-links">
+        <a
+          href="https://github.com/Artleboss2/Batch-Multitool"
+          target="_blank"
+          class="project-link"
+        >
+          <span data-i18n="linkGitHub">Voir sur GitHub</span>
+          <span>→</span>
+        </a>
+        <a href="index.html" class="project-link">
+          <span data-i18n="linkBack">Retour aux projets</span>
+        </a>
+      </div>
+    </div>
+
+    <footer>
+      <p data-i18n="footer">© 2024 Artleboss2 — Tous droits réservés</p>
+    </footer>
+
+      <script src="project_batch.js"></script>
+</body>
+</html>
