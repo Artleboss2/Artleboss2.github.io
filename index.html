@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio — Développeur</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&family=Playfair+Display:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+      <link rel="stylesheet" href="index.css">
+</head>
+  <body>
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <header>
+      <div class="logo">PORTFOLIO</div>
+      <nav>
+        <a href="#projets" data-i18n="nav.projects">Projets</a>
+        <a href="#competences" data-i18n="nav.skills">Compétences</a>
+        <a href="ressources.html" data-i18n="nav.resources">Ressources</a>
+        <a href="#contact" data-i18n="nav.contact">Contact</a>
+        <button
+          class="lang-switcher"
+          id="langSwitcher"
+          onclick="toggleLanguage()"
+        >
+          <span id="langIcon">FR</span>
+        </button>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="grid-bg"></div>
+      <div class="particles" id="particles"></div>
+      <div class="hero-content">
+        <h1 data-i18n="hero.title">
+          Développeur passionné par le gaming et la création
+        </h1>
+        <p data-i18n="hero.description">
+          Je développe des applications, texture packs et outils créatifs pour
+          la communauté gaming. Spécialisé dans la customisation de jeux, les
+          applications mobiles et l'automatisation système.
+        </p>
+        <a href="#projets" class="cta">
+          <span data-i18n="hero.cta">Découvrir mes projets</span>
+          <span>→</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="projects" id="projets">
+      <h2 class="section-title" data-i18n="projects.title">
+        Projets sélectionnés
+      </h2>
+      <div class="projects-grid">
+        <!-- EXISTING PROJECTS -->
+        <div class="project-card">
+          <div class="project-number">01</div>
+          <h3 data-i18n="projects.project1.title">Zynit — To-Do List App</h3>
+          <p data-i18n="projects.project1.description">
+            Application mobile de gestion de tâches avec interface moderne et
+            intuitive. Système de catégorisation, rappels et synchronisation
+            multi-plateforme. Développée avec des standards juridiques complets
+            (CLUF) et conformité aux lois canadiennes sur la protection des
+            données.
+          </p>
+          <div class="tech-stack">
+            <span class="tech-tag">React Native</span>
+            <span class="tech-tag">Mobile App</span>
+            <span class="tech-tag">UI/UX Design</span>
+            <span class="tech-tag">Legal Compliance</span>
+          </div>
+          <a
+            href="https://github.com/Artleboss2/Zynit"
+            target="_blank"
+            class="project-details-link"
+            >Voir sur GitHub →</a
+          >
+        </div>
+
+        <div class="project-card">
+          <div class="project-number">02</div>
+          <h3 data-i18n="projects.project2.title">Bloxd Texture Pack</h3>
+          <p data-i18n="projects.project2.description">
+            Texture pack personnalisé pour Bloxd.io permettant de modifier
+            l'apparence des blocs, skybox, items et modèles 3D. Système de
+            customisation CSS avancé pour personnaliser l'interface du jeu.
+          </p>
+          <div class="tech-stack">
+            <span class="tech-tag">CSS</span>
+            <span class="tech-tag">WebGL</span>
+            <span class="tech-tag">Game Design</span>
+            <span class="tech-tag">3D Textures</span>
+          </div>
+          <a
+            href="https://github.com/Artleboss2/Bloxd-Texture-Pack"
+            target="_blank"
+            class="project-details-link"
+            >Voir sur GitHub →</a
+          >
+        </div>
+
+        <div class="project-card">
+          <div class="project-number">03</div>
+          <h3 data-i18n="projects.project3.title">Batch Multitool</h3>
+          <p data-i18n="projects.project3.description">
+            Outil multifonction développé en Batch pour automatiser des tâches
+            basiques système. Interface en ligne de commande intuitive pour
+            faciliter l'administration Windows.
+          </p>
+          <div class="tech-stack">
+            <span class="tech-tag">Batchfile</span>
+            <span class="tech-tag">CLI</span>
+            <span class="tech-tag">Automation</span>
+            <span class="tech-tag">Windows</span>
+          </div>
+          <a
+            href="https://github.com/Artleboss2/Batch-Multitool"
+            target="_blank"
+            class="project-details-link"
+            >Voir sur GitHub →</a
+          >
+        </div>
+
+        <div class="project-card">
+          <div class="project-number">04</div>
+          <h3 data-i18n="projects.project4.title">Portfolio GitHub</h3>
+          <p data-i18n="projects.project4.description">
+            Portfolio professionnel interactif avec animations réactives au
+            curseur, particules génératives et design moderne. Terminal
+            interactif intégré et jeu Snake. Optimisé pour les performances et
+            l'expérience utilisateur.
+          </p>
+          <div class="tech-stack">
+            <span class="tech-tag">HTML5</span>
+            <span class="tech-tag">CSS3</span>
+            <span class="tech-tag">JavaScript</span>
+            <span class="tech-tag">Animations</span>
+          </div>
+          <a
+            href="https://github.com/Artleboss2"
+            target="_blank"
+            class="project-details-link"
+            >Voir sur GitHub →</a
+          >
+        </div>
+
+        <!-- NEW PROJECTS -->
+        <div class="project-card">
+          <div class="project-number">05</div>
+          <h3 data-i18n="projects.project5.title">
+            St-Mars E L Inc — Refonte Web
+          </h3>
+          <p data-i18n="projects.project5.description">
+            Refonte numérique premium pour une entreprise familiale de plomberie
+            et chauffage à Montréal, fondée en 1937. Design «Luxe Industriel»
+            avec animations de scroll inversé, effets parallaxe et identité
+            visuelle modernisée sur 4 générations.
+          </p>
+          <div class="tech-stack">
+            <span class="tech-tag">HTML5</span>
+            <span class="tech-tag">CSS3</span>
+            <span class="tech-tag">JavaScript</span>
+            <span class="tech-tag">Scroll Animations</span>
+            <span class="tech-tag">UI/UX</span>
+          </div>
+          <a
+            href="https://artleboss2.github.io/Plomberie/"
+            target="_blank"
+            class="project-details-link"
+            >Voir le projet →</a
+          >
+        </div>
+
+        <div class="project-card">
+          <div class="project-number">06</div>
+          <h3 data-i18n="projects.project6.title">NFT Generator</h3>
+          <p data-i18n="projects.project6.description">
+            Générateur d'NFT interactif permettant de créer et visualiser des
+            actifs numériques uniques directement dans le navigateur. Interface
+            web moderne avec génération algorithmique de combinaisons
+            d'attributs et prévisualisation en temps réel.
+          </p>
+          <div class="tech-stack">
+            <span class="tech-tag">HTML5</span>
+            <span class="tech-tag">JavaScript</span>
+            <span class="tech-tag">Canvas API</span>
+            <span class="tech-tag">Web3</span>
+            <span class="tech-tag">Generative Art</span>
+          </div>
+          <a
+            href="https://artleboss2.github.io/NFT%20GENERATOR/"
+            target="_blank"
+            class="project-details-link"
+            >Voir le projet →</a
+          >
+        </div>
+
+        <div class="project-card">
+          <div class="project-number">07</div>
+          <h3 data-i18n="projects.project7.title">Phone Simulation</h3>
+          <p data-i18n="projects.project7.description">
+            Simulation interactive d'interface smartphone dans le navigateur.
+            Reproduction fidèle des interactions tactiles, notifications,
+            applications et gestes courants d'un téléphone moderne. Expérience
+            immersive entièrement construite en technologies web.
+          </p>
+          <div class="tech-stack">
+            <span class="tech-tag">HTML5</span>
+            <span class="tech-tag">CSS3</span>
+            <span class="tech-tag">JavaScript</span>
+            <span class="tech-tag">Mobile UI</span>
+            <span class="tech-tag">Touch Events</span>
+          </div>
+          <a
+            href="https://artleboss2.github.io/phonesimulation/"
+            target="_blank"
+            class="project-details-link"
+            >Voir le projet →</a
+          >
+        </div>
+
+        <div class="project-card">
+          <div class="project-number">08</div>
+          <h3 data-i18n="projects.project8.title">UI Components Library</h3>
+          <p data-i18n="projects.project8.description">
+            Collection de composants et maquettes d'interfaces utilisateur
+            modernes. Ensemble de designs réutilisables incluant boutons,
+            cartes, modales et layouts avancés. Vitrine de compétences en design
+            system et cohérence visuelle.
+          </p>
+          <div class="tech-stack">
+            <span class="tech-tag">HTML5</span>
+            <span class="tech-tag">CSS3</span>
+            <span class="tech-tag">Design System</span>
+            <span class="tech-tag">UI Components</span>
+          </div>
+          <a
+            href="https://artleboss2.github.io/UI/"
+            target="_blank"
+            class="project-details-link"
+            >Voir le projet →</a
+          >
+        </div>
+
+        <div class="project-card">
+          <div class="project-number">09</div>
+          <h3 data-i18n="projects.project9.title">Music Page</h3>
+          <p data-i18n="projects.project9.description">
+            Page musicale interactive avec lecteur audio personnalisé, gestion
+            de licences et notices légales intégrées. Interface immersive dédiée
+            à la découverte et l'écoute de créations musicales, avec
+            documentation complète des droits d'auteur.
+          </p>
+          <div class="tech-stack">
+            <span class="tech-tag">HTML5</span>
+            <span class="tech-tag">CSS3</span>
+            <span class="tech-tag">Audio API</span>
+            <span class="tech-tag">Music</span>
+            <span class="tech-tag">Licensing</span>
+          </div>
+          <a
+            href="https://artleboss2.github.io/music.html"
+            target="_blank"
+            class="project-details-link"
+            >Voir le projet →</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="skills" id="competences">
+      <h2 class="section-title" data-i18n="skills.title">
+        Expertise technique
+      </h2>
+      <div class="skills-grid">
+        <div class="skill-category">
+          <h4 data-i18n="skills.frontend.title">Frontend & Design</h4>
+          <ul>
+            <li>HTML5 / CSS3</li>
+            <li>JavaScript (Vanilla)</li>
+            <li>React Native</li>
+            <li data-i18n="skills.frontend.item3">Web Animations</li>
+            <li>Responsive Design</li>
+            <li>UI/UX Design</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h4 data-i18n="skills.gamedev.title">Game Development</h4>
+          <ul>
+            <li>Texture Packs</li>
+            <li data-i18n="skills.gamedev.item2">3D Modeling (GLB)</li>
+            <li>WebGL / Graphics</li>
+            <li data-i18n="skills.gamedev.item4">Game Customization</li>
+            <li>Bloxd.io Modding</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h4 data-i18n="skills.mobile.title">Mobile Development</h4>
+          <ul>
+            <li>React Native</li>
+            <li data-i18n="skills.mobile.item2">Cross-Platform Apps</li>
+            <li data-i18n="skills.mobile.item3">Mobile UI/UX</li>
+            <li data-i18n="skills.mobile.item4">App Architecture</li>
+            <li data-i18n="skills.mobile.item5">Data Management</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h4 data-i18n="skills.automation.title">System & Automation</h4>
+          <ul>
+            <li>Batch Scripting</li>
+            <li>Windows CLI</li>
+            <li data-i18n="skills.automation.item3">Task Automation</li>
+            <li data-i18n="skills.automation.item4">System Administration</li>
+            <li>Shell Scripting</li>
+          </ul>
+        </div>
+        <div class="skill-category">
+          <h4 data-i18n="skills.tools.title">Outils & Technologies</h4>
+          <ul>
+            <li>Git / GitHub</li>
+            <li>VS Code</li>
+            <li data-i18n="skills.tools.item3">Image Editing</li>
+            <li data-i18n="skills.tools.item4">File Management</li>
+            <li>Web Hosting</li>
+            <li data-i18n="skills.tools.item6">Legal Documentation</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <footer id="contact">
+      <div class="footer-content">
+        <div class="social-links">
+          <a href="https://github.com/Artleboss2" target="_blank">GitHub</a>
+          <a href="https://linkedin.com/in/votre-profil" target="_blank"
+            >LinkedIn</a
+          >
+          <a href="mailto:contact@artleboss.com">Email</a>
+          <a href="https://discord.com" target="_blank">Discord</a>
+        </div>
+        <div class="copyright">
+          <span data-i18n="footer.copyright"
+            >© 2026 — Conçu et développé avec passion</span
+          >
+        </div>
+      </div>
+    </footer>
+
+    <div class="terminal-container minimized" id="terminal">
+      <div class="terminal-header" onclick="toggleTerminal()">
+        <div class="terminal-title">terminal@artleboss2</div>
+        <div class="terminal-controls">
+          <div
+            class="terminal-btn minimize"
+            onclick="
+              event.stopPropagation();
+              toggleTerminal();
+            "
+          ></div>
+          <div
+            class="terminal-btn close"
+            onclick="
+              event.stopPropagation();
+              closeTerminal();
+            "
+          ></div>
+        </div>
+      </div>
+      <div class="terminal-output" id="terminalOutput">
+        <div class="terminal-line">
+          <span class="terminal-success" data-i18n="terminal.welcome"
+            >Bienvenue dans le terminal interactif!</span
+          >
+        </div>
+        <div
+          class="terminal-line terminal-info"
+          data-i18n="terminal.helpPrompt"
+        >
+          Tapez 'help' pour voir les commandes disponibles.
+        </div>
+        <div class="terminal-line"></div>
+      </div>
+      <div class="terminal-input-container">
+        <span class="terminal-prompt">$</span>
+        <input
+          type="text"
+          class="terminal-input"
+          id="terminalInput"
+          placeholder="Tapez une commande..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+    </div>
+
+    <div class="snake-game-container" id="snakeGame">
+      <div class="snake-header">
+        <h3>🐍 SNAKE GAME</h3>
+        <div class="snake-score">Score: <span id="snakeScore">0</span></div>
+      </div>
+      <div class="snake-canvas" id="snakeCanvas"></div>
+      <div class="snake-controls">Utilisez les flèches ← ↑ → ↓ pour jouer</div>
+      <div class="snake-close">
+        <button onclick="closeSnake()">Fermer (ESC)</button>
+      </div>
+    </div>
+
+      <script src="index.js"></script>
+</body>
+</html>
