@@ -1,0 +1,4262 @@
+<!DOCTYPE html>
+<html lang="fr-CA" data-theme="dark" data-scroll="0">
+<!-- ============================================================ -->
+<!-- BLOC 1: HEAD — SEO, FONTS, META, STYLES                      -->
+<!-- ============================================================ -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="CodeNord Studio — Agence web premium à Montréal. Sites haute performance, design époustouflant, résultats mesurables. 50+ projets livrés. Devis gratuit.">
+  <meta name="keywords" content="agence web Montréal, développement web Québec, design web premium, site web professionnel, SEO Montréal, web app React, performance web, UX design, frontend senior, CSS avancé, JavaScript ES2024, accessibilité WCAG">
+  <meta name="author" content="CodeNord Studio">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="CodeNord Studio — Agence Web Premium Montréal">
+  <meta property="og:description" content="Des sites web qui convertissent, performent et impressionnent. Expertise HTML5, CSS3, JavaScript ES2024+.">
+  <meta property="og:locale" content="fr_CA">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CodeNord Studio — Agence Web Premium Montréal">
+  <title>CodeNord Studio | Agence Web Premium | Montréal, Québec</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       DESIGN SYSTEM — VARIABLES & FONDATIONS
+    ============================================================ */
+    :root {
+      --color-bg:            #0a0a0f;
+      --color-bg-2:          #0f0f18;
+      --color-bg-card:       rgba(255,255,255,0.04);
+      --color-surface:       rgba(255,255,255,0.06);
+      --color-border:        rgba(255,255,255,0.08);
+      --color-border-hover:  rgba(255,255,255,0.18);
+      --color-text:          #e8e8f0;
+      --color-text-muted:    rgba(232,232,240,0.5);
+      --color-text-faint:    rgba(232,232,240,0.28);
+      --color-primary:       #5b6fff;
+      --color-primary-glow:  rgba(91,111,255,0.35);
+      --color-accent:        #ff6b6b;
+      --color-accent-2:      #ffd93d;
+      --color-green:         #6bcb77;
+      --color-cyan:          #4dd0e1;
+      --gradient-primary:    linear-gradient(135deg, #5b6fff 0%, #a66cff 100%);
+      --gradient-hero:       linear-gradient(135deg, #1a1a2e 0%, #0a0a0f 50%, #0f0a1a 100%);
+      --gradient-card:       linear-gradient(135deg, rgba(91,111,255,0.08) 0%, rgba(166,108,255,0.04) 100%);
+      --font-display:        'Syne', sans-serif;
+      --font-body:           'DM Sans', sans-serif;
+      --font-mono:           'JetBrains Mono', monospace;
+      --radius-sm:           8px;
+      --radius-md:           16px;
+      --radius-lg:           24px;
+      --radius-xl:           40px;
+      --shadow-card:         0 4px 32px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.06) inset;
+      --shadow-glow:         0 0 60px rgba(91,111,255,0.2);
+      --ease-bounce:         cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-smooth:         cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --transition-fast:     0.15s var(--ease-smooth);
+      --transition-med:      0.3s var(--ease-smooth);
+      --transition-slow:     0.6s var(--ease-smooth);
+      --nav-height:          72px;
+      --container-max:       1240px;
+      --container-pad:       clamp(1.25rem, 5vw, 3rem);
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    body {
+      font-family: var(--font-body);
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      cursor: none;
+    }
+    ::selection {
+      background: var(--color-primary);
+      color: #fff;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; height: auto; display: block; }
+    button { cursor: none; font-family: inherit; border: none; background: none; }
+    ul, ol { list-style: none; }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-display);
+      line-height: 1.15;
+      font-weight: 700;
+    }
+
+    /* ============================================================
+       CURSEUR PERSONNALISÉ
+    ============================================================ */
+    .cursor-dot {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background: var(--color-primary);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background 0.2s;
+      mix-blend-mode: screen;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 40px;
+      height: 40px;
+      border: 1.5px solid rgba(91,111,255,0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width 0.35s var(--ease-smooth), height 0.35s var(--ease-smooth), border-color 0.2s;
+    }
+    body.cursor-hover .cursor-dot {
+      width: 14px;
+      height: 14px;
+      background: var(--color-accent);
+    }
+    body.cursor-hover .cursor-ring {
+      width: 60px;
+      height: 60px;
+      border-color: rgba(255,107,107,0.4);
+    }
+
+    /* ============================================================
+       PRÉCHARGEUR
+    ============================================================ */
+    #preloader {
+      position: fixed;
+      inset: 0;
+      background: var(--color-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      flex-direction: column;
+      gap: 2rem;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+    #preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .preloader-logo {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 800;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.03em;
+    }
+    .preloader-bar-track {
+      width: 200px;
+      height: 2px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .preloader-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--gradient-primary);
+      border-radius: 2px;
+      animation: preload-fill 1.8s var(--ease-smooth) forwards;
+    }
+    @keyframes preload-fill {
+      0%   { width: 0%; }
+      60%  { width: 75%; }
+      100% { width: 100%; }
+    }
+    .preloader-pct {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* ============================================================
+       LAYOUT UTILITAIRES
+    ============================================================ */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding-left: var(--container-pad);
+      padding-right: var(--container-pad);
+    }
+    .section {
+      padding-top: clamp(5rem, 10vw, 9rem);
+      padding-bottom: clamp(5rem, 10vw, 9rem);
+    }
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .section-label::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--color-primary);
+    }
+    .section-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.25rem;
+    }
+    .section-title span {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-desc {
+      font-size: clamp(1rem, 1.5vw, 1.15rem);
+      color: var(--color-text-muted);
+      max-width: 560px;
+      line-height: 1.7;
+    }
+
+    /* ============================================================
+       ANIMATIONS DE BASE
+    ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s var(--ease-smooth), transform 0.7s var(--ease-smooth);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+    .reveal-delay-6 { transition-delay: 0.6s; }
+
+    /* ============================================================
+       NAVIGATION
+    ============================================================ */
+    #navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      z-index: 1000;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+    #navbar.scrolled {
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(20px) saturate(150%);
+      -webkit-backdrop-filter: blur(20px) saturate(150%);
+      box-shadow: 0 1px 0 var(--color-border);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--gradient-primary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-logo-text {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .nav-link {
+      padding: 0.5rem 0.9rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      border-radius: var(--radius-sm);
+      transition: color var(--transition-fast), background var(--transition-fast);
+      position: relative;
+    }
+    .nav-link:hover {
+      color: var(--color-text);
+      background: var(--color-surface);
+    }
+    .nav-link.active {
+      color: var(--color-text);
+    }
+    .nav-cta {
+      padding: 0.55rem 1.2rem;
+      background: var(--gradient-primary);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.875rem;
+      border-radius: var(--radius-xl);
+      transition: opacity var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    .nav-cta:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px var(--color-primary-glow);
+    }
+    .nav-mobile-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      background: var(--color-surface);
+    }
+    .nav-mobile-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--color-text);
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .nav-mobile-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-mobile-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-mobile-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile nav drawer */
+    .nav-drawer {
+      position: fixed;
+      top: var(--nav-height);
+      left: 0;
+      right: 0;
+      background: rgba(10,10,15,0.97);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      padding: 1.5rem var(--container-pad) 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transform: translateY(-110%);
+      opacity: 0;
+      transition: transform 0.4s var(--ease-smooth), opacity 0.4s;
+      border-bottom: 1px solid var(--color-border);
+      z-index: 999;
+    }
+    .nav-drawer.open {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .nav-drawer-link {
+      padding: 0.875rem 1rem;
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      border-radius: var(--radius-sm);
+      transition: color var(--transition-fast), background var(--transition-fast);
+    }
+    .nav-drawer-link:hover {
+      color: var(--color-text);
+      background: var(--color-surface);
+    }
+    .nav-drawer-cta {
+      margin-top: 1rem;
+      padding: 0.875rem;
+      background: var(--gradient-primary);
+      color: #fff;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      text-align: center;
+    }
+
+    /* ============================================================
+       HERO SECTION
+    ============================================================ */
+    #hero {
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: var(--gradient-hero);
+      padding-top: var(--nav-height);
+    }
+    .hero-bg-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    /* Noise texture overlay */
+    .hero-noise {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 200px;
+      pointer-events: none;
+    }
+    /* Orbs de lumière ambiance */
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-orb-1 {
+      width: clamp(300px, 50vw, 700px);
+      height: clamp(300px, 50vw, 700px);
+      top: -15%;
+      right: -10%;
+      background: radial-gradient(circle, rgba(91,111,255,0.18) 0%, transparent 70%);
+      animation: orb-float 12s ease-in-out infinite;
+    }
+    .hero-orb-2 {
+      width: clamp(200px, 30vw, 450px);
+      height: clamp(200px, 30vw, 450px);
+      bottom: -5%;
+      left: -5%;
+      background: radial-gradient(circle, rgba(166,108,255,0.12) 0%, transparent 70%);
+      animation: orb-float 16s ease-in-out infinite reverse;
+    }
+    .hero-orb-3 {
+      width: clamp(150px, 20vw, 300px);
+      height: clamp(150px, 20vw, 300px);
+      top: 40%;
+      left: 40%;
+      background: radial-gradient(circle, rgba(255,107,107,0.08) 0%, transparent 70%);
+      animation: orb-float 20s ease-in-out infinite;
+      animation-delay: -5s;
+    }
+    @keyframes orb-float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33%       { transform: translate(30px, -20px) scale(1.05); }
+      66%       { transform: translate(-20px, 15px) scale(0.97); }
+    }
+    .hero-grid-pattern {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      opacity: 0.06;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+    }
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.9rem;
+      background: rgba(91,111,255,0.12);
+      border: 1px solid rgba(91,111,255,0.25);
+      border-radius: var(--radius-xl);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      margin-bottom: 1.75rem;
+      animation: hero-badge-in 0.8s var(--ease-bounce) 0.3s both;
+    }
+    .hero-badge-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--color-green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--color-green);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+    @keyframes hero-badge-in {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-h1 {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.5rem;
+      animation: hero-h1-in 0.9s var(--ease-smooth) 0.5s both;
+    }
+    @keyframes hero-h1-in {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-h1-line2 {
+      display: block;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-desc {
+      font-size: clamp(1rem, 1.4vw, 1.15rem);
+      color: var(--color-text-muted);
+      line-height: 1.75;
+      max-width: 520px;
+      margin-bottom: 2.5rem;
+      animation: hero-h1-in 0.9s var(--ease-smooth) 0.7s both;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      animation: hero-h1-in 0.9s var(--ease-smooth) 0.9s both;
+    }
+    .btn-primary {
+      position: relative;
+      padding: 1px;
+      border-radius: var(--radius-xl);
+      background: var(--gradient-primary);
+      border: none;
+      cursor: none;
+      outline: none;
+      transition: transform 0.2s;
+      display: inline-flex;
+    }
+    .btn-primary span {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.75rem;
+      border-radius: calc(var(--radius-xl) - 1px);
+      background: var(--color-primary);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: background 0.3s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); }
+    .btn-primary:hover span { background: transparent; }
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: var(--radius-xl);
+      background: var(--gradient-primary);
+      filter: blur(18px);
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: -1;
+    }
+    .btn-primary:hover::after { opacity: 0.5; }
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.5rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      color: var(--color-text-muted);
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: border-color var(--transition-fast), color var(--transition-fast), background var(--transition-fast);
+    }
+    .btn-ghost:hover {
+      border-color: var(--color-border-hover);
+      color: var(--color-text);
+      background: var(--color-surface);
+    }
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 3.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--color-border);
+      animation: hero-h1-in 0.9s var(--ease-smooth) 1.1s both;
+    }
+    .hero-stat-value {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-stat-label {
+      font-size: 0.8rem;
+      color: var(--color-text-faint);
+      margin-top: 0.15rem;
+      letter-spacing: 0.03em;
+    }
+
+    /* Hero illustration side */
+    .hero-illustration {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: hero-h1-in 1s var(--ease-smooth) 0.6s both;
+    }
+    .hero-code-window {
+      background: rgba(15,15,24,0.8);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 0;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: var(--shadow-card), 0 0 80px rgba(91,111,255,0.15);
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+    }
+    .code-window-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--color-border);
+      background: rgba(255,255,255,0.02);
+    }
+    .code-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .code-dot-red   { background: #ff5f57; }
+    .code-dot-yel   { background: #febc2e; }
+    .code-dot-grn   { background: #28c840; }
+    .code-window-title {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--color-text-faint);
+      margin-left: auto;
+    }
+    .code-body {
+      padding: 1.25rem 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 1.8;
+      overflow: hidden;
+    }
+    .code-line {
+      display: flex;
+      gap: 1.25rem;
+      opacity: 0;
+      animation: code-line-in 0.4s ease forwards;
+    }
+    .code-line:nth-child(1)  { animation-delay: 1.2s; }
+    .code-line:nth-child(2)  { animation-delay: 1.35s; }
+    .code-line:nth-child(3)  { animation-delay: 1.5s; }
+    .code-line:nth-child(4)  { animation-delay: 1.65s; }
+    .code-line:nth-child(5)  { animation-delay: 1.8s; }
+    .code-line:nth-child(6)  { animation-delay: 1.95s; }
+    .code-line:nth-child(7)  { animation-delay: 2.1s; }
+    .code-line:nth-child(8)  { animation-delay: 2.25s; }
+    .code-line:nth-child(9)  { animation-delay: 2.4s; }
+    .code-line:nth-child(10) { animation-delay: 2.55s; }
+    .code-line:nth-child(11) { animation-delay: 2.7s; }
+    .code-line:nth-child(12) { animation-delay: 2.85s; }
+    @keyframes code-line-in {
+      from { opacity: 0; transform: translateX(-8px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    .code-ln { color: var(--color-text-faint); user-select: none; min-width: 18px; text-align: right; }
+    .t-kw   { color: #c678dd; }
+    .t-fn   { color: #61afef; }
+    .t-str  { color: #98c379; }
+    .t-val  { color: #d19a66; }
+    .t-op   { color: #56b6c2; }
+    .t-cm   { color: #5c6370; font-style: italic; }
+    .t-tag  { color: #e06c75; }
+    .t-attr { color: #d19a66; }
+    .t-tx   { color: var(--color-text-muted); }
+
+    /* Floating badges on hero illustration */
+    .hero-float-badge {
+      position: absolute;
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-card);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      white-space: nowrap;
+    }
+    .hero-float-badge-1 {
+      top: 5%;
+      right: -4%;
+      animation: float-1 6s ease-in-out infinite;
+    }
+    .hero-float-badge-2 {
+      bottom: 12%;
+      left: -8%;
+      animation: float-2 7s ease-in-out infinite;
+    }
+    .hero-float-badge-3 {
+      top: 45%;
+      right: -10%;
+      animation: float-3 5.5s ease-in-out infinite;
+    }
+    @keyframes float-1 {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-10px); }
+    }
+    @keyframes float-2 {
+      0%, 100% { transform: translateY(0px) rotate(-2deg); }
+      50%       { transform: translateY(-8px) rotate(2deg); }
+    }
+    @keyframes float-3 {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(8px); }
+    }
+    .float-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       BANDE DÉFILANTE LOGOS (MARQUEE)
+    ============================================================ */
+    .marquee-section {
+      padding: 2.5rem 0;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      overflow: hidden;
+      position: relative;
+    }
+    .marquee-track {
+      display: flex;
+      gap: 4rem;
+      width: max-content;
+      animation: marquee-scroll 30s linear infinite;
+    }
+    .marquee-section:hover .marquee-track { animation-play-state: paused; }
+    @keyframes marquee-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .marquee-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-text-faint);
+      white-space: nowrap;
+      transition: color var(--transition-fast);
+      letter-spacing: -0.02em;
+    }
+    .marquee-item:hover { color: var(--color-text-muted); }
+    .marquee-sep {
+      color: var(--color-primary);
+      opacity: 0.4;
+    }
+    /* Fade masks */
+    .marquee-section::before,
+    .marquee-section::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 120px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .marquee-section::before {
+      left: 0;
+      background: linear-gradient(to right, var(--color-bg), transparent);
+    }
+    .marquee-section::after {
+      right: 0;
+      background: linear-gradient(to left, var(--color-bg), transparent);
+    }
+
+    /* ============================================================
+       SECTION SERVICES
+    ============================================================ */
+    #services {
+      background: var(--color-bg);
+    }
+    .services-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: end;
+      margin-bottom: 4rem;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .service-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color var(--transition-med), transform var(--transition-med), box-shadow var(--transition-med);
+      cursor: none;
+    }
+    .service-card:hover {
+      border-color: rgba(91,111,255,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.3), 0 0 40px rgba(91,111,255,0.1);
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gradient-primary);
+      opacity: 0;
+      transition: opacity var(--transition-med);
+    }
+    .service-card:hover::before { opacity: 1; }
+    .service-card-bg {
+      position: absolute;
+      inset: 0;
+      background: var(--gradient-card);
+      opacity: 0;
+      transition: opacity var(--transition-slow);
+    }
+    .service-card:hover .service-card-bg { opacity: 1; }
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    .service-card-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.65rem;
+      letter-spacing: -0.02em;
+    }
+    .service-card-desc {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+      line-height: 1.65;
+    }
+    .service-card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1.25rem;
+    }
+    .tag {
+      padding: 0.2rem 0.7rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--color-text-faint);
+      letter-spacing: 0.04em;
+    }
+    .service-card:hover .tag {
+      border-color: rgba(91,111,255,0.2);
+      color: var(--color-text-muted);
+    }
+
+    /* Featured card (1st) */
+    .service-card.featured {
+      grid-column: span 1;
+      background: linear-gradient(135deg, rgba(91,111,255,0.12) 0%, rgba(166,108,255,0.06) 100%);
+      border-color: rgba(91,111,255,0.2);
+    }
+
+    /* ============================================================
+       SECTION PROCESSUS (TIMELINE)
+    ============================================================ */
+    #processus {
+      background: var(--color-bg-2);
+      position: relative;
+      overflow: hidden;
+    }
+    #processus .bg-dots {
+      position: absolute;
+      inset: 0;
+      opacity: 0.04;
+    }
+    .processus-header {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 5rem;
+    }
+    .processus-header .section-desc {
+      margin: 0 auto;
+      text-align: center;
+    }
+    .timeline {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 36px;
+      left: calc(12.5% + 20px);
+      right: calc(12.5% + 20px);
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--color-primary), transparent);
+      opacity: 0.3;
+    }
+    .timeline-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1.25rem;
+    }
+    .timeline-num {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: 1px solid var(--color-border);
+      background: var(--color-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .timeline-num::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(91,111,255,0.25);
+      background: rgba(91,111,255,0.06);
+    }
+    .timeline-step-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .timeline-step-desc {
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    /* ============================================================
+       SECTION STATS / METRICS
+    ============================================================ */
+    #metrics {
+      background: var(--color-bg);
+      padding-top: clamp(4rem, 8vw, 7rem);
+      padding-bottom: clamp(4rem, 8vw, 7rem);
+    }
+    .metrics-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .metrics-left {}
+    .metrics-chart-area {
+      position: relative;
+      padding: 2rem;
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+    }
+    .metrics-chart-title {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--color-text-faint);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    /* SVG charts */
+    .chart-svg {
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+
+    /* Stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .stat-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      transition: border-color var(--transition-med), transform var(--transition-med);
+    }
+    .stat-card:hover {
+      border-color: rgba(91,111,255,0.3);
+      transform: translateY(-2px);
+    }
+    .stat-card-value {
+      font-family: var(--font-display);
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .stat-card-label {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+    }
+    .stat-card-change {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--color-green);
+      margin-top: 0.5rem;
+    }
+
+    /* ============================================================
+       SECTION PROJETS / PORTFOLIO
+    ============================================================ */
+    #projets {
+      background: var(--color-bg-2);
+      position: relative;
+      overflow: hidden;
+    }
+    .projets-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      margin-bottom: 3rem;
+      gap: 2rem;
+    }
+    .projets-filter {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 0.45rem 1.1rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      background: transparent;
+      cursor: none;
+      transition: all var(--transition-fast);
+    }
+    .filter-btn:hover {
+      border-color: var(--color-primary);
+      color: var(--color-text);
+    }
+    .filter-btn.active {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #fff;
+    }
+    .projets-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.25rem;
+    }
+    .projet-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      position: relative;
+      cursor: none;
+      transition: transform var(--transition-med), box-shadow var(--transition-med), border-color var(--transition-med);
+    }
+    .projet-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4), 0 0 50px rgba(91,111,255,0.1);
+      border-color: rgba(91,111,255,0.25);
+    }
+    .projet-card-1 { grid-column: span 7; }
+    .projet-card-2 { grid-column: span 5; }
+    .projet-card-3 { grid-column: span 5; }
+    .projet-card-4 { grid-column: span 7; }
+    .projet-card-5 { grid-column: span 4; }
+    .projet-card-6 { grid-column: span 4; }
+    .projet-card-7 { grid-column: span 4; }
+    .projet-thumbnail {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      position: relative;
+      overflow: hidden;
+    }
+    .projet-thumb-bg {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .projet-thumb-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      opacity: 0;
+      transition: opacity var(--transition-med);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .projet-card:hover .projet-thumb-overlay { opacity: 1; }
+    .projet-thumb-cta {
+      padding: 0.7rem 1.4rem;
+      background: rgba(255,255,255,0.95);
+      color: #000;
+      border-radius: var(--radius-xl);
+      font-size: 0.85rem;
+      font-weight: 600;
+      transform: translateY(8px);
+      transition: transform var(--transition-med);
+    }
+    .projet-card:hover .projet-thumb-cta { transform: translateY(0); }
+    .projet-meta {
+      padding: 1.25rem 1.5rem;
+    }
+    .projet-category {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--color-primary);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+    .projet-name {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+    }
+    .projet-desc {
+      font-size: 0.82rem;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       SECTION COMPÉTENCES (RADAR + PROGRESS)
+    ============================================================ */
+    #competences {
+      background: var(--color-bg);
+    }
+    .comp-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .skill-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-top: 2.5rem;
+    }
+    .skill-bar-item {}
+    .skill-bar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .skill-bar-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+    .skill-bar-pct {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+    }
+    .skill-bar-track {
+      width: 100%;
+      height: 5px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .skill-bar-fill {
+      height: 100%;
+      background: var(--gradient-primary);
+      border-radius: 5px;
+      width: 0%;
+      transition: width 1.2s var(--ease-smooth);
+    }
+
+    /* ============================================================
+       SECTION TÉMOIGNAGES
+    ============================================================ */
+    #temoignages {
+      background: var(--color-bg-2);
+      position: relative;
+      overflow: hidden;
+    }
+    .temoignages-header {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 4rem;
+    }
+    .temoignages-header .section-desc { margin: 0 auto; text-align: center; }
+    .temoignages-track-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .temoignages-track {
+      display: flex;
+      gap: 1.5rem;
+      transition: transform 0.5s var(--ease-smooth);
+    }
+    .temoignage-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      min-width: calc(33.33% - 1rem);
+      flex-shrink: 0;
+      position: relative;
+      transition: border-color var(--transition-med), transform var(--transition-med);
+    }
+    .temoignage-card:hover {
+      border-color: rgba(91,111,255,0.2);
+      transform: translateY(-3px);
+    }
+    .temo-quote-icon {
+      color: var(--color-primary);
+      opacity: 0.5;
+      margin-bottom: 1.25rem;
+    }
+    .temo-stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 1rem;
+    }
+    .temo-star { color: var(--color-accent-2); }
+    .temo-text {
+      font-size: 0.93rem;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .temo-author {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .temo-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .temo-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .temo-role {
+      font-size: 0.78rem;
+      color: var(--color-text-faint);
+    }
+    .temo-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+    .temo-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
+      transition: border-color var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
+      color: var(--color-text-muted);
+    }
+    .temo-btn:hover {
+      border-color: var(--color-primary);
+      background: rgba(91,111,255,0.1);
+      color: var(--color-text);
+      transform: scale(1.08);
+    }
+    .temo-dots {
+      display: flex;
+      gap: 0.4rem;
+    }
+    .temo-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-border);
+      transition: background var(--transition-fast), transform var(--transition-fast);
+      cursor: none;
+    }
+    .temo-dot.active {
+      background: var(--color-primary);
+      transform: scale(1.4);
+    }
+
+    /* ============================================================
+       SECTION TARIFS
+    ============================================================ */
+    #tarifs {
+      background: var(--color-bg);
+    }
+    .tarifs-header {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 4rem;
+    }
+    .tarifs-header .section-desc { margin: 0 auto; text-align: center; }
+    .tarifs-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      margin-bottom: 3.5rem;
+    }
+    .toggle-label {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+      font-weight: 500;
+    }
+    .toggle-switch {
+      width: 52px;
+      height: 28px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 28px;
+      position: relative;
+      cursor: none;
+      transition: background var(--transition-fast);
+      border: 1px solid var(--color-border);
+    }
+    .toggle-switch.active { background: var(--color-primary); }
+    .toggle-switch-knob {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform var(--transition-med);
+    }
+    .toggle-switch.active .toggle-switch-knob { transform: translateX(24px); }
+    .toggle-badge {
+      background: rgba(107,203,119,0.15);
+      color: var(--color-green);
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-xl);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+    .tarifs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      align-items: start;
+    }
+    .tarif-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--transition-med), box-shadow var(--transition-med);
+    }
+    .tarif-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    }
+    .tarif-card.popular {
+      border-color: rgba(91,111,255,0.4);
+      background: linear-gradient(135deg, rgba(91,111,255,0.1) 0%, rgba(166,108,255,0.05) 100%);
+    }
+    .popular-badge {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      background: var(--gradient-primary);
+      color: #fff;
+      padding: 0.3rem 1rem;
+      border-radius: var(--radius-xl);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .tarif-name {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--color-text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .tarif-price {
+      font-family: var(--font-display);
+      font-size: 2.75rem;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .tarif-price sup { font-size: 1.2rem; vertical-align: top; margin-top: 0.5rem; }
+    .tarif-price .annual-note { font-size: 0.85rem; color: var(--color-text-faint); font-weight: 400; }
+    .tarif-desc {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      margin-bottom: 1.75rem;
+      line-height: 1.5;
+    }
+    .tarif-features {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+    .tarif-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+    }
+    .tarif-feature-icon {
+      color: var(--color-green);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .tarif-feature.disabled {
+      opacity: 0.35;
+      text-decoration: line-through;
+    }
+    .tarif-feature.disabled .tarif-feature-icon { color: var(--color-text-faint); }
+    .tarif-cta {
+      width: 100%;
+      padding: 0.85rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-align: center;
+      transition: all var(--transition-fast);
+      display: block;
+      cursor: none;
+    }
+    .tarif-cta-outline {
+      border: 1px solid var(--color-border);
+      background: transparent;
+      color: var(--color-text-muted);
+    }
+    .tarif-cta-outline:hover {
+      border-color: var(--color-primary);
+      color: var(--color-text);
+      background: rgba(91,111,255,0.08);
+    }
+    .tarif-cta-solid {
+      background: var(--gradient-primary);
+      color: #fff;
+      border: none;
+    }
+    .tarif-cta-solid:hover {
+      opacity: 0.9;
+      box-shadow: 0 8px 24px var(--color-primary-glow);
+    }
+
+    /* ============================================================
+       FAQ SECTION
+    ============================================================ */
+    #faq {
+      background: var(--color-bg-2);
+    }
+    .faq-inner {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .faq-item {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color var(--transition-fast);
+    }
+    .faq-item.open {
+      border-color: rgba(91,111,255,0.25);
+    }
+    .faq-question {
+      width: 100%;
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.93rem;
+      font-weight: 600;
+      text-align: left;
+      color: var(--color-text);
+      cursor: none;
+      background: transparent;
+      transition: background var(--transition-fast);
+    }
+    .faq-question:hover { background: var(--color-surface); }
+    .faq-arrow {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform var(--transition-med), background var(--transition-fast), border-color var(--transition-fast);
+      color: var(--color-text-muted);
+    }
+    .faq-item.open .faq-arrow {
+      transform: rotate(45deg);
+      background: rgba(91,111,255,0.15);
+      border-color: rgba(91,111,255,0.3);
+      color: var(--color-primary);
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s var(--ease-smooth), padding 0.3s ease;
+    }
+    .faq-item.open .faq-answer {
+      max-height: 400px;
+    }
+    .faq-answer-inner {
+      padding: 0 1.25rem 1.1rem;
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+    }
+
+    /* ============================================================
+       CTA SECTION
+    ============================================================ */
+    #cta-section {
+      background: var(--color-bg);
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-card {
+      background: linear-gradient(135deg, rgba(91,111,255,0.12) 0%, rgba(166,108,255,0.08) 50%, rgba(255,107,107,0.04) 100%);
+      border: 1px solid rgba(91,111,255,0.2);
+      border-radius: var(--radius-xl);
+      padding: clamp(3rem, 6vw, 5rem);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(91,111,255,0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .cta-title {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.25rem;
+      line-height: 1.1;
+    }
+    .cta-desc {
+      font-size: 1.05rem;
+      color: var(--color-text-muted);
+      max-width: 540px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+    .cta-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .cta-trust {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .cta-trust-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.83rem;
+      color: var(--color-text-faint);
+    }
+    .cta-trust-item svg { color: var(--color-green); }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    #footer {
+      background: var(--color-bg);
+      border-top: 1px solid var(--color-border);
+      padding-top: 4rem;
+      padding-bottom: 2rem;
+    }
+    .footer-main {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    .footer-brand-desc {
+      font-size: 0.875rem;
+      color: var(--color-text-faint);
+      line-height: 1.65;
+      margin-top: 0.75rem;
+      max-width: 280px;
+    }
+    .footer-socials {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: 1.5rem;
+    }
+    .social-btn {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-faint);
+      transition: all var(--transition-fast);
+      cursor: none;
+    }
+    .social-btn:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+      background: rgba(91,111,255,0.08);
+    }
+    .footer-col-title {
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      margin-bottom: 1.25rem;
+    }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .footer-link {
+      font-size: 0.875rem;
+      color: var(--color-text-faint);
+      transition: color var(--transition-fast);
+    }
+    .footer-link:hover { color: var(--color-text); }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 2rem;
+      border-top: 1px solid var(--color-border);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-copy {
+      font-size: 0.8rem;
+      color: var(--color-text-faint);
+    }
+    .footer-legal {
+      display: flex;
+      gap: 1.5rem;
+    }
+    .footer-legal a {
+      font-size: 0.8rem;
+      color: var(--color-text-faint);
+      transition: color var(--transition-fast);
+    }
+    .footer-legal a:hover { color: var(--color-text-muted); }
+
+    /* ============================================================
+       ÉLÉMENTS FLOTTANTS
+    ============================================================ */
+    #back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 48px;
+      height: 48px;
+      background: var(--gradient-primary);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
+      z-index: 500;
+      box-shadow: 0 8px 24px var(--color-primary-glow);
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity var(--transition-med), transform var(--transition-med);
+      color: #fff;
+    }
+    #back-to-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    #back-to-top:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px var(--color-primary-glow);
+    }
+
+    /* Cookie consent */
+    #cookie-banner {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      width: min(560px, calc(100vw - 3rem));
+      background: rgba(15,15,24,0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      z-index: 600;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      transition: transform 0.5s var(--ease-bounce);
+      flex-wrap: wrap;
+    }
+    #cookie-banner.visible {
+      transform: translateX(-50%) translateY(0);
+    }
+    .cookie-text {
+      font-size: 0.83rem;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+      flex: 1;
+      min-width: 200px;
+    }
+    .cookie-text a { color: var(--color-primary); text-decoration: underline; }
+    .cookie-btns {
+      display: flex;
+      gap: 0.6rem;
+      flex-shrink: 0;
+    }
+    .cookie-accept {
+      padding: 0.55rem 1.1rem;
+      background: var(--color-primary);
+      color: #fff;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: none;
+      transition: opacity var(--transition-fast);
+    }
+    .cookie-accept:hover { opacity: 0.85; }
+    .cookie-decline {
+      padding: 0.55rem 1.1rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      color: var(--color-text-muted);
+      cursor: none;
+      transition: all var(--transition-fast);
+    }
+    .cookie-decline:hover {
+      border-color: var(--color-border-hover);
+      color: var(--color-text);
+    }
+
+    /* ============================================================
+       MODALE CONTACT
+    ============================================================ */
+    dialog#modal-contact {
+      background: transparent;
+      border: none;
+      padding: 0;
+      max-width: 560px;
+      width: calc(100vw - 2rem);
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    dialog#modal-contact::backdrop {
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(6px);
+    }
+    .modal-inner {
+      background: var(--color-bg-2);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: 2.5rem;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+    }
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    .modal-close {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
+      color: var(--color-text-muted);
+      transition: all var(--transition-fast);
+      flex-shrink: 0;
+    }
+    .modal-close:hover {
+      border-color: var(--color-border-hover);
+      color: var(--color-text);
+    }
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.02em;
+    }
+    .form-input,
+    .form-textarea,
+    .form-select {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      transition: border-color var(--transition-fast), background var(--transition-fast);
+      outline: none;
+      appearance: none;
+    }
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
+      border-color: var(--color-primary);
+      background: rgba(91,111,255,0.04);
+    }
+    .form-input::placeholder,
+    .form-textarea::placeholder { color: var(--color-text-faint); }
+    .form-textarea { resize: vertical; min-height: 110px; }
+    .form-select option { background: var(--color-bg-2); }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .form-submit {
+      width: 100%;
+      padding: 0.9rem;
+      background: var(--gradient-primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: none;
+      transition: opacity var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+      margin-top: 0.5rem;
+    }
+    .form-submit:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px var(--color-primary-glow);
+    }
+
+    /* ============================================================
+       MEDIA QUERIES — RESPONSIVE
+    ============================================================ */
+    @media (max-width: 1100px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .hero-illustration { max-width: 500px; margin: 0 auto; }
+      .hero-h1 { font-size: clamp(2.2rem, 8vw, 3.5rem); }
+      .services-grid { grid-template-columns: 1fr 1fr; }
+      .metrics-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+      .comp-inner { grid-template-columns: 1fr; gap: 3rem; }
+    }
+    @media (max-width: 900px) {
+      .timeline { grid-template-columns: 1fr 1fr; }
+      .timeline::before { display: none; }
+      .projets-grid { grid-template-columns: 1fr 1fr; }
+      .projet-card-1,
+      .projet-card-2,
+      .projet-card-3,
+      .projet-card-4,
+      .projet-card-5,
+      .projet-card-6,
+      .projet-card-7 { grid-column: span 1; }
+      .tarifs-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
+      .faq-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .services-header { grid-template-columns: 1fr; gap: 1.5rem; }
+      .temoignage-card { min-width: calc(50% - 0.75rem); }
+    }
+    @media (max-width: 768px) {
+      :root { --nav-height: 64px; }
+      .nav-links { display: none; }
+      .nav-cta.desktop-only { display: none; }
+      .nav-mobile-toggle { display: flex; }
+      .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .projets-grid { grid-template-columns: 1fr; }
+      .timeline { grid-template-columns: 1fr; }
+      .temoignage-card { min-width: calc(100% - 0rem); }
+      .footer-main { grid-template-columns: 1fr; gap: 2rem; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 500px) {
+      .hero-actions { flex-direction: column; align-items: flex-start; }
+      .projets-filter { display: none; }
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<!-- ============================================================ -->
+<!-- BLOC 2: BODY — PRÉCHARGEUR & CURSEUR                         -->
+<!-- ============================================================ -->
+<body>
+
+  <!-- CURSEUR PERSONNALISÉ -->
+  <div class="cursor-dot"  id="cursor-dot"  aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
+
+  <!-- PRÉCHARGEUR -->
+  <div id="preloader" role="status" aria-label="Chargement en cours">
+    <div class="preloader-logo">CodeNord⚡</div>
+    <div class="preloader-bar-track">
+      <div class="preloader-bar-fill"></div>
+    </div>
+    <div class="preloader-pct" id="preloader-pct">0%</div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- BLOC 3: NAVIGATION PRINCIPALE                                 -->
+  <!-- ============================================================ -->
+  <header id="navbar" role="banner">
+    <div class="container">
+      <nav class="nav-inner" aria-label="Navigation principale">
+        <a href="#hero" class="nav-logo" aria-label="CodeNord Studio — Accueil">
+          <div class="nav-logo-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M3 9L7 5L11 9L7 13L3 9Z" fill="white" fill-opacity="0.9"/>
+              <path d="M9 5L13 1L17 5L13 9L9 5Z" fill="white" fill-opacity="0.6"/>
+              <path d="M9 13L13 9L17 13L13 17L9 13Z" fill="white" fill-opacity="0.6"/>
+            </svg>
+          </div>
+          <span class="nav-logo-text">CodeNord</span>
+        </a>
+
+        <div class="nav-links" role="menubar">
+          <a href="#services"    class="nav-link" role="menuitem">Services</a>
+          <a href="#processus"   class="nav-link" role="menuitem">Processus</a>
+          <a href="#projets"     class="nav-link" role="menuitem">Projets</a>
+          <a href="#competences" class="nav-link" role="menuitem">Expertise</a>
+          <a href="#tarifs"      class="nav-link" role="menuitem">Tarifs</a>
+          <a href="#faq"         class="nav-link" role="menuitem">FAQ</a>
+        </div>
+
+        <button class="nav-cta desktop-only" onclick="document.getElementById('modal-contact').showModal()" aria-label="Démarrer un projet">
+          Démarrer un projet
+        </button>
+
+        <button class="nav-mobile-toggle" id="nav-mobile-toggle" aria-expanded="false" aria-label="Ouvrir le menu">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="nav-drawer" id="nav-drawer" role="navigation" aria-label="Menu mobile">
+    <a href="#services"    class="nav-drawer-link" onclick="closeDrawer()">Services</a>
+    <a href="#processus"   class="nav-drawer-link" onclick="closeDrawer()">Processus</a>
+    <a href="#projets"     class="nav-drawer-link" onclick="closeDrawer()">Projets</a>
+    <a href="#competences" class="nav-drawer-link" onclick="closeDrawer()">Expertise</a>
+    <a href="#tarifs"      class="nav-drawer-link" onclick="closeDrawer()">Tarifs</a>
+    <a href="#faq"         class="nav-drawer-link" onclick="closeDrawer()">FAQ</a>
+    <button class="nav-drawer-cta" onclick="document.getElementById('modal-contact').showModal(); closeDrawer()">
+      Démarrer un projet →
+    </button>
+  </div>
+
+  <main id="main-content">
+
+    <!-- ============================================================ -->
+    <!-- BLOC 4: HERO SECTION                                         -->
+    <!-- ============================================================ -->
+    <section id="hero" aria-labelledby="hero-title">
+
+      <!-- Canvas background -->
+      <canvas class="hero-bg-canvas" id="hero-canvas" aria-hidden="true"></canvas>
+      <div class="hero-noise"  aria-hidden="true"></div>
+      <div class="hero-orb hero-orb-1" aria-hidden="true"></div>
+      <div class="hero-orb hero-orb-2" aria-hidden="true"></div>
+      <div class="hero-orb hero-orb-3" aria-hidden="true"></div>
+
+      <!-- SVG Grid Pattern -->
+      <svg class="hero-grid-pattern" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid)"/>
+      </svg>
+
+      <div class="container hero-content">
+        <div class="hero-inner">
+          <!-- Left: texte -->
+          <div class="hero-text">
+            <div class="hero-badge" aria-label="Agence disponible">
+              <span class="hero-badge-dot" aria-hidden="true"></span>
+              Disponibles pour nouveaux projets · Montréal
+            </div>
+            <h1 class="hero-h1" id="hero-title">
+              Sites web qui
+              <span class="hero-h1-line2">convertissent,</span>
+              <span class="hero-h1-line2" style="color: var(--color-text); -webkit-text-fill-color: var(--color-text);">performent.</span>
+            </h1>
+            <p class="hero-desc">
+              CodeNord Studio conçoit des expériences numériques haut de gamme — 
+              HTML5 sémantique, CSS3 de pointe, JavaScript ES2024+ — 
+              100&nbsp;% accessibles, ultra-rapides, et visuellement inoubliables.
+            </p>
+            <div class="hero-actions">
+              <button class="btn-primary" onclick="document.getElementById('modal-contact').showModal()" aria-label="Démarrer votre projet">
+                <span>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Démarrer mon projet
+                </span>
+              </button>
+              <a href="#projets" class="btn-ghost">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+                Voir les projets
+              </a>
+            </div>
+            <div class="hero-stats" role="list">
+              <div role="listitem">
+                <div class="hero-stat-value" aria-label="50 projets livrés">50+</div>
+                <div class="hero-stat-label">Projets livrés</div>
+              </div>
+              <div role="listitem">
+                <div class="hero-stat-value" aria-label="98% clients satisfaits">98%</div>
+                <div class="hero-stat-label">Clients satisfaits</div>
+              </div>
+              <div role="listitem">
+                <div class="hero-stat-value" aria-label="7 ans d'expérience">7 ans</div>
+                <div class="hero-stat-label">D'expertise</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: code window illustration -->
+          <div class="hero-illustration" aria-label="Illustration de code">
+            <div class="hero-code-window" role="img" aria-label="Fenêtre de code montrant notre style de développement">
+              <div class="code-window-bar">
+                <div class="code-dot code-dot-red" aria-hidden="true"></div>
+                <div class="code-dot code-dot-yel" aria-hidden="true"></div>
+                <div class="code-dot code-dot-grn" aria-hidden="true"></div>
+                <span class="code-window-title">index.html — CodeNord Studio</span>
+              </div>
+              <div class="code-body" aria-hidden="true">
+                <div class="code-line"><span class="code-ln">1</span><span class="t-cm">/* Design System Premium */</span></div>
+                <div class="code-line"><span class="code-ln">2</span><span class="t-kw">:root</span><span class="t-tx"> {</span></div>
+                <div class="code-line"><span class="code-ln">3</span><span class="t-tx">&nbsp;&nbsp;</span><span class="t-attr">--primary</span><span class="t-op">:</span><span class="t-str"> #5b6fff</span><span class="t-tx">;</span></div>
+                <div class="code-line"><span class="code-ln">4</span><span class="t-tx">&nbsp;&nbsp;</span><span class="t-attr">--font</span><span class="t-op">:</span><span class="t-str"> clamp(1rem, 2vw, 1.15rem)</span><span class="t-tx">;</span></div>
+                <div class="code-line"><span class="code-ln">5</span><span class="t-tx">}</span></div>
+                <div class="code-line"><span class="code-ln">6</span><span class="t-tag">.hero</span><span class="t-tx"> {</span></div>
+                <div class="code-line"><span class="code-ln">7</span><span class="t-tx">&nbsp;&nbsp;</span><span class="t-attr">display</span><span class="t-op">:</span><span class="t-val"> grid</span><span class="t-tx">;</span></div>
+                <div class="code-line"><span class="code-ln">8</span><span class="t-tx">&nbsp;&nbsp;</span><span class="t-attr">place-items</span><span class="t-op">:</span><span class="t-val"> center</span><span class="t-tx">;</span></div>
+                <div class="code-line"><span class="code-ln">9</span><span class="t-tx">&nbsp;&nbsp;</span><span class="t-attr">backdrop-filter</span><span class="t-op">:</span><span class="t-fn"> blur</span><span class="t-tx">(</span><span class="t-val">20px</span><span class="t-tx">);</span></div>
+                <div class="code-line"><span class="code-ln">10</span><span class="t-tx">}</span></div>
+                <div class="code-line"><span class="code-ln">11</span><span class="t-cm">// Intersection Observer ✨</span></div>
+                <div class="code-line"><span class="code-ln">12</span><span class="t-kw">const</span><span class="t-tx"> </span><span class="t-fn">observer</span><span class="t-tx"> = </span><span class="t-kw">new</span><span class="t-tx"> </span><span class="t-fn">IntersectionObserver</span><span class="t-tx">(…)</span></div>
+              </div>
+            </div>
+
+            <!-- Floating badges -->
+            <div class="hero-float-badge hero-float-badge-1">
+              <div class="float-icon" style="background: rgba(107,203,119,0.15);">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 7L5.5 10.5L12 3.5" stroke="#6bcb77" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <span>WCAG 2.1 AA</span>
+            </div>
+            <div class="hero-float-badge hero-float-badge-2">
+              <div class="float-icon" style="background: rgba(91,111,255,0.15);">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5" stroke="#5b6fff" stroke-width="1.5"/><path d="M7 4V7L9 9" stroke="#5b6fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+              <span>Core Web Vitals ✓</span>
+            </div>
+            <div class="hero-float-badge hero-float-badge-3">
+              <div class="float-icon" style="background: rgba(255,217,61,0.12);">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><polygon points="7,1 9,5 13,5 10,8 11,12 7,9.5 3,12 4,8 1,5 5,5" fill="#ffd93d" stroke="none"/></svg>
+              </div>
+              <span>Google 100/100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- MARQUEE — TECHNOLOGIES                                        -->
+    <!-- ============================================================ -->
+    <div class="marquee-section" aria-label="Technologies maîtrisées">
+      <div class="marquee-track" aria-hidden="true">
+        <!-- Premier set -->
+        <span class="marquee-item"><svg width="16" height="16" viewBox="0 0 32 32" fill="#e34f26"><rect width="32" height="32" rx="4"/><path d="M5 3l2.5 25L16 30l8.5-2L27 3H5z" fill="white"/></svg>HTML5</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item"><svg width="16" height="16" viewBox="0 0 32 32" fill="#1572b6"><rect width="32" height="32" rx="4"/><path d="M5 3l2.5 25L16 30l8.5-2L27 3H5z" fill="white"/></svg>CSS3</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item"><svg width="16" height="16" viewBox="0 0 32 32"><rect width="32" height="32" rx="4" fill="#f7df1e"/><path d="M26 24c-.6 1.8-2 3-4 3-2 0-3-1-4-2l-2 1.5c1 2 3 3.5 6 3.5 3.5 0 6-2 7-5L26 24zm-16 0c-1 1.5-2.5 2-4 1-1-.5-1.5-1.5-1-2.5l-3-1C1.5 24 3 27 6.5 28c3 1 5.5 0 7-2.5L10 24z" fill="#000"/></svg>JavaScript</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">⚛ React</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">▲ Next.js</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">🟢 Node.js</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">🐘 PostgreSQL</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">🔷 TypeScript</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">🐋 Docker</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">☁️ Vercel</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">🎨 Figma</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">📊 Analytics</span>
+        <span class="marquee-sep">◆</span>
+        <!-- Duplicated set for seamless scroll -->
+        <span class="marquee-item">HTML5</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">CSS3</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">JavaScript</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">⚛ React</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">▲ Next.js</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">🟢 Node.js</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">🐘 PostgreSQL</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">🔷 TypeScript</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">🐋 Docker</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">☁️ Vercel</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">🎨 Figma</span>
+        <span class="marquee-sep">◆</span>
+        <span class="marquee-item">📊 Analytics</span>
+        <span class="marquee-sep">◆</span>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- BLOC 5: SERVICES                                              -->
+    <!-- ============================================================ -->
+    <section id="services" class="section" aria-labelledby="services-title">
+      <div class="container">
+        <div class="services-header">
+          <div>
+            <p class="section-label reveal">Nos services</p>
+            <h2 class="section-title reveal reveal-delay-1" id="services-title">
+              Ce que nous<br><span>maîtrisons</span>
+            </h2>
+          </div>
+          <p class="section-desc reveal reveal-delay-2">
+            De la stratégie à la mise en ligne, nous livrons des projets web 
+            complets qui dépassent les attentes — en termes de design, de performance et de conversions.
+          </p>
+        </div>
+
+        <div class="services-grid">
+          <!-- Service 1 -->
+          <article class="service-card featured reveal" aria-label="Service: Design UI/UX de pointe">
+            <div class="service-card-bg"></div>
+            <div class="service-icon" style="background: rgba(91,111,255,0.15);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#5b6fff" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M2 17L12 22L22 17" stroke="#5b6fff" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M2 12L12 17L22 12" stroke="#5b6fff" stroke-width="1.5" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="service-card-title">Design UI/UX de pointe</h3>
+            <p class="service-card-desc">
+              Glassmorphisme, neumorphisme, animations complexes — nous créons des interfaces 
+              qui surprennent et fidélisent vos utilisateurs au premier coup d'œil.
+            </p>
+            <div class="service-card-tags">
+              <span class="tag">Figma</span>
+              <span class="tag">CSS3</span>
+              <span class="tag">Motion</span>
+              <span class="tag">WCAG 2.1</span>
+            </div>
+          </article>
+
+          <!-- Service 2 -->
+          <article class="service-card reveal reveal-delay-1" aria-label="Service: Développement Frontend Senior">
+            <div class="service-card-bg"></div>
+            <div class="service-icon" style="background: rgba(255,107,107,0.12);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M16 18L22 12L16 6" stroke="#ff6b6b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8 6L2 12L8 18" stroke="#ff6b6b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14 4L10 20" stroke="#ff6b6b" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="service-card-title">Développement Frontend</h3>
+            <p class="service-card-desc">
+              HTML5 sémantique, CSS Grid/Flexbox, JavaScript ES2024+, React et Next.js — 
+              du code propre, documenté, testé, et maintenable.
+            </p>
+            <div class="service-card-tags">
+              <span class="tag">HTML5</span>
+              <span class="tag">React</span>
+              <span class="tag">TypeScript</span>
+            </div>
+          </article>
+
+          <!-- Service 3 -->
+          <article class="service-card reveal reveal-delay-2" aria-label="Service: Performance et Core Web Vitals">
+            <div class="service-card-bg"></div>
+            <div class="service-icon" style="background: rgba(107,203,119,0.12);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" stroke="#6bcb77" stroke-width="1.5"/>
+                <path d="M12 7V12L15 15" stroke="#6bcb77" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="service-card-title">Performance & Core Web Vitals</h3>
+            <p class="service-card-desc">
+              LCP &lt;2.5s, FID &lt;100ms, CLS &lt;0.1 garantis. Audit Lighthouse, optimisation 
+              images, lazy loading — score de 100/100 atteignable.
+            </p>
+            <div class="service-card-tags">
+              <span class="tag">Lighthouse</span>
+              <span class="tag">Lazy load</span>
+              <span class="tag">CDN</span>
+            </div>
+          </article>
+
+          <!-- Service 4 -->
+          <article class="service-card reveal reveal-delay-1" aria-label="Service: SEO Technique avancé">
+            <div class="service-card-bg"></div>
+            <div class="service-icon" style="background: rgba(77,208,225,0.12);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="11" cy="11" r="7" stroke="#4dd0e1" stroke-width="1.5"/>
+                <path d="M20 20L17 17" stroke="#4dd0e1" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M11 8V11H14" stroke="#4dd0e1" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="service-card-title">SEO Technique avancé</h3>
+            <p class="service-card-desc">
+              Schema.org, Open Graph, sitemap XML, meta tags optimisées, 
+              balisage sémantique — votre site visible dès la première page.
+            </p>
+            <div class="service-card-tags">
+              <span class="tag">Schema.org</span>
+              <span class="tag">Meta SEO</span>
+              <span class="tag">Analytics</span>
+            </div>
+          </article>
+
+          <!-- Service 5 -->
+          <article class="service-card reveal reveal-delay-2" aria-label="Service: Accessibilité WCAG 2.1">
+            <div class="service-card-bg"></div>
+            <div class="service-icon" style="background: rgba(255,217,61,0.12);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="12" cy="6" r="2" stroke="#ffd93d" stroke-width="1.5"/>
+                <path d="M12 9V14" stroke="#ffd93d" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M8 11H16" stroke="#ffd93d" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M9 14L7 20M15 14L17 20" stroke="#ffd93d" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="service-card-title">Accessibilité WCAG 2.1 AA</h3>
+            <p class="service-card-desc">
+              Navigation clavier complète, ARIA labels, ratios de contraste AA, 
+              lecteurs d'écran compatibles — votre site ouvert à tous.
+            </p>
+            <div class="service-card-tags">
+              <span class="tag">ARIA</span>
+              <span class="tag">Screen reader</span>
+              <span class="tag">A11y</span>
+            </div>
+          </article>
+
+          <!-- Service 6 -->
+          <article class="service-card reveal reveal-delay-3" aria-label="Service: Applications web React">
+            <div class="service-card-bg"></div>
+            <div class="service-icon" style="background: rgba(166,108,255,0.12);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="2" y="3" width="20" height="14" rx="2" stroke="#a66cff" stroke-width="1.5"/>
+                <path d="M8 21H16" stroke="#a66cff" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M12 17V21" stroke="#a66cff" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M7 10L10 7L13 10L17 6" stroke="#a66cff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="service-card-title">Applications Web React</h3>
+            <p class="service-card-desc">
+              Dashboards, SaaS, portails clients — applications React/Next.js 
+              avec authentification, base de données et déploiement cloud inclus.
+            </p>
+            <div class="service-card-tags">
+              <span class="tag">Next.js</span>
+              <span class="tag">Supabase</span>
+              <span class="tag">Vercel</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- BLOC 6: PROCESSUS                                             -->
+    <!-- ============================================================ -->
+    <section id="processus" class="section" aria-labelledby="processus-title">
+      <!-- Dot pattern background -->
+      <svg class="bg-dots" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="dots-bg" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+            <circle cx="1" cy="1" r="1" fill="white"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#dots-bg)"/>
+      </svg>
+      <div class="container">
+        <div class="processus-header">
+          <p class="section-label reveal">Notre approche</p>
+          <h2 class="section-title reveal reveal-delay-1" id="processus-title">
+            De l'idée au <span>lancement</span>
+          </h2>
+          <p class="section-desc reveal reveal-delay-2">
+            Un processus en 4 étapes éprouvées. Transparent, collaboratif, et livré dans les délais.
+          </p>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-step reveal">
+            <div class="timeline-num" aria-hidden="true">01</div>
+            <div>
+              <h3 class="timeline-step-title">Découverte & Stratégie</h3>
+              <p class="timeline-step-desc">Analyse de vos besoins, de votre audience cible et de votre concurrence. Définition des objectifs mesurables.</p>
+            </div>
+          </div>
+          <div class="timeline-step reveal reveal-delay-1">
+            <div class="timeline-num" aria-hidden="true">02</div>
+            <div>
+              <h3 class="timeline-step-title">Design & Prototypage</h3>
+              <p class="timeline-step-desc">Maquettes Figma haute fidélité, design system complet, validation visuelle avant tout développement.</p>
+            </div>
+          </div>
+          <div class="timeline-step reveal reveal-delay-2">
+            <div class="timeline-num" aria-hidden="true">03</div>
+            <div>
+              <h3 class="timeline-step-title">Développement & Tests</h3>
+              <p class="timeline-step-desc">Code propre, tests cross-browser, audit performance, validation WCAG et SEO technique complet.</p>
+            </div>
+          </div>
+          <div class="timeline-step reveal reveal-delay-3">
+            <div class="timeline-num" aria-hidden="true">04</div>
+            <div>
+              <h3 class="timeline-step-title">Lancement & Suivi</h3>
+              <p class="timeline-step-desc">Déploiement cloud, analytics configurés, 30 jours de support post-lancement inclus dans chaque forfait.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- BLOC 7: MÉTRIQUES & GRAPHIQUES                               -->
+    <!-- ============================================================ -->
+    <section id="metrics" aria-labelledby="metrics-title">
+      <div class="container">
+        <div class="metrics-inner">
+          <div class="metrics-left">
+            <p class="section-label reveal">Résultats prouvés</p>
+            <h2 class="section-title reveal reveal-delay-1" id="metrics-title">
+              Des chiffres qui<br><span>parlent d'eux-mêmes</span>
+            </h2>
+            <p class="section-desc reveal reveal-delay-2">
+              Chaque projet est une opportunité de dépasser nos propres records. 
+              Voici les résultats moyens obtenus pour nos clients en 2024.
+            </p>
+
+            <div class="stats-grid">
+              <div class="stat-card reveal reveal-delay-1">
+                <div class="stat-card-value" data-count-to="98">0</div>
+                <div class="stat-card-label">Score Lighthouse moyen</div>
+                <div class="stat-card-change">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 2L10 6L6 10M2 6H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" transform="rotate(-90 6 6)"/></svg>
+                  +12 pts vs industrie
+                </div>
+              </div>
+              <div class="stat-card reveal reveal-delay-2">
+                <div class="stat-card-value" data-count-to="247">0</div>
+                <div class="stat-card-label">% augmentation trafic</div>
+                <div class="stat-card-change">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 2L10 6L6 10M2 6H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" transform="rotate(-90 6 6)"/></svg>
+                  Moyenne 12 mois
+                </div>
+              </div>
+              <div class="stat-card reveal reveal-delay-3">
+                <div class="stat-card-value" data-count-to="3">0</div>
+                <div class="stat-card-label">Semaines délai moyen</div>
+                <div class="stat-card-change">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 2L10 6L6 10M2 6H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" transform="rotate(-90 6 6)"/></svg>
+                  Toujours dans les temps
+                </div>
+              </div>
+              <div class="stat-card reveal reveal-delay-4">
+                <div class="stat-card-value" data-count-to="50">0</div>
+                <div class="stat-card-label">Projets livrés</div>
+                <div class="stat-card-change">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 2L10 6L6 10M2 6H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" transform="rotate(-90 6 6)"/></svg>
+                  Depuis 2017
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bar chart SVG -->
+          <div class="metrics-chart-area reveal reveal-delay-2">
+            <p class="metrics-chart-title">Croissance trafic clients — 2024</p>
+            <svg class="chart-svg" id="bar-chart" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Graphique de croissance du trafic en 2024">
+              <defs>
+                <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#5b6fff" stop-opacity="1"/>
+                  <stop offset="100%" stop-color="#a66cff" stop-opacity="0.6"/>
+                </linearGradient>
+                <linearGradient id="barGradHover" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#ff6b6b" stop-opacity="1"/>
+                  <stop offset="100%" stop-color="#ffd93d" stop-opacity="0.6"/>
+                </linearGradient>
+              </defs>
+              <!-- Grille -->
+              <line x1="40" y1="20"  x2="40" y2="210" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="40" y1="20"  x2="390" y2="20"  stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="40" y1="72"  x2="390" y2="72"  stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="40" y1="115" x2="390" y2="115" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="40" y1="158" x2="390" y2="158" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="40" y1="210" x2="390" y2="210" stroke="rgba(255,255,255,0.1)"  stroke-width="1"/>
+              <!-- Labels Y -->
+              <text x="32" y="24"  fill="rgba(232,232,240,0.3)" font-size="9" text-anchor="end" font-family="JetBrains Mono, monospace">250%</text>
+              <text x="32" y="76"  fill="rgba(232,232,240,0.3)" font-size="9" text-anchor="end" font-family="JetBrains Mono, monospace">187%</text>
+              <text x="32" y="119" fill="rgba(232,232,240,0.3)" font-size="9" text-anchor="end" font-family="JetBrains Mono, monospace">125%</text>
+              <text x="32" y="162" fill="rgba(232,232,240,0.3)" font-size="9" text-anchor="end" font-family="JetBrains Mono, monospace">62%</text>
+              <text x="32" y="214" fill="rgba(232,232,240,0.3)" font-size="9" text-anchor="end" font-family="JetBrains Mono, monospace">0%</text>
+              <!-- Barres animées -->
+              <rect id="bar1" x="55"  y="210" width="38" height="0" fill="url(#barGrad)" rx="4" class="chart-bar" data-value="190" data-full="190"/>
+              <rect id="bar2" x="110" y="210" width="38" height="0" fill="url(#barGrad)" rx="4" class="chart-bar" data-value="145" data-full="145"/>
+              <rect id="bar3" x="165" y="210" width="38" height="0" fill="url(#barGrad)" rx="4" class="chart-bar" data-value="210" data-full="210"/>
+              <rect id="bar4" x="220" y="210" width="38" height="0" fill="url(#barGrad)" rx="4" class="chart-bar" data-value="165" data-full="165"/>
+              <rect id="bar5" x="275" y="210" width="38" height="0" fill="url(#barGrad)" rx="4" class="chart-bar" data-value="230" data-full="230"/>
+              <rect id="bar6" x="330" y="210" width="38" height="0" fill="url(#barGrad)" rx="4" class="chart-bar" data-value="175" data-full="175"/>
+              <!-- Labels X -->
+              <text x="74"  y="228" fill="rgba(232,232,240,0.4)" font-size="9" text-anchor="middle" font-family="JetBrains Mono, monospace">Trim 1</text>
+              <text x="129" y="228" fill="rgba(232,232,240,0.4)" font-size="9" text-anchor="middle" font-family="JetBrains Mono, monospace">Trim 2</text>
+              <text x="184" y="228" fill="rgba(232,232,240,0.4)" font-size="9" text-anchor="middle" font-family="JetBrains Mono, monospace">Trim 3</text>
+              <text x="239" y="228" fill="rgba(232,232,240,0.4)" font-size="9" text-anchor="middle" font-family="JetBrains Mono, monospace">Trim 4</text>
+              <text x="294" y="228" fill="rgba(232,232,240,0.4)" font-size="9" text-anchor="middle" font-family="JetBrains Mono, monospace">Trim 5</text>
+              <text x="349" y="228" fill="rgba(232,232,240,0.4)" font-size="9" text-anchor="middle" font-family="JetBrains Mono, monospace">Trim 6</text>
+            </svg>
+
+            <!-- Légende -->
+            <div style="display:flex; gap:1.5rem; margin-top:1rem; flex-wrap:wrap;">
+              <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.78rem; color:var(--color-text-muted);">
+                <div style="width:12px;height:12px;border-radius:3px;background:var(--gradient-primary);"></div>
+                Croissance organique %
+              </div>
+              <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.78rem; color:var(--color-text-faint);">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="5" fill="rgba(107,203,119,0.2)" stroke="#6bcb77" stroke-width="1"/></svg>
+                Tous secteurs confondus
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- BLOC 8: PROJETS / PORTFOLIO                                  -->
+    <!-- ============================================================ -->
+    <section id="projets" class="section" aria-labelledby="projets-title">
+      <div class="container">
+        <div class="projets-header">
+          <div>
+            <p class="section-label reveal">Portfolio</p>
+            <h2 class="section-title reveal reveal-delay-1" id="projets-title">
+              Nos <span>réalisations</span>
+            </h2>
+          </div>
+          <div class="projets-filter" role="group" aria-label="Filtrer les projets">
+            <button class="filter-btn active" data-filter="all" aria-pressed="true">Tous</button>
+            <button class="filter-btn" data-filter="web" aria-pressed="false">Sites web</button>
+            <button class="filter-btn" data-filter="app" aria-pressed="false">Applications</button>
+            <button class="filter-btn" data-filter="ecom" aria-pressed="false">E-commerce</button>
+          </div>
+        </div>
+
+        <div class="projets-grid" id="projets-grid">
+          <!-- Card 1 - large -->
+          <article class="projet-card projet-card-1 reveal" data-category="app" aria-label="Projet: Dashboard Analytics Nordica">
+            <div class="projet-thumbnail">
+              <div class="projet-thumb-bg" style="background: linear-gradient(135deg, #0f0f2e 0%, #1a1a4e 50%, #0a1a3e 100%);">
+                <svg width="200" height="130" viewBox="0 0 200 130" fill="none" aria-hidden="true">
+                  <rect x="10" y="70" width="25" height="55" rx="3" fill="#5b6fff" opacity="0.7"/>
+                  <rect x="45" y="50" width="25" height="75" rx="3" fill="#5b6fff" opacity="0.8"/>
+                  <rect x="80" y="35" width="25" height="90" rx="3" fill="#5b6fff"/>
+                  <rect x="115" y="55" width="25" height="70" rx="3" fill="#a66cff" opacity="0.8"/>
+                  <rect x="150" y="20" width="25" height="105" rx="3" fill="#a66cff"/>
+                  <polyline points="22,65 57,45 92,30 127,50 162,15" fill="none" stroke="#ff6b6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="22"  cy="65"  r="4" fill="#ff6b6b"/>
+                  <circle cx="57"  cy="45"  r="4" fill="#ff6b6b"/>
+                  <circle cx="92"  cy="30"  r="4" fill="#ff6b6b"/>
+                  <circle cx="127" cy="50"  r="4" fill="#ff6b6b"/>
+                  <circle cx="162" cy="15"  r="4" fill="#ff6b6b"/>
+                  <rect x="10" y="10" width="80" height="18" rx="4" fill="rgba(255,255,255,0.06)"/>
+                  <rect x="12" y="14" width="40" height="10" rx="2" fill="rgba(91,111,255,0.4)"/>
+                </svg>
+              </div>
+              <div class="projet-thumb-overlay">
+                <div class="projet-thumb-cta">Voir le projet →</div>
+              </div>
+            </div>
+            <div class="projet-meta">
+              <p class="projet-category">Application web</p>
+              <h3 class="projet-name">Dashboard Analytics Nordica</h3>
+              <p class="projet-desc">Interface React avec graphiques SVG animés, temps réel via WebSockets et dark mode complet.</p>
+            </div>
+          </article>
+
+          <!-- Card 2 -->
+          <article class="projet-card projet-card-2 reveal reveal-delay-1" data-category="web" aria-label="Projet: Site Vitrine Studio Arborea">
+            <div class="projet-thumbnail">
+              <div class="projet-thumb-bg" style="background: linear-gradient(135deg, #0a1a10 0%, #102018 100%);">
+                <svg width="160" height="110" viewBox="0 0 160 110" fill="none" aria-hidden="true">
+                  <rect x="0" y="0" width="160" height="30" fill="rgba(107,203,119,0.08)"/>
+                  <rect x="10" y="8" width="60" height="14" rx="3" fill="rgba(107,203,119,0.3)"/>
+                  <circle cx="80" cy="65" r="30" fill="rgba(107,203,119,0.12)" stroke="#6bcb77" stroke-width="1.5"/>
+                  <path d="M65 65 Q80 45 95 65 Q80 85 65 65Z" fill="#6bcb77" opacity="0.6"/>
+                </svg>
+              </div>
+              <div class="projet-thumb-overlay">
+                <div class="projet-thumb-cta">Voir le projet →</div>
+              </div>
+            </div>
+            <div class="projet-meta">
+              <p class="projet-category">Site vitrine</p>
+              <h3 class="projet-name">Studio Arborea</h3>
+              <p class="projet-desc">Site d'architecture paysagère avec animations scroll-triggered et galerie interactive.</p>
+            </div>
+          </article>
+
+          <!-- Card 3 -->
+          <article class="projet-card projet-card-3 reveal reveal-delay-2" data-category="ecom" aria-label="Projet: Boutique Épices du Nord">
+            <div class="projet-thumbnail">
+              <div class="projet-thumb-bg" style="background: linear-gradient(135deg, #1a0a0a 0%, #2a0f0f 100%);">
+                <svg width="160" height="110" viewBox="0 0 160 110" fill="none" aria-hidden="true">
+                  <rect x="15" y="20" width="55" height="70" rx="6" fill="rgba(255,107,107,0.15)" stroke="rgba(255,107,107,0.3)" stroke-width="1"/>
+                  <rect x="90" y="30" width="55" height="70" rx="6" fill="rgba(255,107,107,0.15)" stroke="rgba(255,107,107,0.3)" stroke-width="1"/>
+                  <rect x="35" y="30" width="35" height="8" rx="2" fill="rgba(255,107,107,0.4)"/>
+                  <rect x="35" y="42" width="25" height="5" rx="2" fill="rgba(255,255,255,0.15)"/>
+                  <circle cx="42" cy="75" r="10" fill="rgba(255,107,107,0.3)" stroke="#ff6b6b" stroke-width="1"/>
+                </svg>
+              </div>
+              <div class="projet-thumb-overlay">
+                <div class="projet-thumb-cta">Voir le projet →</div>
+              </div>
+            </div>
+            <div class="projet-meta">
+              <p class="projet-category">E-commerce</p>
+              <h3 class="projet-name">Épices du Nord</h3>
+              <p class="projet-desc">Boutique en ligne avec panier dynamique, paiement Stripe et gestion d'inventaire.</p>
+            </div>
+          </article>
+
+          <!-- Card 4 - large -->
+          <article class="projet-card projet-card-4 reveal" data-category="app" aria-label="Projet: Plateforme SaaS KorvaSuite">
+            <div class="projet-thumbnail">
+              <div class="projet-thumb-bg" style="background: linear-gradient(135deg, #0a0a2e 0%, #1a0a2e 100%);">
+                <svg width="220" height="130" viewBox="0 0 220 130" fill="none" aria-hidden="true">
+                  <rect x="5" y="5" width="210" height="120" rx="8" fill="none" stroke="rgba(166,108,255,0.2)" stroke-width="1"/>
+                  <rect x="5" y="5" width="50" height="120" rx="8" fill="rgba(166,108,255,0.06)"/>
+                  <circle cx="30" cy="30" r="12" fill="rgba(166,108,255,0.2)" stroke="#a66cff" stroke-width="1"/>
+                  <rect x="15" y="55" width="30" height="6" rx="3" fill="rgba(166,108,255,0.3)"/>
+                  <rect x="15" y="68" width="25" height="6" rx="3" fill="rgba(255,255,255,0.1)"/>
+                  <rect x="15" y="81" width="28" height="6" rx="3" fill="rgba(255,255,255,0.1)"/>
+                  <rect x="15" y="94" width="22" height="6" rx="3" fill="rgba(255,255,255,0.1)"/>
+                  <rect x="70" y="15" width="135" height="35" rx="6" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+                  <rect x="80" y="24" width="80" height="8" rx="2" fill="rgba(166,108,255,0.3)"/>
+                  <rect x="170" y="24" width="20" height="8" rx="2" fill="rgba(166,108,255,0.15)"/>
+                  <rect x="70" y="60" width="63" height="55" rx="6" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+                  <rect x="143" y="60" width="63" height="55" rx="6" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+                  <circle cx="101" cy="95" r="18" fill="none" stroke="#5b6fff" stroke-width="6" stroke-dasharray="70 30"/>
+                  <text x="97" y="100" fill="white" font-size="10" font-family="JetBrains Mono, monospace">72%</text>
+                </svg>
+              </div>
+              <div class="projet-thumb-overlay">
+                <div class="projet-thumb-cta">Voir le projet →</div>
+              </div>
+            </div>
+            <div class="projet-meta">
+              <p class="projet-category">Plateforme SaaS</p>
+              <h3 class="projet-name">KorvaSuite — Gestion de projets</h3>
+              <p class="projet-desc">Application SaaS complète avec tableau Kanban, analytics en temps réel, authentification multi-tenant et API REST.</p>
+            </div>
+          </article>
+
+          <!-- Cards 5-7 small -->
+          <article class="projet-card projet-card-5 reveal" data-category="web" aria-label="Projet: Landing page Borealis Conseil">
+            <div class="projet-thumbnail">
+              <div class="projet-thumb-bg" style="background: linear-gradient(135deg, #0a1020 0%, #1a2040 100%); justify-content: center;">
+                <svg width="120" height="80" viewBox="0 0 120 80" fill="none" aria-hidden="true">
+                  <rect x="10" y="5" width="100" height="70" rx="6" fill="rgba(77,208,225,0.05)" stroke="rgba(77,208,225,0.2)" stroke-width="1"/>
+                  <rect x="20" y="15" width="80" height="12" rx="2" fill="rgba(77,208,225,0.2)"/>
+                  <rect x="20" y="32" width="55" height="6" rx="2" fill="rgba(255,255,255,0.1)"/>
+                  <rect x="20" y="42" width="45" height="6" rx="2" fill="rgba(255,255,255,0.07)"/>
+                  <rect x="20" y="56" width="40" height="12" rx="20" fill="rgba(77,208,225,0.3)"/>
+                </svg>
+              </div>
+              <div class="projet-thumb-overlay"><div class="projet-thumb-cta">Voir →</div></div>
+            </div>
+            <div class="projet-meta">
+              <p class="projet-category">Landing page</p>
+              <h3 class="projet-name">Borealis Conseil</h3>
+            </div>
+          </article>
+
+          <article class="projet-card projet-card-6 reveal reveal-delay-1" data-category="ecom" aria-label="Projet: Boutique MaisonRocher">
+            <div class="projet-thumbnail">
+              <div class="projet-thumb-bg" style="background: linear-gradient(135deg, #101020 0%, #202030 100%);">
+                <svg width="120" height="80" viewBox="0 0 120 80" fill="none" aria-hidden="true">
+                  <circle cx="40" cy="40" r="25" fill="rgba(255,217,61,0.1)" stroke="rgba(255,217,61,0.3)" stroke-width="1"/>
+                  <circle cx="80" cy="40" r="20" fill="rgba(255,217,61,0.07)" stroke="rgba(255,217,61,0.2)" stroke-width="1"/>
+                  <path d="M28 40 Q40 25 52 40 Q40 55 28 40Z" fill="rgba(255,217,61,0.5)"/>
+                </svg>
+              </div>
+              <div class="projet-thumb-overlay"><div class="projet-thumb-cta">Voir →</div></div>
+            </div>
+            <div class="projet-meta">
+              <p class="projet-category">E-commerce</p>
+              <h3 class="projet-name">MaisonRocher</h3>
+            </div>
+          </article>
+
+          <article class="projet-card projet-card-7 reveal reveal-delay-2" data-category="app" aria-label="Projet: Application Vigilant RH">
+            <div class="projet-thumbnail">
+              <div class="projet-thumb-bg" style="background: linear-gradient(135deg, #0a1520 0%, #102030 100%);">
+                <svg width="120" height="80" viewBox="0 0 120 80" fill="none" aria-hidden="true">
+                  <rect x="10" y="10" width="100" height="14" rx="3" fill="rgba(91,111,255,0.15)" stroke="rgba(91,111,255,0.2)" stroke-width="1"/>
+                  <rect x="10" y="30" width="45" height="40" rx="3" fill="rgba(91,111,255,0.1)" stroke="rgba(91,111,255,0.15)" stroke-width="1"/>
+                  <rect x="62" y="30" width="48" height="18" rx="3" fill="rgba(91,111,255,0.1)" stroke="rgba(91,111,255,0.15)" stroke-width="1"/>
+                  <rect x="62" y="52" width="48" height="18" rx="3" fill="rgba(91,111,255,0.1)" stroke="rgba(91,111,255,0.15)" stroke-width="1"/>
+                  <circle cx="32" cy="50" r="10" fill="none" stroke="#5b6fff" stroke-width="3" stroke-dasharray="40 24"/>
+                </svg>
+              </div>
+              <div class="projet-thumb-overlay"><div class="projet-thumb-cta">Voir →</div></div>
+            </div>
+            <div class="projet-meta">
+              <p class="projet-category">Application</p>
+              <h3 class="projet-name">Vigilant RH</h3>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- BLOC 9: COMPÉTENCES                                           -->
+    <!-- ============================================================ -->
+    <section id="competences" class="section" aria-labelledby="comp-title">
+      <div class="container">
+        <div class="comp-inner">
+          <div>
+            <p class="section-label reveal">Notre expertise</p>
+            <h2 class="section-title reveal reveal-delay-1" id="comp-title">
+              Maîtrise <span>technique</span>
+            </h2>
+            <p class="section-desc reveal reveal-delay-2">
+              7 ans de perfectionnement dans chaque aspect du développement web moderne. 
+              Chaque barre représente notre niveau de confiance réel — pas du marketing.
+            </p>
+
+            <div class="skill-bars reveal reveal-delay-3" id="skill-bars">
+              <div class="skill-bar-item">
+                <div class="skill-bar-header">
+                  <span class="skill-bar-name">HTML5 Sémantique & Accessibilité</span>
+                  <span class="skill-bar-pct">98%</span>
+                </div>
+                <div class="skill-bar-track" role="progressbar" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100" aria-label="HTML5: 98%">
+                  <div class="skill-bar-fill" data-pct="98"></div>
+                </div>
+              </div>
+              <div class="skill-bar-item">
+                <div class="skill-bar-header">
+                  <span class="skill-bar-name">CSS3 Avancé (Grid, Animations, Variables)</span>
+                  <span class="skill-bar-pct">96%</span>
+                </div>
+                <div class="skill-bar-track" role="progressbar" aria-valuenow="96" aria-valuemin="0" aria-valuemax="100" aria-label="CSS3: 96%">
+                  <div class="skill-bar-fill" data-pct="96"></div>
+                </div>
+              </div>
+              <div class="skill-bar-item">
+                <div class="skill-bar-header">
+                  <span class="skill-bar-name">JavaScript ES2024+ & Web APIs</span>
+                  <span class="skill-bar-pct">94%</span>
+                </div>
+                <div class="skill-bar-track" role="progressbar" aria-valuenow="94" aria-valuemin="0" aria-valuemax="100" aria-label="JavaScript: 94%">
+                  <div class="skill-bar-fill" data-pct="94"></div>
+                </div>
+              </div>
+              <div class="skill-bar-item">
+                <div class="skill-bar-header">
+                  <span class="skill-bar-name">React / Next.js / TypeScript</span>
+                  <span class="skill-bar-pct">92%</span>
+                </div>
+                <div class="skill-bar-track" role="progressbar" aria-valuenow="92" aria-valuemin="0" aria-valuemax="100" aria-label="React: 92%">
+                  <div class="skill-bar-fill" data-pct="92"></div>
+                </div>
+              </div>
+              <div class="skill-bar-item">
+                <div class="skill-bar-header">
+                  <span class="skill-bar-name">Performance & Core Web Vitals</span>
+                  <span class="skill-bar-pct">97%</span>
+                </div>
+                <div class="skill-bar-track" role="progressbar" aria-valuenow="97" aria-valuemin="0" aria-valuemax="100" aria-label="Performance: 97%">
+                  <div class="skill-bar-fill" data-pct="97"></div>
+                </div>
+              </div>
+              <div class="skill-bar-item">
+                <div class="skill-bar-header">
+                  <span class="skill-bar-name">SEO Technique & Schema.org</span>
+                  <span class="skill-bar-pct">90%</span>
+                </div>
+                <div class="skill-bar-track" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" aria-label="SEO: 90%">
+                  <div class="skill-bar-fill" data-pct="90"></div>
+                </div>
+              </div>
+              <div class="skill-bar-item">
+                <div class="skill-bar-header">
+                  <span class="skill-bar-name">UI/UX Design (Figma)</span>
+                  <span class="skill-bar-pct">88%</span>
+                </div>
+                <div class="skill-bar-track" role="progressbar" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100" aria-label="Figma: 88%">
+                  <div class="skill-bar-fill" data-pct="88"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Radar chart SVG -->
+          <div class="reveal reveal-delay-2">
+            <div style="background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 2rem;">
+              <p class="metrics-chart-title" style="margin-bottom: 1.5rem;">Profil de compétences — Radar</p>
+              <svg viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagramme radar des compétences techniques" style="width:100%;max-width:300px;display:block;margin:0 auto;">
+                <defs>
+                  <linearGradient id="radarGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#5b6fff" stop-opacity="0.35"/>
+                    <stop offset="100%" stop-color="#a66cff" stop-opacity="0.2"/>
+                  </linearGradient>
+                </defs>
+                <!-- Axes grille -->
+                <polygon points="150,30 230,80 230,200 150,250 70,200 70,80" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+                <polygon points="150,60 210,97 210,183 150,220 90,183 90,97"  fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+                <polygon points="150,90 190,115 190,165 150,190 110,165 110,115" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+                <polygon points="150,120 170,133 170,147 150,160 130,147 130,133" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+                <!-- Lignes d'axe -->
+                <line x1="150" y1="140" x2="150" y2="30"  stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                <line x1="150" y1="140" x2="230" y2="80"  stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                <line x1="150" y1="140" x2="230" y2="200" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                <line x1="150" y1="140" x2="150" y2="250" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                <line x1="150" y1="140" x2="70"  y2="200" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                <line x1="150" y1="140" x2="70"  y2="80"  stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+                <!-- Données (98% HTML, 96% CSS, 94% JS, 92% React, 97% Perf, 90% SEO) -->
+                <polygon id="radar-poly"
+                  points="150,32 227,81 228,198 150,248 73,197 73,81"
+                  fill="url(#radarGrad)"
+                  stroke="#5b6fff"
+                  stroke-width="2"
+                  stroke-linejoin="round"
+                  opacity="0"
+                  style="transition: opacity 1s ease 0.5s;"
+                />
+                <!-- Points -->
+                <circle cx="150" cy="32"  r="4" fill="#5b6fff" opacity="0"/>
+                <circle cx="227" cy="81"  r="4" fill="#5b6fff" opacity="0"/>
+                <circle cx="228" cy="198" r="4" fill="#5b6fff" opacity="0"/>
+                <circle cx="150" cy="248" r="4" fill="#5b6fff" opacity="0"/>
+                <circle cx="73"  cy="197" r="4" fill="#5b6fff" opacity="0"/>
+                <circle cx="73"  cy="81"  r="4" fill="#5b6fff" opacity="0"/>
+                <!-- Labels -->
+                <text x="150" y="20"  fill="rgba(232,232,240,0.5)" font-size="10" text-anchor="middle" font-family="DM Sans, sans-serif">HTML5</text>
+                <text x="244" y="78"  fill="rgba(232,232,240,0.5)" font-size="10" text-anchor="start"  font-family="DM Sans, sans-serif">CSS3</text>
+                <text x="244" y="208" fill="rgba(232,232,240,0.5)" font-size="10" text-anchor="start"  font-family="DM Sans, sans-serif">JS</text>
+                <text x="150" y="268" fill="rgba(232,232,240,0.5)" font-size="10" text-anchor="middle" font-family="DM Sans, sans-serif">React</text>
+                <text x="56"  y="208" fill="rgba(232,232,240,0.5)" font-size="10" text-anchor="end"    font-family="DM Sans, sans-serif">Perf.</text>
+                <text x="56"  y="78"  fill="rgba(232,232,240,0.5)" font-size="10" text-anchor="end"    font-family="DM Sans, sans-serif">SEO</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- BLOC 10: TÉMOIGNAGES                                          -->
+    <!-- ============================================================ -->
+    <section id="temoignages" class="section" aria-labelledby="temo-title">
+      <div class="container">
+        <div class="temoignages-header">
+          <p class="section-label reveal">Ce qu'ils disent</p>
+          <h2 class="section-title reveal reveal-delay-1" id="temo-title">Nos clients <span>parlent</span></h2>
+          <p class="section-desc reveal reveal-delay-2">
+            Des partenariats durables basés sur la confiance, la transparence et des résultats mesurables.
+          </p>
+        </div>
+
+        <div class="temoignages-track-wrap reveal">
+          <div class="temoignages-track" id="temo-track">
+            <article class="temoignage-card" aria-label="Témoignage de Marie-Ève Tremblay">
+              <div class="temo-quote-icon" aria-hidden="true">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor"><path d="M10 20Q6 20 4 17.5T2 11Q2 7 5 4.5T12 2V6Q9 6 7.5 7.5T6 11H10V20ZM22 20Q18 20 16 17.5T14 11Q14 7 17 4.5T24 2V6Q21 6 19.5 7.5T18 11H22V20Z"/></svg>
+              </div>
+              <div class="temo-stars" aria-label="5 étoiles sur 5">
+                <span class="temo-star" aria-hidden="true">★</span><span class="temo-star" aria-hidden="true">★</span><span class="temo-star" aria-hidden="true">★</span><span class="temo-star" aria-hidden="true">★</span><span class="temo-star" aria-hidden="true">★</span>
+              </div>
+              <p class="temo-text">
+                «&nbsp;CodeNord a transformé notre présence en ligne. Notre trafic organique a augmenté de 312&nbsp;% en 8 mois, et notre taux de conversion a doublé. Leur expertise CSS et React est vraiment au-dessus du lot. Chaque détail était parfait.&nbsp;»
+              </p>
+              <div class="temo-author">
+                <div class="temo-avatar" style="background: linear-gradient(135deg, #5b6fff, #a66cff);" aria-hidden="true">ME</div>
+                <div>
+                  <div class="temo-name">Marie-Ève Tremblay</div>
+                  <div class="temo-role">PDG — Nordica Technologies, Montréal</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="temoignage-card" aria-label="Témoignage de Jean-Philippe Bouchard">
+              <div class="temo-quote-icon" aria-hidden="true">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor"><path d="M10 20Q6 20 4 17.5T2 11Q2 7 5 4.5T12 2V6Q9 6 7.5 7.5T6 11H10V20ZM22 20Q18 20 16 17.5T14 11Q14 7 17 4.5T24 2V6Q21 6 19.5 7.5T18 11H22V20Z"/></svg>
+              </div>
+              <div class="temo-stars" aria-label="5 étoiles sur 5">
+                <span class="temo-star" aria-hidden="true">★</span><span class="temo-star" aria-hidden="true">★</span><span class="temo-star" aria-hidden="true">★</span><span class="temo-star" aria-hidden="true">★</span><span class="temo-star" aria-hidden="true">★</span>
+              </div>
+              <p class="temo-text">
+                «&nbsp;Notre score Lighthouse est passé de 45 à 98. Le temps de chargement a été réduit de 4,2s à 0,8s. L'équipe CodeNord connaît leur métier comme personne. Livraison en 3 semaines, dans les budgets, sans surprise.&nbsp;»
+              </p>
+              <div class="temo-author">
+                <div class="temo-avatar" style="background: linear-gradient(135deg, #ff6b6b, #ffd93d);" aria-hidden="true">JP</div>
+                <div>
+                  <div class="temo-name">Jean-Philippe Bouchard</div>
+                  <div class="temo-role">Directeur technique — KorvaSuite</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="temoignage-card" aria-label="Témoignage de Sophie Larivière">
+              <div class="temo-quote-icon" aria-hidden="true">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor"><path d="M10 20Q6 20 4 17.5T2 11Q2 7 5 4.5T12 2V6Q9 6 7.5 7.5T6 11H10V20ZM22 20Q18 20 16 17.5T14 11Q14 7 17 4.5T24 2V6Q21 6 19.5 7.5T18 11H22V20Z"/></svg>
+              </div>
+              <div class="temo-stars" aria-label="5 étoiles sur 5">
+                <span class="temo-star" aria-hidden="true">★</span><span class="temo-star" aria-hidden="true">★</span><span class="temo-star" aria-hidden="true">★</span><span class="temo-star" aria-hidden="true">★</span><span class="temo-star" aria-hidden="true">★</span>
+              </div>
+              <p class="temo-text">
+                «&nbsp;Le design de notre boutique est tout simplement magnifique. L'attention aux détails — les micro-animations, le dark mode, la navigation mobile — chaque élément a été pensé. Nos clients nous en parlent encore. Résultat: +67% ventes.&nbsp;»
+              </p>
+              <div class="temo-author">
+                <div class="temo-avatar" style="background: linear-gradient(135deg, #6bcb77, #4dd0e1);" aria-hidden="true">SL</div>
+                <div>
+                  <div class="temo-name">Sophie Larivière</div>
+                  <div class="temo-role">Fondatrice — Épices du Nord</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="temoignage-card" aria-label="Témoignage de Alexandre Gagnon">
+              <div class="temo-quote-icon" aria-hidden="true">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="currentColor"><path d="M10 20Q6 20 4 17.5T2 11Q2 7 5 4.5T12 2V6Q9 6 7.5 7.5T6 11H10V20ZM22 20Q18 20 16 17.5T14 11Q14 7 17 4.5T24 2V6Q21 6 19.5 7.5T18 11H22V20Z"/></svg>
+              </div>
+              <div class="temo-stars" aria-label="5 étoiles sur 5">
+                <span class="temo-star" aria-hidden="true">★</span><span class="temo-star" aria-hidden="true">★</span><span class="temo-star" aria-hidden="true">★</span><span class="temo-star" aria-hidden="true">★</span><span class="temo-star" aria-hidden="true">★</span>
+              </div>
+              <p class="temo-text">
+                «&nbsp;J'ai travaillé avec plusieurs agences web avant CodeNord. Aucune n'arrive à la même qualité technique. Leur code est propre, documenté, et maintenable. Un vrai plaisir pour notre équipe interne de prendre la relève.&nbsp;»
+              </p>
+              <div class="temo-author">
+                <div class="temo-avatar" style="background: linear-gradient(135deg, #a66cff, #5b6fff);" aria-hidden="true">AG</div>
+                <div>
+                  <div class="temo-name">Alexandre Gagnon</div>
+                  <div class="temo-role">VP Technologie — Borealis Conseil</div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="temo-controls" aria-label="Contrôles du carrousel">
+          <button class="temo-btn" id="temo-prev" aria-label="Témoignage précédent">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 4L6 8L10 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="temo-dots" id="temo-dots" role="tablist" aria-label="Navigation témoignages">
+            <div class="temo-dot active" role="tab" aria-selected="true"  tabindex="0" data-index="0" aria-label="Témoignage 1"></div>
+            <div class="temo-dot"        role="tab" aria-selected="false" tabindex="-1" data-index="1" aria-label="Témoignage 2"></div>
+            <div class="temo-dot"        role="tab" aria-selected="false" tabindex="-1" data-index="2" aria-label="Témoignage 3"></div>
+            <div class="temo-dot"        role="tab" aria-selected="false" tabindex="-1" data-index="3" aria-label="Témoignage 4"></div>
+          </div>
+          <button class="temo-btn" id="temo-next" aria-label="Témoignage suivant">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- BLOC 11: TARIFS                                               -->
+    <!-- ============================================================ -->
+    <section id="tarifs" class="section" aria-labelledby="tarifs-title">
+      <div class="container">
+        <div class="tarifs-header">
+          <p class="section-label reveal">Investissement</p>
+          <h2 class="section-title reveal reveal-delay-1" id="tarifs-title">
+            Des forfaits <span>clairs</span>
+          </h2>
+          <p class="section-desc reveal reveal-delay-2">
+            Pas de surprise, pas de frais cachés. Des prix fixes, des livrables précis, 
+            et une garantie de satisfaction.
+          </p>
+          <div class="tarifs-toggle" role="group" aria-label="Basculer entre facturation mensuelle et annuelle">
+            <span class="toggle-label">Mensuel</span>
+            <div class="toggle-switch" id="billing-toggle" role="switch" aria-checked="false" tabindex="0" aria-label="Activer la facturation annuelle">
+              <div class="toggle-switch-knob"></div>
+            </div>
+            <span class="toggle-label">Annuel</span>
+            <span class="toggle-badge">-20%</span>
+          </div>
+        </div>
+
+        <div class="tarifs-grid">
+          <!-- Starter -->
+          <div class="tarif-card reveal">
+            <p class="tarif-name">Essentiel</p>
+            <div class="tarif-price" id="price-starter">
+              <sup>$</sup><span class="price-val" data-monthly="3500" data-annual="2800">3&nbsp;500</span>
+              <div class="annual-note">CAD — paiement unique</div>
+            </div>
+            <p class="tarif-desc">Idéal pour les PME, professionnels indépendants et startups démarrant leur présence web.</p>
+            <ul class="tarif-features">
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> Site vitrine 5 pages</li>
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> Design UI/UX sur mesure</li>
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> Responsive mobile-first</li>
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> SEO technique de base</li>
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> Formulaire de contact</li>
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> 14 jours de support</li>
+              <li class="tarif-feature disabled"><span class="tarif-feature-icon" aria-hidden="true">✗</span> Analytics avancés</li>
+              <li class="tarif-feature disabled"><span class="tarif-feature-icon" aria-hidden="true">✗</span> CMS intégré</li>
+            </ul>
+            <button class="tarif-cta tarif-cta-outline" onclick="document.getElementById('modal-contact').showModal()" aria-label="Commencer avec le forfait Essentiel">
+              Commencer →
+            </button>
+          </div>
+
+          <!-- Pro - Popular -->
+          <div class="tarif-card popular reveal reveal-delay-1">
+            <div class="popular-badge" aria-label="Forfait le plus populaire">⭐ Le plus populaire</div>
+            <p class="tarif-name">Professionnel</p>
+            <div class="tarif-price" id="price-pro">
+              <sup>$</sup><span class="price-val" data-monthly="7500" data-annual="6000">7&nbsp;500</span>
+              <div class="annual-note">CAD — paiement unique</div>
+            </div>
+            <p class="tarif-desc">La solution complète pour les entreprises voulant un site qui génère des leads et se démarque.</p>
+            <ul class="tarif-features">
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> Site complet 10–15 pages</li>
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> Design premium + animations</li>
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> CMS Sanity/Contentful intégré</li>
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> SEO technique avancé + Schema</li>
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> Analytics GA4 + Hotjar</li>
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> Score Lighthouse 95+ garanti</li>
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> 30 jours de support</li>
+              <li class="tarif-feature disabled"><span class="tarif-feature-icon" aria-hidden="true">✗</span> Application web complète</li>
+            </ul>
+            <button class="tarif-cta tarif-cta-solid" onclick="document.getElementById('modal-contact').showModal()" aria-label="Commencer avec le forfait Professionnel">
+              Commencer →
+            </button>
+          </div>
+
+          <!-- Enterprise -->
+          <div class="tarif-card reveal reveal-delay-2">
+            <p class="tarif-name">Entreprise</p>
+            <div class="tarif-price">
+              Sur mesure
+              <div class="annual-note">Devis personnalisé</div>
+            </div>
+            <p class="tarif-desc">Applications web complexes, SaaS, portails clients — projets sans compromis.</p>
+            <ul class="tarif-features">
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> Application React/Next.js complète</li>
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> Architecture cloud (Vercel/AWS)</li>
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> Authentification & base de données</li>
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> API REST ou GraphQL</li>
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> Tests automatisés (Jest/Playwright)</li>
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> Documentation technique complète</li>
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> Formation équipe interne</li>
+              <li class="tarif-feature"><span class="tarif-feature-icon" aria-hidden="true">✓</span> Support 90 jours inclus</li>
+            </ul>
+            <button class="tarif-cta tarif-cta-outline" onclick="document.getElementById('modal-contact').showModal()" aria-label="Demander un devis pour le forfait Entreprise">
+              Demander un devis →
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- BLOC 12: FAQ                                                  -->
+    <!-- ============================================================ -->
+    <section id="faq" class="section" aria-labelledby="faq-title">
+      <div class="container">
+        <div class="faq-inner">
+          <div>
+            <p class="section-label reveal">Questions fréquentes</p>
+            <h2 class="section-title reveal reveal-delay-1" id="faq-title">
+              Vous avez des<br><span>questions ?</span>
+            </h2>
+            <p class="section-desc reveal reveal-delay-2" style="margin-bottom: 2rem;">
+              Vous ne trouvez pas la réponse ici ? Écrivez-nous directement et nous vous répondrons dans les 24h.
+            </p>
+            <button class="btn-ghost reveal reveal-delay-3" onclick="document.getElementById('modal-contact').showModal()" style="display:inline-flex;">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M14 10.667A1.333 1.333 0 0112.667 12H4.667L2 14.667V3.333A1.333 1.333 0 013.333 2H12.667A1.333 1.333 0 0114 3.333V10.667Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+              Nous écrire
+            </button>
+          </div>
+
+          <div class="faq-list reveal reveal-delay-2" id="faq-list">
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                Combien de temps pour livrer un site web ?
+                <div class="faq-arrow" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2V10M2 6H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+              </button>
+              <div class="faq-answer">
+                <p class="faq-answer-inner">Un site vitrine (forfait Essentiel) est livré en 2 à 3 semaines. Le forfait Professionnel nécessite généralement 4 à 6 semaines. Les projets d'application web sur mesure varient selon la complexité — nous définissons ensemble un calendrier précis lors de la phase de découverte. Nous n'avons jamais manqué une date de livraison.</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                Est-ce que je peux modifier mon site après livraison ?
+                <div class="faq-arrow" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2V10M2 6H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+              </button>
+              <div class="faq-answer">
+                <p class="faq-answer-inner">Absolument. Le forfait Professionnel inclut l'intégration d'un CMS (Sanity ou Contentful) pour vous permettre de modifier textes, images et pages sans toucher au code. Pour le forfait Essentiel, nous offrons une formation d'une heure et une documentation pour les modifications courantes. Des heures de support supplémentaires sont disponibles à 120&nbsp;$/h.</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                Mon site sera-t-il accessible sur mobile ?
+                <div class="faq-arrow" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2V10M2 6H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+              </button>
+              <div class="faq-answer">
+                <p class="faq-answer-inner">100&nbsp;% garanti. Nous développons en Mobile-First — le design est d'abord optimisé pour les écrans de 375px, puis adapté aux tablettes et ordinateurs via CSS Grid, Flexbox et des media queries précises. Nous testons sur iOS (Safari), Android (Chrome), Firefox et Edge avant toute livraison.</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                Quelle est votre politique de révisions ?
+                <div class="faq-arrow" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2V10M2 6H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+              </button>
+              <div class="faq-answer">
+                <p class="faq-answer-inner">Chaque forfait inclut 2 rondes de révisions après la présentation des maquettes Figma, et 1 ronde de révisions après le développement. Cette politique couvre les ajustements de design, textes et structure — pas les changements de scope majeurs. Votre satisfaction est notre priorité et nous n'avons jamais eu de client insatisfait à la livraison finale.</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                Comment se déroule le paiement ?
+                <div class="faq-arrow" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2V10M2 6H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+              </button>
+              <div class="faq-answer">
+                <p class="faq-answer-inner">50&nbsp;% à la signature du contrat, 50&nbsp;% à la livraison. Nous acceptons le virement bancaire et les cartes de crédit via Stripe. Pour les projets entreprise, des modalités de paiement en 3 versements sont disponibles. Toutes les transactions incluent les taxes applicables au Québec (TPS + TVQ).</p>
+              </div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                Travaillez-vous avec des clients hors Québec ?
+                <div class="faq-arrow" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2V10M2 6H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </div>
+              </button>
+              <div class="faq-answer">
+                <p class="faq-answer-inner">Oui ! La majorité de notre collaboration se fait à distance via Figma, Notion et des appels vidéo. Nous avons des clients partout au Canada, aux États-Unis et en Europe francophone. Nos processus sont entièrement optimisés pour la collaboration à distance. Nous sommes disponibles en français et en anglais.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- BLOC 13: CTA FINAL                                            -->
+    <!-- ============================================================ -->
+    <section id="cta-section" class="section" aria-labelledby="cta-title">
+      <div class="container">
+        <div class="cta-card reveal">
+          <p class="section-label" style="justify-content: center;">Prêt à commencer ?</p>
+          <h2 class="cta-title" id="cta-title">
+            Votre projet mérite<br><span style="background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">le meilleur.</span>
+          </h2>
+          <p class="cta-desc">
+            Consultation gratuite de 30 minutes pour évaluer votre projet, 
+            définir les objectifs et estimer l'investissement. Sans engagement.
+          </p>
+          <div class="cta-actions">
+            <button class="btn-primary" onclick="document.getElementById('modal-contact').showModal()" aria-label="Démarrer votre projet gratuitement">
+              <span>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Consultation gratuite
+              </span>
+            </button>
+            <a href="mailto:hello@codenord.ca" class="btn-ghost">hello@codenord.ca</a>
+          </div>
+          <div class="cta-trust">
+            <div class="cta-trust-item">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 8L6 12L14 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Réponse en moins de 24h
+            </div>
+            <div class="cta-trust-item">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 8L6 12L14 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Devis gratuit et sans engagement
+            </div>
+            <div class="cta-trust-item">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 8L6 12L14 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Garantie satisfaction
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================================================ -->
+  <!-- BLOC 14: FOOTER                                               -->
+  <!-- ============================================================ -->
+  <footer id="footer" aria-labelledby="footer-title">
+    <div class="container">
+      <div class="footer-main">
+        <div>
+          <a href="#hero" class="nav-logo" aria-label="CodeNord Studio — Retour en haut" id="footer-title">
+            <div class="nav-logo-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path d="M3 9L7 5L11 9L7 13L3 9Z" fill="white" fill-opacity="0.9"/>
+                <path d="M9 5L13 1L17 5L13 9L9 5Z" fill="white" fill-opacity="0.6"/>
+                <path d="M9 13L13 9L17 13L13 17L9 13Z" fill="white" fill-opacity="0.6"/>
+              </svg>
+            </div>
+            <span class="nav-logo-text">CodeNord</span>
+          </a>
+          <p class="footer-brand-desc">
+            Agence web premium à Montréal, Québec. Nous construisons des expériences numériques 
+            haute performance depuis 2017. Fiers partenaires de +50 entreprises québécoises.
+          </p>
+          <div class="footer-socials" role="list" aria-label="Réseaux sociaux">
+            <a href="#" class="social-btn" aria-label="LinkedIn CodeNord Studio" role="listitem">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="#" class="social-btn" aria-label="GitHub CodeNord Studio" role="listitem">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            </a>
+            <a href="#" class="social-btn" aria-label="Twitter CodeNord Studio" role="listitem">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+            </a>
+            <a href="#" class="social-btn" aria-label="Dribbble CodeNord Studio" role="listitem">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="footer-col-title">Services</h3>
+          <nav class="footer-links" aria-label="Liens services">
+            <a href="#services" class="footer-link">Design UI/UX</a>
+            <a href="#services" class="footer-link">Développement Frontend</a>
+            <a href="#services" class="footer-link">Applications React</a>
+            <a href="#services" class="footer-link">Performance Web</a>
+            <a href="#services" class="footer-link">SEO Technique</a>
+            <a href="#services" class="footer-link">Accessibilité WCAG</a>
+          </nav>
+        </div>
+
+        <div>
+          <h3 class="footer-col-title">Studio</h3>
+          <nav class="footer-links" aria-label="Liens studio">
+            <a href="#projets"     class="footer-link">Portfolio</a>
+            <a href="#processus"   class="footer-link">Notre processus</a>
+            <a href="#competences" class="footer-link">Expertise</a>
+            <a href="#tarifs"      class="footer-link">Tarifs</a>
+            <a href="#temoignages" class="footer-link">Témoignages</a>
+          </nav>
+        </div>
+
+        <div>
+          <h3 class="footer-col-title">Contact</h3>
+          <div class="footer-links">
+            <span class="footer-link">📍 Montréal, QC, Canada</span>
+            <a href="mailto:hello@codenord.ca" class="footer-link">hello@codenord.ca</a>
+            <a href="tel:+15142223456" class="footer-link">+1 (514) 222-3456</a>
+            <button class="footer-link" onclick="document.getElementById('modal-contact').showModal()" style="background:none;border:none;text-align:left;cursor:none;padding:0;">
+              Demander un devis →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p class="footer-copy">
+          © <span id="footer-year">2024</span> CodeNord Studio Inc. — Tous droits réservés.
+          <span style="color: var(--color-primary);">Fait avec ❤️ à Montréal</span>
+        </p>
+        <nav class="footer-legal" aria-label="Liens légaux">
+          <a href="#">Politique de confidentialité</a>
+          <a href="#">Conditions d'utilisation</a>
+          <a href="#">RGPD / LPRPDE</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================ -->
+  <!-- BLOC 15: MODALES & DIALOGS                                    -->
+  <!-- ============================================================ -->
+  <dialog id="modal-contact" aria-labelledby="modal-title" aria-modal="true">
+    <div class="modal-inner">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-title">Démarrer un projet</h2>
+        <button class="modal-close" aria-label="Fermer la modale" onclick="document.getElementById('modal-contact').close()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 1L13 13M13 1L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <form id="contact-form" novalidate aria-label="Formulaire de contact">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="contact-prenom">Prénom <span aria-hidden="true">*</span></label>
+            <input class="form-input" type="text" id="contact-prenom" name="prenom" placeholder="Marie-Ève" required autocomplete="given-name" aria-required="true"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contact-nom">Nom <span aria-hidden="true">*</span></label>
+            <input class="form-input" type="text" id="contact-nom" name="nom" placeholder="Tremblay" required autocomplete="family-name" aria-required="true"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contact-email">Adresse courriel <span aria-hidden="true">*</span></label>
+          <input class="form-input" type="email" id="contact-email" name="email" placeholder="marie@entreprise.ca" required autocomplete="email" aria-required="true"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contact-service">Type de projet</label>
+          <select class="form-select" id="contact-service" name="service" aria-label="Sélectionner le type de projet">
+            <option value="">Sélectionner…</option>
+            <option value="vitrine">Site vitrine</option>
+            <option value="ecom">Boutique en ligne</option>
+            <option value="app">Application web</option>
+            <option value="autre">Autre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contact-message">Description du projet</label>
+          <textarea class="form-textarea" id="contact-message" name="message" placeholder="Décrivez brièvement votre projet — objectifs, audience cible, délai souhaité…" aria-label="Message de description du projet"></textarea>
+        </div>
+        <button type="submit" class="form-submit" id="form-submit-btn">
+          Envoyer ma demande →
+        </button>
+        <p id="form-success" style="display:none; text-align:center; color: var(--color-green); margin-top:1rem; font-size:0.9rem;" role="status" aria-live="polite">
+          ✓ Message envoyé ! Nous vous répondrons dans les 24h.
+        </p>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- ============================================================ -->
+  <!-- BLOC 16: ÉLÉMENTS FLOTTANTS                                  -->
+  <!-- ============================================================ -->
+  <!-- Cookie Banner -->
+  <div id="cookie-banner" role="dialog" aria-labelledby="cookie-title" aria-modal="false">
+    <p class="cookie-text" id="cookie-title">
+      Nous utilisons des cookies pour améliorer votre expérience et analyser notre trafic. 
+      <a href="#">En savoir plus</a> — conforme <abbr title="Règlement Général sur la Protection des Données">RGPD</abbr> & <abbr title="Loi sur la protection des renseignements personnels dans le secteur privé">LPRPDE</abbr>.
+    </p>
+    <div class="cookie-btns">
+      <button class="cookie-decline" id="cookie-decline" aria-label="Refuser les cookies non essentiels">Refuser</button>
+      <button class="cookie-accept" id="cookie-accept" aria-label="Accepter tous les cookies">Accepter</button>
+    </div>
+  </div>
+
+  <!-- Back to top -->
+  <button id="back-to-top" aria-label="Revenir en haut de la page">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+      <path d="M9 14V4M4 9L9 4L14 9" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <!-- ============================================================ -->
+  <!-- BLOC 17: JAVASCRIPT                                           -->
+  <!-- ============================================================ -->
+  <script>
+    'use strict';
+
+    /* ============================================================
+       CONFIG — Constantes globales
+    ============================================================ */
+    const CONFIG = {
+      PRELOADER_DURATION:  2000,
+      COOKIE_DELAY:        2500,
+      TEMO_CARDS_VISIBLE:  3,
+      TEMO_AUTO_INTERVAL:  5000,
+      COUNTER_DURATION:    1800,
+      SCROLL_THRESHOLD:    60,
+    };
+
+    /* ============================================================
+       UTILITAIRES
+    ============================================================ */
+    /**
+     * Sélecteur querySelector raccourci
+     * @param {string} selector - Sélecteur CSS
+     * @param {Element} [ctx=document] - Contexte de recherche
+     * @returns {Element|null}
+     */
+    const qs = (selector, ctx = document) => ctx.querySelector(selector);
+
+    /**
+     * Sélecteur querySelectorAll raccourci
+     * @param {string} selector - Sélecteur CSS
+     * @param {Element} [ctx=document] - Contexte de recherche
+     * @returns {NodeList}
+     */
+    const qsa = (selector, ctx = document) => ctx.querySelectorAll(selector);
+
+    /**
+     * Attache un écouteur d'événement de manière sécurisée
+     * @param {Element|null} el - Élément cible
+     * @param {string} event - Nom de l'événement
+     * @param {Function} handler - Gestionnaire d'événement
+     * @param {Object} [options={}] - Options de l'écouteur
+     */
+    const on = (el, event, handler, options = {}) => {
+      if (el) el.addEventListener(event, handler, options);
+    };
+
+    /**
+     * Easing function: easeOutCubic
+     * @param {number} t - Progression (0 à 1)
+     * @returns {number} - Valeur interpolée
+     */
+    const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+
+    /**
+     * Anime un nombre de 0 vers une valeur cible
+     * @param {Element} el - Élément DOM cible
+     * @param {number} target - Valeur finale
+     * @param {number} [duration=1800] - Durée en ms
+     */
+    const animateCounter = (el, target, duration = CONFIG.COUNTER_DURATION) => {
+      if (!el) return;
+      const startTime = performance.now();
+      const hasPlus   = String(target) === '50'; // Affiche + pour 50
+      const update = (currentTime) => {
+        const elapsed  = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased    = easeOutCubic(progress);
+        const current  = Math.floor(eased * target);
+        el.textContent = current + (hasPlus && progress === 1 ? '+' : '');
+        if (progress < 1) requestAnimationFrame(update);
+        else el.textContent = target + (hasPlus ? '+' : '');
+      };
+      requestAnimationFrame(update);
+    };
+
+    /* ============================================================
+       MODULE: PRÉCHARGEUR
+    ============================================================ */
+    const PreloaderModule = (() => {
+      const preloader = qs('#preloader');
+      const pctEl     = qs('#preloader-pct');
+      let   counter   = 0;
+
+      const tick = () => {
+        counter = Math.min(counter + Math.random() * 12 + 3, 100);
+        if (pctEl) pctEl.textContent = Math.floor(counter) + '%';
+        if (counter < 100) setTimeout(tick, 120);
+      };
+
+      const hide = () => {
+        if (preloader) {
+          preloader.classList.add('hidden');
+          document.body.style.overflow = '';
+          setTimeout(() => preloader.remove(), 700);
+        }
+      };
+
+      const init = () => {
+        document.body.style.overflow = 'hidden';
+        tick();
+        setTimeout(hide, CONFIG.PRELOADER_DURATION);
+      };
+
+      return { init };
+    })();
+
+    /* ============================================================
+       MODULE: CURSEUR PERSONNALISÉ
+    ============================================================ */
+    const CursorModule = (() => {
+      const dot  = qs('#cursor-dot');
+      const ring = qs('#cursor-ring');
+      let   mx   = 0;
+      let   my   = 0;
+      let   rx   = 0;
+      let   ry   = 0;
+
+      const lerp = (a, b, n) => a + (b - a) * n;
+
+      const update = () => {
+        if (ring) {
+          rx = lerp(rx, mx, 0.12);
+          ry = lerp(ry, my, 0.12);
+          ring.style.left = rx + 'px';
+          ring.style.top  = ry + 'px';
+        }
+        requestAnimationFrame(update);
+      };
+
+      const init = () => {
+        if (!dot || !ring) return;
+        on(document, 'mousemove', (e) => {
+          mx = e.clientX;
+          my = e.clientY;
+          dot.style.left = e.clientX + 'px';
+          dot.style.top  = e.clientY + 'px';
+        });
+
+        /* Hover sur éléments interactifs */
+        const interactiveSelectors = 'a, button, [tabindex], .projet-card, .service-card, .temoignage-card, .filter-btn, .faq-question';
+        on(document, 'mouseover', (e) => {
+          if (e.target.closest(interactiveSelectors)) {
+            document.body.classList.add('cursor-hover');
+          }
+        });
+        on(document, 'mouseout', (e) => {
+          if (e.target.closest(interactiveSelectors)) {
+            document.body.classList.remove('cursor-hover');
+          }
+        });
+
+        requestAnimationFrame(update);
+      };
+
+      return { init };
+    })();
+
+    /* ============================================================
+       MODULE: NAVIGATION
+    ============================================================ */
+    const NavModule = (() => {
+      const navbar  = qs('#navbar');
+      const toggle  = qs('#nav-mobile-toggle');
+      const drawer  = qs('#nav-drawer');
+      const links   = qsa('.nav-link');
+      let   isOpen  = false;
+
+      const updateScrollState = () => {
+        const scrolled = window.scrollY > CONFIG.SCROLL_THRESHOLD;
+        navbar?.classList.toggle('scrolled', scrolled);
+        document.documentElement.dataset.scroll = Math.floor(window.scrollY);
+      };
+
+      const updateActiveLink = () => {
+        const sections = qsa('section[id]');
+        let   current  = '';
+        sections.forEach(section => {
+          const top    = section.offsetTop - 100;
+          const bottom = top + section.offsetHeight;
+          if (window.scrollY >= top && window.scrollY < bottom) {
+            current = section.id;
+          }
+        });
+        links.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+        });
+      };
+
+      window.closeDrawer = () => {
+        isOpen = false;
+        toggle?.classList.remove('open');
+        drawer?.classList.remove('open');
+        toggle?.setAttribute('aria-expanded', 'false');
+      };
+
+      const init = () => {
+        on(window, 'scroll', () => {
+          updateScrollState();
+          updateActiveLink();
+        }, { passive: true });
+
+        on(toggle, 'click', () => {
+          isOpen = !isOpen;
+          toggle.classList.toggle('open', isOpen);
+          drawer.classList.toggle('open', isOpen);
+          toggle.setAttribute('aria-expanded', String(isOpen));
+        });
+
+        /* Fermer drawer avec Escape */
+        on(document, 'keydown', (e) => {
+          if (e.key === 'Escape' && isOpen) closeDrawer();
+        });
+
+        updateScrollState();
+        updateActiveLink();
+      };
+
+      return { init };
+    })();
+
+    /* ============================================================
+       MODULE: INTERSECTION OBSERVER (Animations au scroll)
+    ============================================================ */
+    const ScrollAnimModule = (() => {
+      const init = () => {
+        /* Éléments reveal (fade + slide up) */
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+        qsa('.reveal').forEach(el => revealObserver.observe(el));
+
+        /* Barres de compétences */
+        const skillObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              qsa('.skill-bar-fill', entry.target).forEach(fill => {
+                const pct = fill.dataset.pct ?? '0';
+                requestAnimationFrame(() => { fill.style.width = pct + '%'; });
+              });
+              skillObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.3 });
+        const skillBars = qs('#skill-bars');
+        if (skillBars) skillObserver.observe(skillBars);
+
+        /* Compteurs animés */
+        const counterObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              qsa('.stat-card-value[data-count-to]', entry.target.closest('.stats-grid') ?? document).forEach(el => {
+                animateCounter(el, parseInt(el.dataset.countTo, 10));
+              });
+              counterObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.5 });
+        qsa('.stat-card').forEach(card => counterObserver.observe(card));
+
+        /* Graphique barres SVG */
+        const chartObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              animateBarChart();
+              chartObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.3 });
+        const barChart = qs('#bar-chart');
+        if (barChart) chartObserver.observe(barChart);
+
+        /* Radar chart */
+        const radarObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const poly = qs('#radar-poly');
+              const circles = qsa('#competences svg circle');
+              if (poly) poly.style.opacity = '1';
+              circles.forEach((c, i) => {
+                setTimeout(() => { c.style.opacity = '1'; c.style.transition = 'opacity 0.4s ease'; }, i * 100 + 400);
+              });
+              radarObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.3 });
+        qsa('#competences .reveal').forEach(el => radarObserver.observe(el));
+      };
+
+      return { init };
+    })();
+
+    /* ============================================================
+       MODULE: GRAPHIQUE À BARRES SVG ANIMÉ
+    ============================================================ */
+    const animateBarChart = () => {
+      /* Données: croissance en % (max 250 => hauteur 190px) */
+      const data = [
+        { id: 'bar1', pct: 190, label: '190%' },
+        { id: 'bar2', pct: 145, label: '145%' },
+        { id: 'bar3', pct: 210, label: '210%' },
+        { id: 'bar4', pct: 165, label: '165%' },
+        { id: 'bar5', pct: 230, label: '230%' },
+        { id: 'bar6', pct: 175, label: '175%' },
+      ];
+      const MAX_H  = 190;   /* hauteur max en px (unités SVG) */
+      const MAX_V  = 250;   /* valeur max en % */
+      const BASE_Y = 210;   /* ligne de base Y */
+
+      data.forEach((d, i) => {
+        const bar = qs('#' + d.id);
+        if (!bar) return;
+        const heightPx = (d.pct / MAX_V) * MAX_H;
+        setTimeout(() => {
+          const startTime = performance.now();
+          const duration  = 900;
+          const animate   = (now) => {
+            const progress  = Math.min((now - startTime) / duration, 1);
+            const eased     = easeOutCubic(progress);
+            const currentH  = eased * heightPx;
+            bar.setAttribute('height', currentH);
+            bar.setAttribute('y', BASE_Y - currentH);
+            if (progress < 1) requestAnimationFrame(animate);
+          };
+          requestAnimationFrame(animate);
+        }, i * 120);
+      });
+    };
+
+    /* ============================================================
+       MODULE: TÉMOIGNAGES CARROUSEL
+    ============================================================ */
+    const TemoModule = (() => {
+      const track      = qs('#temo-track');
+      const dots       = qsa('#temo-dots .temo-dot');
+      const prevBtn    = qs('#temo-prev');
+      const nextBtn    = qs('#temo-next');
+      const cards      = qsa('#temo-track .temoignage-card');
+      let   current    = 0;
+      let   autoTimer  = null;
+
+      const getVisible = () => {
+        if (window.innerWidth <= 768) return 1;
+        if (window.innerWidth <= 900) return 2;
+        return CONFIG.TEMO_CARDS_VISIBLE;
+      };
+
+      const getCardWidth = () => {
+        if (!cards[0]) return 0;
+        return cards[0].getBoundingClientRect().width + 24; /* gap = 1.5rem = 24px */
+      };
+
+      const goTo = (index) => {
+        const visible = getVisible();
+        const maxIdx  = Math.max(0, cards.length - visible);
+        current       = Math.max(0, Math.min(index, maxIdx));
+        if (track) track.style.transform = `translateX(-${current * getCardWidth()}px)`;
+
+        /* Mise à jour dots */
+        dots.forEach((dot, i) => {
+          const isActive = i === current;
+          dot.classList.toggle('active', isActive);
+          dot.setAttribute('aria-selected', String(isActive));
+          dot.setAttribute('tabindex', isActive ? '0' : '-1');
+        });
+      };
+
+      const next = () => goTo(current + 1 >= cards.length - getVisible() + 1 ? 0 : current + 1);
+      const prev = () => goTo(current - 1 < 0 ? Math.max(0, cards.length - getVisible()) : current - 1);
+
+      const startAuto = () => {
+        stopAuto();
+        autoTimer = setInterval(next, CONFIG.TEMO_AUTO_INTERVAL);
+      };
+
+      const stopAuto = () => {
+        clearInterval(autoTimer);
+        autoTimer = null;
+      };
+
+      const init = () => {
+        on(nextBtn, 'click', () => { next(); startAuto(); });
+        on(prevBtn, 'click', () => { prev(); startAuto(); });
+
+        dots.forEach((dot, i) => {
+          on(dot, 'click', () => { goTo(i); startAuto(); });
+          on(dot, 'keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goTo(i); }
+          });
+        });
+
+        /* Touch/Swipe support */
+        let touchStartX = 0;
+        on(track, 'touchstart', (e) => { touchStartX = e.touches[0].clientX; stopAuto(); }, { passive: true });
+        on(track, 'touchend',   (e) => {
+          const diff = touchStartX - e.changedTouches[0].clientX;
+          if (Math.abs(diff) > 40) {
+            diff > 0 ? next() : prev();
+          }
+          startAuto();
+        });
+
+        on(window, 'resize', () => goTo(current));
+
+        startAuto();
+        goTo(0);
+      };
+
+      return { init };
+    })();
+
+    /* ============================================================
+       MODULE: FAQ ACCORDION
+    ============================================================ */
+    const FaqModule = (() => {
+      const init = () => {
+        qsa('.faq-question').forEach(btn => {
+          on(btn, 'click', () => {
+            const item      = btn.closest('.faq-item');
+            const isOpen    = item.classList.contains('open');
+
+            /* Fermer tous */
+            qsa('.faq-item').forEach(i => {
+              i.classList.remove('open');
+              i.querySelector('.faq-question')?.setAttribute('aria-expanded', 'false');
+            });
+
+            /* Ouvrir celui cliqué si pas déjà ouvert */
+            if (!isOpen) {
+              item.classList.add('open');
+              btn.setAttribute('aria-expanded', 'true');
+            }
+          });
+        });
+      };
+
+      return { init };
+    })();
+
+    /* ============================================================
+       MODULE: TARIFS (Toggle mensuel/annuel)
+    ============================================================ */
+    const TarifsModule = (() => {
+      const toggle     = qs('#billing-toggle');
+      let   isAnnual   = false;
+
+      const updatePrices = () => {
+        qsa('.price-val').forEach(el => {
+          const monthly = parseInt(el.dataset.monthly, 10);
+          const annual  = parseInt(el.dataset.annual, 10);
+          if (!isNaN(monthly) && !isNaN(annual)) {
+            const target = isAnnual ? annual : monthly;
+            animateCounter(el, target);
+          }
+        });
+      };
+
+      const init = () => {
+        on(toggle, 'click', () => {
+          isAnnual = !isAnnual;
+          toggle.classList.toggle('active', isAnnual);
+          toggle.setAttribute('aria-checked', String(isAnnual));
+          updatePrices();
+        });
+
+        on(toggle, 'keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggle.click();
+          }
+        });
+      };
+
+      return { init };
+    })();
+
+    /* ============================================================
+       MODULE: FILTRES PROJETS
+    ============================================================ */
+    const ProjetsModule = (() => {
+      const filterBtns = qsa('.filter-btn');
+      const cards      = qsa('#projets-grid .projet-card');
+
+      const init = () => {
+        filterBtns.forEach(btn => {
+          on(btn, 'click', () => {
+            const filter = btn.dataset.filter;
+
+            filterBtns.forEach(b => {
+              b.classList.remove('active');
+              b.setAttribute('aria-pressed', 'false');
+            });
+            btn.classList.add('active');
+            btn.setAttribute('aria-pressed', 'true');
+
+            cards.forEach(card => {
+              const match = filter === 'all' || card.dataset.category === filter;
+              card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+              if (match) {
+                card.style.opacity   = '1';
+                card.style.transform = 'scale(1)';
+                card.removeAttribute('aria-hidden');
+              } else {
+                card.style.opacity   = '0.25';
+                card.style.transform = 'scale(0.97)';
+                card.setAttribute('aria-hidden', 'true');
+              }
+            });
+          });
+        });
+      };
+
+      return { init };
+    })();
+
+    /* ============================================================
+       MODULE: BACK TO TOP
+    ============================================================ */
+    const BackTopModule = (() => {
+      const btn = qs('#back-to-top');
+
+      const init = () => {
+        on(window, 'scroll', () => {
+          btn?.classList.toggle('visible', window.scrollY > 400);
+        }, { passive: true });
+
+        on(btn, 'click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      };
+
+      return { init };
+    })();
+
+    /* ============================================================
+       MODULE: COOKIE BANNER
+    ============================================================ */
+    const CookieModule = (() => {
+      const banner  = qs('#cookie-banner');
+      const accept  = qs('#cookie-accept');
+      const decline = qs('#cookie-decline');
+      const STORAGE_KEY = 'cn_cookie_consent';
+
+      const hide = () => {
+        banner?.classList.remove('visible');
+        setTimeout(() => banner?.remove(), 500);
+      };
+
+      const init = () => {
+        if (localStorage.getItem(STORAGE_KEY)) return;
+
+        setTimeout(() => banner?.classList.add('visible'), CONFIG.COOKIE_DELAY);
+
+        on(accept, 'click', () => {
+          localStorage.setItem(STORAGE_KEY, 'accepted');
+          hide();
+        });
+        on(decline, 'click', () => {
+          localStorage.setItem(STORAGE_KEY, 'declined');
+          hide();
+        });
+      };
+
+      return { init };
+    })();
+
+    /* ============================================================
+       MODULE: FORMULAIRE CONTACT
+    ============================================================ */
+    const FormModule = (() => {
+      const form       = qs('#contact-form');
+      const submitBtn  = qs('#form-submit-btn');
+      const successMsg = qs('#form-success');
+
+      const init = () => {
+        on(form, 'submit', (e) => {
+          e.preventDefault();
+          if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+          }
+          /* Simulation d'envoi */
+          if (submitBtn) {
+            submitBtn.textContent = 'Envoi en cours…';
+            submitBtn.disabled    = true;
+          }
+          setTimeout(() => {
+            if (submitBtn) {
+              submitBtn.style.display = 'none';
+            }
+            if (successMsg) {
+              successMsg.style.display = 'block';
+            }
+            setTimeout(() => {
+              document.getElementById('modal-contact')?.close();
+              if (submitBtn) {
+                submitBtn.textContent = 'Envoyer ma demande →';
+                submitBtn.disabled    = false;
+                submitBtn.style.display = '';
+              }
+              if (successMsg) successMsg.style.display = 'none';
+              form.reset();
+            }, 2500);
+          }, 1200);
+        });
+      };
+
+      return { init };
+    })();
+
+    /* ============================================================
+       MODULE: CANVAS HERO PARTICLES
+    ============================================================ */
+    const CanvasModule = (() => {
+      const canvas  = qs('#hero-canvas');
+      if (!canvas) return { init: () => {} };
+      const ctx     = canvas.getContext('2d');
+
+      let   W, H, particles = [];
+
+      const resize = () => {
+        W = canvas.width  = canvas.offsetWidth;
+        H = canvas.height = canvas.offsetHeight;
+      };
+
+      /** @typedef {{ x: number, y: number, vx: number, vy: number, r: number, opacity: number }} Particle */
+
+      const createParticle = () => ({
+        x:       Math.random() * W,
+        y:       Math.random() * H,
+        vx:      (Math.random() - 0.5) * 0.4,
+        vy:      (Math.random() - 0.5) * 0.4,
+        r:       Math.random() * 1.5 + 0.5,
+        opacity: Math.random() * 0.4 + 0.05,
+      });
+
+      const initParticles = () => {
+        const count   = Math.floor((W * H) / 12000);
+        particles     = Array.from({ length: Math.min(count, 80) }, createParticle);
+      };
+
+      const draw = () => {
+        ctx.clearRect(0, 0, W, H);
+
+        /* Lignes de connexion */
+        particles.forEach((p, i) => {
+          particles.slice(i + 1).forEach(q => {
+            const dx   = p.x - q.x;
+            const dy   = p.y - q.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist < 120) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(q.x, q.y);
+              ctx.strokeStyle = `rgba(91,111,255,${0.08 * (1 - dist / 120)})`;
+              ctx.lineWidth   = 0.5;
+              ctx.stroke();
+            }
+          });
+        });
+
+        /* Points */
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0 || p.x > W) p.vx *= -1;
+          if (p.y < 0 || p.y > H) p.vy *= -1;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(91,111,255,${p.opacity})`;
+          ctx.fill();
+        });
+
+        requestAnimationFrame(draw);
+      };
+
+      const init = () => {
+        resize();
+        initParticles();
+        draw();
+        on(window, 'resize', () => {
+          resize();
+          initParticles();
+        });
+      };
+
+      return { init };
+    })();
+
+    /* ============================================================
+       MODULE: FOOTER ANNÉE DYNAMIQUE
+    ============================================================ */
+    const FooterYearModule = (() => {
+      const init = () => {
+        const el = qs('#footer-year');
+        if (el) el.textContent = new Date().getFullYear();
+      };
+      return { init };
+    })();
+
+    /* ============================================================
+       INITIALISATION — Démarrage de tous les modules
+    ============================================================ */
+    const init = () => {
+      PreloaderModule.init();
+      CursorModule.init();
+      NavModule.init();
+      CanvasModule.init();
+      ScrollAnimModule.init();
+      TemoModule.init();
+      FaqModule.init();
+      TarifsModule.init();
+      ProjetsModule.init();
+      BackTopModule.init();
+      CookieModule.init();
+      FormModule.init();
+      FooterYearModule.init();
+    };
+
+    /* Lancement au chargement du DOM */
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  </script>
+
+  <!-- ============================================================
+       SCHEMA.ORG — Données structurées (SEO)
+  ============================================================ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "CodeNord Studio",
+    "description": "Agence web premium à Montréal spécialisée en développement web haute performance, design UI/UX, SEO technique et accessibilité WCAG 2.1.",
+    "url": "https://codenord.ca",
+    "telephone": "+15142223456",
+    "email": "hello@codenord.ca",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Montréal",
+      "addressRegion": "QC",
+      "addressCountry": "CA"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "45.5017",
+      "longitude": "-73.5673"
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "priceRange": "$$",
+    "sameAs": [
+      "https://linkedin.com/company/codenord-studio",
+      "https://github.com/codenord-studio"
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5.0",
+      "reviewCount": "47",
+      "bestRating": "5",
+      "worstRating": "1"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Services Web Premium",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "name": "Forfait Essentiel",
+          "price": "3500",
+          "priceCurrency": "CAD",
+          "description": "Site vitrine 5 pages avec design responsive et SEO de base"
+        },
+        {
+          "@type": "Offer",
+          "name": "Forfait Professionnel",
+          "price": "7500",
+          "priceCurrency": "CAD",
+          "description": "Site complet 10-15 pages avec CMS, analytics et Lighthouse 95+ garanti"
+        }
+      ]
+    }
+  }
+  </script>
+
+</body>
+</html>
