@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ressources — Développeur</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&family=Playfair+Display:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+      <link rel="stylesheet" href="ressources.css">
+</head>
+  <body>
+    <!-- Curseur personnalisé -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- En-tête -->
+    <header>
+      <a href="index.html" class="logo">PORTFOLIO</a>
+      <nav>
+        <a href="index.html#projets" data-i18n="nav.projects">Projets</a>
+        <a href="index.html#competences" data-i18n="nav.skills">Compétences</a>
+        <a href="ressources.html" class="active" data-i18n="nav.resources"
+          >Ressources</a
+        >
+        <a href="index.html#contact" data-i18n="nav.contact">Contact</a>
+        <button
+          class="lang-switcher"
+          id="langSwitcher"
+          onclick="toggleLanguage()"
+        >
+          <span id="langIcon">FR</span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="grid-bg"></div>
+      <div class="hero-content">
+        <h1 data-i18n="resources.title">Ressources & Outils</h1>
+        <p data-i18n="resources.description">
+          Une collection d'outils et ressources que j'utilise pour le design, le
+          développement web et la création de contenu.
+        </p>
+      </div>
+    </section>
+
+    <!-- Ressources -->
+    <section class="resources">
+      <div class="category">
+        <h3 class="category-title" data-i18n="resources.colors.title">
+          Couleurs & Palettes
+        </h3>
+        <div class="resources-grid">
+          <a href="https://uicolors.app" target="_blank" class="resource-card">
+            <div class="resource-icon">🎨</div>
+            <h4 class="resource-name">UI Colors</h4>
+            <p
+              class="resource-description"
+              data-i18n="resources.colors.uicolors"
+            >
+              Générateur de palettes de couleurs pour Tailwind CSS avec aperçu
+              en temps réel et export facile.
+            </p>
+            <span class="resource-tag">Tailwind</span>
+            <span class="resource-link">uicolors.app</span>
+          </a>
+
+          <a href="https://khroma.co" target="_blank" class="resource-card">
+            <div class="resource-icon">🤖</div>
+            <h4 class="resource-name">Khroma</h4>
+            <p class="resource-description" data-i18n="resources.colors.khroma">
+              Générateur de palettes de couleurs alimenté par l'IA qui apprend
+              vos préférences.
+            </p>
+            <span class="resource-tag">AI</span>
+            <span class="resource-link">khroma.co</span>
+          </a>
+
+          <a href="https://colorkit.io" target="_blank" class="resource-card">
+            <div class="resource-icon">🎭</div>
+            <h4 class="resource-name">ColorKit</h4>
+            <p
+              class="resource-description"
+              data-i18n="resources.colors.colorkit"
+            >
+              Outil complet pour créer et gérer des palettes de couleurs avec
+              harmonies et contrastes.
+            </p>
+            <span class="resource-tag">Palette</span>
+            <span class="resource-link">colorkit.io</span>
+          </a>
+
+          <a href="https://colors.io" target="_blank" class="resource-card">
+            <div class="resource-icon">🌈</div>
+            <h4 class="resource-name">Colors.io</h4>
+            <p
+              class="resource-description"
+              data-i18n="resources.colors.colorsio"
+            >
+              Plateforme collaborative pour créer et partager des palettes de
+              couleurs.
+            </p>
+            <span class="resource-tag">Communauté</span>
+            <span class="resource-link">colors.io</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="category">
+        <h3 class="category-title" data-i18n="resources.gradients.title">
+          Dégradés & Effets
+        </h3>
+        <div class="resources-grid">
+          <a
+            href="https://grainient.supply"
+            target="_blank"
+            class="resource-card"
+          >
+            <div class="resource-icon">✨</div>
+            <h4 class="resource-name">Grainient</h4>
+            <p
+              class="resource-description"
+              data-i18n="resources.gradients.grainient"
+            >
+              Créateur de dégradés avec effet de grain pour des designs
+              organiques et texturés.
+            </p>
+            <span class="resource-tag">Texture</span>
+            <span class="resource-link">grainient.supply</span>
+          </a>
+
+          <a
+            href="https://shadergradient.co"
+            target="_blank"
+            class="resource-card"
+          >
+            <div class="resource-icon">🌊</div>
+            <h4 class="resource-name">Shader Gradient</h4>
+            <p
+              class="resource-description"
+              data-i18n="resources.gradients.shader"
+            >
+              Générateur de dégradés animés avec shaders WebGL pour des
+              backgrounds dynamiques.
+            </p>
+            <span class="resource-tag">WebGL</span>
+            <span class="resource-link">shadergradient.co</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="category">
+        <h3 class="category-title" data-i18n="resources.shapes.title">
+          Formes & Composants
+        </h3>
+        <div class="resources-grid">
+          <a
+            href="https://shapes.framer.website"
+            target="_blank"
+            class="resource-card"
+          >
+            <div class="resource-icon">🔷</div>
+            <h4 class="resource-name">Framer Shapes</h4>
+            <p class="resource-description" data-i18n="resources.shapes.framer">
+              Collection de formes et composants SVG pour Framer et autres
+              outils de design.
+            </p>
+            <span class="resource-tag">SVG</span>
+            <span class="resource-link">shapes.framer.website</span>
+          </a>
+
+          <a
+            href="https://cssgridgenerator.io"
+            target="_blank"
+            class="resource-card"
+          >
+            <div class="resource-icon">📐</div>
+            <h4 class="resource-name">CSS Grid Generator</h4>
+            <p
+              class="resource-description"
+              data-i18n="resources.shapes.cssgrid"
+            >
+              Générateur interactif pour créer des layouts CSS Grid avec aperçu
+              visuel.
+            </p>
+            <span class="resource-tag">CSS</span>
+            <span class="resource-link">cssgridgenerator.io</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="category">
+        <h3 class="category-title" data-i18n="resources.design.title">
+          Design & Prototypage
+        </h3>
+        <div class="resources-grid">
+          <a href="https://framer.com" target="_blank" class="resource-card">
+            <div class="resource-icon">🎯</div>
+            <h4 class="resource-name">Framer</h4>
+            <p class="resource-description" data-i18n="resources.design.framer">
+              Plateforme complète pour le design et prototypage de sites web
+              interactifs sans code.
+            </p>
+            <span class="resource-tag">No-Code</span>
+            <span class="resource-link">framer.com</span>
+          </a>
+
+          <a
+            href="https://designspells.com"
+            target="_blank"
+            class="resource-card"
+          >
+            <div class="resource-icon">✨</div>
+            <h4 class="resource-name">Design Spells</h4>
+            <p class="resource-description" data-i18n="resources.design.spells">
+              Collection d'astuces et de sortilèges pour améliorer vos designs
+              web.
+            </p>
+            <span class="resource-tag">Tips</span>
+            <span class="resource-link">designspells.com</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="category">
+        <h3 class="category-title" data-i18n="resources.images.title">
+          Images & Assets
+        </h3>
+        <div class="resources-grid">
+          <a href="https://pngimg.com" target="_blank" class="resource-card">
+            <div class="resource-icon">🖼️</div>
+            <h4 class="resource-name">PNG Img</h4>
+            <p class="resource-description" data-i18n="resources.images.pngimg">
+              Base de données massive d'images PNG transparentes gratuites pour
+              tous vos projets.
+            </p>
+            <span class="resource-tag">Free</span>
+            <span class="resource-link">pngimg.com</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+      <div class="footer-content">
+        <div class="social-links">
+          <a href="https://github.com/Artleboss2" target="_blank">GitHub</a>
+          <a href="https://linkedin.com/in/votre-profil" target="_blank"
+            >LinkedIn</a
+          >
+          <a href="mailto:contact@artleboss.com">Email</a>
+          <a href="https://discord.com" target="_blank">Discord</a>
+        </div>
+        <div class="copyright">
+          <span data-i18n="footer.copyright"
+            >© 2026 — Conçu et développé avec passion</span
+          >
+        </div>
+      </div>
+    </footer>
+
+      <script src="ressources.js"></script>
+</body>
+</html>
