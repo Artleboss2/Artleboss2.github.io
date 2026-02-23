@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio GitHub — Artleboss2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&family=Playfair+Display:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+      <link rel="stylesheet" href="project-portfolio.css">
+</head>
+  <body>
+    <!-- Curseur personnalisé -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <header>
+      <a href="index.html" class="back-btn">
+        <span>←</span>
+        <span data-i18n="back">Retour au portfolio</span>
+      </a>
+      <div class="logo">PROJET 03</div>
+      <button
+        class="lang-switcher"
+        id="langSwitcher"
+        onclick="toggleLanguage()"
+      >
+        <span id="langIcon">EN</span>
+      </button>
+    </header>
+
+    <section class="project-hero">
+      <div class="project-hero-content">
+        <div class="project-number" data-i18n="projectLabel">PROJET #03</div>
+        <h1>Portfolio GitHub</h1>
+        <p data-i18n="heroDesc">
+          Portfolio interactif avec animations avancées, terminal intégré et jeu
+          Snake, hébergé sur GitHub Pages.
+        </p>
+
+        <div class="project-meta">
+          <div class="meta-item">
+            <div class="meta-label" data-i18n="metaType">Type</div>
+            <div class="meta-value">Web Portfolio</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label" data-i18n="metaYear">Année</div>
+            <div class="meta-value">2024</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label" data-i18n="metaTech">Technologies</div>
+            <div class="tech-stack">
+              <span class="tech-tag">HTML5</span>
+              <span class="tech-tag">CSS3</span>
+              <span class="tech-tag">JavaScript</span>
+              <span class="tech-tag">GitHub Pages</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="project-content">
+      <section class="content-section">
+        <h2 data-i18n="titleOverview">Vue d'ensemble</h2>
+        <p data-i18n="overviewP1">
+          Ce portfolio web est un projet personnel conçu pour présenter mes
+          compétences en développement frontend de manière interactive et
+          engageante. L'objectif était de créer une expérience utilisateur
+          unique qui va au-delà d'un portfolio traditionnel, en intégrant des
+          éléments ludiques et techniques démontrant ma maîtrise du JavaScript.
+        </p>
+        <p data-i18n="overviewP2">
+          Le site est entièrement responsive, performant et hébergé gratuitement
+          sur GitHub Pages, démontrant également ma compétence en déploiement et
+          gestion de projets web.
+        </p>
+      </section>
+
+      <section class="content-section">
+        <h2 data-i18n="titleFeatures">Fonctionnalités interactives</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <h3 data-i18n="feat1Title">🎯 Curseur personnalisé</h3>
+            <p data-i18n="feat1Desc">
+              Curseur custom avec effet de suivi fluide et particules
+              génératives qui réagissent au mouvement de la souris.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3 data-i18n="feat2Title">💻 Terminal interactif</h3>
+            <p data-i18n="feat2Desc">
+              Terminal fonctionnel avec commandes système, historique de
+              navigation, auto-complétion et easter eggs cachés.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3 data-i18n="feat3Title">🐍 Jeu Snake</h3>
+            <p data-i18n="feat3Desc">
+              Jeu Snake classique jouable directement dans le navigateur avec
+              score et difficulté progressive.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3 data-i18n="feat4Title">🟢 Effet Matrix</h3>
+            <p data-i18n="feat4Desc">
+              Animation Matrix plein écran avec code en cascade, activable via
+              le terminal.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3 data-i18n="feat5Title">🌍 Bilingue FR/EN</h3>
+            <p data-i18n="feat5Desc">
+              Système de traduction complet avec sauvegarde de préférence dans
+              localStorage.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3 data-i18n="feat6Title">📱 Responsive</h3>
+            <p data-i18n="feat6Desc">
+              Design adaptatif optimisé pour mobile, tablette et desktop avec
+              animations fluides.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2 data-i18n="titleChallenges">Défis techniques relevés</h2>
+        <ul>
+          <li data-i18n="challenge1">
+            Animations performantes avec requestAnimationFrame pour maintenir 60
+            FPS
+          </li>
+          <li data-i18n="challenge2">
+            Gestion d'état complexe pour le jeu Snake sans framework
+          </li>
+          <li data-i18n="challenge3">
+            Système de particules optimisé avec limitation automatique
+          </li>
+          <li data-i18n="challenge4">
+            Terminal avec parsing de commandes et gestion d'historique
+          </li>
+          <li data-i18n="challenge5">
+            Intégration API externe pour afficher l'adresse IP et
+            géolocalisation
+          </li>
+          <li data-i18n="challenge6">
+            Système i18n (internationalisation) custom sans librairie
+          </li>
+          <li data-i18n="challenge7">
+            Design moderne évitant les clichés "AI-generated"
+          </li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2 data-i18n="titleArchi">Architecture et organisation</h2>
+        <p data-i18n="archiIntro">
+          Le code est structuré de manière modulaire pour faciliter la
+          maintenance :
+        </p>
+        <ul>
+          <li data-i18n="archi1">
+            Variables CSS pour thématisation cohérente et facilité de
+            modification
+          </li>
+          <li data-i18n="archi2">
+            JavaScript organisé en sections clairement commentées
+          </li>
+          <li data-i18n="archi3">
+            Séparation des responsabilités : animations, terminal, jeux,
+            traductions
+          </li>
+          <li data-i18n="archi4">
+            Pas de dépendances externes - JavaScript vanilla uniquement
+          </li>
+          <li data-i18n="archi5">
+            Code optimisé pour un chargement rapide (< 100KB total)
+          </li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2 data-i18n="titleTerminal">Commandes du terminal</h2>
+        <p data-i18n="terminalIntro">
+          Le terminal inclut plusieurs commandes utiles :
+        </p>
+        <ul>
+          <li data-i18n="cmd1">
+            <strong>help</strong> - Liste toutes les commandes disponibles
+          </li>
+          <li data-i18n="cmd2">
+            <strong>about</strong> - Informations personnelles
+          </li>
+          <li data-i18n="cmd3">
+            <strong>skills</strong> - Compétences techniques
+          </li>
+          <li data-i18n="cmd4">
+            <strong>projects</strong> - Liste des projets
+          </li>
+          <li data-i18n="cmd5">
+            <strong>whatismyip</strong> - Affiche IP, localisation et FAI
+          </li>
+          <li data-i18n="cmd6">
+            <strong>date</strong> - Date et heure localisées
+          </li>
+          <li data-i18n="cmd7"><strong>snake</strong> - Lance le jeu Snake</li>
+          <li data-i18n="cmd8">
+            <strong>matrix</strong> - Active l'effet Matrix
+          </li>
+          <li data-i18n="cmd9"><strong>clear</strong> - Efface le terminal</li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2 data-i18n="titlePerf">Performances et optimisation</h2>
+        <p data-i18n="perfIntro">
+          Une attention particulière a été portée aux performances :
+        </p>
+        <ul>
+          <li data-i18n="perf1">
+            Lazy loading des animations pour réduire l'impact initial
+          </li>
+          <li data-i18n="perf2">
+            Debouncing des événements de souris pour éviter les calculs inutiles
+          </li>
+          <li data-i18n="perf3">
+            Limitation du nombre de particules actives (max 20)
+          </li>
+          <li data-i18n="perf4">
+            CSS transforms pour les animations hardware-accelerated
+          </li>
+          <li data-i18n="perf5">
+            Minification et optimisation du code pour la production
+          </li>
+          <li data-i18n="perf6">
+            Score Lighthouse: 95+ en performance sur mobile
+          </li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2 data-i18n="titleLearnings">Apprentissages clés</h2>
+        <p data-i18n="learningsIntro">
+          Ce projet m'a permis d'approfondir mes connaissances en :
+        </p>
+        <ul>
+          <li data-i18n="learning1">
+            Animation JavaScript performante et optimisation rendering
+          </li>
+          <li data-i18n="learning2">
+            Design d'interface utilisateur moderne et minimaliste
+          </li>
+          <li data-i18n="learning3">
+            Développement de jeux en JavaScript vanilla
+          </li>
+          <li data-i18n="learning4">
+            Internationalisation et gestion d'état global
+          </li>
+          <li data-i18n="learning5">
+            Intégration d'API externes et gestion d'erreurs async
+          </li>
+          <li data-i18n="learning6">Déploiement continu avec GitHub Pages</li>
+        </ul>
+      </section>
+
+      <div class="project-links">
+        <a
+          href="https://github.com/Artleboss2/Artleboss2.github.io"
+          target="_blank"
+          class="project-link"
+        >
+          <span data-i18n="linkGitHub">Voir sur GitHub</span>
+          <span>→</span>
+        </a>
+        <a href="index.html" class="project-link">
+          <span data-i18n="linkBack">Retour aux projets</span>
+        </a>
+      </div>
+    </div>
+
+    <footer>
+      <p data-i18n="footer">© 2024 Artleboss2 — Tous droits réservés</p>
+    </footer>
+
+      <script src="project-portfolio.js"></script>
+</body>
+</html>
