@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votre Empreinte Numérique</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        #canvas-container {
+            position: relative;
+            width: 90vmin;
+            height: 90vmin;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+            filter: contrast(1.5) brightness(1.2) drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
+        }
+
+        #info {
+            position: absolute;
+            bottom: 30px;
+            color: #222;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            pointer-events: none;
+            transition: color 2s ease;
+        }
+
+        #info.visible {
+            color: #555;
+        }
+
+        .loader {
+            color: white;
+            font-size: 1rem;
+            letter-spacing: 5px;
+            animation: pulse 1.5s infinite;
+            position: absolute;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.2; }
+            50% { opacity: 1; }
+            100% { opacity: 0.2; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="canvas-container">
+        <div id="loader" class="loader">SCANNING BIOMETRIC IP...</div>
+        <canvas id="fingerprintCanvas"></canvas>
+    </div>
+
+    <div id="info">Tout laisse une trace.</div>
+
+    <script>
+        /**
+         * ALGORITHME DE GÉNÉRATION BIOMÉTRIQUE SYNTHÉTIQUE
+         * Basé sur des flux de vecteurs et des seeds IP.
+         */
+
+        const canvas = document.getElementById('fingerprintCanvas');
+        const ctx = canvas.getContext('2d');
+        const loader = document.getElementById('loader');
+
+        const SIZE = 1200;
+        canvas.width = SIZE;
+        canvas.height = SIZE;
+
+        function hashString(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = ((hash << 5) - hash) + str.charCodeAt(i);
+                hash |= 0; 
+            }
+            return Math.abs(hash);
+        }
+
+        function mulberry32(a) {
+            return function() {
+                var t = a += 0x6D2B79F5;
+                t = Math.imul(t ^ t >>> 15, t | 1);
+                t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+                return ((t ^ t >>> 14) >>> 0) / 4294967296;
+            }
+        }
+
+        async function getIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (e) {
+                return "192.168.1.1";
+            }
+        }
+
+        function drawFingerprint(ip) {
+            loader.style.display = 'none';
+            document.getElementById('info').classList.add('visible');
+            
+            const seed = hashString(ip);
+            const random = mulberry32(seed);
+
+            ctx.clearRect(0, 0, SIZE, SIZE);
+            
+            const centerX = SIZE / 2;
+            const centerY = SIZE / 2;
+            
+            // Paramètres structurels
+            const lineCount = 85; 
+            const stepSize = 8;
+            
+            // On crée un champ de force pour courber les lignes vers le bas (forme de boucle)
+            const whorlIntensity = random() * 2 + 1; // Unicité de la courbure
+            
+            ctx.strokeStyle = 'white';
+            ctx.lineCap = 'round';
+
+            // Masque de forme pour l'empreinte (Ovale de base)
+            ctx.save();
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY, 380, 550, 0, 0, Math.PI * 2);
+            ctx.clip();
+
+            for (let i = 0; i < lineCount; i++) {
+                // On commence chaque ligne sur une ellipse imaginaire
+                let radius = i * 12;
+                let angleStart = -Math.PI * 0.2;
+                
+                ctx.beginPath();
+                ctx.lineWidth = 1.5 + random() * 3.5;
+                ctx.globalAlpha = 0.7 + random() * 0.3;
+
+                // Points de départ répartis sur la hauteur
+                let px = centerX - 400 + (random() * 800);
+                let py = centerY - 600 + (i * 14);
+
+                ctx.moveTo(px, py);
+
+                // Simulation de croissance de la ligne (Ridge flow)
+                for (let step = 0; step < 250; step++) {
+                    // Algorithme de flux : les lignes suivent une forme de dôme
+                    const dx = px - centerX;
+                    const dy = py - centerY;
+                    
+                    // Calcul de l'angle du flux biométrique
+                    // On mélange une fonction de cercle avec une force descendante
+                    let flowAngle = Math.atan2(dy, dx) + Math.PI/2;
+                    
+                    // Distorsion basée sur la distance au centre pour créer le "Whorl"
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    const influence = Math.exp(-dist / 300);
+                    flowAngle += influence * whorlIntensity;
+
+                    // Ajout de micro-irrégularités propres à l'IP
+                    flowAngle += (random() - 0.5) * 0.15;
+
+                    px += Math.cos(flowAngle) * stepSize;
+                    py += Math.sin(flowAngle) * stepSize;
+
+                    // Aléatoirement, on arrête la ligne pour créer des minuties
+                    if (random() < 0.005) {
+                        ctx.stroke();
+                        ctx.beginPath();
+                        // On saute un petit espace pour simuler une rupture
+                        px += Math.cos(flowAngle) * 5;
+                        py += Math.sin(flowAngle) * 5;
+                        ctx.moveTo(px, py);
+                    } else {
+                        ctx.lineTo(px, py);
+                    }
+                }
+                ctx.stroke();
+            }
+            
+            // Effet d'usure finale (pores de la peau)
+            ctx.globalCompositeOperation = 'destination-out';
+            for (let j = 0; j < 4000; j++) {
+                const px = random() * SIZE;
+                const py = random() * SIZE;
+                const size = random() * 1.5;
+                ctx.beginPath();
+                ctx.arc(px, py, size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.restore();
+        }
+
+        window.onload = async () => {
+            const ip = await getIP();
+            // Petite pause pour simuler le scan
+            setTimeout(() => {
+                drawFingerprint(ip);
+                document.getElementById('info').innerText = `ID NUMÉRIQUE GÉNÉRÉ VIA IP : ${ip}`;
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
