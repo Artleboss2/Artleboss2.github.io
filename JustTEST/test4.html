@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Porsche | Driven by Dreams</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        'porsche-red': '#D5001C',
+                        'porsche-gold': '#b09b6e',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+            scrollbar-width: none;
+        }
+        body::-webkit-scrollbar { display: none; }
+
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .hero-container {
+            height: 500vh;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-ui {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+            pointer-events: none;
+            transform: translateY(20px);
+        }
+
+        .section-ui.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .glass-nav {
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .porsche-loader {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1s ease;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <div id="loader" class="porsche-loader">
+        <div class="text-center">
+            <div class="font-black text-3xl tracking-tighter uppercase mb-2">Porsche</div>
+            <div class="w-48 h-[1px] bg-white/20 relative overflow-hidden">
+                <div id="loader-bar" class="absolute inset-0 bg-porsche-red w-full"></div>
+            </div>
+            <div class="text-[10px] uppercase tracking-widest mt-4 text-white/40">Sculpture Haute Précision...</div>
+        </div>
+    </div>
+
+    <canvas id="webgl-canvas"></canvas>
+
+    <nav class="fixed top-0 w-full z-50 glass-nav px-6 py-4 flex justify-between items-center">
+        <div class="font-black text-2xl tracking-tighter uppercase">Porsche</div>
+        <div class="hidden md:flex space-x-8 text-xs font-bold tracking-widest uppercase">
+            <a href="#" class="hover:text-porsche-red transition-colors">911 GT3</a>
+            <a href="#" class="hover:text-porsche-red transition-colors">Héritage</a>
+            <a href="#" class="hover:text-porsche-red transition-colors">Configurateur</a>
+        </div>
+        <div class="text-[10px] font-bold tracking-widest text-porsche-red">DESIGN STUDIO</div>
+    </nav>
+
+    <div class="hero-container">
+        <div class="section-ui active" data-start="0" data-end="20">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="font-serif text-7xl md:text-9xl italic mb-6">Silhouette <span class="text-white text-6xl md:text-8xl block not-italic font-sans font-black mt-2 uppercase tracking-tighter">Épurée</span></h1>
+                <p class="text-xs md:text-sm tracking-[0.5em] uppercase font-light text-gray-400">L'équilibre parfait des proportions</p>
+            </div>
+        </div>
+
+        <div class="section-ui" data-start="25" data-end="45">
+            <div class="max-w-xl ml-[10%]">
+                <h2 class="text-4xl md:text-6xl font-black mb-6 uppercase">Le Regard <br><span class="italic font-serif text-porsche-red lowercase">Vertical</span></h2>
+                <p class="text-gray-400 leading-relaxed font-light border-l border-porsche-red pl-6">
+                    L'image nous montre des phares qui s'intègrent dans le galbe des ailes. Une verticalité qui remonte aux premières 356.
+                </p>
+            </div>
+        </div>
+
+        <div class="section-ui" data-start="50" data-end="75">
+            <div class="max-w-xl ml-auto mr-[10%] text-right">
+                <h2 class="text-4xl md:text-6xl font-black mb-6 uppercase">Aérodynamisme <br><span class="italic font-serif text-white lowercase">Sculpté</span></h2>
+                <div class="flex justify-end">
+                    <p class="text-gray-400 leading-relaxed font-light border-r border-porsche-red pr-6 max-w-sm">
+                        Le capot plongeant réduit la traînée tandis que les ailes arrière élargies assoient le véhicule sur la route.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-ui" data-start="80" data-end="100">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="font-serif text-6xl md:text-8xl italic mb-8">Iconic <br>911.</h2>
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="pointer-events-auto px-12 py-4 border border-white text-white text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all">
+                    Relancer l'expérience
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://esm.sh/three@0.160.0"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+
+        const canvas = document.querySelector('#webgl-canvas');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2('#000000', 0.12);
+
+        const camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 0, 8.5);
+        scene.add(camera);
+
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+        // --- ÉCLAIRAGE STUDIO ---
+        const ambient = new THREE.AmbientLight(0xffffff, 0.3);
+        scene.add(ambient);
+
+        const topLight = new THREE.RectAreaLight('#ffffff', 5, 10, 10);
+        topLight.position.set(0, 10, 0);
+        topLight.lookAt(0,0,0);
+        scene.add(topLight);
+
+        const frontLight = new THREE.DirectionalLight('#ffffff', 1.5);
+        frontLight.position.set(-5, 5, 10);
+        scene.add(frontLight);
+
+        const rimLight = new THREE.DirectionalLight('#ffffff', 3);
+        rimLight.position.set(5, 2, -5);
+        scene.add(rimLight);
+
+        // --- MATÉRIAUX ---
+        const bodyMat = new THREE.MeshPhysicalMaterial({
+            color: '#ffffff',
+            metalness: 0.05,
+            roughness: 0.1,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.05,
+            reflectivity: 1
+        });
+
+        const blackMat = new THREE.MeshStandardMaterial({ color: '#080808', roughness: 0.3 });
+        const plasticMat = new THREE.MeshStandardMaterial({ color: '#151515', roughness: 0.8 });
+        const wheelMat = new THREE.MeshStandardMaterial({ color: '#050505', roughness: 0.95 });
+        
+        const glassMat = new THREE.MeshPhysicalMaterial({
+            color: '#000',
+            metalness: 1,
+            roughness: 0,
+            transparent: true,
+            opacity: 0.9,
+            transmission: 0.5
+        });
+
+        const brakeMat = new THREE.MeshStandardMaterial({ color: '#D5001C' });
+
+        // --- GROUPE VOITURE ---
+        const carGroup = new THREE.Group();
+
+        /**
+         * AJOUT D'UNE PIÈCE SCULPTÉE
+         * On regarde l'image : La silhouette est composée de volumes tendus.
+         */
+        function addShape(geo, mat, pos, rot, scale) {
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.set(...pos);
+            mesh.rotation.set(...rot);
+            mesh.scale.set(...scale);
+            carGroup.add(mesh);
+            return mesh;
+        }
+
+        const sphere = new THREE.SphereGeometry(1, 64, 64);
+        const cylinder = new THREE.CylinderGeometry(1, 1, 1, 32);
+
+        // 1. CHASSIS INFERIEUR (Regarder l'image : ligne de caisse droite et basse)
+        addShape(sphere, bodyMat, [0, 0.3, 0], [0, 0, 0], [2.15, 0.22, 0.88]);
+
+        // 2. CAPOT (Regarder l'image : plat au centre, plongeant vers le pare-choc)
+        addShape(sphere, bodyMat, [-1.15, 0.38, 0], [0.05, 0, 0], [1.05, 0.18, 0.78]);
+
+        // 3. AILES AVANT (Regarder l'image : proéminentes, formant les orbites des phares)
+        addShape(sphere, bodyMat, [-1.45, 0.42, 0.64], [0, 0, 0], [0.72, 0.32, 0.24]);
+        addShape(sphere, bodyMat, [-1.45, 0.42, -0.64], [0, 0, 0], [0.72, 0.32, 0.24]);
+
+        // 4. TOIT & COCKPIT (Regarder l'image : La fuyante "Flyline" doit être continue)
+        addShape(sphere, bodyMat, [0.15, 0.52, 0], [0, 0, 0], [1.25, 0.45, 0.74]);
+        addShape(sphere, glassMat, [0.05, 0.58, 0], [0, 0, 0], [0.95, 0.42, 0.72]);
+
+        // 5. AILES ARRIÈRE (Regarder l'image : hanches très larges et musclées)
+        addShape(sphere, bodyMat, [1.25, 0.42, 0.76], [0, 0, 0], [0.85, 0.46, 0.36]);
+        addShape(sphere, bodyMat, [1.25, 0.42, -0.76], [0, 0, 0], [0.85, 0.46, 0.36]);
+
+        // 6. PARE-CHOC AVANT (Regarder l'image : prises d'air horizontales)
+        addShape(sphere, plasticMat, [-2.05, 0.3, 0], [0, 0, 0], [0.2, 0.15, 0.75]);
+
+        // 7. BAS DE CAISSE (Sculpture pour marquer le flanc)
+        addShape(sphere, blackMat, [0, 0.22, 0], [0, 0, 0], [2.1, 0.08, 0.82]);
+
+        // 8. ROUES ET JANTES (Regarder l'image : les jantes sont affleurantes)
+        const wheelPos = [
+            [-1.4, 0.32, 0.82], [-1.4, 0.32, -0.82],
+            [1.3, 0.35, 0.86], [1.3, 0.35, -0.86]
+        ];
+
+        const tireGeo = new THREE.TorusGeometry(0.32, 0.08, 16, 50);
+        const rimGeo = new THREE.CircleGeometry(0.3, 32);
+
+        wheelPos.forEach(pos => {
+            const wGroup = new THREE.Group();
+            wGroup.position.set(...pos);
+
+            const tire = new THREE.Mesh(tireGeo, wheelMat);
+            tire.rotation.y = Math.PI/2;
+            wGroup.add(tire);
+
+            const rim = new THREE.Mesh(rimGeo, blackMat);
+            rim.rotation.y = Math.PI/2;
+            rim.position.x = (pos[2] > 0 ? 0.05 : -0.05);
+            wGroup.add(rim);
+
+            const caliper = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.15, 0.08), brakeMat);
+            caliper.position.set(0, 0.18, pos[2] > 0 ? -0.1 : 0.1);
+            wGroup.add(caliper);
+
+            carGroup.add(wGroup);
+        });
+
+        // 9. PHARES (Regarder l'image : parfaitement ronds et intégrés verticalement)
+        const lightGeo = new THREE.SphereGeometry(0.18, 32, 32);
+        const glassLightMat = new THREE.MeshPhysicalMaterial({ 
+            color: '#fff', 
+            emissive: '#fff', 
+            emissiveIntensity: 1.5,
+            transparent: true,
+            opacity: 0.9
+        });
+        addShape(lightGeo, glassLightMat, [-1.98, 0.52, 0.62], [0, 0, 0], [0.15, 0.45, 0.65]);
+        addShape(lightGeo, glassLightMat, [-1.98, 0.52, -0.62], [0, 0, 0], [0.15, 0.45, 0.65]);
+
+        // 10. BANDEAU ARRIÈRE (Regarder l'image : ligne rouge très fine)
+        const stripGeo = new THREE.TorusGeometry(0.78, 0.015, 8, 100, Math.PI);
+        const stripMat = new THREE.MeshBasicMaterial({ color: '#ff0022' });
+        const strip = new THREE.Mesh(stripGeo, stripMat);
+        strip.position.set(2.05, 0.48, 0);
+        strip.rotation.y = Math.PI/2;
+        carGroup.add(strip);
+
+        // 11. SPOILER ARRIÈRE (Petit rebord ducktail intégré)
+        addShape(sphere, bodyMat, [1.9, 0.62, 0], [-0.15, 0, 0], [0.3, 0.1, 0.72]);
+
+        scene.add(carGroup);
+
+        // --- ANIMATION ET SCROLL ---
+        let targetZ = 8.5;
+        let targetRotY = -0.45;
+        let targetY = 0;
+
+        window.addEventListener('scroll', () => {
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollY = window.scrollY;
+            const percent = (scrollY / Math.max(scrollHeight, 1)) * 100;
+
+            targetZ = 8.5 - (percent / 100) * 11; 
+            targetRotY = -0.45 + (percent / 100) * Math.PI * 3; 
+            targetY = -(percent / 100) * 0.45;
+
+            document.querySelectorAll('.section-ui').forEach(sec => {
+                const start = parseFloat(sec.dataset.start);
+                const end = parseFloat(sec.dataset.end);
+                sec.classList.toggle('active', percent >= start && percent < end);
+            });
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const lerpFactor = 0.055;
+
+            carGroup.rotation.y += (targetRotY - carGroup.rotation.y) * lerpFactor;
+            carGroup.position.y += (targetY - carGroup.position.y) * lerpFactor;
+            
+            // Flottaison subtile
+            carGroup.position.y += Math.sin(Date.now() * 0.0018) * 0.006; 
+
+            camera.position.z += (targetZ - camera.position.z) * lerpFactor;
+            renderer.render(scene, camera);
+        }
+
+        window.onload = () => {
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => document.getElementById('loader').remove(), 1000);
+                animate();
+            }, 1000);
+        };
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
