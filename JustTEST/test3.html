@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Élégance du Quotidien | Expérience 3D</title>
+    
+    <!-- Polices harmonieuses : Playfair Display pour l'élégance, Poppins pour la modernité -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS pour une UI poussée et réactive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        'deep-space': '#0f111a',
+                        'accent-lavender': '#b4a6ff',
+                        'accent-peach': '#ffb0a6',
+                        'accent-mint': '#a6ffea',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Three.js pour la 3D -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- GSAP pour des animations d'UI fluides -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        /* Réinitialisation et suppression des barres de défilement pour une immersion totale */
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: #0f111a;
+            color: white;
+            overflow-x: hidden;
+            /* Cacher la scrollbar pour un look plus propre, tout en gardant le scroll actif */
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
+        }
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none; /* Laisse passer les clics vers le contenu en dessous si nécessaire */
+        }
+
+        /* Espace de défilement pour forcer la hauteur de la page */
+        .scroll-container {
+            position: relative;
+            height: 500vh; /* 5 écrans de haut pour notre voyage en profondeur */
+            z-index: 10;
+        }
+
+        /* Conteneurs de texte qui apparaîtront au fil du scroll */
+        .section-ui {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-out;
+            pointer-events: none;
+        }
+
+        .section-ui.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .glass-panel {
+            background: rgba(15, 17, 26, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Indicateur de scroll */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.7;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-10px) translateX(-50%); }
+            60% { transform: translateY(-5px) translateX(-50%); }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-accent-lavender selection:text-deep-space">
+
+    <!-- Toile WebGL (Arrière-plan interactif) -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- UI Fixe (Superposition) -->
+    <div id="ui-layer" class="fixed inset-0 z-20 pointer-events-none">
+        
+        <!-- Navigation / Header -->
+        <header class="absolute top-0 w-full p-6 md:p-10 flex justify-between items-center glass-panel z-50">
+            <h1 class="font-serif text-xl md:text-2xl font-bold tracking-wider text-white">L'Élégance</h1>
+            <div class="text-xs md:text-sm font-sans tracking-widest uppercase text-accent-lavender">Expérience de Profondeur</div>
+        </header>
+
+        <!-- Sections de contenu (Pilotées par le scroll) -->
+        <div class="section-ui active" id="section-0" data-start="0" data-end="15">
+            <div class="max-w-2xl mx-auto text-center md:text-left md:mx-0 md:ml-[10%] mt-20">
+                <h2 class="font-serif text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                    Plongez dans<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent-lavender to-accent-mint">le quotidien.</span>
+                </h2>
+                <p class="font-sans text-lg md:text-xl text-gray-300 font-light max-w-lg">
+                    Scrollez pour avancer. Découvrez la beauté cachée dans les objets les plus simples de notre routine, sublimés par la lumière et l'espace.
+                </p>
+            </div>
+        </div>
+
+        <div class="section-ui" id="section-1" data-start="15" data-end="40">
+            <div class="max-w-xl mx-auto text-center md:text-right md:mx-0 md:ml-auto md:mr-[10%] mt-20">
+                <h2 class="font-serif text-4xl md:text-6xl font-bold mb-4 text-accent-peach">Le Réveil</h2>
+                <div class="glass-panel p-6 rounded-2xl inline-block text-left">
+                    <p class="font-sans text-gray-200 font-light leading-relaxed">
+                        La première gorgée. La chaleur de la céramique entre vos mains. Ce simple cylindre marque le début de toutes les possibilités de la journée.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-ui" id="section-2" data-start="40" data-end="65">
+            <div class="max-w-xl mx-auto text-center md:text-left md:mx-0 md:ml-[10%] mt-20">
+                <h2 class="font-serif text-4xl md:text-6xl font-bold mb-4 text-accent-lavender">La Connexion</h2>
+                <div class="glass-panel p-6 rounded-2xl inline-block">
+                    <p class="font-sans text-gray-200 font-light leading-relaxed">
+                        Une fenêtre de verre et de métal vers le monde entier. Un monolithe moderne qui détient nos souvenirs, nos voix et notre savoir.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-ui" id="section-3" data-start="65" data-end="90">
+            <div class="max-w-xl mx-auto text-center md:text-right md:mx-0 md:ml-auto md:mr-[10%] mt-20">
+                <h2 class="font-serif text-4xl md:text-6xl font-bold mb-4 text-accent-mint">La Pause</h2>
+                <div class="glass-panel p-6 rounded-2xl inline-block text-left">
+                    <p class="font-sans text-gray-200 font-light leading-relaxed">
+                        Le cercle parfait de la gourmandise. Un moment suspendu dans le temps pour savourer la douceur de l'instant présent.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-ui" id="section-4" data-start="90" data-end="100">
+            <div class="max-w-3xl mx-auto text-center mt-20">
+                <h2 class="font-serif text-5xl md:text-8xl font-bold mb-6 text-white">L'Essentiel.</h2>
+                <p class="font-sans text-xl text-gray-400 font-light mb-8">
+                    La beauté n'est pas dans l'objet, mais dans le regard qu'on lui porte.
+                </p>
+                <button onclick="window.scrollTo(0,0)" class="pointer-events-auto px-8 py-3 rounded-full border border-accent-lavender text-accent-lavender hover:bg-accent-lavender hover:text-deep-space transition-colors duration-300 font-sans tracking-wide">
+                    Remonter à la surface
+                </button>
+            </div>
+        </div>
+
+        <!-- Indicateur de Scroll -->
+        <div class="scroll-indicator font-sans text-xs tracking-widest text-gray-400">
+            <span>SCROLL</span>
+            <div class="w-[1px] h-8 bg-gradient-to-b from-gray-400 to-transparent"></div>
+        </div>
+    </div>
+
+    <!-- Espace pour permettre le scroll -->
+    <div class="scroll-container"></div>
+
+    <script>
+        // --- INITIALISATION THREE.JS ---
+        const canvas = document.querySelector('#webgl-canvas');
+        const scene = new THREE.Scene();
+        
+        // Brouillard pour donner un effet de profondeur infini
+        scene.fog = new THREE.FogExp2('#0f111a', 0.02);
+
+        // Caméra
+        const sizes = { width: window.innerWidth, height: window.innerHeight };
+        const camera = new THREE.PerspectiveCamera(45, sizes.width / sizes.height, 0.1, 100);
+        
+        // La caméra commence à Z=5 (devant le premier objet) et reculera (vers les Z négatifs) avec le scroll
+        const initialCameraZ = 5;
+        camera.position.set(0, 0, initialCameraZ);
+        scene.add(camera);
+
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+        renderer.setSize(sizes.width, sizes.height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+        // --- LUMIÈRES ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(5, 5, 4);
+        directionalLight.castShadow = true;
+        scene.add(directionalLight);
+
+        // Lumières colorées pour l'ambiance (Lavande et Menthe)
+        const pointLight1 = new THREE.PointLight('#b4a6ff', 2, 20);
+        pointLight1.position.set(-3, 2, 0);
+        scene.add(pointLight1);
+
+        const pointLight2 = new THREE.PointLight('#a6ffea', 1.5, 20);
+        pointLight2.position.set(3, -2, -10);
+        scene.add(pointLight2);
+
+        // --- MATÉRIAUX ---
+        // Matériau élégant, type verre dépoli / plastique premium
+        const premiumMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0xffffff,
+            metalness: 0.1,
+            roughness: 0.2,
+            transmission: 0.5, // Effet verre
+            thickness: 0.5,
+            envMapIntensity: 1.0,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.1
+        });
+
+        // --- CRÉATION DES OBJETS DU QUOTIDIEN ---
+        const objects = [];
+        
+        // Fonction utilitaire pour créer et positionner un objet
+        function createSceneObject(geometry, material, zPosition, xOffset, yOffset) {
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(xOffset, yOffset, zPosition);
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            
+            // On sauvegarde sa rotation de base pour l'animation
+            mesh.userData = {
+                rotSpeedX: (Math.random() - 0.5) * 0.01,
+                rotSpeedY: (Math.random() - 0.5) * 0.01,
+                rotSpeedZ: (Math.random() - 0.5) * 0.01
+            };
+            
+            scene.add(mesh);
+            objects.push(mesh);
+            return mesh;
+        }
+
+        // 1. La Tasse (Z = 0)
+        const mugGroup = new THREE.Group();
+        // Corps de la tasse
+        const mugBodyGeometry = new THREE.CylinderGeometry(0.8, 0.8, 1.5, 32);
+        const mugBody = new THREE.Mesh(mugBodyGeometry, premiumMaterial);
+        // Anse de la tasse
+        const mugHandleGeometry = new THREE.TorusGeometry(0.5, 0.15, 16, 32);
+        const mugHandle = new THREE.Mesh(mugHandleGeometry, premiumMaterial);
+        mugHandle.position.set(0.8, 0, 0);
+        
+        mugGroup.add(mugBody);
+        mugGroup.add(mugHandle);
+        mugGroup.position.set(-1.5, -0.5, 0);
+        mugGroup.userData = { rotSpeedX: 0.005, rotSpeedY: 0.01, rotSpeedZ: 0 };
+        scene.add(mugGroup);
+        objects.push(mugGroup);
+
+        // 2. Le Smartphone Abstrait (Z = -15)
+        const phoneGeometry = new THREE.BoxGeometry(1.5, 3, 0.2);
+        // On modifie légèrement le matériau pour le téléphone (plus métallique/sombre)
+        const phoneMaterial = premiumMaterial.clone();
+        phoneMaterial.color.setHex(0x333344);
+        phoneMaterial.metalness = 0.8;
+        phoneMaterial.roughness = 0.1;
+        createSceneObject(phoneGeometry, phoneMaterial, -15, 2, 0.5);
+
+        // 3. Le Beigne / La Pause (Z = -30)
+        const donutGeometry = new THREE.TorusGeometry(1, 0.4, 32, 64);
+        const donutMaterial = premiumMaterial.clone();
+        donutMaterial.color.setHex(0xffb0a6); // Couleur pêche pour le beigne
+        createSceneObject(donutGeometry, donutMaterial, -30, -1.5, -1);
+
+        // 4. Objet de fin mystère (Sphère parfaite) (Z = -45)
+        const sphereGeometry = new THREE.SphereGeometry(1.2, 64, 64);
+        const sphereMaterial = premiumMaterial.clone();
+        sphereMaterial.color.setHex(0xb4a6ff);
+        sphereMaterial.transmission = 0.9;
+        createSceneObject(sphereGeometry, sphereMaterial, -45, 0, 0);
+
+        // --- PARTICULES (Poussière d'étoiles / Effet de vitesse) ---
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 1000;
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for(let i = 0; i < particlesCount * 3; i+=3) {
+            // Répartir les particules le long du trajet (de Z=10 à Z=-60)
+            posArray[i] = (Math.random() - 0.5) * 20; // X
+            posArray[i+1] = (Math.random() - 0.5) * 20; // Y
+            posArray[i+2] = (Math.random() * -70) + 10; // Z
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.05,
+            color: '#a6ffea',
+            transparent: true,
+            opacity: 0.6,
+            blending: THREE.AdditiveBlending
+        });
+
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        // --- LOGIQUE DE SCROLL & PROFONDEUR ---
+        let scrollY = window.scrollY;
+        let scrollPercent = 0;
+        
+        // Z de destination de la caméra. Elle ira de +5 à -50
+        const maxScrollZ = -50; 
+        let targetCameraZ = initialCameraZ;
+
+        window.addEventListener('scroll', () => {
+            scrollY = window.scrollY;
+            
+            // Calculer le pourcentage de défilement de la page (0 à 100)
+            const maxScrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            scrollPercent = (scrollY / maxScrollHeight) * 100;
+            
+            // Mettre à jour la cible Z de la caméra en fonction du pourcentage
+            // Si scroll=0%, Z=initialCameraZ. Si scroll=100%, Z=maxScrollZ
+            targetCameraZ = initialCameraZ + (scrollPercent / 100) * (maxScrollZ - initialCameraZ);
+
+            // Gestion de l'interface utilisateur (apparaitre/disparaitre)
+            updateUI(scrollPercent);
+        });
+
+        const uiSections = document.querySelectorAll('.section-ui');
+        
+        function updateUI(percent) {
+            uiSections.forEach(section => {
+                const start = parseFloat(section.getAttribute('data-start'));
+                const end = parseFloat(section.getAttribute('data-end'));
+                
+                // Si le scroll est dans la plage de la section
+                if (percent >= start && percent < end) {
+                    section.classList.add('active');
+                    // Petit effet parallaxe sur le contenu HTML
+                    const innerContent = section.firstElementChild;
+                    if(innerContent) {
+                        const progress = (percent - start) / (end - start);
+                        // Fait glisser légèrement le texte vers le haut
+                        innerContent.style.transform = `translateY(${(1 - progress) * 20}px)`;
+                    }
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+
+            // Cacher l'indicateur de scroll une fois qu'on a commencé
+            const indicator = document.querySelector('.scroll-indicator');
+            if (percent > 2) {
+                indicator.style.opacity = '0';
+            } else {
+                indicator.style.opacity = '0.7';
+            }
+        }
+
+        // --- REDIMENSIONNEMENT FENÊTRE ---
+        window.addEventListener('resize', () => {
+            sizes.width = window.innerWidth;
+            sizes.height = window.innerHeight;
+            camera.aspect = sizes.width / sizes.height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(sizes.width, sizes.height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        });
+
+        // --- BOUCLE D'ANIMATION ---
+        const clock = new THREE.Clock();
+
+        const tick = () => {
+            const elapsedTime = clock.getElapsedTime();
+
+            // 1. Interpolation fluide de la caméra (Lerp) pour un effet de profondeur doux
+            // On s'approche de targetCameraZ à chaque frame
+            camera.position.z += (targetCameraZ - camera.position.z) * 0.05;
+
+            // Optionnel : Ajouter un léger balancement de la caméra pour un effet de flottement
+            camera.position.x = Math.sin(elapsedTime * 0.5) * 0.5;
+            camera.position.y = Math.cos(elapsedTime * 0.3) * 0.2;
+
+            // 2. Animer la rotation continue des objets
+            objects.forEach(obj => {
+                obj.rotation.x += obj.userData.rotSpeedX;
+                obj.rotation.y += obj.userData.rotSpeedY;
+                obj.rotation.z += obj.userData.rotSpeedZ;
+                
+                // Faire flotter doucement les objets sur l'axe Y
+                obj.position.y += Math.sin(elapsedTime * 2 + obj.position.z) * 0.002;
+            });
+
+            // 3. Animer les particules lentement vers le spectateur
+            particlesMesh.rotation.y = elapsedTime * 0.02;
+
+            // 4. Mettre à jour les lumières colorées pour les faire tourner autour de l'axe central
+            pointLight1.position.x = Math.sin(elapsedTime * 0.5) * 5;
+            pointLight1.position.z = camera.position.z - 5 + Math.cos(elapsedTime * 0.5) * 5;
+
+            // Rendu de la scène
+            renderer.render(scene, camera);
+
+            // Appeler la prochaine frame
+            window.requestAnimationFrame(tick);
+        };
+
+        // Lancer l'animation
+        tick();
+        
+        // Initialiser l'UI au chargement
+        updateUI(0);
+
+    </script>
+</body>
+</html>
