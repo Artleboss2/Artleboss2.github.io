@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AXIOM — Computational Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- Navigation -->
+  <nav id="nav">
+    <div class="nav-logo">AXIOM</div>
+    <div class="nav-links">
+      <a href="#hero" class="nav-link" data-section="hero">Init</a>
+      <a href="#pathfinding" class="nav-link" data-section="pathfinding">Navigate</a>
+      <a href="#particles" class="nav-link" data-section="particles">Physics</a>
+      <a href="#lab" class="nav-link" data-section="lab">Lab</a>
+      <a href="#services" class="nav-link" data-section="services">Systems</a>
+    </div>
+    <div class="nav-status">
+      <span class="status-dot"></span>
+      <span id="nav-clock">00:00:00</span>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 1 — HERO: Visual Sort + Delaunay
+  ════════════════════════════════════════════════ -->
+  <section id="hero">
+    <canvas id="sort-canvas"></canvas>
+    <canvas id="delaunay-canvas"></canvas>
+    <div class="hero-content">
+      <div class="hero-eyebrow reveal-item">
+        <span class="mono">v3.14.159</span>
+        <span class="tag">COMPUTATIONAL</span>
+      </div>
+      <h1 class="hero-title reveal-item">
+        <span class="title-line" id="title-line-1">ALGO</span>
+        <span class="title-line accent" id="title-line-2">RITHM</span>
+        <span class="title-line" id="title-line-3">IC</span>
+      </h1>
+      <p class="hero-sub reveal-item">
+        Where mathematics becomes architecture.<br />
+        Where data transforms into experience.
+      </p>
+      <div class="hero-cta reveal-item">
+        <button class="btn-primary" id="init-btn">Initialize Systems</button>
+        <span class="mono small">↓ scroll to explore</span>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-val" id="stat-sort">0</span>
+        <span class="stat-label mono">comparisons</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val" id="stat-fps">60</span>
+        <span class="stat-label mono">fps</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val" id="stat-nodes">0</span>
+        <span class="stat-label mono">nodes active</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 2 — PATHFINDING: A* Interactive Grid
+  ════════════════════════════════════════════════ -->
+  <section id="pathfinding">
+    <div class="section-header reveal-item">
+      <span class="mono label">02 / NAVIGATE</span>
+      <h2>A* Pathfinding</h2>
+      <p>Click to place walls. Watch the algorithm solve in real-time.</p>
+    </div>
+    <div class="pathfinding-container">
+      <canvas id="pathfinding-canvas"></canvas>
+      <div class="pathfinding-controls">
+        <button class="ctrl-btn active" id="mode-wall">Wall Mode</button>
+        <button class="ctrl-btn" id="mode-start">Set Start</button>
+        <button class="ctrl-btn" id="mode-end">Set End</button>
+        <button class="ctrl-btn ghost" id="clear-grid">Clear</button>
+        <div class="pathfinding-stats mono">
+          <div>Explored: <span id="pf-explored">0</span></div>
+          <div>Path length: <span id="pf-length">—</span></div>
+          <div>Time: <span id="pf-time">—</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 3 — PARTICLES: Newtonian Physics
+  ════════════════════════════════════════════════ -->
+  <section id="particles">
+    <canvas id="particles-canvas"></canvas>
+    <div class="particles-overlay reveal-item">
+      <span class="mono label">03 / PHYSICS</span>
+      <h2>Newtonian<br />Particle Engine</h2>
+      <p class="mono small">500 particles · attraction · repulsion · friction</p>
+      <div class="particle-controls">
+        <label>Gravity <input type="range" id="gravity-slider" min="0" max="100" value="20" /></label>
+        <label>Repulsion <input type="range" id="repulsion-slider" min="0" max="100" value="50" /></label>
+        <label>Friction <input type="range" id="friction-slider" min="1" max="100" value="95" /></label>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 4 — LAB: Fractals + FFT Visualizer
+  ════════════════════════════════════════════════ -->
+  <section id="lab">
+    <div class="lab-grid">
+      <div class="lab-panel lab-panel-fractal reveal-item">
+        <div class="panel-header">
+          <span class="mono label">04a / GENERATIVE</span>
+          <h3>Mandelbrot Fractal</h3>
+        </div>
+        <canvas id="fractal-canvas"></canvas>
+        <div class="fractal-controls">
+          <button class="ctrl-btn" id="fractal-zoom-in">Zoom +</button>
+          <button class="ctrl-btn" id="fractal-zoom-out">Zoom −</button>
+          <button class="ctrl-btn ghost" id="fractal-reset">Reset</button>
+          <label class="mono small">Iterations: <span id="fractal-iter-val">100</span>
+            <input type="range" id="fractal-iter" min="20" max="500" value="100" />
+          </label>
+        </div>
+      </div>
+
+      <div class="lab-panel lab-panel-fft reveal-item">
+        <div class="panel-header">
+          <span class="mono label">04b / FREQUENCY</span>
+          <h3>FFT Scroll Analyzer</h3>
+        </div>
+        <canvas id="fft-canvas"></canvas>
+        <p class="mono small fft-hint">↕ Scroll to drive the waveform</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 5 — HUFFMAN: Compression Tree
+  ════════════════════════════════════════════════ -->
+  <section id="huffman">
+    <div class="section-header reveal-item">
+      <span class="mono label">05 / ENCODE</span>
+      <h2>Huffman Compression</h2>
+      <p>Type text to generate a live encoding tree.</p>
+    </div>
+    <div class="huffman-container">
+      <div class="huffman-input-panel reveal-item">
+        <textarea id="huffman-input" placeholder="Type something to encode..." maxlength="200">hello world</textarea>
+        <div class="huffman-stats mono">
+          <div>Original: <span id="huff-original">0</span> bits</div>
+          <div>Compressed: <span id="huff-compressed">0</span> bits</div>
+          <div>Ratio: <span id="huff-ratio">—</span></div>
+        </div>
+        <div id="huffman-codes" class="huffman-codes mono"></div>
+      </div>
+      <canvas id="huffman-canvas" class="reveal-item"></canvas>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 6 — SERVICES: Recommendation Engine
+  ════════════════════════════════════════════════ -->
+  <section id="services">
+    <div class="section-header reveal-item">
+      <span class="mono label">06 / SYSTEMS</span>
+      <h2>Adaptive Services</h2>
+      <p class="mono small">Collaborative filtering — recommendations update as you explore.</p>
+    </div>
+    <div class="services-grid" id="services-grid">
+      <!-- Injected by JS -->
+    </div>
+    <div class="recommendation-bar reveal-item">
+      <span class="mono small">Based on your session:</span>
+      <div id="recommendation-output" class="recommendation-tags"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       FOOTER: Clock + Session Stats
+  ════════════════════════════════════════════════ -->
+  <footer id="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">AXIOM</div>
+        <p class="mono small">Computational Intelligence Systems<br />Est. 2025 — All rights reserved</p>
+      </div>
+      <div class="footer-clock-wrapper">
+        <canvas id="clock-canvas"></canvas>
+        <div class="clock-digital mono" id="footer-time">00:00:00</div>
+      </div>
+      <div class="footer-session mono">
+        <div class="session-item">
+          <span class="session-label">Session duration</span>
+          <span class="session-val" id="session-duration">00:00</span>
+        </div>
+        <div class="session-item">
+          <span class="session-label">Mouse distance</span>
+          <span class="session-val" id="mouse-distance">0 px</span>
+        </div>
+        <div class="session-item">
+          <span class="session-label">Scroll depth</span>
+          <span class="session-val" id="scroll-depth">0%</span>
+        </div>
+        <div class="session-item">
+          <span class="session-label">Interactions</span>
+          <span class="session-val" id="interaction-count">0</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom mono">
+      <span>AXIOM v3.14.159</span>
+      <span id="footer-entropy">Entropy: calculating…</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
