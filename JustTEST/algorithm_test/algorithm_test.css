@@ -488,7 +488,145 @@ input[type=range]::-webkit-slider-thumb {
   border: 1px solid var(--border);
 }
 
-/* ── Scrollbar ── */
+/* ══════════════════════════════════
+   SECTIONS 9–28: NEW ALGORITHMS
+══════════════════════════════════ */
+
+/* ── Neural Network ── */
+.neural-layout {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+  margin-top: 48px;
+}
+#neural-draw-canvas {
+  width: 100%; aspect-ratio: 1;
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  background: var(--bg-surface); cursor: none;
+}
+.neural-draw-controls { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+#neural-arch-canvas {
+  width: 100%; aspect-ratio: 1;
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+}
+#neural { padding: 120px 48px; background: var(--bg-deep); }
+
+/* ── Chaos / Lorenz ── */
+#chaos { position: relative; min-height: 100vh; display: flex; align-items: center; overflow: hidden; }
+#lorenz-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* ── Crypto ── */
+#crypto { padding: 120px 48px; }
+.crypto-layout {
+  display: grid; grid-template-columns: 340px 1fr; gap: 32px;
+  margin-top: 48px;
+}
+.crypto-input-col { display: flex; flex-direction: column; gap: 16px; }
+#crypto-input {
+  background: var(--bg-surface); color: var(--text-primary);
+  font-family: var(--font-mono); font-size: 14px;
+  border: 1px solid var(--border); border-radius: var(--radius-md);
+  padding: 16px; resize: vertical; min-height: 80px; outline: none;
+  transition: border-color 0.2s;
+}
+#crypto-input:focus { border-color: var(--accent-cyan); }
+#crypto-canvas {
+  width: 100%; height: 380px;
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+}
+
+/* ── Graph ── */
+#graph { padding: 120px 48px; background: var(--bg-deep); }
+#graph-canvas {
+  width: 100%; aspect-ratio: 16/9; max-height: 560px;
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  cursor: none;
+}
+
+/* ── Cellular Automata ── */
+#cellular { padding: 120px 48px; }
+#life-canvas {
+  width: 100%; aspect-ratio: 16/9;
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  cursor: none;
+}
+
+/* ── Noise / Wave ── */
+#noise-canvas { width: 100%; aspect-ratio: 1; display: block; border-radius: var(--radius-md); }
+#wave-canvas  { width: 100%; aspect-ratio: 16/7; display: block; border-radius: var(--radius-md); }
+
+/* ── Maze ── */
+#maze-canvas {
+  width: 100%; aspect-ratio: 16/9;
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  cursor: none;
+}
+
+/* ── Epicycles ── */
+#epicycle-canvas {
+  width: 100%; aspect-ratio: 16/9; max-height: 520px;
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  cursor: none;
+}
+
+/* ── Genetic ── */
+#genetic-canvas {
+  width: 100%; aspect-ratio: 16/9;
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  cursor: none;
+}
+
+/* ── Sorting Race ── */
+.sortrace-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+.sortrace-panel {
+  background: var(--bg-surface); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 16px;
+}
+.sortrace-title {
+  font-family: var(--font-mono); font-size: 11px; color: var(--accent-cyan);
+  letter-spacing: 0.08em; margin-bottom: 10px;
+  display: flex; justify-content: space-between;
+}
+.sortrace-canvas { display: block; width: 100%; height: 100px; }
+
+/* ── L-System ── */
+#lsystem-canvas {
+  width: 100%; aspect-ratio: 16/9; max-height: 560px;
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+}
+
+/* ── RSA ── */
+#rsa-canvas {
+  width: 100%; height: 460px;
+  border: 1px solid var(--border); border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+}
+
+/* ── Boids / Langton ── */
+#langton-canvas { width: 100%; aspect-ratio: 1; display: block; border-radius: var(--radius-md); }
+#boids-canvas   { width: 100%; aspect-ratio: 1; display: block; border-radius: var(--radius-md); }
+
+/* ── Voronoi ── */
+#voronoi-canvas { cursor: none; }
+
+/* ── Cloth ── */
+#cloth-canvas { cursor: none; }
+
+/* ── Marching squares ── */
+#marching-canvas { cursor: none; }
+
+/* responsive extras */
+@media (max-width: 960px) {
+  .neural-layout  { grid-template-columns: 1fr; }
+  .crypto-layout  { grid-template-columns: 1fr; }
+  .sortrace-grid  { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .sortrace-grid  { grid-template-columns: 1fr; }
+}
+
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg-void); }
 ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
