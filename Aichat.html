@@ -78,9 +78,7 @@
                 </button>
             </div>
             
-            <div id="history-list" class="flex-1 overflow-y-auto px-4 space-y-2 custom-scrollbar">
-                <!-- History Items -->
-            </div>
+            <div id="history-list" class="flex-1 overflow-y-auto px-4 space-y-2 custom-scrollbar"></div>
 
             <div class="p-4 border-t border-white/5">
                 <button onclick="openSettings()" class="w-full flex items-center gap-3 p-3 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl transition-all text-sm">
@@ -98,18 +96,15 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
                     </div>
                     <div>
-                        <h2 id="chat-title" class="font-bold text-sm">Prêt à discuter</h2>
-                        <p id="model-badge" class="text-[10px] text-slate-500 font-mono">Aucun modèle configuré</p>
+                        <h2 id="chat-title" class="font-bold text-sm">Nexus Chat</h2>
+                        <p id="model-badge" class="text-[10px] text-slate-500 font-mono">Prêt</p>
                     </div>
                 </div>
-                <button onclick="openSettings()" class="md:hidden p-2 text-slate-400"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/></svg></button>
             </header>
 
             <div id="chat-box" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 custom-scrollbar">
-                <!-- Messages -->
                 <div class="h-full flex flex-col items-center justify-center text-slate-500 opacity-50">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="mb-4"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-                    <p class="text-sm">Sélectionnez un fournisseur et posez une question.</p>
+                    <p class="text-sm italic">Configurez votre API pour commencer.</p>
                 </div>
             </div>
 
@@ -141,306 +136,232 @@
             </div>
             
             <div class="p-6 overflow-y-auto flex-1 custom-scrollbar space-y-8">
-                <!-- Provider Selector -->
                 <section>
-                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 block">1. Choisir le fournisseur</label>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="provider-grid">
-                        <!-- Dynamically filled -->
-                    </div>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 block">1. Fournisseur API</label>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="provider-grid"></div>
                 </section>
 
-                <!-- API Key & URL -->
                 <section class="space-y-4">
                     <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">2. Authentification</label>
-                    
                     <div class="space-y-4">
-                        <div id="key-container">
+                        <div>
                             <div class="flex justify-between items-end mb-1.5">
                                 <span class="text-xs text-slate-400">Clé API</span>
-                                <a id="get-key-link" href="#" target="_blank" class="text-[10px] text-indigo-400 hover:underline">Obtenir une clé →</a>
+                                <a id="get-key-link" href="#" target="_blank" class="text-[10px] text-indigo-400 hover:underline">Obtenir →</a>
                             </div>
                             <div class="relative">
-                                <input type="password" id="api-key-input" class="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-sm outline-none focus:border-indigo-500 transition-all pr-10" placeholder="Entrez votre clé">
+                                <input type="password" id="api-key-input" class="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-sm outline-none focus:border-indigo-500 transition-all pr-10" placeholder="Collez votre clé ici">
                                 <div id="key-status" class="absolute right-3 top-3.5 hidden">
                                     <svg class="text-emerald-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>
                                 </div>
                             </div>
                             <p id="key-hint" class="text-[10px] text-slate-500 mt-1.5"></p>
                         </div>
-
-                        <div>
-                            <span class="text-xs text-slate-400 block mb-1.5">Point de terminaison (Base URL)</span>
-                            <input type="text" id="base-url-input" class="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-sm outline-none focus:border-indigo-500 transition-all text-slate-500" readonly>
-                        </div>
                     </div>
                 </section>
 
-                <!-- Model Choice -->
                 <section>
-                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-4">3. Sélectionner le modèle</label>
-                    <select id="model-select" class="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-sm outline-none focus:border-indigo-500 transition-all appearance-none cursor-pointer">
-                        <!-- Filled based on provider -->
-                    </select>
+                    <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-4">3. Modèle</label>
+                    <select id="model-select" class="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-sm outline-none focus:border-indigo-500 transition-all cursor-pointer"></select>
                 </section>
             </div>
 
             <div class="p-6 bg-slate-900 border-t border-white/10">
-                <button onclick="saveAndApply()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-4 rounded-xl font-bold transition-all shadow-xl shadow-indigo-600/20 active:scale-95">
-                    Sauvegarder la configuration
+                <button onclick="saveAndApply()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-4 rounded-xl font-bold transition-all shadow-xl shadow-indigo-600/20">
+                    Sauvegarder
                 </button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- CONFIGURATION DATA ---
         const PROVIDERS = {
             google: {
                 name: "Google Gemini",
-                icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 24c6.627 0 12-5.373 12-12S18.627 0 12 0 0 5.373 0 12s5.373 12 12 12z"/><path fill="#fff" d="M17.5 12c0-.3-.03-.6-.08-.9h-5.42v1.7h3.08c-.13.7-.53 1.3-1.13 1.7v1.4h1.83c1.07-1 1.72-2.47 1.72-4.2z"/></svg>`,
-                baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai",
+                icon: "✨",
+                baseUrl: "https://generativelanguage.googleapis.com/v1beta",
                 models: ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash-exp"],
                 keyLink: "https://aistudio.google.com/app/apikey",
                 keyPrefix: "AIza",
-                hint: "Commence généralement par 'AIza'"
+                type: "google_native" // Format spécial
             },
             openai: {
                 name: "OpenAI",
-                icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.28 7.53c-.52-1.3-1.45-2.4-2.65-3.14-1.2-.74-2.6-1.07-3.98-1.07-.6 0-1.2.06-1.78.18-.74-1.37-1.87-2.52-3.3-3.23C9.13-.44 7.55-.54 6.13-.07c-1.42.47-2.65 1.4-3.4 2.65-.74 1.25-1.05 2.67-1 4.08.02.6.1 1.2.25 1.78-1.37.74-2.52 1.87-3.23 3.3-.71 1.43-.81 3.01-.34 4.43.47 1.42 1.4 2.65 2.65 3.4 1.25.74 2.67 1.05 4.08 1 .6-.02 1.2-.1 1.78-.25.74 1.37 1.87 2.52 3.3 3.23 1.43.71 3.01.81 4.43.34 1.42-.47 2.65-1.4 3.4-2.65.74-1.25 1.05-2.67 1-4.08-.02-.6-.1-1.2-.25-1.78 1.37-.74 2.52-1.87 3.23-3.3.71-1.43.81-3.01.34-4.43-.47-1.42-1.4-2.65-2.65-3.4zM12 14.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`,
+                icon: "🤖",
                 baseUrl: "https://api.openai.com/v1",
                 models: ["gpt-4o", "gpt-4o-mini", "gpt-3.5-turbo"],
                 keyLink: "https://platform.openai.com/api-keys",
                 keyPrefix: "sk-",
-                hint: "Commence par 'sk-'"
-            },
-            anthropic: {
-                name: "Anthropic",
-                icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 22h20L12 2zm0 4.8L18.4 19H5.6L12 6.8z"/></svg>`,
-                baseUrl: "https://api.anthropic.com/v1",
-                models: ["claude-3-5-sonnet-20240620", "claude-3-opus-20240229", "claude-3-haiku-20240307"],
-                keyLink: "https://console.anthropic.com/settings/keys",
-                keyPrefix: "sk-ant-",
-                hint: "Commence par 'sk-ant-'"
+                type: "openai_format"
             },
             groq: {
-                name: "Groq",
-                icon: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L2 12l10 12 10-12L12 0z"/></svg>`,
+                name: "Groq (Llama/Mixtral)",
+                icon: "⚡",
                 baseUrl: "https://api.groq.com/openai/v1",
                 models: ["llama-3.1-70b-versatile", "llama-3.1-8b-instant", "mixtral-8x7b-32768"],
                 keyLink: "https://console.groq.com/keys",
                 keyPrefix: "gsk_",
-                hint: "Commence par 'gsk_'"
+                type: "openai_format"
             }
         };
 
-        // --- STATE ---
-        let currentProvider = "google";
         let state = {
             currentChatId: null,
-            chats: JSON.parse(localStorage.getItem('nexus_chats')) || [],
-            config: JSON.parse(localStorage.getItem('nexus_config')) || {
+            chats: JSON.parse(localStorage.getItem('nexus_chats_v2')) || [],
+            config: JSON.parse(localStorage.getItem('nexus_config_v2')) || {
                 provider: "google",
                 apiKey: "",
-                model: "gemini-1.5-flash",
-                baseUrl: PROVIDERS.google.baseUrl
+                model: "gemini-1.5-flash"
             }
         };
 
-        // --- UI HELPERS ---
-        const $ = (id) => document.getElementById(id);
-        const chatBox = $('chat-box');
-        const userInput = $('user-input');
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
 
-        function openSettings() { $('settings-modal').classList.remove('hidden'); }
-        function closeSettings() { $('settings-modal').classList.add('hidden'); }
+        function openSettings() { document.getElementById('settings-modal').classList.remove('hidden'); }
+        function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
 
-        function initSettings() {
-            const grid = $('provider-grid');
-            grid.innerHTML = '';
-            
-            Object.entries(PROVIDERS).forEach(([id, data]) => {
-                const card = document.createElement('div');
-                card.className = `provider-card glass p-4 rounded-2xl flex flex-col items-center gap-3 text-center ${state.config.provider === id ? 'active' : ''}`;
-                card.innerHTML = `
-                    <div class="w-10 h-10 flex items-center justify-center text-slate-400">${data.icon}</div>
-                    <span class="text-xs font-bold">${data.name}</span>
-                `;
-                card.onclick = () => selectProvider(id);
-                grid.appendChild(card);
-            });
-
-            selectProvider(state.config.provider, false);
-            $('api-key-input').value = state.config.apiKey;
-            validateKey(state.config.apiKey);
-        }
-
-        function selectProvider(id, updateModel = true) {
-            currentProvider = id;
+        function selectProvider(id) {
+            state.config.provider = id;
             document.querySelectorAll('.provider-card').forEach(c => c.classList.remove('active'));
-            const cards = document.querySelectorAll('.provider-card');
-            const index = Object.keys(PROVIDERS).indexOf(id);
-            if(cards[index]) cards[index].classList.add('active');
-
-            const data = PROVIDERS[id];
-            $('base-url-input').value = data.baseUrl;
-            $('get-key-link').href = data.keyLink;
-            $('key-hint').innerText = data.hint;
-
-            // Fill Models
-            const select = $('model-select');
+            const pData = PROVIDERS[id];
+            
+            const select = document.getElementById('model-select');
             select.innerHTML = '';
-            data.models.forEach(m => {
+            pData.models.forEach(m => {
                 const opt = document.createElement('option');
                 opt.value = m;
                 opt.innerText = m;
-                if(updateModel && m === state.config.model) opt.selected = true;
                 select.appendChild(opt);
             });
 
-            validateKey($('api-key-input').value);
+            document.getElementById('get-key-link').href = pData.keyLink;
+            document.getElementById('key-hint').innerText = `Format: ${pData.keyPrefix}...`;
+            validateKey(document.getElementById('api-key-input').value);
+            
+            // Highlight card
+            const cards = document.querySelectorAll('.provider-card');
+            const idx = Object.keys(PROVIDERS).indexOf(id);
+            if(cards[idx]) cards[idx].classList.add('active');
         }
 
         function validateKey(val) {
-            const prefix = PROVIDERS[currentProvider].keyPrefix;
-            const status = $('key-status');
-            if(val && val.startsWith(prefix)) {
-                status.classList.remove('hidden');
-            } else {
-                status.classList.add('hidden');
-            }
+            const prefix = PROVIDERS[state.config.provider].keyPrefix;
+            const status = document.getElementById('key-status');
+            if(val && val.startsWith(prefix)) status.classList.remove('hidden');
+            else status.classList.add('hidden');
         }
 
-        $('api-key-input').oninput = (e) => validateKey(e.target.value);
+        function initSettings() {
+            const grid = document.getElementById('provider-grid');
+            grid.innerHTML = '';
+            Object.entries(PROVIDERS).forEach(([id, data]) => {
+                const card = document.createElement('div');
+                card.className = `provider-card glass p-4 rounded-2xl flex flex-col items-center gap-2 text-center ${state.config.provider === id ? 'active' : ''}`;
+                card.innerHTML = `<span class="text-2xl">${data.icon}</span><span class="text-[10px] font-bold">${data.name}</span>`;
+                card.onclick = () => selectProvider(id);
+                grid.appendChild(card);
+            });
+            document.getElementById('api-key-input').value = state.config.apiKey;
+            selectProvider(state.config.provider);
+            document.getElementById('model-select').value = state.config.model;
+        }
 
         function saveAndApply() {
-            state.config = {
-                provider: currentProvider,
-                apiKey: $('api-key-input').value.trim(),
-                model: $('model-select').value,
-                baseUrl: $('base-url-input').value
-            };
-            localStorage.setItem('nexus_config', JSON.stringify(state.config));
-            updateHeader();
+            state.config.apiKey = document.getElementById('api-key-input').value.trim();
+            state.config.model = document.getElementById('model-select').value;
+            localStorage.setItem('nexus_config_v2', JSON.stringify(state.config));
+            document.getElementById('model-badge').innerText = `${state.config.provider} / ${state.config.model}`;
             closeSettings();
         }
 
-        function updateHeader() {
-            $('model-badge').innerText = `${state.config.provider.toUpperCase()} / ${state.config.model}`;
-            $('active-provider-icon').innerHTML = PROVIDERS[state.config.provider].icon;
-        }
-
-        // --- CHAT LOGIC ---
         function appendMessage(role, content) {
             if(chatBox.querySelector('.opacity-50')) chatBox.innerHTML = '';
-            
             const div = document.createElement('div');
             div.className = `message-bubble flex flex-col ${role === 'user' ? 'items-end' : 'items-start'}`;
-            
             const inner = document.createElement('div');
-            inner.className = `max-w-[85%] p-4 rounded-2xl text-sm leading-relaxed ${role === 'user' ? 'bg-indigo-600 text-white rounded-tr-none' : 'bg-white/5 border border-white/10 text-slate-200 rounded-tl-none prose prose-invert'}`;
-            
-            inner.innerHTML = role === 'user' ? `<p class="whitespace-pre-wrap">${content}</p>` : marked.parse(content);
-            
+            inner.className = `max-w-[85%] p-4 rounded-2xl text-sm ${role === 'user' ? 'bg-indigo-600 text-white rounded-tr-none' : 'bg-white/5 border border-white/10 text-slate-200 rounded-tl-none prose prose-invert'}`;
+            inner.innerHTML = role === 'user' ? content : marked.parse(content);
             div.appendChild(inner);
             chatBox.appendChild(div);
-            
             inner.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
         async function handleSend() {
             const text = userInput.value.trim();
-            if(!text || !state.config.apiKey) {
-                if(!state.config.apiKey) openSettings();
-                return;
+            if(!text || !state.config.apiKey) return;
+
+            if(!state.currentChatId) {
+                state.currentChatId = Date.now().toString();
+                state.chats.push({id: state.currentChatId, title: text.slice(0, 20), messages: []});
             }
-
-            if(!state.currentChatId) createNewChat();
             const chat = state.chats.find(c => c.id === state.currentChatId);
-            
-            appendMessage('user', text);
-            chat.messages.push({ role: 'user', content: text });
-            userInput.value = '';
-            userInput.style.height = 'auto';
 
-            $('typing-indicator').classList.remove('hidden');
-            $('send-btn').disabled = true;
+            appendMessage('user', text);
+            chat.messages.push({role: 'user', content: text});
+            userInput.value = '';
+
+            document.getElementById('typing-indicator').classList.remove('hidden');
 
             try {
-                const response = await fetch(`${state.config.baseUrl}/chat/completions`, {
-                    method: 'POST',
-                    headers: {
+                let url, body, headers;
+                const p = PROVIDERS[state.config.provider];
+
+                if (p.type === "google_native") {
+                    // FORMAT GOOGLE NATIF
+                    url = `${p.baseUrl}/models/${state.config.model}:generateContent?key=${state.config.apiKey}`;
+                    headers = { 'Content-Type': 'application/json' };
+                    body = JSON.stringify({
+                        contents: chat.messages.map(m => ({
+                            role: m.role === 'assistant' ? 'model' : 'user',
+                            parts: [{ text: m.content }]
+                        }))
+                    });
+                } else {
+                    // FORMAT OPENAI
+                    url = `${p.baseUrl}/chat/completions`;
+                    headers = { 
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${state.config.apiKey}`
-                    },
-                    body: JSON.stringify({
+                    };
+                    body = JSON.stringify({
                         model: state.config.model,
                         messages: chat.messages
-                    })
-                });
-
-                const data = await response.json();
-                if(data.error) throw new Error(data.error.message);
-
-                const aiMsg = data.choices[0].message.content;
-                appendMessage('assistant', aiMsg);
-                chat.messages.push({ role: 'assistant', content: aiMsg });
-                
-                if(chat.messages.length === 2) {
-                    chat.title = text.substring(0, 30) + "...";
-                    renderHistory();
+                    });
                 }
 
+                const response = await fetch(url, { method: 'POST', headers, body });
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error?.message || data[0]?.error?.message || "Erreur de configuration");
+                }
+
+                let aiMsg = "";
+                if (p.type === "google_native") {
+                    aiMsg = data.candidates[0].content.parts[0].text;
+                } else {
+                    aiMsg = data.choices[0].message.content;
+                }
+
+                appendMessage('assistant', aiMsg);
+                chat.messages.push({role: 'assistant', content: aiMsg});
+                localStorage.setItem('nexus_chats_v2', JSON.stringify(state.chats));
+
             } catch (err) {
-                appendMessage('assistant', `❌ **Erreur :** ${err.message}\n\nVérifiez votre clé API et votre connexion.`);
+                appendMessage('assistant', `❌ **Erreur :** ${err.message}`);
             } finally {
-                $('typing-indicator').classList.add('hidden');
-                $('send-btn').disabled = false;
-                saveChats();
+                document.getElementById('typing-indicator').classList.add('hidden');
             }
         }
 
-        function createNewChat() {
-            const id = Date.now().toString();
-            state.chats.push({ id, title: "Nouvelle discussion", messages: [], updatedAt: Date.now() });
-            loadChat(id);
-        }
-
-        function loadChat(id) {
-            state.currentChatId = id;
-            const chat = state.chats.find(c => c.id === id);
-            chatBox.innerHTML = '';
-            $('chat-title').innerText = chat.title;
-            chat.messages.forEach(m => appendMessage(m.role, m.content));
-            renderHistory();
-        }
-
-        function renderHistory() {
-            const list = $('history-list');
-            list.innerHTML = '';
-            state.chats.sort((a,b) => b.updatedAt - a.updatedAt).forEach(chat => {
-                const btn = document.createElement('button');
-                btn.className = `w-full text-left p-3 rounded-xl text-xs truncate transition-all ${state.currentChatId === chat.id ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/30' : 'text-slate-500 hover:bg-white/5'}`;
-                btn.innerText = chat.title;
-                btn.onclick = () => loadChat(chat.id);
-                list.appendChild(btn);
-            });
-        }
-
-        function saveChats() { localStorage.setItem('nexus_chats', JSON.stringify(state.chats)); }
-
-        // --- INIT ---
         window.onload = () => {
             initSettings();
-            updateHeader();
-            renderHistory();
-            if(state.chats.length > 0) loadChat(state.chats[0].id);
+            document.getElementById('api-key-input').oninput = (e) => validateKey(e.target.value);
+            document.getElementById('send-btn').onclick = handleSend;
+            userInput.onkeydown = (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } };
         };
-
-        userInput.onkeydown = (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } };
-        userInput.oninput = function() { this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px'; };
-        $('send-btn').onclick = handleSend;
-
     </script>
 </body>
 </html>
