@@ -183,7 +183,7 @@
                 models: ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash-exp"],
                 keyLink: "https://aistudio.google.com/app/apikey",
                 keyPrefix: "AIza",
-                type: "google_native" // Format spécial
+                type: "google_native" 
             },
             openai: {
                 name: "OpenAI",
@@ -239,9 +239,9 @@
             document.getElementById('key-hint').innerText = `Format: ${pData.keyPrefix}...`;
             validateKey(document.getElementById('api-key-input').value);
             
-            // Highlight card
             const cards = document.querySelectorAll('.provider-card');
-            const idx = Object.keys(PROVIDERS).indexOf(id);
+            const keys = Object.keys(PROVIDERS);
+            const idx = keys.indexOf(id);
             if(cards[idx]) cards[idx].classList.add('active');
         }
 
@@ -309,8 +309,9 @@
                 const p = PROVIDERS[state.config.provider];
 
                 if (p.type === "google_native") {
-                    // FORMAT GOOGLE NATIF
-                    url = `${p.baseUrl}/models/${state.config.model}:generateContent?key=${state.config.apiKey}`;
+                    // Correction du chemin du modèle pour Google
+                    const modelName = state.config.model.startsWith('models/') ? state.config.model : `models/${state.config.model}`;
+                    url = `${p.baseUrl}/${modelName}:generateContent?key=${state.config.apiKey}`;
                     headers = { 'Content-Type': 'application/json' };
                     body = JSON.stringify({
                         contents: chat.messages.map(m => ({
@@ -319,7 +320,6 @@
                         }))
                     });
                 } else {
-                    // FORMAT OPENAI
                     url = `${p.baseUrl}/chat/completions`;
                     headers = { 
                         'Content-Type': 'application/json',
@@ -335,7 +335,7 @@
                 const data = await response.json();
 
                 if (!response.ok) {
-                    throw new Error(data.error?.message || data[0]?.error?.message || "Erreur de configuration");
+                    throw new Error(data.error?.message || data[0]?.error?.message || "Erreur API");
                 }
 
                 let aiMsg = "";
