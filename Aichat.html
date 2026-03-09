@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Nexus AI | Multi-Engine Elite</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -44,13 +44,13 @@
         }
 
         .sidebar-glass {
-            background: rgba(15, 23, 42, 0.5);
-            backdrop-filter: blur(16px);
+            background: rgba(10, 15, 28, 0.98);
+            backdrop-filter: blur(20px);
             border-right: 1px solid var(--glass-border);
         }
 
         .glass-card {
-            background: rgba(30, 41, 59, 0.5);
+            background: rgba(30, 41, 59, 0.4);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             transition: all 0.2s ease;
@@ -59,157 +59,217 @@
         .active-chat {
             background: rgba(99, 102, 241, 0.25);
             border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.1);
         }
 
-        /* Markdown Styles */
+        /* Styles Markdown Propres */
         .prose pre {
             background: #0f172a !important;
-            padding: 1.25rem;
+            padding: 1rem;
             border-radius: 12px;
-            margin: 1rem 0;
-            border: 1px solid rgba(255,255,255,0.1);
+            margin: 0.8rem 0;
+            border: 1px solid rgba(255,255,255,0.05);
             overflow-x: auto;
+            font-size: 0.85rem;
         }
         .prose code {
             font-family: 'ui-monospace', monospace;
-            font-size: 0.9em;
-            background: rgba(255,255,255,0.1);
-            padding: 0.2rem 0.4rem;
+            background: rgba(255,255,255,0.08);
+            padding: 0.15rem 0.3rem;
             border-radius: 4px;
+            font-weight: 400;
         }
         .prose pre code { background: transparent; padding: 0; }
+        .prose p { margin-bottom: 0.75rem; line-height: 1.6; }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .message-animate { animation: slideUp 0.3s ease-out forwards; }
+        .message-animate { animation: slideUp 0.25s ease-out forwards; }
 
         .shimmer {
             background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.4), transparent);
             background-size: 200% 100%;
-            animation: shimmer 2s infinite linear;
+            animation: shimmer 1.5s infinite linear;
         }
         @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 
-        @media (max-width: 768px) {
-            #sidebar { position: absolute; height: 100%; left: -100%; z-index: 50; }
+        /* Correction Sidebar Responsive */
+        @media (max-width: 767px) {
+            #sidebar { 
+                position: fixed; 
+                height: 100%; 
+                left: -280px; /* Caché par défaut sur mobile */
+                top: 0;
+                width: 280px;
+                z-index: 100; 
+                transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
             #sidebar.open { left: 0; }
+            #sidebar-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.6);
+                backdrop-filter: blur(4px);
+                z-index: 90;
+            }
+            #sidebar-overlay.visible { display: block; }
+            .main-container { border-radius: 0; width: 100%; height: 100vh; margin: 0; border: none; }
         }
+
+        /* Sur Desktop, on force l'affichage */
+        @media (min-width: 768px) {
+            #sidebar {
+                position: relative !important;
+                left: 0 !important;
+                display: flex !important;
+            }
+        }
+
+        /* Scrollbar subtile */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
     </style>
 </head>
 <body>
     <canvas id="canvas-bg"></canvas>
+    <div id="sidebar-overlay" onclick="toggleSidebar(false)"></div>
 
-    <div class="flex w-full max-w-7xl h-[94vh] glass overflow-hidden relative shadow-2xl mx-4">
+    <div class="flex w-full max-w-7xl h-[100vh] md:h-[94vh] md:glass main-container overflow-hidden relative shadow-2xl md:mx-4">
         
         <!-- SIDEBAR -->
-        <aside id="sidebar" class="w-72 sidebar-glass flex flex-col z-20 transition-all duration-300">
-            <div class="p-6">
-                <button id="new-chat-btn" class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-indigo-600 hover:bg-indigo-500 transition-all rounded-xl font-bold text-sm shadow-lg shadow-indigo-500/20 active:scale-95">
+        <aside id="sidebar" class="w-72 sidebar-glass flex flex-col shrink-0">
+            <div class="p-5 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
+                    <h2 class="font-bold text-white text-xs tracking-[0.2em] uppercase">Nexus Pro</h2>
+                </div>
+                <button onclick="toggleSidebar(false)" class="md:hidden p-2 text-slate-400 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            
+            <div class="px-4 pb-4">
+                <button id="new-chat-btn" class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-indigo-600 hover:bg-indigo-500 transition-all rounded-xl font-bold text-sm shadow-lg shadow-indigo-600/20 active:scale-[0.98]">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m-7-7v14"/></svg>
                     Nouveau Chat
                 </button>
             </div>
 
-            <div class="flex-1 overflow-y-auto px-4 space-y-2" id="history-list"></div>
+            <div class="flex-1 overflow-y-auto px-3 space-y-1.5" id="history-list">
+                <!-- Historique injecté ici -->
+            </div>
 
             <div class="p-4 border-t border-white/5 space-y-2">
-                <button onclick="toggleSettings()" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors text-slate-400 hover:text-white text-sm">
+                <button onclick="toggleSettings()" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors text-slate-400 hover:text-indigo-400 text-sm font-medium">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-                    Configuration API
+                    Paramètres API
                 </button>
             </div>
         </aside>
 
         <!-- CHAT AREA -->
-        <div class="flex-1 flex flex-col min-w-0 relative">
-            <header class="p-5 border-b border-white/10 flex items-center justify-between z-10">
+        <div class="flex-1 flex flex-col min-w-0 relative bg-slate-900/20">
+            <header class="p-4 md:p-5 border-b border-white/10 flex items-center justify-between z-10 bg-[#020617]/40 backdrop-blur-xl">
                 <div class="flex items-center gap-3">
-                    <button id="mobile-toggle" class="md:hidden p-2 glass-card rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
-                    <div>
-                        <h1 class="font-bold text-lg" id="current-chat-title">Nexus AI</h1>
-                        <p class="text-[10px] text-indigo-400 font-bold tracking-widest uppercase" id="engine-badge">Moteur universel prêt</p>
+                    <button id="mobile-toggle" onclick="toggleSidebar(true)" class="md:hidden p-2 glass-card rounded-lg text-indigo-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                    </button>
+                    <div class="truncate">
+                        <h1 class="font-bold text-sm md:text-base truncate text-slate-100" id="current-chat-title">Nouveau Chat</h1>
+                        <p class="text-[8px] md:text-[9px] text-indigo-400/80 font-bold tracking-[0.15em] uppercase truncate" id="engine-badge">Chargement...</p>
                     </div>
+                </div>
+                <div class="flex items-center gap-2">
+                     <span class="hidden md:block text-[10px] text-slate-500 font-medium bg-white/5 px-2 py-1 rounded-md border border-white/5">v3.0 Stable</span>
                 </div>
             </header>
 
-            <div id="chat-container" class="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth prose prose-invert max-w-none">
-                <!-- Les messages s'affichent ici -->
+            <div id="chat-container" class="flex-1 overflow-y-auto p-4 md:p-8 space-y-8 scroll-smooth prose prose-invert max-w-none">
+                <!-- État vide -->
+                <div class="h-full flex flex-col items-center justify-center opacity-30 text-center space-y-6">
+                    <div class="p-6 rounded-full bg-indigo-500/5 border border-indigo-500/10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-lg font-semibold text-slate-200">Comment puis-je vous aider ?</p>
+                        <p class="text-xs text-slate-400 mt-1">Configurez votre clé API pour commencer à discuter.</p>
+                    </div>
+                </div>
             </div>
 
             <div id="loading-bar" class="h-0.5 w-full bg-white/5 overflow-hidden hidden">
                 <div class="h-full w-full shimmer"></div>
             </div>
 
-            <footer class="p-6">
-                <div class="max-w-4xl mx-auto flex items-end gap-3 glass p-2 shadow-2xl">
-                    <label class="p-3 cursor-pointer hover:bg-white/10 rounded-xl transition-all text-slate-400" title="Ajouter un fichier">
+            <footer class="p-4 md:p-6 bg-gradient-to-t from-[#020617] to-transparent">
+                <div class="max-w-4xl mx-auto flex items-end gap-2 md:gap-4 glass p-2 shadow-2xl border border-white/10 ring-1 ring-white/5">
+                    <label class="p-3 cursor-pointer hover:bg-white/10 rounded-xl transition-all text-slate-400 hover:text-indigo-400" title="Attacher">
                         <input type="file" class="hidden" id="file-input">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.51a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.51a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
                     </label>
-                    <textarea id="user-input" rows="1" placeholder="Écrivez n'importe quoi..." class="flex-1 bg-transparent border-none focus:ring-0 text-slate-200 py-3 resize-none outline-none text-sm" style="max-height: 250px;"></textarea>
-                    <button id="send-btn" class="bg-indigo-600 p-3 rounded-xl hover:bg-indigo-500 transition-all active:scale-90 disabled:opacity-30 shadow-lg shadow-indigo-600/20">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="m5 12 7-7 7 7M12 19V5"/></svg>
+                    <textarea id="user-input" rows="1" placeholder="Posez votre question..." class="flex-1 bg-transparent border-none focus:ring-0 text-slate-200 py-3 resize-none outline-none text-sm md:text-base placeholder:text-slate-600" style="max-height: 180px;"></textarea>
+                    <button id="send-btn" class="bg-indigo-600 p-3 rounded-xl hover:bg-indigo-500 transition-all active:scale-90 disabled:opacity-20 shadow-lg shadow-indigo-600/30">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="m5 12 7-7 7 7M12 19V5"/></svg>
                     </button>
                 </div>
             </footer>
         </div>
     </div>
 
-    <!-- MODAL DE PARAMÈTRES AVANCÉS -->
-    <div id="settings-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-[100] hidden items-center justify-center p-4">
-        <div class="glass max-w-2xl w-full p-8 space-y-6 overflow-y-auto max-h-[95vh]">
+    <!-- MODAL PARAMÈTRES -->
+    <div id="settings-modal" class="fixed inset-0 bg-black/95 backdrop-blur-2xl z-[150] hidden items-center justify-center p-4">
+        <div class="glass max-w-xl w-full p-6 md:p-8 space-y-6 overflow-y-auto max-h-[90vh] border border-white/10">
             <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-extrabold text-indigo-400 tracking-tight">Paramètres API Universels</h2>
-                <button onclick="toggleSettings()" class="p-2 hover:bg-white/10 rounded-full transition-all">
+                <h2 class="text-xl font-bold text-white tracking-tight">Configuration de l'IA</h2>
+                <button onclick="toggleSettings()" class="p-2 hover:bg-white/10 rounded-full transition-all text-slate-400">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
                 </button>
             </div>
             
-            <div class="grid gap-6">
-                <!-- Configuration de l'endpoint -->
-                <div class="space-y-4 bg-white/5 p-4 rounded-2xl border border-white/5">
-                    <label class="text-xs font-bold text-slate-500 uppercase">Serveur & Authentification</label>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-6">
+                <div class="space-y-4 bg-white/5 p-5 rounded-2xl border border-white/5">
+                    <p class="text-[10px] font-black text-indigo-500 uppercase tracking-widest">Connectivité</p>
+                    <div class="space-y-3">
                         <div>
-                            <p class="text-[10px] mb-1 text-slate-400">URL de base (Endpoint)</p>
-                            <input type="text" id="base-url-input" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-sm focus:border-indigo-500 outline-none" placeholder="https://api.openai.com/v1">
+                            <p class="text-[10px] mb-1.5 text-slate-400 font-medium">Point de terminaison (Base URL)</p>
+                            <input type="text" id="base-url-input" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-sm focus:border-indigo-500/50 outline-none transition-all" placeholder="https://api.openai.com/v1">
                         </div>
-                        <div>
-                            <p class="text-[10px] mb-1 text-slate-400">Modèle</p>
-                            <input type="text" id="model-input" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-sm focus:border-indigo-500 outline-none" placeholder="gpt-4o, gemini-pro, llama3...">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <p class="text-[10px] mb-1.5 text-slate-400 font-medium">Modèle IA</p>
+                                <input type="text" id="model-input" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-sm focus:border-indigo-500/50 outline-none transition-all" placeholder="gpt-4o">
+                            </div>
+                            <div>
+                                <p class="text-[10px] mb-1.5 text-slate-400 font-medium">Clé API</p>
+                                <input type="password" id="api-key-input" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-sm focus:border-indigo-500/50 outline-none transition-all" placeholder="sk-...">
+                            </div>
                         </div>
-                    </div>
-
-                    <div>
-                        <p class="text-[10px] mb-1 text-slate-400">Clé API (Secret Key)</p>
-                        <input type="password" id="api-key-input" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-sm focus:border-indigo-500 outline-none" placeholder="Insérez votre clé ici">
                     </div>
                 </div>
 
-                <!-- Custom System Instructions -->
-                <div class="space-y-4 bg-white/5 p-4 rounded-2xl border border-white/5">
-                    <label class="text-xs font-bold text-slate-500 uppercase">Personnalité (System Prompt)</label>
-                    <textarea id="skills-input" rows="4" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-sm focus:border-indigo-500 outline-none resize-none" placeholder="Ex: Tu es un expert en code, réponds toujours en Markdown avec des explications concises."></textarea>
+                <div class="space-y-4 bg-white/5 p-5 rounded-2xl border border-white/5">
+                    <p class="text-[10px] font-black text-indigo-500 uppercase tracking-widest">Comportement</p>
+                    <textarea id="skills-input" rows="3" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-sm focus:border-indigo-500/50 outline-none resize-none transition-all" placeholder="Instructions système..."></textarea>
                 </div>
             </div>
 
-            <div class="flex justify-end gap-3 pt-4">
-                <button onclick="saveSettings()" class="w-full py-4 bg-indigo-600 rounded-2xl font-bold text-sm shadow-xl shadow-indigo-600/20 hover:bg-indigo-500 transition-all active:scale-95">
-                    Sauvegarder la configuration
-                </button>
-            </div>
+            <button onclick="saveSettings()" class="w-full py-4 bg-indigo-600 rounded-2xl font-bold text-sm text-white shadow-xl shadow-indigo-600/20 hover:bg-indigo-500 transition-all active:scale-[0.98]">
+                Appliquer les réglages
+            </button>
         </div>
     </div>
 
     <script>
-        // --- GESTION DE L'ÉTAT ---
+        // --- ÉTAT ---
         let state = {
             currentChatId: null,
-            chats: JSON.parse(localStorage.getItem('nexus_v3_chats')) || [],
-            config: JSON.parse(localStorage.getItem('nexus_v3_config')) || {
+            chats: JSON.parse(localStorage.getItem('nexus_v4_chats')) || [],
+            config: JSON.parse(localStorage.getItem('nexus_v4_config')) || {
                 apiKey: "",
                 baseUrl: "https://api.openai.com/v1",
                 model: "gpt-4o",
@@ -222,46 +282,47 @@
         const userInput = document.getElementById('user-input');
         const sendBtn = document.getElementById('send-btn');
         const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
 
-        // Initialisation sécurisée de Marked (Rendu Markdown)
-        function renderMarkdown(text) {
-            if (typeof marked !== 'undefined' && marked.parse) {
-                marked.setOptions({
-                    highlight: function(code, lang) {
-                        if (typeof hljs !== 'undefined') {
-                            const l = hljs.getLanguage(lang) ? lang : 'plaintext';
-                            return hljs.highlight(code, { language: l }).value;
-                        }
-                        return code;
-                    },
-                    breaks: true,
-                    gfm: true
-                });
-                return marked.parse(text);
+        marked.setOptions({
+            highlight: (code, lang) => {
+                const l = (lang && hljs.getLanguage(lang)) ? lang : 'plaintext';
+                return hljs.highlight(code, { language: l }).value;
+            },
+            breaks: true,
+            gfm: true
+        });
+
+        function toggleSidebar(open) {
+            if (open) {
+                sidebar.classList.add('open');
+                overlay.classList.add('visible');
+            } else {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('visible');
             }
-            return text.replace(/\n/g, '<br>');
         }
 
-        // --- FONCTIONS CORE ---
         function saveToLocal() {
-            localStorage.setItem('nexus_v3_chats', JSON.stringify(state.chats));
-            localStorage.setItem('nexus_v3_config', JSON.stringify(state.config));
+            localStorage.setItem('nexus_v4_chats', JSON.stringify(state.chats));
+            localStorage.setItem('nexus_v4_config', JSON.stringify(state.config));
         }
 
         function renderHistory() {
             historyList.innerHTML = '';
             state.chats.sort((a,b) => b.updatedAt - a.updatedAt).forEach(chat => {
                 const item = document.createElement('div');
-                item.className = "group flex items-center gap-1";
+                item.className = "group flex items-center gap-1.5";
                 
+                const isActive = state.currentChatId === chat.id;
                 const btn = document.createElement('button');
-                btn.className = `flex-1 text-left p-3 rounded-xl text-xs transition-all truncate glass-card flex items-center gap-2 ${state.currentChatId === chat.id ? 'active-chat' : 'opacity-60 hover:opacity-100'}`;
-                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> ${chat.title}`;
-                btn.onclick = () => { loadChat(chat.id); if(window.innerWidth < 768) sidebar.classList.remove('open'); };
+                btn.className = `flex-1 text-left p-3 rounded-xl text-xs transition-all truncate border flex items-center gap-2.5 ${isActive ? 'active-chat border-indigo-500/50 text-indigo-100' : 'glass-card border-transparent text-slate-400 hover:text-slate-200'}`;
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="${isActive ? 'text-indigo-400' : 'text-slate-500'}"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> <span class="truncate">${chat.title}</span>`;
+                btn.onclick = () => { loadChat(chat.id); toggleSidebar(false); };
                 
                 const del = document.createElement('button');
-                del.className = "p-2 opacity-0 group-hover:opacity-100 hover:text-red-400 transition-all";
-                del.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>`;
+                del.className = "p-2 opacity-0 group-hover:opacity-100 hover:text-red-400 transition-all text-slate-600";
+                del.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/></svg>`;
                 del.onclick = (e) => { e.stopPropagation(); deleteChat(chat.id); };
 
                 item.append(btn, del);
@@ -269,26 +330,33 @@
             });
         }
 
-        function createNewChat() {
-            const id = Date.now().toString();
-            state.chats.push({ id, title: "Nouveau Chat", messages: [], updatedAt: Date.now() });
-            loadChat(id);
-        }
-
         function loadChat(id) {
             state.currentChatId = id;
             const chat = state.chats.find(c => c.id === id);
+            if (!chat) return;
             document.getElementById('current-chat-title').innerText = chat.title;
             chatContainer.innerHTML = '';
-            chat.messages.forEach(m => appendToUI(m.role, m.content, false));
+            if (chat.messages.length === 0) {
+                 chatContainer.innerHTML = `<div class="h-full flex flex-col items-center justify-center opacity-20 text-center"><p class="text-sm font-medium">Début de la conversation</p></div>`;
+            } else {
+                chat.messages.forEach(m => appendToUI(m.role, m.content, false));
+            }
             renderHistory();
+        }
+
+        function createNewChat() {
+            const id = Date.now().toString();
+            state.chats.push({ id, title: "Nouvelle discussion", messages: [], updatedAt: Date.now() });
+            loadChat(id);
+            if (window.innerWidth < 768) toggleSidebar(false);
+            userInput.focus();
         }
 
         function deleteChat(id) {
             state.chats = state.chats.filter(c => c.id !== id);
             if(state.currentChatId === id) {
                 state.currentChatId = null;
-                chatContainer.innerHTML = '';
+                chatContainer.innerHTML = `<div class="h-full flex flex-col items-center justify-center opacity-30 text-center space-y-4">...</div>`;
                 document.getElementById('current-chat-title').innerText = "Nexus AI";
             }
             saveToLocal();
@@ -296,20 +364,24 @@
         }
 
         function appendToUI(role, content, animate = true) {
+            if (chatContainer.querySelector('.opacity-20') || chatContainer.querySelector('.opacity-30')) chatContainer.innerHTML = '';
+
             const div = document.createElement('div');
-            div.className = `p-5 glass-card rounded-2xl ${animate ? 'message-animate' : ''} ${role === 'user' ? 'ml-auto bg-indigo-600/10 border-indigo-500/20 max-w-[85%]' : 'mr-auto max-w-[95%] border-white/5'}`;
+            div.className = `p-4 md:p-6 rounded-2xl ${animate ? 'message-animate' : ''} ${role === 'user' ? 'ml-auto bg-indigo-600/10 border border-indigo-500/20 max-w-[90%] md:max-w-[80%]' : 'mr-auto max-w-[98%] border-transparent'}`;
             
-            const label = role === 'user' ? 'UTILISATEUR' : 'IA';
-            const htmlContent = role === 'user' ? content : renderMarkdown(content);
+            const label = role === 'user' ? 'MOI' : 'NEXUS';
+            const htmlContent = role === 'user' ? `<p class="whitespace-pre-wrap">${content}</p>` : marked.parse(content);
 
             div.innerHTML = `
-                <div class="text-[9px] font-bold mb-2 opacity-30 tracking-[0.2em]">${label}</div>
-                <div class="text-sm leading-relaxed">${htmlContent}</div>
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="text-[8px] font-black tracking-[0.2em] text-indigo-400/60 uppercase">${label}</span>
+                </div>
+                <div class="text-sm md:text-base leading-relaxed text-slate-200 prose prose-invert max-w-none">${htmlContent}</div>
             `;
             
             chatContainer.appendChild(div);
-            if(typeof hljs !== 'undefined') div.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            div.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
+            chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
         }
 
         async function handleSend() {
@@ -320,7 +392,7 @@
             if(!state.currentChatId) createNewChat();
             const chat = state.chats.find(c => c.id === state.currentChatId);
 
-            if(chat.messages.length === 0) chat.title = text.substring(0, 30);
+            if(chat.messages.length === 0) chat.title = text.substring(0, 40);
             
             chat.messages.push({ role: 'user', content: text });
             chat.updatedAt = Date.now();
@@ -336,7 +408,7 @@
                 chat.messages.push({ role: 'assistant', content: response });
                 appendToUI('assistant', response);
             } catch (err) {
-                appendToUI('assistant', `⚠️ **Erreur API** : ${err.message}`);
+                appendToUI('assistant', `⚠️ **Erreur** : ${err.message}`);
             } finally {
                 sendBtn.disabled = false;
                 document.getElementById('loading-bar').classList.add('hidden');
@@ -347,16 +419,12 @@
 
         async function callUniversalAPI(messages) {
             const { apiKey, baseUrl, model, skills } = state.config;
-            
-            // Formatage des messages
             let formattedMessages = [];
             if(skills) formattedMessages.push({ role: "system", content: skills });
-            formattedMessages = [...formattedMessages, ...messages];
+            formattedMessages = [...formattedMessages, ...messages.slice(-10)];
 
-            const url = baseUrl.endsWith('/') ? baseUrl + 'chat/completions' : baseUrl + '/chat/completions';
+            const url = baseUrl.replace(/\/$/, '') + '/chat/completions';
 
-            // Support spécial pour Google Gemini API (qui n'utilise pas le format OpenAI standard par défaut)
-            // Mais ici nous supposons un endpoint compatible OpenAI (comme la plupart des providers)
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -364,7 +432,7 @@
                     'Authorization': `Bearer ${apiKey}`
                 },
                 body: JSON.stringify({
-                    model: model || "gpt-3.5-turbo",
+                    model: model || "gpt-4o",
                     messages: formattedMessages,
                     temperature: 0.7
                 })
@@ -372,23 +440,24 @@
 
             if(!response.ok) {
                 const errData = await response.json().catch(() => ({}));
-                throw new Error(errData.error?.message || `Status ${response.status}`);
+                throw new Error(errData.error?.message || `Erreur ${response.status}`);
             }
 
             const data = await response.json();
             return data.choices[0].message.content;
         }
 
-        // --- UI UTILS ---
         function toggleSettings() {
             const modal = document.getElementById('settings-modal');
-            modal.classList.toggle('hidden');
-            modal.classList.toggle('flex');
-            
-            document.getElementById('api-key-input').value = state.config.apiKey;
-            document.getElementById('base-url-input').value = state.config.baseUrl;
-            document.getElementById('model-input').value = state.config.model;
-            document.getElementById('skills-input').value = state.config.skills;
+            if (modal.classList.contains('hidden')) {
+                document.getElementById('api-key-input').value = state.config.apiKey;
+                document.getElementById('base-url-input').value = state.config.baseUrl;
+                document.getElementById('model-input').value = state.config.model;
+                document.getElementById('skills-input').value = state.config.skills;
+                modal.classList.replace('hidden', 'flex');
+            } else {
+                modal.classList.replace('flex', 'hidden');
+            }
         }
 
         function saveSettings() {
@@ -399,25 +468,33 @@
                 skills: document.getElementById('skills-input').value.trim()
             };
             saveToLocal();
-            document.getElementById('engine-badge').innerText = `Moteur : ${state.config.model}`;
+            document.getElementById('engine-badge').innerText = `Modèle : ${state.config.model}`;
             toggleSettings();
         }
 
-        // Animation Arrière-plan
         const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
         function anim() {
             ctx.clearRect(0,0,canvas.width,canvas.height);
-            ctx.fillStyle = "rgba(99, 102, 241, 0.05)";
-            for(let i=0; i<10; i++){
-                const x = (Math.sin(Date.now()*0.0005 + i) * 0.4 + 0.5) * canvas.width;
-                const y = (Math.cos(Date.now()*0.0003 + i) * 0.4 + 0.5) * canvas.height;
+            const time = Date.now() * 0.0005;
+            for(let i=0; i<6; i++){
+                const x = (Math.sin(time + i * 2) * 0.3 + 0.5) * canvas.width;
+                const y = (Math.cos(time * 0.7 + i) * 0.3 + 0.5) * canvas.height;
+                const grad = ctx.createRadialGradient(x, y, 0, x, y, 300);
+                grad.addColorStop(0, 'rgba(99, 102, 241, 0.08)');
+                grad.addColorStop(1, 'rgba(99, 102, 241, 0)');
+                ctx.fillStyle = grad;
                 ctx.beginPath();
-                ctx.arc(x, y, 100 + i*20, 0, Math.PI*2);
+                ctx.arc(x, y, 300, 0, Math.PI*2);
                 ctx.fill();
             }
             requestAnimationFrame(anim);
         }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
 
         window.onload = () => {
             canvas.width = window.innerWidth;
@@ -425,19 +502,13 @@
             anim();
             renderHistory();
             if(state.chats.length > 0) loadChat(state.chats[0].id);
-            document.getElementById('engine-badge').innerText = `Moteur : ${state.config.model}`;
+            document.getElementById('engine-badge').innerText = `Modèle : ${state.config.model}`;
         };
 
-        // Event Listeners
-        document.getElementById('mobile-toggle').onclick = () => sidebar.classList.add('open');
         document.getElementById('new-chat-btn').onclick = createNewChat;
         sendBtn.onclick = handleSend;
         userInput.onkeydown = (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } };
         userInput.oninput = function() { this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px'; };
-        
-        document.getElementById('file-input').onchange = function() {
-            if(this.files[0]) appendToUI('user', `📎 Fichier attaché : **${this.files[0].name}**`);
-        };
     </script>
 </body>
 </html>
