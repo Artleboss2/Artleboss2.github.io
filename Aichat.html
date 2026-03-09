@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus AI | Multi-Engine Elite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bibliothèques pour le Markdown et le Code -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+    <style>
+        :root {
+            --glass-bg: rgba(15, 23, 42, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent: #6366f1;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #020617;
+            color: #f8fafc;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #canvas-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+        }
+
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+        }
+
+        .sidebar-glass {
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(16px);
+            border-right: 1px solid var(--glass-border);
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.2s ease;
+        }
+
+        .active-chat {
+            background: rgba(99, 102, 241, 0.25);
+            border-color: var(--accent);
+        }
+
+        /* Markdown Styles */
+        .prose pre {
+            background: #0f172a !important;
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow-x: auto;
+        }
+        .prose code {
+            font-family: 'ui-monospace', monospace;
+            font-size: 0.9em;
+            background: rgba(255,255,255,0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+        .prose pre code { background: transparent; padding: 0; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .message-animate { animation: slideUp 0.3s ease-out forwards; }
+
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.4), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite linear;
+        }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+        @media (max-width: 768px) {
+            #sidebar { position: absolute; height: 100%; left: -100%; z-index: 50; }
+            #sidebar.open { left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas-bg"></canvas>
+
+    <div class="flex w-full max-w-7xl h-[94vh] glass overflow-hidden relative shadow-2xl mx-4">
+        
+        <!-- SIDEBAR -->
+        <aside id="sidebar" class="w-72 sidebar-glass flex flex-col z-20 transition-all duration-300">
+            <div class="p-6">
+                <button id="new-chat-btn" class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-indigo-600 hover:bg-indigo-500 transition-all rounded-xl font-bold text-sm shadow-lg shadow-indigo-500/20 active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14m-7-7v14"/></svg>
+                    Nouveau Chat
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto px-4 space-y-2" id="history-list"></div>
+
+            <div class="p-4 border-t border-white/5 space-y-2">
+                <button onclick="toggleSettings()" class="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors text-slate-400 hover:text-white text-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                    Configuration API
+                </button>
+            </div>
+        </aside>
+
+        <!-- CHAT AREA -->
+        <div class="flex-1 flex flex-col min-w-0 relative">
+            <header class="p-5 border-b border-white/10 flex items-center justify-between z-10">
+                <div class="flex items-center gap-3">
+                    <button id="mobile-toggle" class="md:hidden p-2 glass-card rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+                    <div>
+                        <h1 class="font-bold text-lg" id="current-chat-title">Nexus AI</h1>
+                        <p class="text-[10px] text-indigo-400 font-bold tracking-widest uppercase" id="engine-badge">Moteur universel prêt</p>
+                    </div>
+                </div>
+            </header>
+
+            <div id="chat-container" class="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth prose prose-invert max-w-none">
+                <!-- Les messages s'affichent ici -->
+            </div>
+
+            <div id="loading-bar" class="h-0.5 w-full bg-white/5 overflow-hidden hidden">
+                <div class="h-full w-full shimmer"></div>
+            </div>
+
+            <footer class="p-6">
+                <div class="max-w-4xl mx-auto flex items-end gap-3 glass p-2 shadow-2xl">
+                    <label class="p-3 cursor-pointer hover:bg-white/10 rounded-xl transition-all text-slate-400" title="Ajouter un fichier">
+                        <input type="file" class="hidden" id="file-input">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.51a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                    </label>
+                    <textarea id="user-input" rows="1" placeholder="Écrivez n'importe quoi..." class="flex-1 bg-transparent border-none focus:ring-0 text-slate-200 py-3 resize-none outline-none text-sm" style="max-height: 250px;"></textarea>
+                    <button id="send-btn" class="bg-indigo-600 p-3 rounded-xl hover:bg-indigo-500 transition-all active:scale-90 disabled:opacity-30 shadow-lg shadow-indigo-600/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="m5 12 7-7 7 7M12 19V5"/></svg>
+                    </button>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- MODAL DE PARAMÈTRES AVANCÉS -->
+    <div id="settings-modal" class="fixed inset-0 bg-black/90 backdrop-blur-xl z-[100] hidden items-center justify-center p-4">
+        <div class="glass max-w-2xl w-full p-8 space-y-6 overflow-y-auto max-h-[95vh]">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-extrabold text-indigo-400 tracking-tight">Paramètres API Universels</h2>
+                <button onclick="toggleSettings()" class="p-2 hover:bg-white/10 rounded-full transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            
+            <div class="grid gap-6">
+                <!-- Configuration de l'endpoint -->
+                <div class="space-y-4 bg-white/5 p-4 rounded-2xl border border-white/5">
+                    <label class="text-xs font-bold text-slate-500 uppercase">Serveur & Authentification</label>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-[10px] mb-1 text-slate-400">URL de base (Endpoint)</p>
+                            <input type="text" id="base-url-input" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-sm focus:border-indigo-500 outline-none" placeholder="https://api.openai.com/v1">
+                        </div>
+                        <div>
+                            <p class="text-[10px] mb-1 text-slate-400">Modèle</p>
+                            <input type="text" id="model-input" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-sm focus:border-indigo-500 outline-none" placeholder="gpt-4o, gemini-pro, llama3...">
+                        </div>
+                    </div>
+
+                    <div>
+                        <p class="text-[10px] mb-1 text-slate-400">Clé API (Secret Key)</p>
+                        <input type="password" id="api-key-input" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-sm focus:border-indigo-500 outline-none" placeholder="Insérez votre clé ici">
+                    </div>
+                </div>
+
+                <!-- Custom System Instructions -->
+                <div class="space-y-4 bg-white/5 p-4 rounded-2xl border border-white/5">
+                    <label class="text-xs font-bold text-slate-500 uppercase">Personnalité (System Prompt)</label>
+                    <textarea id="skills-input" rows="4" class="w-full bg-slate-900 border border-white/10 rounded-xl p-3 text-sm focus:border-indigo-500 outline-none resize-none" placeholder="Ex: Tu es un expert en code, réponds toujours en Markdown avec des explications concises."></textarea>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-4">
+                <button onclick="saveSettings()" class="w-full py-4 bg-indigo-600 rounded-2xl font-bold text-sm shadow-xl shadow-indigo-600/20 hover:bg-indigo-500 transition-all active:scale-95">
+                    Sauvegarder la configuration
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- GESTION DE L'ÉTAT ---
+        let state = {
+            currentChatId: null,
+            chats: JSON.parse(localStorage.getItem('nexus_v3_chats')) || [],
+            config: JSON.parse(localStorage.getItem('nexus_v3_config')) || {
+                apiKey: "",
+                baseUrl: "https://api.openai.com/v1",
+                model: "gpt-4o",
+                skills: ""
+            }
+        };
+
+        const chatContainer = document.getElementById('chat-container');
+        const historyList = document.getElementById('history-list');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const sidebar = document.getElementById('sidebar');
+
+        // Initialisation sécurisée de Marked (Rendu Markdown)
+        function renderMarkdown(text) {
+            if (typeof marked !== 'undefined' && marked.parse) {
+                marked.setOptions({
+                    highlight: function(code, lang) {
+                        if (typeof hljs !== 'undefined') {
+                            const l = hljs.getLanguage(lang) ? lang : 'plaintext';
+                            return hljs.highlight(code, { language: l }).value;
+                        }
+                        return code;
+                    },
+                    breaks: true,
+                    gfm: true
+                });
+                return marked.parse(text);
+            }
+            return text.replace(/\n/g, '<br>');
+        }
+
+        // --- FONCTIONS CORE ---
+        function saveToLocal() {
+            localStorage.setItem('nexus_v3_chats', JSON.stringify(state.chats));
+            localStorage.setItem('nexus_v3_config', JSON.stringify(state.config));
+        }
+
+        function renderHistory() {
+            historyList.innerHTML = '';
+            state.chats.sort((a,b) => b.updatedAt - a.updatedAt).forEach(chat => {
+                const item = document.createElement('div');
+                item.className = "group flex items-center gap-1";
+                
+                const btn = document.createElement('button');
+                btn.className = `flex-1 text-left p-3 rounded-xl text-xs transition-all truncate glass-card flex items-center gap-2 ${state.currentChatId === chat.id ? 'active-chat' : 'opacity-60 hover:opacity-100'}`;
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> ${chat.title}`;
+                btn.onclick = () => { loadChat(chat.id); if(window.innerWidth < 768) sidebar.classList.remove('open'); };
+                
+                const del = document.createElement('button');
+                del.className = "p-2 opacity-0 group-hover:opacity-100 hover:text-red-400 transition-all";
+                del.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>`;
+                del.onclick = (e) => { e.stopPropagation(); deleteChat(chat.id); };
+
+                item.append(btn, del);
+                historyList.appendChild(item);
+            });
+        }
+
+        function createNewChat() {
+            const id = Date.now().toString();
+            state.chats.push({ id, title: "Nouveau Chat", messages: [], updatedAt: Date.now() });
+            loadChat(id);
+        }
+
+        function loadChat(id) {
+            state.currentChatId = id;
+            const chat = state.chats.find(c => c.id === id);
+            document.getElementById('current-chat-title').innerText = chat.title;
+            chatContainer.innerHTML = '';
+            chat.messages.forEach(m => appendToUI(m.role, m.content, false));
+            renderHistory();
+        }
+
+        function deleteChat(id) {
+            state.chats = state.chats.filter(c => c.id !== id);
+            if(state.currentChatId === id) {
+                state.currentChatId = null;
+                chatContainer.innerHTML = '';
+                document.getElementById('current-chat-title').innerText = "Nexus AI";
+            }
+            saveToLocal();
+            renderHistory();
+        }
+
+        function appendToUI(role, content, animate = true) {
+            const div = document.createElement('div');
+            div.className = `p-5 glass-card rounded-2xl ${animate ? 'message-animate' : ''} ${role === 'user' ? 'ml-auto bg-indigo-600/10 border-indigo-500/20 max-w-[85%]' : 'mr-auto max-w-[95%] border-white/5'}`;
+            
+            const label = role === 'user' ? 'UTILISATEUR' : 'IA';
+            const htmlContent = role === 'user' ? content : renderMarkdown(content);
+
+            div.innerHTML = `
+                <div class="text-[9px] font-bold mb-2 opacity-30 tracking-[0.2em]">${label}</div>
+                <div class="text-sm leading-relaxed">${htmlContent}</div>
+            `;
+            
+            chatContainer.appendChild(div);
+            if(typeof hljs !== 'undefined') div.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        async function handleSend() {
+            const text = userInput.value.trim();
+            if(!text || sendBtn.disabled) return;
+            if(!state.config.apiKey) { toggleSettings(); return; }
+
+            if(!state.currentChatId) createNewChat();
+            const chat = state.chats.find(c => c.id === state.currentChatId);
+
+            if(chat.messages.length === 0) chat.title = text.substring(0, 30);
+            
+            chat.messages.push({ role: 'user', content: text });
+            chat.updatedAt = Date.now();
+            appendToUI('user', text);
+            userInput.value = '';
+            userInput.style.height = 'auto';
+
+            sendBtn.disabled = true;
+            document.getElementById('loading-bar').classList.remove('hidden');
+
+            try {
+                const response = await callUniversalAPI(chat.messages);
+                chat.messages.push({ role: 'assistant', content: response });
+                appendToUI('assistant', response);
+            } catch (err) {
+                appendToUI('assistant', `⚠️ **Erreur API** : ${err.message}`);
+            } finally {
+                sendBtn.disabled = false;
+                document.getElementById('loading-bar').classList.add('hidden');
+                saveToLocal();
+                renderHistory();
+            }
+        }
+
+        async function callUniversalAPI(messages) {
+            const { apiKey, baseUrl, model, skills } = state.config;
+            
+            // Formatage des messages
+            let formattedMessages = [];
+            if(skills) formattedMessages.push({ role: "system", content: skills });
+            formattedMessages = [...formattedMessages, ...messages];
+
+            const url = baseUrl.endsWith('/') ? baseUrl + 'chat/completions' : baseUrl + '/chat/completions';
+
+            // Support spécial pour Google Gemini API (qui n'utilise pas le format OpenAI standard par défaut)
+            // Mais ici nous supposons un endpoint compatible OpenAI (comme la plupart des providers)
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: model || "gpt-3.5-turbo",
+                    messages: formattedMessages,
+                    temperature: 0.7
+                })
+            });
+
+            if(!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.error?.message || `Status ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data.choices[0].message.content;
+        }
+
+        // --- UI UTILS ---
+        function toggleSettings() {
+            const modal = document.getElementById('settings-modal');
+            modal.classList.toggle('hidden');
+            modal.classList.toggle('flex');
+            
+            document.getElementById('api-key-input').value = state.config.apiKey;
+            document.getElementById('base-url-input').value = state.config.baseUrl;
+            document.getElementById('model-input').value = state.config.model;
+            document.getElementById('skills-input').value = state.config.skills;
+        }
+
+        function saveSettings() {
+            state.config = {
+                apiKey: document.getElementById('api-key-input').value.trim(),
+                baseUrl: document.getElementById('base-url-input').value.trim() || "https://api.openai.com/v1",
+                model: document.getElementById('model-input').value.trim() || "gpt-4o",
+                skills: document.getElementById('skills-input').value.trim()
+            };
+            saveToLocal();
+            document.getElementById('engine-badge').innerText = `Moteur : ${state.config.model}`;
+            toggleSettings();
+        }
+
+        // Animation Arrière-plan
+        const canvas = document.getElementById('canvas-bg');
+        const ctx = canvas.getContext('2d');
+        function anim() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle = "rgba(99, 102, 241, 0.05)";
+            for(let i=0; i<10; i++){
+                const x = (Math.sin(Date.now()*0.0005 + i) * 0.4 + 0.5) * canvas.width;
+                const y = (Math.cos(Date.now()*0.0003 + i) * 0.4 + 0.5) * canvas.height;
+                ctx.beginPath();
+                ctx.arc(x, y, 100 + i*20, 0, Math.PI*2);
+                ctx.fill();
+            }
+            requestAnimationFrame(anim);
+        }
+
+        window.onload = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            anim();
+            renderHistory();
+            if(state.chats.length > 0) loadChat(state.chats[0].id);
+            document.getElementById('engine-badge').innerText = `Moteur : ${state.config.model}`;
+        };
+
+        // Event Listeners
+        document.getElementById('mobile-toggle').onclick = () => sidebar.classList.add('open');
+        document.getElementById('new-chat-btn').onclick = createNewChat;
+        sendBtn.onclick = handleSend;
+        userInput.onkeydown = (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } };
+        userInput.oninput = function() { this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px'; };
+        
+        document.getElementById('file-input').onchange = function() {
+            if(this.files[0]) appendToUI('user', `📎 Fichier attaché : **${this.files[0].name}**`);
+        };
+    </script>
+</body>
+</html>
