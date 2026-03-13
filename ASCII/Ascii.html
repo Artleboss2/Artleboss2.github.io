@@ -1,257 +1,298 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Photo → ASCII Art</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a0f;color:#e0e0e0;font-family:'Segoe UI',sans-serif;min-height:100vh}
-header{text-align:center;padding:36px 20px 16px}
-header h1{font-size:2.4rem;font-weight:800;background:linear-gradient(135deg,#7c3aed,#06b6d4,#10b981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-header p{color:#6b7280;margin-top:6px}
-.container{max-width:1200px;margin:0 auto;padding:16px}
-.upload-zone{border:2px dashed #2d2d4e;border-radius:16px;padding:40px;text-align:center;cursor:pointer;transition:all .3s;background:#0d0d1a}
-.upload-zone:hover,.upload-zone.drag-over{border-color:#7c3aed;background:#110d1f}
-.upload-zone .icon{font-size:2.5rem;display:block;margin-bottom:10px}
-.upload-zone p{color:#9ca3af}.upload-zone p span{color:#7c3aed;font-weight:600}
-#fileInput{display:none}
-#previewImg{max-width:100px;max-height:70px;border-radius:8px;border:1px solid #2d2d4e;object-fit:contain;display:none;margin:10px auto 0}
-.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:20px 0}
-.control-group{background:#0d0d1a;border:1px solid #1e1e3a;border-radius:12px;padding:14px}
-.control-group label{display:block;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#7c3aed;margin-bottom:10px}
-.style-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.style-btn{padding:7px 5px;background:#141428;border:1px solid #2d2d4e;border-radius:7px;color:#9ca3af;cursor:pointer;font-size:.72rem;font-family:monospace;transition:all .2s;text-align:center}
-.style-btn:hover{border-color:#7c3aed;color:#e0e0e0}
-.style-btn.active{background:#1e0a3c;border-color:#7c3aed;color:#c4b5fd;font-weight:700}
-.style-btn .preview{font-size:.6rem;color:#4b5563;display:block;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.style-btn.active .preview{color:#7c3aed}
-input[type=range]{width:100%;accent-color:#7c3aed;cursor:pointer}
-.range-row{display:flex;justify-content:space-between;margin-bottom:5px}
-.range-row span{color:#c4b5fd;font-size:.9rem;font-weight:600}
-.color-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.color-btn{height:30px;border-radius:6px;border:2px solid transparent;cursor:pointer;transition:all .2s}
-.color-btn.active{border-color:white;transform:scale(1.1)}
-.actions{display:flex;gap:10px;margin:6px 0 20px}
-.btn{flex:1;padding:13px;border:none;border-radius:10px;font-size:.92rem;font-weight:600;cursor:pointer;transition:all .2s}
-.btn-primary{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white}
-.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(124,58,237,.4)}
-.btn-primary:disabled,.btn-secondary:disabled{opacity:.4;cursor:not-allowed;transform:none}
-.btn-secondary{background:#141428;color:#9ca3af;border:1px solid #2d2d4e}
-.btn-secondary:hover{border-color:#7c3aed;color:#e0e0e0}
-.output-section{background:#0d0d1a;border:1px solid #1e1e3a;border-radius:16px;overflow:hidden}
-.output-header{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid #1e1e3a}
-.output-header span{color:#6b7280;font-size:.82rem}
-.copy-btn{background:#141428;border:1px solid #2d2d4e;border-radius:7px;color:#9ca3af;padding:5px 12px;font-size:.78rem;cursor:pointer;transition:all .2s}
-.copy-btn:hover{border-color:#06b6d4;color:#06b6d4}
-.output-wrapper{overflow:auto;max-height:580px;padding:14px;background:#070710}
-#asciiOutput{font-family:'Courier New',monospace;font-size:7px;line-height:1;white-space:pre;display:block}
-.placeholder{color:#2d2d4e;font-family:monospace;font-size:14px;padding:60px;text-align:center}
-.toggle-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
-.toggle-row span{font-size:.82rem;color:#9ca3af}
-.toggle{position:relative;width:38px;height:21px}
-.toggle input{opacity:0;width:0;height:0}
-.slider{position:absolute;cursor:pointer;inset:0;background:#1e1e3a;border-radius:21px;transition:.3s}
-.slider:before{content:'';position:absolute;height:15px;width:15px;left:3px;bottom:3px;background:#4b5563;border-radius:50%;transition:.3s}
-.toggle input:checked+.slider{background:#7c3aed}
-.toggle input:checked+.slider:before{transform:translateX(17px);background:white}
-.span2{grid-column:span 2}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo → ASCII Art Professionnel</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; line-height: 1.5; }
+        header { text-align: center; padding: 30px 20px 10px; }
+        header h1 { font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, #7c3aed, #06b6d4, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        header p { color: #6b7280; margin-top: 5px; font-size: 0.9rem; }
+        
+        .container { max-width: 1100px; margin: 0 auto; padding: 15px; }
+        
+        /* Upload Area */
+        .upload-zone { border: 2px dashed #2d2d4e; border-radius: 16px; padding: 30px; text-align: center; cursor: pointer; transition: 0.3s; background: #0d0d1a; margin-bottom: 20px; }
+        .upload-zone:hover { border-color: #7c3aed; background: #110d1f; }
+        .upload-zone .icon { font-size: 2rem; display: block; margin-bottom: 8px; }
+        #previewImg { max-width: 80px; max-height: 60px; border-radius: 6px; margin: 10px auto 0; display: none; }
+        #fileInput { display: none; }
+
+        /* Controls Layout */
+        .main-grid { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
+        @media (max-width: 850px) { .main-grid { grid-template-columns: 1fr; } }
+
+        .control-group { background: #0d0d1a; border: 1px solid #1e1e3a; border-radius: 12px; padding: 16px; margin-bottom: 15px; }
+        .control-group label { display: block; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #7c3aed; margin-bottom: 12px; }
+        
+        /* Presets Grid */
+        .preset-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 10px; }
+        .preset-btn { padding: 8px; background: #141428; border: 1px solid #2d2d4e; border-radius: 8px; color: #9ca3af; cursor: pointer; font-size: .75rem; transition: 0.2s; }
+        .preset-btn:hover { border-color: #7c3aed; color: #fff; }
+        .preset-btn.active { background: #7c3aed; color: white; border-color: #7c3aed; }
+
+        /* Character Styles */
+        .style-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+        .style-btn { padding: 8px; background: #141428; border: 1px solid #2d2d4e; border-radius: 8px; color: #9ca3af; cursor: pointer; text-align: left; transition: 0.2s; }
+        .style-btn.active { border-color: #7c3aed; background: #1e0a3c; color: #c4b5fd; }
+        .style-btn .name { display: block; font-size: 0.75rem; font-weight: bold; }
+        .style-btn .preview { font-size: 0.65rem; opacity: 0.6; font-family: monospace; }
+
+        /* Range Sliders */
+        input[type=range] { width: 100%; accent-color: #7c3aed; margin: 10px 0; }
+        .range-info { display: flex; justify-content: space-between; font-size: 0.8rem; color: #c4b5fd; font-weight: 600; }
+
+        /* Output Area */
+        .output-section { background: #070710; border: 1px solid #1e1e3a; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+        .output-header { background: #0d0d1a; padding: 12px 18px; border-bottom: 1px solid #1e1e3a; display: flex; justify-content: space-between; align-items: center; }
+        .copy-btn { background: #7c3aed; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .copy-btn:hover { background: #6d28d9; transform: scale(1.05); }
+
+        .output-wrapper { overflow: auto; flex-grow: 1; padding: 20px; min-height: 400px; background-image: radial-gradient(#1a1a2e 1px, transparent 1px); background-size: 20px 20px; }
+        #asciiOutput { font-family: 'Courier New', Courier, monospace; line-height: 1; white-space: pre; display: inline-block; transform-origin: top left; }
+        
+        .toggle-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; color: #9ca3af; }
+        
+        .toggle { position: relative; width: 34px; height: 18px; }
+        .toggle input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; inset: 0; background: #1e1e3a; border-radius: 20px; transition: .3s; }
+        .slider:before { content: ''; position: absolute; height: 12px; width: 12px; left: 3px; bottom: 3px; background: #4b5563; border-radius: 50%; transition: .3s; }
+        .toggle input:checked + .slider { background: #7c3aed; }
+        .toggle input:checked + .slider:before { transform: translateX(16px); background: white; }
+    </style>
 </head>
 <body>
+
 <header>
-  <h1>⬛ ASCII Art Converter</h1>
-  <p>Transformez n'importe quelle photo en art ASCII</p>
+    <h1>🖼️ ASCII Art Studio</h1>
+    <p>Convertissez vos images et copiez-les vers vos applications</p>
 </header>
+
 <div class="container">
-  <div class="upload-zone" id="uploadZone">
-    <span class="icon">🖼️</span>
-    <p><span>Cliquez pour choisir</span> ou glissez une image ici</p>
-    <p style="font-size:.78rem;margin-top:5px">JPG, PNG, GIF, WebP</p>
-    <input type="file" id="fileInput" accept="image/*">
-    <img id="previewImg" alt="preview">
-  </div>
-  <div class="controls">
-    <div class="control-group span2">
-      <label>Style de caractères</label>
-      <div class="style-grid" id="styleGrid"></div>
+    <div class="upload-zone" id="uploadZone">
+        <span class="icon">📁</span>
+        <p>Glissez une image ou <strong>cliquez ici</strong></p>
+        <input type="file" id="fileInput" accept="image/*">
+        <img id="previewImg" alt="Miniature">
     </div>
-    <div class="control-group">
-      <label>Largeur (colonnes)</label>
-      <div class="range-row"><span id="widthVal">120</span></div>
-      <input type="range" id="widthRange" min="40" max="300" value="120" step="5">
+
+    <div class="main-grid">
+        <div class="output-section">
+            <div class="output-header">
+                <span id="outputInfo" style="font-size: 0.75rem; color: #6b7280;">Prêt</span>
+                <button class="copy-btn" id="copyBtn">📋 Copier (Couleurs)</button>
+            </div>
+            <div class="output-wrapper" id="outputWrapper">
+                <div id="asciiOutput"></div>
+            </div>
+        </div>
+
+        <aside>
+            <div class="control-group">
+                <label>Format de destination</label>
+                <div class="preset-grid">
+                    <!-- Ratio : 0.45 pour mobile (caractères fins), 0.55 pour Docs (caractères plus larges) -->
+                    <button class="preset-btn" data-w="48" data-size="9" data-ratio="0.45">Notes iPhone</button>
+                    <button class="preset-btn" data-w="32" data-size="8" data-ratio="0.5">Commentaire IG</button>
+                    <button class="preset-btn active" data-w="85" data-size="7" data-ratio="0.6">Google Docs</button>
+                    <button class="preset-btn" data-w="90" data-size="7" data-ratio="0.55">Word / Pages</button>
+                    <button class="preset-btn" data-w="120" data-size="6" data-ratio="0.5">PowerPoint</button>
+                    <button class="preset-btn" data-w="180" data-size="4" data-ratio="0.5">Écran Large</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>Style Artistique</label>
+                <div class="style-grid" id="styleGrid"></div>
+            </div>
+
+            <div class="control-group">
+                <label>Ajustements</label>
+                <div class="range-info">Largeur <span id="wVal">85</span></div>
+                <input type="range" id="widthRange" min="10" max="300" value="85">
+                
+                <div class="range-info">Taille Police <span id="fVal">7</span>px</div>
+                <input type="range" id="fontSizeRange" min="2" max="24" value="7">
+
+                <div class="range-info">Ratio Hauteur <span id="rVal">0.60</span></div>
+                <input type="range" id="ratioRange" min="0.3" max="1.0" step="0.05" value="0.60">
+            </div>
+
+            <div class="control-group">
+                <label>Options</label>
+                <div class="toggle-row">
+                    <span>Couleurs</span>
+                    <label class="toggle"><input type="checkbox" id="colorToggle" checked><span class="slider"></span></label>
+                </div>
+                <div class="toggle-row">
+                    <span>Inverser</span>
+                    <label class="toggle"><input type="checkbox" id="invertToggle"><span class="slider"></span></label>
+                </div>
+            </div>
+            
+            <button id="downloadBtn" class="preset-btn" style="width: 100%; padding: 12px; border-color: #7c3aed; color: #c4b5fd;">💾 Télécharger .txt</button>
+        </aside>
     </div>
-    <div class="control-group">
-      <label>Contraste</label>
-      <div class="range-row"><span id="contrastVal">1.0</span></div>
-      <input type="range" id="contrastRange" min="0.5" max="3" value="1" step="0.1">
-    </div>
-    <div class="control-group">
-      <label>Luminosité</label>
-      <div class="range-row"><span id="brightnessVal">1.0</span></div>
-      <input type="range" id="brightnessRange" min="0.3" max="2" value="1" step="0.1">
-    </div>
-    <div class="control-group">
-      <label>Options</label>
-      <div class="toggle-row"><span>Inverser les tons</span><label class="toggle"><input type="checkbox" id="invertToggle"><span class="slider"></span></label></div>
-      <div class="toggle-row"><span>Mode couleur</span><label class="toggle"><input type="checkbox" id="colorToggle" checked><span class="slider"></span></label></div>
-      <div class="toggle-row"><span>Auto-reconvertir</span><label class="toggle"><input type="checkbox" id="autoToggle" checked><span class="slider"></span></label></div>
-    </div>
-    <div class="control-group" id="textColorGroup" style="opacity:.4">
-      <label>Couleur du texte</label>
-      <div class="color-grid" id="colorGrid"></div>
-    </div>
-  </div>
-  <div class="actions">
-    <button class="btn btn-primary" id="convertBtn" disabled>⚡ Convertir</button>
-    <button class="btn btn-secondary" id="downloadBtn" disabled>💾 Télécharger .txt</button>
-  </div>
-  <div class="output-section">
-    <div class="output-header">
-      <span id="outputInfo">En attente d'une image…</span>
-      <button class="copy-btn" id="copyBtn">📋 Copier</button>
-    </div>
-    <div class="output-wrapper" id="outputWrapper">
-      <div class="placeholder">[ Votre ASCII Art apparaîtra ici ]</div>
-    </div>
-  </div>
 </div>
+
 <canvas id="canvas" style="display:none"></canvas>
+
 <script>
-const STYLES=[
-  {name:'Standard',chars:'@%#*+=-:. ',preview:'@%#*+=-:.'},
-  {name:'Dense',chars:'$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/|()1{}[]?-_+~i!lI;:,. ',preview:'$@B%8&WM#'},
-  {name:'Minimal',chars:'@:. ',preview:'@ : .'},
-  {name:'Blocs',chars:'█▓▒░ ',preview:'█▓▒░'},
-  {name:'Braille',chars:'⣿⣷⣯⣟⡿⢿⣻⣽⣶⣤⠶⠦⠄ ',preview:'⣿⣷⣯⣟'},
-  {name:'Binaire',chars:'10 ',preview:'1 0 1 0'},
-  {name:'Lettres',chars:'WMXKOAIJL. ',preview:'WMXKOAIJL'},
-  {name:'Symboles',chars:'♠♣♥♦★☆●□■▲▼ ',preview:'♠♣♥♦★'},
-  {name:'Hex',chars:'0123456789ABCDEF ',preview:'0-9 A-F'},
-  {name:'Slashes',chars:'#\\/|()[]{}=+- .',preview:'#\\/|()'},
-  {name:'Points',chars:'•·∙ ',preview:'• · ∙'},
-  {name:'Maths',chars:'∑∏∫≈≡∞±×÷ ',preview:'∑∏∫≈∞'},
-];
-const COLORS=[
-  {label:'Vert Matrix',v:'#00ff41'},{label:'Blanc',v:'#e0e0e0'},
-  {label:'Cyan',v:'#06b6d4'},{label:'Violet',v:'#c4b5fd'},
-  {label:'Orange',v:'#fb923c'},{label:'Rose',v:'#f472b6'},
-  {label:'Jaune',v:'#fbbf24'},{label:'Rouge',v:'#f87171'},
-];
-let styleIdx=0,colorIdx=0,img=null,lastASCII='';
-const sg=document.getElementById('styleGrid');
-STYLES.forEach((s,i)=>{
-  const b=document.createElement('button');
-  b.className='style-btn'+(i===0?' active':'');
-  b.innerHTML=s.name+'<span class="preview">'+s.preview+'</span>';
-  b.onclick=()=>{
-    document.querySelectorAll('.style-btn').forEach(x=>x.classList.remove('active'));
-    b.classList.add('active');styleIdx=i;
-    if(img&&document.getElementById('autoToggle').checked)convert();
-  };
-  sg.appendChild(b);
-});
-const cg=document.getElementById('colorGrid');
-COLORS.forEach((c,i)=>{
-  const b=document.createElement('button');
-  b.className='color-btn'+(i===0?' active':'');
-  b.style.background=c.v;b.title=c.label;
-  b.onclick=()=>{
-    document.querySelectorAll('.color-btn').forEach(x=>x.classList.remove('active'));
-    b.classList.add('active');colorIdx=i;
-    const o=document.getElementById('asciiOutput');
-    if(o&&!document.getElementById('colorToggle').checked)o.style.color=c.v;
-  };
-  cg.appendChild(b);
-});
-const uz=document.getElementById('uploadZone'),fi=document.getElementById('fileInput');
-uz.onclick=e=>{if(e.target!==fi)fi.click();};
-uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('drag-over');});
-uz.addEventListener('dragleave',()=>uz.classList.remove('drag-over'));
-uz.addEventListener('drop',e=>{e.preventDefault();uz.classList.remove('drag-over');if(e.dataTransfer.files[0])loadFile(e.dataTransfer.files[0]);});
-fi.onchange=()=>{if(fi.files[0])loadFile(fi.files[0]);};
-function loadFile(file){
-  const r=new FileReader();
-  r.onload=ev=>{
-    const i=new Image();
-    i.onload=()=>{
-      img=i;
-      const pv=document.getElementById('previewImg');
-      pv.src=ev.target.result;pv.style.display='block';
-      document.getElementById('convertBtn').disabled=false;
-      document.getElementById('downloadBtn').disabled=false;
-      if(document.getElementById('autoToggle').checked)convert();
-    };
-    i.src=ev.target.result;
-  };
-  r.readAsDataURL(file);
-}
-function setupRange(id,vid,dec){
-  const el=document.getElementById(id),vl=document.getElementById(vid);
-  el.oninput=()=>{
-    vl.textContent=parseFloat(el.value).toFixed(dec);
-    if(img&&document.getElementById('autoToggle').checked)convert();
-  };
-}
-setupRange('widthRange','widthVal',0);
-setupRange('contrastRange','contrastVal',1);
-setupRange('brightnessRange','brightnessVal',1);
-document.getElementById('invertToggle').onchange=()=>{if(img&&document.getElementById('autoToggle').checked)convert();};
-document.getElementById('colorToggle').onchange=()=>{
-  const on=document.getElementById('colorToggle').checked;
-  document.getElementById('textColorGroup').style.opacity=on?'.4':'1';
-  if(img&&document.getElementById('autoToggle').checked)convert();
-};
-document.getElementById('convertBtn').onclick=convert;
-function esc(c){return c==='<'?'&lt;':c==='>'?'&gt;':c==='&'?'&amp;':c;}
-function convert(){
-  if(!img)return;
-  const s=STYLES[styleIdx],chars=s.chars;
-  const w=parseInt(document.getElementById('widthRange').value);
-  const contrast=parseFloat(document.getElementById('contrastRange').value);
-  const brightness=parseFloat(document.getElementById('brightnessRange').value);
-  const inv=document.getElementById('invertToggle').checked;
-  const useColor=document.getElementById('colorToggle').checked;
-  const canvas=document.getElementById('canvas'),ctx=canvas.getContext('2d');
-  const cols=w,rows=Math.round(cols*(img.height/img.width)*.45);
-  canvas.width=cols;canvas.height=rows;
-  ctx.filter='contrast('+contrast+') brightness('+brightness+')';
-  ctx.drawImage(img,0,0,cols,rows);
-  const d=ctx.getImageData(0,0,cols,rows).data;
-  let txt='',html='';
-  for(let y=0;y<rows;y++){
-    for(let x=0;x<cols;x++){
-      const idx=(y*cols+x)*4,r=d[idx],g=d[idx+1],b=d[idx+2];
-      let lum=(0.299*r+0.587*g+0.114*b)/255;
-      if(inv)lum=1-lum;
-      const ch=chars[Math.floor(lum*(chars.length-1))]||' ';
-      txt+=ch;
-      html+=useColor?'<span style="color:rgb('+r+','+g+','+b+')">'+esc(ch)+'</span>':esc(ch);
+    const STYLES = [
+        { name: 'Standard', chars: '@%#*+=-:. ' },
+        { name: 'Blocs', chars: '█▓▒░ ' },
+        { name: 'Braille', chars: '⣿⣷⣯⣟⡿⢿⣻⣽⣶⣤⠶⠦⠄ ' },
+        { name: 'Binaire', chars: '01' },
+        { name: 'Lettres', chars: 'WMXKOAIJL:,. ' }
+    ];
+
+    let currentImg = null;
+    let currentStyleIdx = 0;
+
+    const styleGrid = document.getElementById('styleGrid');
+    STYLES.forEach((s, i) => {
+        const btn = document.createElement('button');
+        btn.className = `style-btn ${i === 0 ? 'active' : ''}`;
+        btn.innerHTML = `<span class="name">${s.name}</span><span class="preview">${s.chars.substring(0,8)}</span>`;
+        btn.onclick = () => {
+            document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentStyleIdx = i;
+            render();
+        };
+        styleGrid.appendChild(btn);
+    });
+
+    document.querySelectorAll('.preset-btn[data-w]').forEach(btn => {
+        btn.onclick = () => {
+            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const w = btn.dataset.w;
+            const size = btn.dataset.size;
+            const ratio = btn.dataset.ratio;
+            
+            document.getElementById('widthRange').value = w;
+            document.getElementById('fontSizeRange').value = size;
+            document.getElementById('ratioRange').value = ratio;
+            
+            document.getElementById('wVal').textContent = w;
+            document.getElementById('fVal').textContent = size;
+            document.getElementById('rVal').textContent = ratio;
+            
+            render();
+        };
+    });
+
+    const fileInput = document.getElementById('fileInput');
+    const uploadZone = document.getElementById('uploadZone');
+    
+    uploadZone.onclick = () => fileInput.click();
+    fileInput.onchange = () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); };
+
+    function handleFile(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                currentImg = img;
+                document.getElementById('previewImg').src = e.target.result;
+                document.getElementById('previewImg').style.display = 'block';
+                render();
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
     }
-    txt+='\n';html+='\n';
-  }
-  lastASCII=txt;
-  const wr=document.getElementById('outputWrapper');
-  wr.innerHTML='';
-  const pre=document.createElement('pre');
-  pre.id='asciiOutput';pre.innerHTML=html;
-  if(!useColor)pre.style.color=COLORS[colorIdx].v;
-  wr.appendChild(pre);
-  document.getElementById('outputInfo').textContent=cols+'×'+rows+' caractères • Style: '+s.name;
-}
-document.getElementById('copyBtn').onclick=()=>{
-  if(!lastASCII)return;
-  navigator.clipboard.writeText(lastASCII).then(()=>{
-    const b=document.getElementById('copyBtn');
-    b.textContent='✅ Copié!';setTimeout(()=>b.textContent='📋 Copier',2000);
-  });
-};
-document.getElementById('downloadBtn').onclick=()=>{
-  if(!lastASCII)return;
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([lastASCII],{type:'text/plain'}));
-  a.download='ascii-art.txt';a.click();
-};
+
+    function render() {
+        if (!currentImg) return;
+
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        
+        const width = parseInt(document.getElementById('widthRange').value);
+        const fontSize = parseInt(document.getElementById('fontSizeRange').value);
+        const ratio = parseFloat(document.getElementById('ratioRange').value);
+        const useColor = document.getElementById('colorToggle').checked;
+        const invert = document.getElementById('invertToggle').checked;
+        
+        const height = Math.round(width * (currentImg.height / currentImg.width) * ratio);
+        
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(currentImg, 0, 0, width, height);
+        
+        const imageData = ctx.getImageData(0, 0, width, height).data;
+        const chars = STYLES[currentStyleIdx].chars;
+        const output = document.getElementById('asciiOutput');
+        
+        output.style.fontSize = fontSize + 'px';
+        output.style.lineHeight = '1';
+        
+        let htmlContent = "";
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                const idx = (y * width + x) * 4;
+                const r = imageData[idx], g = imageData[idx+1], b = imageData[idx+2];
+                let bness = (0.299*r + 0.587*g + 0.114*b)/255;
+                if (invert) bness = 1 - bness;
+                const char = chars[Math.floor(bness * (chars.length - 1))] || ' ';
+                const finalChar = char === ' ' ? '&nbsp;' : (char === '<' ? '&lt;' : (char === '>' ? '&gt;' : char));
+                
+                if (useColor) htmlContent += `<span style="color:rgb(${r},${g},${b})">${finalChar}</span>`;
+                else htmlContent += finalChar;
+            }
+            htmlContent += '\n';
+        }
+        output.innerHTML = htmlContent;
+        document.getElementById('outputInfo').textContent = `${width}x${height} - ${fontSize}px`;
+    }
+
+    document.getElementById('copyBtn').onclick = async () => {
+        const output = document.getElementById('asciiOutput');
+        if (!output.innerText) return;
+        const btn = document.getElementById('copyBtn');
+
+        try {
+            const fontSize = document.getElementById('fontSizeRange').value;
+            // IMPORTANT : Utilisation d'une table HTML pour forcer l'alignement strict dans Google Docs/Word
+            // ou un div avec des styles inline très forts.
+            const styledHtml = `<div style="font-family:'Courier New',Courier,monospace; font-size:${fontSize}px; line-height:1; white-space:pre; background-color:#000; color:#fff; letter-spacing:0px;">${output.innerHTML}</div>`;
+            
+            const blobHtml = new Blob([styledHtml], { type: 'text/html' });
+            const blobText = new Blob([output.innerText], { type: 'text/plain' });
+
+            await navigator.clipboard.write([
+                new ClipboardItem({ 'text/html': blobHtml, 'text/plain': blobText })
+            ]);
+            
+            btn.textContent = "✅ Prêt à coller !";
+            setTimeout(() => btn.textContent = "📋 Copier (Couleurs)", 2000);
+        } catch (err) {
+            navigator.clipboard.writeText(output.innerText);
+            btn.textContent = "⚠️ Texte seul copié";
+        }
+    };
+
+    document.getElementById('downloadBtn').onclick = () => {
+        const blob = new Blob([document.getElementById('asciiOutput').innerText], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'ascii-art.txt';
+        a.click();
+    };
+
+    ['widthRange', 'fontSizeRange', 'ratioRange'].forEach(id => {
+        document.getElementById(id).oninput = (e) => {
+            document.getElementById(id.replace('Range', '').charAt(0) + 'Val').textContent = e.target.value;
+            render();
+        };
+    });
+    document.getElementById('colorToggle').onchange = render;
+    document.getElementById('invertToggle').onchange = render;
 </script>
 </body>
 </html>
