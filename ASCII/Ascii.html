@@ -13,48 +13,35 @@
         
         .container { max-width: 1100px; margin: 0 auto; padding: 15px; }
         
-        /* Upload Area */
         .upload-zone { border: 2px dashed #2d2d4e; border-radius: 16px; padding: 30px; text-align: center; cursor: pointer; transition: 0.3s; background: #0d0d1a; margin-bottom: 20px; }
         .upload-zone:hover { border-color: #7c3aed; background: #110d1f; }
         .upload-zone .icon { font-size: 2rem; display: block; margin-bottom: 8px; }
         #previewImg { max-width: 80px; max-height: 60px; border-radius: 6px; margin: 10px auto 0; display: none; }
         #fileInput { display: none; }
 
-        /* Controls Layout */
         .main-grid { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
         @media (max-width: 850px) { .main-grid { grid-template-columns: 1fr; } }
 
         .control-group { background: #0d0d1a; border: 1px solid #1e1e3a; border-radius: 12px; padding: 16px; margin-bottom: 15px; }
         .control-group label { display: block; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #7c3aed; margin-bottom: 12px; }
         
-        /* Presets Grid */
         .preset-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 10px; }
         .preset-btn { padding: 8px; background: #141428; border: 1px solid #2d2d4e; border-radius: 8px; color: #9ca3af; cursor: pointer; font-size: .75rem; transition: 0.2s; }
         .preset-btn:hover { border-color: #7c3aed; color: #fff; }
         .preset-btn.active { background: #7c3aed; color: white; border-color: #7c3aed; }
 
-        /* Character Styles */
-        .style-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
-        .style-btn { padding: 8px; background: #141428; border: 1px solid #2d2d4e; border-radius: 8px; color: #9ca3af; cursor: pointer; text-align: left; transition: 0.2s; }
-        .style-btn.active { border-color: #7c3aed; background: #1e0a3c; color: #c4b5fd; }
-        .style-btn .name { display: block; font-size: 0.75rem; font-weight: bold; }
-        .style-btn .preview { font-size: 0.65rem; opacity: 0.6; font-family: monospace; }
-
-        /* Range Sliders */
         input[type=range] { width: 100%; accent-color: #7c3aed; margin: 10px 0; }
         .range-info { display: flex; justify-content: space-between; font-size: 0.8rem; color: #c4b5fd; font-weight: 600; }
 
-        /* Output Area */
         .output-section { background: #070710; border: 1px solid #1e1e3a; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
         .output-header { background: #0d0d1a; padding: 12px 18px; border-bottom: 1px solid #1e1e3a; display: flex; justify-content: space-between; align-items: center; }
         .copy-btn { background: #7c3aed; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
         .copy-btn:hover { background: #6d28d9; transform: scale(1.05); }
 
-        .output-wrapper { overflow: auto; flex-grow: 1; padding: 20px; min-height: 400px; background-image: radial-gradient(#1a1a2e 1px, transparent 1px); background-size: 20px 20px; }
-        #asciiOutput { font-family: 'Courier New', Courier, monospace; line-height: 1; white-space: pre; display: inline-block; transform-origin: top left; }
+        .output-wrapper { overflow: auto; flex-grow: 1; padding: 20px; min-height: 400px; background: #fff; }
+        #asciiOutput { font-family: 'Courier New', Courier, monospace; line-height: 1; white-space: pre; display: inline-block; letter-spacing: 0px; color: #000; }
         
         .toggle-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; color: #9ca3af; }
-        
         .toggle { position: relative; width: 34px; height: 18px; }
         .toggle input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; inset: 0; background: #1e1e3a; border-radius: 20px; transition: .3s; }
@@ -67,7 +54,7 @@
 
 <header>
     <h1>🖼️ ASCII Art Studio</h1>
-    <p>Convertissez vos images et copiez-les vers vos applications</p>
+    <p>Couleurs Ultra-Vives (Texte + Fond)</p>
 </header>
 
 <div class="container">
@@ -81,8 +68,8 @@
     <div class="main-grid">
         <div class="output-section">
             <div class="output-header">
-                <span id="outputInfo" style="font-size: 0.75rem; color: #6b7280;">Prêt</span>
-                <button class="copy-btn" id="copyBtn">📋 Copier (Couleurs)</button>
+                <span id="outputInfo" style="font-size: 0.75rem; color: #6b7280;">Aperçu final</span>
+                <button class="copy-btn" id="copyBtn">📋 Copier pour Google Docs</button>
             </div>
             <div class="output-wrapper" id="outputWrapper">
                 <div id="asciiOutput"></div>
@@ -93,46 +80,42 @@
             <div class="control-group">
                 <label>Format de destination</label>
                 <div class="preset-grid">
-                    <!-- Ratio : 0.45 pour mobile (caractères fins), 0.55 pour Docs (caractères plus larges) -->
-                    <button class="preset-btn" data-w="48" data-size="9" data-ratio="0.45">Notes iPhone</button>
-                    <button class="preset-btn" data-w="32" data-size="8" data-ratio="0.5">Commentaire IG</button>
-                    <button class="preset-btn active" data-w="85" data-size="7" data-ratio="0.6">Google Docs</button>
+                    <button class="preset-btn" data-w="45" data-size="8" data-ratio="0.45">Notes iPhone</button>
+                    <button class="preset-btn active" data-w="80" data-size="7" data-ratio="0.6">Google Docs</button>
                     <button class="preset-btn" data-w="90" data-size="7" data-ratio="0.55">Word / Pages</button>
                     <button class="preset-btn" data-w="120" data-size="6" data-ratio="0.5">PowerPoint</button>
-                    <button class="preset-btn" data-w="180" data-size="4" data-ratio="0.5">Écran Large</button>
                 </div>
             </div>
 
             <div class="control-group">
-                <label>Style Artistique</label>
-                <div class="style-grid" id="styleGrid"></div>
+                <label>Amélioration Image</label>
+                <div class="range-info">Saturation <span id="sVal">1.6</span></div>
+                <input type="range" id="saturationRange" min="1.0" max="4.0" step="0.1" value="1.6">
+                
+                <div class="range-info">Contraste <span id="cVal">1.3</span></div>
+                <input type="range" id="contrastRange" min="0.5" max="3.0" step="0.1" value="1.3">
             </div>
 
             <div class="control-group">
-                <label>Ajustements</label>
-                <div class="range-info">Largeur <span id="wVal">85</span></div>
-                <input type="range" id="widthRange" min="10" max="300" value="85">
+                <label>Dimensions</label>
+                <div class="range-info">Largeur <span id="wVal">80</span></div>
+                <input type="range" id="widthRange" min="10" max="250" value="80">
                 
                 <div class="range-info">Taille Police <span id="fVal">7</span>px</div>
                 <input type="range" id="fontSizeRange" min="2" max="24" value="7">
-
-                <div class="range-info">Ratio Hauteur <span id="rVal">0.60</span></div>
-                <input type="range" id="ratioRange" min="0.3" max="1.0" step="0.05" value="0.60">
+                
+                <div class="toggle-row" style="margin-top:10px">
+                    <span>Double Couleur (Dense)</span>
+                    <label class="toggle"><input type="checkbox" id="doubleColorToggle" checked><span class="slider"></span></label>
+                </div>
             </div>
 
             <div class="control-group">
-                <label>Options</label>
-                <div class="toggle-row">
-                    <span>Couleurs</span>
-                    <label class="toggle"><input type="checkbox" id="colorToggle" checked><span class="slider"></span></label>
-                </div>
-                <div class="toggle-row">
-                    <span>Inverser</span>
-                    <label class="toggle"><input type="checkbox" id="invertToggle"><span class="slider"></span></label>
-                </div>
+                <label>Caractères ASCII</label>
+                <div class="range-info">Ratio Hauteur <span id="rVal">0.60</span></div>
+                <input type="range" id="ratioRange" min="0.3" max="1.0" step="0.05" value="0.60">
+                <p style="font-size: 0.7rem; color: #6b7280; margin-top:8px;">Les caractères s'adaptent à la luminosité de l'image.</p>
             </div>
-            
-            <button id="downloadBtn" class="preset-btn" style="width: 100%; padding: 12px; border-color: #7c3aed; color: #c4b5fd;">💾 Télécharger .txt</button>
         </aside>
     </div>
 </div>
@@ -140,55 +123,19 @@
 <canvas id="canvas" style="display:none"></canvas>
 
 <script>
-    const STYLES = [
-        { name: 'Standard', chars: '@%#*+=-:. ' },
-        { name: 'Blocs', chars: '█▓▒░ ' },
-        { name: 'Braille', chars: '⣿⣷⣯⣟⡿⢿⣻⣽⣶⣤⠶⠦⠄ ' },
-        { name: 'Binaire', chars: '01' },
-        { name: 'Lettres', chars: 'WMXKOAIJL:,. ' }
-    ];
-
     let currentImg = null;
-    let currentStyleIdx = 0;
+    const ASCII_CHARS = "@%#*+=-:. ";
 
-    const styleGrid = document.getElementById('styleGrid');
-    STYLES.forEach((s, i) => {
-        const btn = document.createElement('button');
-        btn.className = `style-btn ${i === 0 ? 'active' : ''}`;
-        btn.innerHTML = `<span class="name">${s.name}</span><span class="preview">${s.chars.substring(0,8)}</span>`;
-        btn.onclick = () => {
-            document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentStyleIdx = i;
-            render();
-        };
-        styleGrid.appendChild(btn);
-    });
-
-    document.querySelectorAll('.preset-btn[data-w]').forEach(btn => {
-        btn.onclick = () => {
-            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            const w = btn.dataset.w;
-            const size = btn.dataset.size;
-            const ratio = btn.dataset.ratio;
-            
-            document.getElementById('widthRange').value = w;
-            document.getElementById('fontSizeRange').value = size;
-            document.getElementById('ratioRange').value = ratio;
-            
-            document.getElementById('wVal').textContent = w;
-            document.getElementById('fVal').textContent = size;
-            document.getElementById('rVal').textContent = ratio;
-            
-            render();
-        };
-    });
+    function updateLabels() {
+        ['width', 'fontSize', 'ratio', 'saturation', 'contrast'].forEach(id => {
+            const el = document.getElementById(id + 'Range');
+            const disp = document.getElementById(id.charAt(0) + 'Val');
+            if (disp) disp.textContent = el.value;
+        });
+    }
 
     const fileInput = document.getElementById('fileInput');
     const uploadZone = document.getElementById('uploadZone');
-    
     uploadZone.onclick = () => fileInput.click();
     fileInput.onchange = () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); };
 
@@ -196,12 +143,7 @@
         const reader = new FileReader();
         reader.onload = (e) => {
             const img = new Image();
-            img.onload = () => {
-                currentImg = img;
-                document.getElementById('previewImg').src = e.target.result;
-                document.getElementById('previewImg').style.display = 'block';
-                render();
-            };
+            img.onload = () => { currentImg = img; render(); document.getElementById('previewImg').src = e.target.result; document.getElementById('previewImg').style.display = 'block'; };
             img.src = e.target.result;
         };
         reader.readAsDataURL(file);
@@ -209,59 +151,66 @@
 
     function render() {
         if (!currentImg) return;
-
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
         
         const width = parseInt(document.getElementById('widthRange').value);
         const fontSize = parseInt(document.getElementById('fontSizeRange').value);
         const ratio = parseFloat(document.getElementById('ratioRange').value);
-        const useColor = document.getElementById('colorToggle').checked;
-        const invert = document.getElementById('invertToggle').checked;
+        const saturation = document.getElementById('saturationRange').value;
+        const contrast = document.getElementById('contrastRange').value;
+        const useDoubleColor = document.getElementById('doubleColorToggle').checked;
         
         const height = Math.round(width * (currentImg.height / currentImg.width) * ratio);
-        
         canvas.width = width;
         canvas.height = height;
+        
+        ctx.filter = `saturate(${saturation}) contrast(${contrast})`;
         ctx.drawImage(currentImg, 0, 0, width, height);
         
         const imageData = ctx.getImageData(0, 0, width, height).data;
-        const chars = STYLES[currentStyleIdx].chars;
         const output = document.getElementById('asciiOutput');
         
         output.style.fontSize = fontSize + 'px';
-        output.style.lineHeight = '1';
         
         let htmlContent = "";
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
                 const idx = (y * width + x) * 4;
                 const r = imageData[idx], g = imageData[idx+1], b = imageData[idx+2];
-                let bness = (0.299*r + 0.587*g + 0.114*b)/255;
-                if (invert) bness = 1 - bness;
-                const char = chars[Math.floor(bness * (chars.length - 1))] || ' ';
-                const finalChar = char === ' ' ? '&nbsp;' : (char === '<' ? '&lt;' : (char === '>' ? '&gt;' : char));
+                const brightness = (0.299*r + 0.587*g + 0.114*b)/255;
                 
-                if (useColor) htmlContent += `<span style="color:rgb(${r},${g},${b})">${finalChar}</span>`;
-                else htmlContent += finalChar;
+                const charIdx = Math.floor(brightness * (ASCII_CHARS.length - 1));
+                const char = ASCII_CHARS[charIdx];
+                const finalChar = char === " " ? "&nbsp;" : char;
+                const color = `rgb(${r},${g},${b})`;
+                
+                if (useDoubleColor) {
+                    // Couleur appliquée au texte ET au fond pour un maximum de densité
+                    htmlContent += `<span style="background-color:${color}; color:${color};">${finalChar}</span>`;
+                } else {
+                    htmlContent += `<span style="color:${color};">${finalChar}</span>`;
+                }
             }
             htmlContent += '\n';
         }
         output.innerHTML = htmlContent;
-        document.getElementById('outputInfo').textContent = `${width}x${height} - ${fontSize}px`;
+        document.getElementById('outputInfo').textContent = `${width}x${height}`;
     }
 
     document.getElementById('copyBtn').onclick = async () => {
         const output = document.getElementById('asciiOutput');
         if (!output.innerText) return;
         const btn = document.getElementById('copyBtn');
-
+        const fontSize = document.getElementById('fontSizeRange').value;
+        
+        const styledHtml = `
+            <div style="font-family:'Courier New', Courier, monospace; font-size:${fontSize}px; line-height:1; white-space:pre; letter-spacing:0px;">
+                ${output.innerHTML}
+            </div>
+        `;
+        
         try {
-            const fontSize = document.getElementById('fontSizeRange').value;
-            // IMPORTANT : Utilisation d'une table HTML pour forcer l'alignement strict dans Google Docs/Word
-            // ou un div avec des styles inline très forts.
-            const styledHtml = `<div style="font-family:'Courier New',Courier,monospace; font-size:${fontSize}px; line-height:1; white-space:pre; background-color:#000; color:#fff; letter-spacing:0px;">${output.innerHTML}</div>`;
-            
             const blobHtml = new Blob([styledHtml], { type: 'text/html' });
             const blobText = new Blob([output.innerText], { type: 'text/plain' });
 
@@ -270,29 +219,28 @@
             ]);
             
             btn.textContent = "✅ Prêt à coller !";
-            setTimeout(() => btn.textContent = "📋 Copier (Couleurs)", 2000);
+            setTimeout(() => btn.textContent = "📋 Copier pour Google Docs", 2000);
         } catch (err) {
-            navigator.clipboard.writeText(output.innerText);
-            btn.textContent = "⚠️ Texte seul copié";
+            btn.textContent = "Erreur de copie";
         }
     };
 
-    document.getElementById('downloadBtn').onclick = () => {
-        const blob = new Blob([document.getElementById('asciiOutput').innerText], { type: 'text/plain' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'ascii-art.txt';
-        a.click();
-    };
-
-    ['widthRange', 'fontSizeRange', 'ratioRange'].forEach(id => {
-        document.getElementById(id).oninput = (e) => {
-            document.getElementById(id.replace('Range', '').charAt(0) + 'Val').textContent = e.target.value;
+    document.querySelectorAll('.preset-btn[data-w]').forEach(btn => {
+        btn.onclick = () => {
+            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('widthRange').value = btn.dataset.w;
+            document.getElementById('fontSizeRange').value = btn.dataset.size;
+            document.getElementById('ratioRange').value = btn.dataset.ratio;
+            updateLabels();
             render();
         };
     });
-    document.getElementById('colorToggle').onchange = render;
-    document.getElementById('invertToggle').onchange = render;
+
+    ['widthRange', 'fontSizeRange', 'ratioRange', 'saturationRange', 'contrastRange'].forEach(id => {
+        document.getElementById(id).oninput = () => { updateLabels(); render(); };
+    });
+    document.getElementById('doubleColorToggle').onchange = render;
 </script>
 </body>
 </html>
