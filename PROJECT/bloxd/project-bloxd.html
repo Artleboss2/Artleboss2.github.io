@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bloxd Texture Pack — Artleboss2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&family=Playfair+Display:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+      <link rel="stylesheet" href="project-bloxd.css">
+</head>
+  <body>
+    <!-- Curseur personnalisé -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Navigation -->
+    <header>
+      <a href="index.html" class="back-btn">
+        <span>←</span>
+        <span data-i18n="back">Retour au portfolio</span>
+      </a>
+      <div class="logo">PROJET 01</div>
+      <button
+        class="lang-switcher"
+        id="langSwitcher"
+        onclick="toggleLanguage()"
+      >
+        <span id="langIcon">EN</span>
+      </button>
+    </header>
+
+    <!-- Hero -->
+    <section class="project-hero">
+      <div class="project-hero-content">
+        <div class="project-number" data-i18n="projectLabel">PROJET #01</div>
+        <h1>Bloxd Texture Pack</h1>
+        <p data-i18n="heroDesc">
+          Un texture pack personnalisé pour Bloxd.io permettant une
+          customisation complète de l'apparence du jeu via CSS et WebGL.
+        </p>
+
+        <div class="project-meta">
+          <div class="meta-item">
+            <div class="meta-label" data-i18n="metaType">Type</div>
+            <div class="meta-value">Game Modification</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label" data-i18n="metaYear">Année</div>
+            <div class="meta-value">2024</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label" data-i18n="metaTech">Technologies</div>
+            <div class="tech-stack">
+              <span class="tech-tag">CSS</span>
+              <span class="tech-tag">WebGL</span>
+              <span class="tech-tag">JavaScript</span>
+              <span class="tech-tag">3D Modeling</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Content -->
+    <div class="project-content">
+      <section class="content-section">
+        <h2 data-i18n="titleOverview">Vue d'ensemble</h2>
+        <p data-i18n="overviewP1">
+          Le Bloxd Texture Pack est un projet de modification visuelle pour le
+          jeu Bloxd.io, offrant aux joueurs la possibilité de personnaliser
+          entièrement l'apparence du jeu. Ce pack utilise des techniques CSS
+          avancées et WebGL pour modifier les textures, la skybox, les modèles
+          3D et l'interface utilisateur.
+        </p>
+        <p data-i18n="overviewP2">
+          L'objectif principal était de créer un système flexible permettant aux
+          joueurs d'exprimer leur créativité tout en maintenant les performances
+          de jeu optimales.
+        </p>
+      </section>
+
+      <section class="content-section">
+        <h2 data-i18n="titleFeatures">Fonctionnalités principales</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <h3 data-i18n="feat1Title">🎨 Textures personnalisées</h3>
+            <p data-i18n="feat1Desc">
+              Modification complète des textures de blocs avec support de
+              résolutions multiples et filtres d'amélioration visuelle.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3 data-i18n="feat2Title">🌌 Skybox dynamique</h3>
+            <p data-i18n="feat2Desc">
+              Remplacement de la skybox par défaut avec des environnements
+              personnalisés et des effets atmosphériques.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3 data-i18n="feat3Title">🎮 Interface utilisateur</h3>
+            <p data-i18n="feat3Desc">
+              Customisation CSS avancée de l'interface avec thèmes prédéfinis et
+              éditeur visuel en temps réel.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3 data-i18n="feat4Title">📦 Modèles 3D</h3>
+            <p data-i18n="feat4Desc">
+              Support des modèles GLB personnalisés pour les objets et entités
+              du jeu avec optimisation automatique.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2 data-i18n="titleChallenges">Défis techniques</h2>
+        <ul>
+          <li data-i18n="challenge1">
+            Optimisation des performances pour maintenir 60 FPS malgré les
+            textures haute résolution
+          </li>
+          <li data-i18n="challenge2">
+            Compatibilité cross-browser avec différents moteurs de rendu WebGL
+          </li>
+          <li data-i18n="challenge3">
+            Système de cache intelligent pour réduire les temps de chargement
+          </li>
+          <li data-i18n="challenge4">
+            Gestion mémoire efficace pour éviter les fuites sur les sessions
+            longues
+          </li>
+          <li data-i18n="challenge5">
+            API d'injection CSS qui ne casse pas les mises à jour du jeu
+          </li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2 data-i18n="titleArchi">Architecture technique</h2>
+        <p data-i18n="archiDesc">
+          Le texture pack utilise une architecture modulaire permettant aux
+          utilisateurs de sélectionner uniquement les composants qu'ils
+          souhaitent modifier :
+        </p>
+        <div class="code-block">
+          <code>
+            // Structure du pack<br />
+            bloxd-texture-pack/<br />
+            ├── textures/<br />
+            │ ├── blocks/<br />
+            │ ├── items/<br />
+            │ └── skybox/<br />
+            ├── models/<br />
+            │ └── entities/<br />
+            ├── ui/<br />
+            │ ├── styles.css<br />
+            │ └── themes/<br />
+            └── config.json
+          </code>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <h2 data-i18n="titleImpact">Impact et résultats</h2>
+        <p data-i18n="impactDesc">
+          Le texture pack a été bien reçu par la communauté Bloxd.io, avec des
+          retours positifs sur la flexibilité et la facilité d'utilisation. Le
+          projet démontre une compréhension approfondie du rendu WebGL et de
+          l'optimisation des performances dans les applications web gourmandes
+          en ressources.
+        </p>
+      </section>
+
+      <div class="project-links">
+        <a
+          href="https://github.com/Artleboss2/Bloxd-Texture-Pack"
+          target="_blank"
+          class="project-link"
+        >
+          <span data-i18n="linkGitHub">Voir sur GitHub</span>
+          <span>→</span>
+        </a>
+        <a href="index.html" class="project-link">
+          <span data-i18n="linkBack">Retour aux projets</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p data-i18n="footer">© 2024 Artleboss2 — Tous droits réservés</p>
+    </footer>
+
+      <script src="project-bloxd.js"></script>
+</body>
+</html>
