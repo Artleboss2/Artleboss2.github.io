@@ -20,18 +20,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); content-visibility: auto; contain-intrinsic-size: 200px; }
+        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); content-visibility: auto; contain-intrinsic-size: 150px; }
         .card-hover:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.2); border-color: #0ea5e9; }
-        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #111827; }
         ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-gray-950 text-gray-100 min-h-screen antialiased selection:bg-brand-500 selection:text-white">
+<body class="bg-gray-950 text-gray-100 min-h-screen antialiased">
     <header class="sticky top-0 z-50 bg-gray-950/90 backdrop-blur-md border-b border-gray-800 pt-8 pb-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -40,148 +40,171 @@
                         <i data-lucide="database" class="w-8 h-8 text-brand-500"></i>
                         AI Open Source Hub
                     </h1>
-                    <p class="text-gray-400 mt-2 text-sm max-w-xl">Un répertoire intelligent de ressources, modèles et outils open-source.</p>
+                    <p class="text-gray-400 mt-2 text-sm max-w-xl">Répertoire local haute performance.</p>
                 </div>
-                <div class="relative w-full md:w-96 hidden" id="searchContainer">
+                <div class="relative w-full md:w-96">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i data-lucide="search" class="w-5 h-5 text-gray-500"></i>
                     </div>
-                    <input type="text" id="searchInput" disabled
+                    <input type="text" id="searchInput" 
                         class="block w-full pl-10 pr-3 py-3 border border-gray-700 rounded-xl bg-gray-900 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
-                        placeholder="Rechercher...">
+                        placeholder="Rechercher parmi les ressources...">
                 </div>
             </div>
-            <div class="flex items-center gap-2 mt-6 overflow-x-auto pb-2 scrollbar-hide hidden" id="categoryFilters"></div>
+            <div class="flex items-center gap-2 mt-6 overflow-x-auto pb-2 scrollbar-hide" id="categoryFilters"></div>
         </div>
     </header>
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative min-h-[50vh]">
-        <div id="initialLoader" class="absolute inset-0 flex flex-col items-center justify-center z-10 bg-gray-950">
-            <i data-lucide="loader-2" class="w-12 h-12 text-brand-500 animate-spin mb-4"></i>
-            <h2 class="text-xl font-semibold text-gray-200">Téléchargement des données...</h2>
-            <p class="text-gray-500 mt-2 text-sm">Synchronisation avec la base distante.</p>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-6 flex justify-between items-center text-sm text-gray-400">
+            <span id="resultsCount">Chargement...</span>
         </div>
-        <div id="dataError" class="hidden bg-red-900/30 border border-red-800 text-red-200 p-4 rounded-xl mb-6">
-            <div class="flex items-center gap-3 mb-2">
-                <i data-lucide="alert-circle" class="w-5 h-5 text-red-400"></i>
-                <h3 class="font-bold">Erreur de chargement</h3>
+
+        <div id="resourcesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+        
+        <div id="scrollSentinel" class="h-20 w-full flex items-center justify-center mt-6">
+            <div id="loadingSpinner" class="hidden flex items-center gap-2 text-brand-500">
+                <i data-lucide="loader-2" class="w-6 h-6 animate-spin"></i>
+                <span class="text-sm font-medium">Chargement des ressources suivantes...</span>
             </div>
-            <p id="errorText" class="text-sm opacity-90"></p>
         </div>
-        <div id="mainContent" class="hidden opacity-0 transition-opacity duration-500">
-            <div class="mb-6 flex justify-between items-center text-sm text-gray-400">
-                <span id="resultsCount"></span>
-            </div>
-            <div id="resourcesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
-            <div id="scrollSentinel" class="h-20 w-full flex items-center justify-center mt-6">
-                <div id="loadingSpinner" class="hidden flex items-center gap-2 text-brand-500">
-                    <i data-lucide="loader-2" class="w-6 h-6 animate-spin"></i>
-                    <span class="text-sm font-medium">Chargement...</span>
-                </div>
-            </div>
-            <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center">
-                <div class="bg-gray-800 p-4 rounded-full mb-4">
-                    <i data-lucide="search-x" class="w-8 h-8 text-gray-400"></i>
-                </div>
-                <h3 class="text-lg font-medium text-gray-200">Aucun résultat</h3>
-            </div>
+
+        <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center">
+            <i data-lucide="search-x" class="w-12 h-12 text-gray-600 mb-4"></i>
+            <h3 class="text-lg font-medium text-gray-200">Aucun résultat trouvé</h3>
         </div>
     </main>
-    <footer class="border-t border-gray-800 mt-12 py-8 text-center text-sm text-gray-500">
-        <p>Base de données connectée via GitHub Raw.</p>
-    </footer>
-    <script>
-        const DATA_URL = "https://raw.githubusercontent.com/Artleboss2/Artleboss2.github.io/refs/heads/main/ressources/awesome_data.js"; 
-        let baseData = [], processedResources = [], categories = [], tagCounts = {}, currentFilter = "Tout", searchQuery = "", filteredData = [];
-        const ITEMS_PER_PAGE = 50; 
-        let currentPage = 1;
-        const grid = document.getElementById('resourcesGrid'), emptyState = document.getElementById('emptyState'), searchInput = document.getElementById('searchInput'), searchContainer = document.getElementById('searchContainer'), categoryFilters = document.getElementById('categoryFilters'), resultsCount = document.getElementById('resultsCount'), loadingSpinner = document.getElementById('loadingSpinner'), initialLoader = document.getElementById('initialLoader'), mainContent = document.getElementById('mainContent'), dataErrorEl = document.getElementById('dataError'), errorText = document.getElementById('errorText');
 
-        function loadDataScript(url) {
-            return new Promise((resolve, reject) => {
-                const script = document.createElement('script');
-                script.src = url;
-                script.async = true;
-                script.onload = () => resolve();
-                script.onerror = () => reject(new Error(`Impossible de charger : ${url}`));
-                document.body.appendChild(script);
-            });
-        }
+    <script>
+        /**
+         * COLLE TES DONNÉES CI-DESSOUS
+         * Remplace le tableau vide [] par le contenu de ton fichier awesome_data.js
+         * (Garde juste la partie après "const rawData = ")
+         */
+        const rawData = [
+            { name: 'Cross-Platform', desc: 'Writing cross-platform code on Node.js.', link: 'github.com/bcoe/awesome-cross-platform-nodejs', category: 'GitHub', tags: ['platforms'] },
+            { name: 'Frontend Development', desc: 'No description available', link: 'github.com/dypsilon/frontend-dev-bookmarks', category: 'GitHub', tags: ['platforms'] }
+            // ... Coller le reste ici
+        ];
+
+        let processedResources = [], categories = [], tagCounts = {}, currentFilter = "Tout", searchQuery = "", filteredData = [];
+        const ITEMS_PER_PAGE = 200; 
+        let currentPage = 1;
+
+        const grid = document.getElementById('resourcesGrid'), 
+              emptyState = document.getElementById('emptyState'), 
+              searchInput = document.getElementById('searchInput'), 
+              categoryFilters = document.getElementById('categoryFilters'), 
+              resultsCount = document.getElementById('resultsCount'), 
+              loadingSpinner = document.getElementById('loadingSpinner');
 
         function processData() {
-            processedResources = baseData.map(item => {
-                let cleanLink = (item.link || '').trim();
-                if (cleanLink && !cleanLink.startsWith('http')) cleanLink = 'https://' + cleanLink;
-                let primaryTag = item.category || 'General';
-                if (item.tags && Array.isArray(item.tags) && item.tags.length > 0) primaryTag = item.tags[0];
-                let icon = "link-2", color = "text-blue-400", linkLower = cleanLink.toLowerCase(), catLower = (item.category || '').toLowerCase();
-                if (linkLower.includes('github.com') || catLower.includes('github')) { icon = "github"; color = "text-gray-300"; }
-                else if (linkLower.includes('youtube.com') || linkLower.includes('youtu.be')) { icon = "youtube"; color = "text-red-500"; }
-                else if (linkLower.includes('.pdf') || primaryTag.toLowerCase().includes('paper')) { icon = "file-text"; color = "text-orange-400"; }
-                else if (catLower.includes('web')) { icon = "globe"; color = "text-emerald-400"; }
-                return { ...item, url: cleanLink, displayUrl: cleanLink.replace(/^https?:\/\//, '').substring(0, 30) + '...', filterTag: primaryTag, icon, color };
+            processedResources = rawData.map(item => {
+                let link = (item.link || '').trim();
+                if (link && !link.startsWith('http')) link = 'https://' + link;
+                let tag = item.category || (item.tags && item.tags[0]) || 'General';
+                
+                let icon = "link-2", color = "text-blue-400";
+                if (link.includes('github.com')) { icon = "github"; color = "text-gray-300"; }
+                else if (link.includes('youtube.com')) { icon = "youtube"; color = "text-red-500"; }
+                else if (link.includes('.pdf')) { icon = "file-text"; color = "text-orange-400"; }
+
+                return {
+                    ...item,
+                    url: link,
+                    displayUrl: link.replace(/^https?:\/\//, '').substring(0, 25) + '...',
+                    filterTag: tag,
+                    icon,
+                    color
+                };
             });
+
             processedResources.forEach(r => tagCounts[r.filterTag] = (tagCounts[r.filterTag] || 0) + 1);
-            categories = ["Tout", ...Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a]).slice(0, 20)];
+            categories = ["Tout", ...Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a]).slice(0, 25)];
         }
 
         function renderFilters() {
             categoryFilters.innerHTML = categories.map(cat => `
-                <button onclick="setFilter('${cat}')" class="px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors border ${currentFilter === cat ? 'bg-brand-500 text-white border-brand-500' : 'bg-gray-900 text-gray-400 border-gray-700 hover:bg-gray-800'}">
-                    ${cat} ${cat !== "Tout" ? `<span class="opacity-50 text-xs ml-1">(${tagCounts[cat]})</span>` : ''}
+                <button onclick="setFilter('${cat}')" class="px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all border ${currentFilter === cat ? 'bg-brand-500 text-white border-brand-500' : 'bg-gray-900 text-gray-400 border-gray-700 hover:border-gray-500'}">
+                    ${cat} ${cat !== "Tout" ? `<span class="opacity-50 ml-1 text-xs">(${tagCounts[cat]})</span>` : ''}
                 </button>
             `).join('');
         }
 
         function applyFilters() {
+            const s = searchQuery.toLowerCase();
             filteredData = processedResources.filter(item => {
                 const matchCat = currentFilter === "Tout" || item.filterTag === currentFilter;
-                if (!searchQuery) return matchCat;
-                const s = searchQuery.toLowerCase();
-                return matchCat && ((item.name || '').toLowerCase().includes(s) || (item.desc || '').toLowerCase().includes(s));
+                const matchSearch = !searchQuery || (item.name || '').toLowerCase().includes(s) || (item.desc || '').toLowerCase().includes(s);
+                return matchCat && matchSearch;
             });
-            grid.innerHTML = ''; currentPage = 1;
-            resultsCount.textContent = `${filteredData.length.toLocaleString('fr-FR')} ressources`;
-            if (filteredData.length === 0) { emptyState.classList.replace('hidden', 'flex'); }
-            else { emptyState.classList.replace('flex', 'hidden'); appendNextPage(); }
+
+            grid.innerHTML = '';
+            currentPage = 1;
+            resultsCount.textContent = `${filteredData.length.toLocaleString()} ressources`;
+            
+            if (filteredData.length === 0) {
+                emptyState.classList.replace('hidden', 'flex');
+            } else {
+                emptyState.classList.replace('flex', 'hidden');
+                appendNextPage();
+            }
         }
 
         function appendNextPage() {
-            const start = (currentPage - 1) * ITEMS_PER_PAGE, end = start + ITEMS_PER_PAGE, chunk = filteredData.slice(start, end);
+            const start = (currentPage - 1) * ITEMS_PER_PAGE;
+            const end = start + ITEMS_PER_PAGE;
+            const chunk = filteredData.slice(start, end);
+
             if (chunk.length === 0) return;
-            const temp = document.createElement('div');
-            temp.innerHTML = chunk.map((item, i) => `
-                <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 card-hover flex flex-col h-full fade-in" style="animation-delay: ${(i%10)*0.05}s">
-                    <div class="text-[10px] font-bold text-gray-500 uppercase mb-2">${item.filterTag}</div>
+
+            const fragment = document.createDocumentFragment();
+            chunk.forEach(item => {
+                const div = document.createElement('div');
+                div.className = "bg-gray-900 border border-gray-800 rounded-2xl p-5 card-hover flex flex-col h-full fade-in";
+                div.innerHTML = `
+                    <div class="text-[10px] font-bold text-gray-500 uppercase mb-2 tracking-tight">${item.filterTag}</div>
                     <div class="flex items-center gap-3 mb-3">
                         <i data-lucide="${item.icon}" class="w-5 h-5 ${item.color}"></i>
                         <h2 class="text-sm font-bold text-white line-clamp-1">${item.name}</h2>
                     </div>
-                    <p class="text-gray-400 text-xs mb-4 flex-grow line-clamp-2">${item.desc || '...'}</p>
-                    <a href="${item.url}" target="_blank" class="text-xs text-brand-500 font-medium truncate">${item.displayUrl}</a>
-                </div>
-            `).join('');
-            lucide.createIcons({ root: temp });
-            Array.from(temp.children).forEach(c => grid.appendChild(c));
+                    <p class="text-gray-400 text-xs mb-4 flex-grow line-clamp-2">${item.desc || 'Aucune description.'}</p>
+                    <a href="${item.url}" target="_blank" class="text-xs text-brand-500 font-medium truncate hover:underline">${item.displayUrl}</a>
+                `;
+                fragment.appendChild(div);
+            });
+
+            grid.appendChild(fragment);
+            lucide.createIcons({ root: grid });
             loadingSpinner.classList.toggle('hidden', end >= filteredData.length);
         }
 
-        const obs = new IntersectionObserver(e => { if (e[0].isIntersecting && currentPage * ITEMS_PER_PAGE < filteredData.length) { currentPage++; appendNextPage(); } });
-        obs.observe(document.getElementById('scrollSentinel'));
+        const observer = new IntersectionObserver(e => {
+            if (e[0].isIntersecting && currentPage * ITEMS_PER_PAGE < filteredData.length) {
+                currentPage++;
+                appendNextPage();
+            }
+        }, { threshold: 0.1 });
+        observer.observe(document.getElementById('scrollSentinel'));
 
         window.setFilter = (c) => { currentFilter = c; renderFilters(); applyFilters(); };
-        searchInput.addEventListener('input', (e) => { searchQuery = e.target.value; applyFilters(); });
+        
+        let timeout;
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                searchQuery = e.target.value;
+                applyFilters();
+            }, 250);
+        });
 
-        async function initApp() {
+        function init() {
+            processData();
+            renderFilters();
+            applyFilters();
             lucide.createIcons();
-            try {
-                await loadDataScript(DATA_URL);
-                if (typeof rawData !== 'undefined') { baseData = rawData; processData(); renderFilters(); }
-                initialLoader.classList.add('hidden');
-                searchContainer.classList.remove('hidden'); categoryFilters.classList.remove('hidden'); mainContent.classList.remove('hidden');
-                setTimeout(() => { mainContent.classList.remove('opacity-0'); searchInput.disabled = false; applyFilters(); }, 50);
-            } catch (e) { initialLoader.classList.add('hidden'); dataErrorEl.classList.remove('hidden'); errorText.textContent = e.message; }
         }
-        initApp();
+        init();
     </script>
 </body>
 </html>
