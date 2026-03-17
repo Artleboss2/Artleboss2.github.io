@@ -4,30 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Open Source Resources</title>
-    <!-- Tailwind CSS pour le style -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Chargement de tes données externes -->
-    <script src="ressources/awesome_data.js"></script>
-    
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            500: '#0ea5e9',
-                            600: '#0284c7',
-                            900: '#0c4a6e',
-                        }
-                    }
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: { brand: { 50: '#f0f9ff', 100: '#e0f2fe', 500: '#0ea5e9', 600: '#0284c7', 900: '#0c4a6e' } }
                 }
             }
         }
@@ -35,47 +20,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            content-visibility: auto; /* Optimisation de rendu natif du navigateur */
-            contain-intrinsic-size: 200px;
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.2), 0 8px 10px -6px rgba(14, 165, 233, 0.1);
-            border-color: #0ea5e9;
-        }
-
-        .fade-in {
-            animation: fadeIn 0.4s ease-out forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Custom scrollbar */
+        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); content-visibility: auto; contain-intrinsic-size: 200px; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.2); border-color: #0ea5e9; }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #111827; }
         ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
-        
-        /* Cacher la barre de défilement pour les filtres */
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="bg-gray-950 text-gray-100 min-h-screen antialiased selection:bg-brand-500 selection:text-white">
-
-    <!-- Header Section -->
     <header class="sticky top-0 z-50 bg-gray-950/90 backdrop-blur-md border-b border-gray-800 pt-8 pb-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -84,325 +40,148 @@
                         <i data-lucide="database" class="w-8 h-8 text-brand-500"></i>
                         AI Open Source Hub
                     </h1>
-                    <p class="text-gray-400 mt-2 text-sm max-w-xl">
-                        Un répertoire intelligent de ressources, modèles et outils open-source.
-                    </p>
+                    <p class="text-gray-400 mt-2 text-sm max-w-xl">Un répertoire intelligent de ressources, modèles et outils open-source.</p>
                 </div>
-                
-                <!-- Search Bar avec debounce -->
-                <div class="relative w-full md:w-96">
+                <div class="relative w-full md:w-96 hidden" id="searchContainer">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i data-lucide="search" class="w-5 h-5 text-gray-500"></i>
                     </div>
-                    <input type="text" id="searchInput" 
-                        class="block w-full pl-10 pr-3 py-3 border border-gray-700 rounded-xl leading-5 bg-gray-900 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm transition-shadow"
-                        placeholder="Rechercher (nom, description, tag...)">
+                    <input type="text" id="searchInput" disabled
+                        class="block w-full pl-10 pr-3 py-3 border border-gray-700 rounded-xl bg-gray-900 text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
+                        placeholder="Rechercher...">
                 </div>
             </div>
-
-            <!-- Categories / Tags générés dynamiquement -->
-            <div class="flex items-center gap-2 mt-6 overflow-x-auto pb-2 scrollbar-hide" id="categoryFilters">
-                <!-- Les boutons seront injectés ici -->
-            </div>
+            <div class="flex items-center gap-2 mt-6 overflow-x-auto pb-2 scrollbar-hide hidden" id="categoryFilters"></div>
         </div>
     </header>
-
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        <!-- Message d'alerte si rawData est introuvable -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative min-h-[50vh]">
+        <div id="initialLoader" class="absolute inset-0 flex flex-col items-center justify-center z-10 bg-gray-950">
+            <i data-lucide="loader-2" class="w-12 h-12 text-brand-500 animate-spin mb-4"></i>
+            <h2 class="text-xl font-semibold text-gray-200">Téléchargement des données...</h2>
+            <p class="text-gray-500 mt-2 text-sm">Synchronisation avec la base distante.</p>
+        </div>
         <div id="dataError" class="hidden bg-red-900/30 border border-red-800 text-red-200 p-4 rounded-xl mb-6">
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 mb-2">
                 <i data-lucide="alert-circle" class="w-5 h-5 text-red-400"></i>
-                <p>Impossible de charger <strong>awesome_data.js</strong>. Vérifiez que le fichier est bien dans le même dossier que ce fichier HTML.</p>
+                <h3 class="font-bold">Erreur de chargement</h3>
             </div>
+            <p id="errorText" class="text-sm opacity-90"></p>
         </div>
-
-        <!-- Compteur de résultats -->
-        <div class="mb-6 flex justify-between items-center text-sm text-gray-400">
-            <span id="resultsCount">Chargement des ressources...</span>
-        </div>
-
-        <!-- Grille de résultats -->
-        <div id="resourcesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <!-- Les cartes seront injectées ici par blocs (chunks) -->
-        </div>
-        
-        <!-- Sentinelle pour le défilement infini (Infinite Scroll) -->
-        <div id="scrollSentinel" class="h-20 w-full flex items-center justify-center mt-6">
-            <!-- Loader animé -->
-            <div id="loadingSpinner" class="hidden flex items-center gap-2 text-brand-500">
-                <i data-lucide="loader-2" class="w-6 h-6 animate-spin"></i>
-                <span class="text-sm font-medium">Chargement...</span>
+        <div id="mainContent" class="hidden opacity-0 transition-opacity duration-500">
+            <div class="mb-6 flex justify-between items-center text-sm text-gray-400">
+                <span id="resultsCount"></span>
             </div>
-        </div>
-
-        <!-- État vide -->
-        <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center">
-            <div class="bg-gray-800 p-4 rounded-full mb-4">
-                <i data-lucide="search-x" class="w-8 h-8 text-gray-400"></i>
+            <div id="resourcesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+            <div id="scrollSentinel" class="h-20 w-full flex items-center justify-center mt-6">
+                <div id="loadingSpinner" class="hidden flex items-center gap-2 text-brand-500">
+                    <i data-lucide="loader-2" class="w-6 h-6 animate-spin"></i>
+                    <span class="text-sm font-medium">Chargement...</span>
+                </div>
             </div>
-            <h3 class="text-lg font-medium text-gray-200">Aucun résultat trouvé</h3>
-            <p class="text-gray-500 mt-1">Essayez de modifier votre recherche ou vos filtres.</p>
+            <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center">
+                <div class="bg-gray-800 p-4 rounded-full mb-4">
+                    <i data-lucide="search-x" class="w-8 h-8 text-gray-400"></i>
+                </div>
+                <h3 class="text-lg font-medium text-gray-200">Aucun résultat</h3>
+            </div>
         </div>
     </main>
-
-    <!-- Footer -->
     <footer class="border-t border-gray-800 mt-12 py-8 text-center text-sm text-gray-500">
-        <p>Généré dynamiquement à partir d'un large volume de données CSV/JS.</p>
+        <p>Base de données connectée via GitHub Raw.</p>
     </footer>
-
-    <!-- Logique de l'application -->
     <script>
-        // 1. Détection des données
-        let baseData = [];
-        const dataErrorEl = document.getElementById('dataError');
-        
-        if (typeof rawData !== 'undefined' && Array.isArray(rawData)) {
-            baseData = rawData;
-        } else {
-            dataErrorEl.classList.remove('hidden');
-        }
-
-        // 2. Traitement intelligent et assignation des icônes/couleurs
-        const processedResources = baseData.map(item => {
-            let cleanLink = (item.link || '').trim();
-            if (cleanLink && !cleanLink.startsWith('http')) {
-                cleanLink = 'https://' + cleanLink;
-            }
-
-            // Extraction du tag principal ou de la catégorie
-            let primaryTag = item.category || 'General';
-            if (item.tags && Array.isArray(item.tags) && item.tags.length > 0) {
-                primaryTag = item.tags[0];
-            }
-            
-            // Attribution dynamique d'icônes
-            let icon = "link-2";
-            let color = "text-blue-400";
-            
-            const linkLower = cleanLink.toLowerCase();
-            const categoryLower = (item.category || '').toLowerCase();
-            
-            if (linkLower.includes('github.com') || categoryLower.includes('github')) {
-                icon = "github";
-                color = "text-gray-300";
-            } else if (linkLower.includes('youtube.com') || linkLower.includes('youtu.be')) {
-                icon = "youtube";
-                color = "text-red-500";
-            } else if (linkLower.includes('.pdf') || primaryTag.toLowerCase().includes('paper')) {
-                icon = "file-text";
-                color = "text-orange-400";
-            } else if (categoryLower.includes('web') || primaryTag.toLowerCase().includes('web')) {
-                icon = "globe";
-                color = "text-emerald-400";
-            } else if (primaryTag.toLowerCase().includes('platform') || primaryTag.toLowerCase().includes('framework')) {
-                icon = "layers";
-                color = "text-purple-400";
-            }
-
-            return {
-                ...item,
-                url: cleanLink,
-                displayUrl: cleanLink.replace(/^https?:\/\//, '').replace(/\/$/, '').substring(0, 35) + (cleanLink.length > 35 ? '...' : ''),
-                filterTag: primaryTag, // Utilisé pour le filtrage
-                icon,
-                color
-            };
-        });
-
-        // 3. Extraction des catégories les plus fréquentes (Max 20 pour ne pas saturer l'UI)
-        const tagCounts = {};
-        processedResources.forEach(r => {
-            tagCounts[r.filterTag] = (tagCounts[r.filterTag] || 0) + 1;
-        });
-        
-        // Trier par fréquence décroissante
-        const topCategories = Object.keys(tagCounts)
-            .sort((a, b) => tagCounts[b] - tagCounts[a])
-            .slice(0, 20); // Prendre les 20 plus gros tags
-
-        const categories = ["Tout", ...topCategories];
-
-        // 4. État de l'application (Variables globales)
-        let currentFilter = "Tout";
-        let searchQuery = "";
-        let filteredData = [...processedResources];
-        
-        // Paramètres de pagination
+        const DATA_URL = "https://raw.githubusercontent.com/Artleboss2/Artleboss2.github.io/refs/heads/main/ressources/awesome_data.js"; 
+        let baseData = [], processedResources = [], categories = [], tagCounts = {}, currentFilter = "Tout", searchQuery = "", filteredData = [];
         const ITEMS_PER_PAGE = 50; 
         let currentPage = 1;
+        const grid = document.getElementById('resourcesGrid'), emptyState = document.getElementById('emptyState'), searchInput = document.getElementById('searchInput'), searchContainer = document.getElementById('searchContainer'), categoryFilters = document.getElementById('categoryFilters'), resultsCount = document.getElementById('resultsCount'), loadingSpinner = document.getElementById('loadingSpinner'), initialLoader = document.getElementById('initialLoader'), mainContent = document.getElementById('mainContent'), dataErrorEl = document.getElementById('dataError'), errorText = document.getElementById('errorText');
 
-        // Éléments du DOM
-        const grid = document.getElementById('resourcesGrid');
-        const emptyState = document.getElementById('emptyState');
-        const searchInput = document.getElementById('searchInput');
-        const categoryFilters = document.getElementById('categoryFilters');
-        const resultsCount = document.getElementById('resultsCount');
-        const loadingSpinner = document.getElementById('loadingSpinner');
+        function loadDataScript(url) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = url;
+                script.async = true;
+                script.onload = () => resolve();
+                script.onerror = () => reject(new Error(`Impossible de charger : ${url}`));
+                document.body.appendChild(script);
+            });
+        }
 
-        // 5. Fonctions de rendu
+        function processData() {
+            processedResources = baseData.map(item => {
+                let cleanLink = (item.link || '').trim();
+                if (cleanLink && !cleanLink.startsWith('http')) cleanLink = 'https://' + cleanLink;
+                let primaryTag = item.category || 'General';
+                if (item.tags && Array.isArray(item.tags) && item.tags.length > 0) primaryTag = item.tags[0];
+                let icon = "link-2", color = "text-blue-400", linkLower = cleanLink.toLowerCase(), catLower = (item.category || '').toLowerCase();
+                if (linkLower.includes('github.com') || catLower.includes('github')) { icon = "github"; color = "text-gray-300"; }
+                else if (linkLower.includes('youtube.com') || linkLower.includes('youtu.be')) { icon = "youtube"; color = "text-red-500"; }
+                else if (linkLower.includes('.pdf') || primaryTag.toLowerCase().includes('paper')) { icon = "file-text"; color = "text-orange-400"; }
+                else if (catLower.includes('web')) { icon = "globe"; color = "text-emerald-400"; }
+                return { ...item, url: cleanLink, displayUrl: cleanLink.replace(/^https?:\/\//, '').substring(0, 30) + '...', filterTag: primaryTag, icon, color };
+            });
+            processedResources.forEach(r => tagCounts[r.filterTag] = (tagCounts[r.filterTag] || 0) + 1);
+            categories = ["Tout", ...Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a]).slice(0, 20)];
+        }
+
         function renderFilters() {
             categoryFilters.innerHTML = categories.map(cat => `
-                <button onclick="setFilter('${cat}')" 
-                    class="px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors border ${
-                        currentFilter === cat 
-                        ? 'bg-brand-500 text-white border-brand-500' 
-                        : 'bg-gray-900 text-gray-400 border-gray-700 hover:bg-gray-800 hover:text-white'
-                    }">
-                    ${cat.charAt(0).toUpperCase() + cat.slice(1)} 
-                    ${cat !== "Tout" ? `<span class="opacity-50 text-xs ml-1">(${tagCounts[cat]})</span>` : ''}
+                <button onclick="setFilter('${cat}')" class="px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors border ${currentFilter === cat ? 'bg-brand-500 text-white border-brand-500' : 'bg-gray-900 text-gray-400 border-gray-700 hover:bg-gray-800'}">
+                    ${cat} ${cat !== "Tout" ? `<span class="opacity-50 text-xs ml-1">(${tagCounts[cat]})</span>` : ''}
                 </button>
             `).join('');
         }
 
-        // Fonction pour filtrer le jeu de données total
         function applyFilters() {
             filteredData = processedResources.filter(item => {
-                const matchesCategory = currentFilter === "Tout" || item.filterTag === currentFilter;
-                
-                if (!searchQuery) return matchesCategory;
-                
-                const searchLower = searchQuery.toLowerCase();
-                const matchesSearch = (item.name && item.name.toLowerCase().includes(searchLower)) || 
-                                      (item.desc && item.desc.toLowerCase().includes(searchLower)) ||
-                                      (item.url && item.url.toLowerCase().includes(searchLower)) ||
-                                      (item.filterTag && item.filterTag.toLowerCase().includes(searchLower));
-                return matchesCategory && matchesSearch;
+                const matchCat = currentFilter === "Tout" || item.filterTag === currentFilter;
+                if (!searchQuery) return matchCat;
+                const s = searchQuery.toLowerCase();
+                return matchCat && ((item.name || '').toLowerCase().includes(s) || (item.desc || '').toLowerCase().includes(s));
             });
-
-            // Réinitialiser la grille et la page
-            grid.innerHTML = '';
-            currentPage = 1;
-            
-            resultsCount.textContent = `${filteredData.length} ressource${filteredData.length !== 1 ? 's' : ''} trouvée${filteredData.length !== 1 ? 's' : ''}`;
-
-            if (filteredData.length === 0) {
-                emptyState.classList.remove('hidden');
-                emptyState.classList.add('flex');
-            } else {
-                emptyState.classList.add('hidden');
-                emptyState.classList.remove('flex');
-                appendNextPage(); // Charger le premier lot de 50
-            }
+            grid.innerHTML = ''; currentPage = 1;
+            resultsCount.textContent = `${filteredData.length.toLocaleString('fr-FR')} ressources`;
+            if (filteredData.length === 0) { emptyState.classList.replace('hidden', 'flex'); }
+            else { emptyState.classList.replace('flex', 'hidden'); appendNextPage(); }
         }
 
-        // Fonction pour générer le HTML d'une carte
-        function createCardHTML(item, index) {
-            // Un delay de base pour l'animation (max 10 pour éviter que ce soit trop long)
-            const animDelay = (index % 10) * 0.05; 
-            
-            return `
-                <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 card-hover flex flex-col h-full fade-in relative group" style="animation-delay: ${animDelay}s">
-                    
-                    <div class="absolute top-4 right-4 bg-gray-800 px-2 py-1 rounded text-[10px] font-semibold text-gray-400 uppercase tracking-wider max-w-[100px] truncate" title="${item.filterTag}">
-                        ${item.filterTag}
-                    </div>
-
-                    <div class="flex items-center gap-4 mb-4 mt-2">
-                        <div class="w-12 h-12 rounded-xl bg-gray-800 flex items-center justify-center shrink-0">
-                            <i data-lucide="${item.icon}" class="w-6 h-6 ${item.color}"></i>
-                        </div>
-                        <h2 class="text-base font-bold text-white leading-tight pr-12 line-clamp-2" title="${item.name || 'Sans nom'}">${item.name || 'Sans nom'}</h2>
-                    </div>
-                    
-                    <p class="text-gray-400 text-sm mb-6 flex-grow line-clamp-3" title="${item.desc || 'Aucune description'}">
-                        ${item.desc || 'Aucune description disponible.'}
-                    </p>
-                    
-                    <div class="pt-4 border-t border-gray-800 mt-auto">
-                        <a href="${item.url}" target="_blank" rel="noopener noreferrer" 
-                           class="flex items-center justify-between group/link hover:text-brand-500 transition-colors w-full">
-                            <div class="flex items-center gap-2 overflow-hidden">
-                                <i data-lucide="external-link" class="w-4 h-4 text-gray-500 group-hover/link:text-brand-500 shrink-0"></i>
-                                <span class="text-sm font-medium text-gray-300 group-hover/link:text-brand-500 truncate">
-                                    ${item.displayUrl}
-                                </span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Fonction pour ajouter le prochain lot de 50 éléments (Performant !)
         function appendNextPage() {
-            const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-            const endIndex = startIndex + ITEMS_PER_PAGE;
-            const chunk = filteredData.slice(startIndex, endIndex);
-
+            const start = (currentPage - 1) * ITEMS_PER_PAGE, end = start + ITEMS_PER_PAGE, chunk = filteredData.slice(start, end);
             if (chunk.length === 0) return;
-
-            // Créer un conteneur temporaire pour rendre les icones uniquement sur les nouveaux éléments
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = chunk.map((item, index) => createCardHTML(item, index)).join('');
-            
-            // Générer les icônes lucide SEULEMENT pour ce bloc (Très rapide)
-            lucide.createIcons({ root: tempDiv });
-
-            // Transférer les éléments dans la grille principale
-            Array.from(tempDiv.children).forEach(child => {
-                grid.appendChild(child);
-            });
-
-            // Gérer l'affichage du spinner
-            if (endIndex >= filteredData.length) {
-                loadingSpinner.classList.add('hidden');
-            } else {
-                loadingSpinner.classList.remove('hidden');
-            }
+            const temp = document.createElement('div');
+            temp.innerHTML = chunk.map((item, i) => `
+                <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 card-hover flex flex-col h-full fade-in" style="animation-delay: ${(i%10)*0.05}s">
+                    <div class="text-[10px] font-bold text-gray-500 uppercase mb-2">${item.filterTag}</div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-lucide="${item.icon}" class="w-5 h-5 ${item.color}"></i>
+                        <h2 class="text-sm font-bold text-white line-clamp-1">${item.name}</h2>
+                    </div>
+                    <p class="text-gray-400 text-xs mb-4 flex-grow line-clamp-2">${item.desc || '...'}</p>
+                    <a href="${item.url}" target="_blank" class="text-xs text-brand-500 font-medium truncate">${item.displayUrl}</a>
+                </div>
+            `).join('');
+            lucide.createIcons({ root: temp });
+            Array.from(temp.children).forEach(c => grid.appendChild(c));
+            loadingSpinner.classList.toggle('hidden', end >= filteredData.length);
         }
 
-        // 6. Intersection Observer pour l'Infinite Scroll
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
+        const obs = new IntersectionObserver(e => { if (e[0].isIntersecting && currentPage * ITEMS_PER_PAGE < filteredData.length) { currentPage++; appendNextPage(); } });
+        obs.observe(document.getElementById('scrollSentinel'));
 
-        const observer = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) {
-                // Si la sentinelle est visible et qu'il reste des éléments à charger
-                if (currentPage * ITEMS_PER_PAGE < filteredData.length) {
-                    currentPage++;
-                    appendNextPage();
-                }
-            }
-        }, observerOptions);
+        window.setFilter = (c) => { currentFilter = c; renderFilters(); applyFilters(); };
+        searchInput.addEventListener('input', (e) => { searchQuery = e.target.value; applyFilters(); });
 
-        observer.observe(document.getElementById('scrollSentinel'));
-
-        // 7. Utilitaires & Event Listeners
-        
-        // Debounce pour éviter de surcharger le navigateur pendant la frappe
-        function debounce(func, wait) {
-            let timeout;
-            return function(...args) {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(this, args), wait);
-            };
+        async function initApp() {
+            lucide.createIcons();
+            try {
+                await loadDataScript(DATA_URL);
+                if (typeof rawData !== 'undefined') { baseData = rawData; processData(); renderFilters(); }
+                initialLoader.classList.add('hidden');
+                searchContainer.classList.remove('hidden'); categoryFilters.classList.remove('hidden'); mainContent.classList.remove('hidden');
+                setTimeout(() => { mainContent.classList.remove('opacity-0'); searchInput.disabled = false; applyFilters(); }, 50);
+            } catch (e) { initialLoader.classList.add('hidden'); dataErrorEl.classList.remove('hidden'); errorText.textContent = e.message; }
         }
-
-        window.setFilter = (category) => {
-            currentFilter = category;
-            renderFilters();
-            applyFilters();
-        };
-
-        const handleSearch = debounce((e) => {
-            searchQuery = e.target.value;
-            applyFilters();
-        }, 300); // 300ms de délai
-
-        searchInput.addEventListener('input', handleSearch);
-
-        // 8. Initialisation
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initialiser les icônes de base (Header, Empty state)
-            lucide.createIcons(); 
-            renderFilters();
-            applyFilters(); // Initialise le premier lot
-        });
+        initApp();
     </script>
 </body>
 </html>
