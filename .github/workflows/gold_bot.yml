@@ -2,9 +2,8 @@ name: Gold Tracker Bot
 
 on:
   schedule:
-    # "0 * * * *" signifie : à la minute 0 de chaque heure
-    - cron: '0 * * * *'
-  workflow_dispatch: # Pour pouvoir le lancer à la main si besoin
+    - cron: '0 * * * *' # Toutes les heures
+  workflow_dispatch: 
 
 jobs:
   run-bot:
@@ -22,12 +21,13 @@ jobs:
         run: pip install yfinance
 
       - name: Exécuter le script
-        run: python gold_update.py
+        # On précise le chemin vers le dossier .github/scripts/
+        run: python .github/scripts/gold_update.py
 
       - name: Commit et Push
         run: |
           git config --global user.name "Gold-Bot"
           git config --global user.email "bot@github.com"
           git add JustTEST/bot_test/logger.txt
-          git commit -m "Update Gold Price: $(date)" || echo "Pas de changement"
-          git push
+          # On vérifie s'il y a des changements avant de commit pour éviter les erreurs
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update Gold Price: $(date)" && git push)
