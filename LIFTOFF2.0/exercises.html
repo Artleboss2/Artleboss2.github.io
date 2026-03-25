@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liftoff — Exercices</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--p:#00ff88;--pd:rgba(0,255,136,.15);--pg:0 0 24px rgba(0,255,136,.35);--bg:#0a0a0f;--bg2:#111118;--card:#16161f;--card2:#1c1c28;--border:rgba(255,255,255,.07);--text:#f0f0f5;--muted:#6b7280;--danger:#ef4444;--r:12px;--rl:20px;--t:.2s cubic-bezier(.4,0,.2,1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100dvh;padding-bottom:90px}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:inherit;border:none;background:none;color:inherit}
+input{font-family:inherit;color:inherit}
+
+.nav{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,15,.95);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
+.nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 8px;color:var(--muted);font-size:11px;font-weight:500;transition:color var(--t)}
+.nav a.active{color:var(--p)}
+.nav a svg{width:22px;height:22px;stroke-width:1.8}
+.nav a.active svg{filter:drop-shadow(0 0 6px var(--p))}
+
+.top-bar{padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between}
+.page-title{font-size:26px;font-weight:700;letter-spacing:-.5px}
+
+.search-bar{padding:16px 20px}
+.search-wrap{position:relative}
+.search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted)}
+.search-input{width:100%;height:48px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0 14px 0 42px;font-size:15px;outline:none;transition:border-color var(--t)}
+.search-input:focus{border-color:rgba(0,255,136,.4)}
+.search-input::placeholder{color:var(--muted)}
+
+.filters{display:flex;gap:8px;padding:0 20px 16px;overflow-x:auto;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.filter-chip{height:32px;padding:0 14px;border-radius:20px;font-size:13px;font-weight:600;background:var(--card);border:1px solid var(--border);color:var(--muted);white-space:nowrap;transition:all var(--t)}
+.filter-chip.active{background:var(--pd);border-color:rgba(0,255,136,.4);color:var(--p)}
+
+.results-header{padding:0 20px 10px;display:flex;align-items:center;justify-content:space-between}
+.results-count{font-size:13px;color:var(--muted)}
+.add-custom-btn{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--p)}
+.add-custom-btn svg{width:16px;height:16px}
+
+.exercise-grid{padding:0 20px;display:flex;flex-direction:column;gap:8px}
+.ex-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:all var(--t)}
+.ex-card.expanded{border-color:rgba(0,255,136,.25)}
+.ex-card-header{padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer}
+.ex-card-header:active{background:var(--card2)}
+.ex-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.ex-info{flex:1;min-width:0}
+.ex-name{font-size:15px;font-weight:700}
+.ex-tags{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap}
+.ex-tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;background:var(--card2)}
+.ex-tag.muscle{color:#a78bfa;border:1px solid rgba(167,139,250,.2)}
+.ex-tag.group{color:#22d3ee;border:1px solid rgba(34,211,238,.2)}
+.ex-chevron{color:var(--muted);transition:transform var(--t);flex-shrink:0}
+.ex-chevron svg{width:18px;height:18px}
+.ex-card.expanded .ex-chevron{transform:rotate(90deg)}
+
+.ex-detail{display:none;padding:0 16px 16px;border-top:1px solid var(--border)}
+.ex-card.expanded .ex-detail{display:block}
+.ex-detail-section{margin-top:14px}
+.ex-detail-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:6px}
+.ex-detail-text{font-size:14px;line-height:1.65;color:var(--text)}
+
+.pb-section{margin-top:14px;background:var(--card2);border-radius:10px;padding:12px}
+.pb-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:10px}
+.pb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pb-item{text-align:center}
+.pb-val{font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--p)}
+.pb-label{font-size:10px;color:var(--muted);margin-top:2px}
+.no-pb{font-size:13px;color:var(--muted)}
+
+.ex-detail-btn{display:inline-flex;align-items:center;gap:6px;background:var(--p);color:#000;font-weight:700;font-size:13px;padding:10px 18px;border-radius:8px;margin-top:14px;transition:all var(--t)}
+.ex-detail-btn:active{transform:scale(.96)}
+.ex-detail-btn svg{width:16px;height:16px}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:200;display:none;align-items:flex-end}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border-radius:var(--rl) var(--rl) 0 0;width:100%;max-height:90vh;overflow-y:auto;animation:sheet-up .3s cubic-bezier(.4,0,.2,1)}
+@keyframes sheet-up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 0}
+.modal-title{font-size:17px;font-weight:700;padding:16px 20px 0}
+.modal-body{padding:16px 20px 40px}
+.modal-field{margin-bottom:14px}
+.modal-field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.6px}
+.modal-input{width:100%;height:48px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:0 14px;font-size:15px;outline:none;transition:border-color var(--t)}
+.modal-input:focus{border-color:rgba(0,255,136,.4)}
+.modal-input::placeholder{color:var(--muted)}
+.modal-textarea{width:100%;min-height:80px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:14px;outline:none;resize:none;font-family:inherit;color:var(--text);transition:border-color var(--t)}
+.modal-textarea:focus{border-color:rgba(0,255,136,.4)}
+.modal-textarea::placeholder{color:var(--muted)}
+.modal-save{width:100%;height:52px;background:var(--p);color:#000;font-size:16px;font-weight:700;border-radius:var(--r);margin-top:14px;transition:all var(--t)}
+.modal-save:active{transform:scale(.97)}
+.modal-close{width:100%;height:44px;background:transparent;color:var(--muted);font-size:14px;border:1px solid var(--border);border-radius:var(--r);margin-top:8px}
+
+.empty-state{text-align:center;padding:50px 20px;color:var(--muted)}
+.empty-state .icon{font-size:48px;margin-bottom:12px;opacity:.4}
+
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--p);color:#000;font-size:14px;font-weight:700;padding:12px 24px;border-radius:40px;z-index:999;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@keyframes fade-up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.animate{animation:fade-up .35s ease both}
+</style>
+</head>
+<body>
+
+<div class="top-bar animate">
+  <div class="page-title">Exercices</div>
+</div>
+
+<div class="search-bar animate">
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input class="search-input" type="text" id="searchInput" placeholder="Rechercher un exercice…" oninput="render()">
+  </div>
+</div>
+
+<div class="filters animate" id="filterRow">
+  <button class="filter-chip active" onclick="setGroup('Tout',this)">Tout</button>
+  <button class="filter-chip" onclick="setGroup('Poitrine',this)">Poitrine</button>
+  <button class="filter-chip" onclick="setGroup('Épaules',this)">Épaules</button>
+  <button class="filter-chip" onclick="setGroup('Bras',this)">Bras</button>
+  <button class="filter-chip" onclick="setGroup('Dos',this)">Dos</button>
+  <button class="filter-chip" onclick="setGroup('Jambes',this)">Jambes</button>
+  <button class="filter-chip" onclick="setGroup('Abdominaux',this)">Abdos</button>
+  <button class="filter-chip" onclick="setGroup('Cardio',this)">Cardio</button>
+  <button class="filter-chip" onclick="setGroup('Custom',this)">Mes exercices</button>
+</div>
+
+<div class="results-header animate">
+  <span class="results-count" id="resultsCount">0 exercices</span>
+  <button class="add-custom-btn" onclick="openModal()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+    Ajouter
+  </button>
+</div>
+
+<div class="exercise-grid animate" id="exerciseGrid"></div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Nouvel exercice</div>
+    <div class="modal-body">
+      <div class="modal-field">
+        <label>Nom de l'exercice</label>
+        <input class="modal-input" type="text" id="customName" placeholder="Ex: Curl concentration">
+      </div>
+      <div class="modal-field">
+        <label>Groupe musculaire</label>
+        <input class="modal-input" type="text" id="customGroup" placeholder="Ex: Bras">
+      </div>
+      <div class="modal-field">
+        <label>Muscle ciblé</label>
+        <input class="modal-input" type="text" id="customMuscle" placeholder="Ex: Biceps court">
+      </div>
+      <div class="modal-field">
+        <label>Description / Conseils</label>
+        <textarea class="modal-textarea" id="customDesc" placeholder="Décrivez l'exécution, les erreurs à éviter…"></textarea>
+      </div>
+      <button class="modal-save" onclick="saveCustom()">Créer l'exercice</button>
+      <button class="modal-close" onclick="closeModal()">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<nav class="nav">
+  <a href="index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Accueil
+  </a>
+  <a href="workout.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6.5 6.5h11M6.5 17.5h11M3 9l1.5-2.5L6 9M18 9l1.5-2.5L21 9M3 15l1.5 2.5L6 15M18 15l1.5 2.5L21 15" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Séance
+  </a>
+  <a href="history.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Historique
+  </a>
+  <a href="bodytrack.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Body
+  </a>
+</nav>
+
+<script>
+const BUILTIN = [
+  {name:'Développé couché',muscle:'Pectoraux',group:'Poitrine',icon:'🏋️',desc:'Allongé sur le banc, saisir la barre à largeur des épaules. Descendre la barre jusqu\'à la poitrine en contrôlant, puis pousser en extension. Gardez les omoplates rétractées et les pieds au sol.',tips:'Prise légèrement plus large que les épaules. Coudes à 45-75° du corps. Visualisez de "casser" la barre.',custom:false},
+  {name:'Développé incliné haltères',muscle:'Pectoraux sup.',group:'Poitrine',icon:'💪',desc:'Sur un banc incliné à 30-45°. Haltères au niveau des épaules, coudes légèrement fléchis. Poussez vers le haut et légèrement vers l\'intérieur.',tips:'Ne verrouillez pas les coudes en haut. Amplitude complète pour un étirement maximal.',custom:false},
+  {name:'Écarté poulie basse',muscle:'Pectoraux',group:'Poitrine',icon:'✨',desc:'Debout au centre des poulies basses. Tirez les câbles vers le haut et vers l\'intérieur en arc de cercle. Légère flexion des coudes maintenue tout au long du mouvement.',tips:'Concentrez-vous sur le pincement des pectoraux en haut du mouvement.',custom:false},
+  {name:'Dips',muscle:'Pectoraux / Triceps',group:'Poitrine',icon:'🔥',desc:'Aux barres parallèles, descendez jusqu\'à ce que les bras soient à 90°. Poussez en extension. Penchez-vous légèrement vers l\'avant pour cibler les pectoraux davantage.',tips:'Progression : commencez avec assistance. Ajoutez du lest quand vous maîtrisez 15+ reps.',custom:false},
+  {name:'Développé militaire',muscle:'Deltoïdes',group:'Épaules',icon:'⚡',desc:'Debout ou assis, barre au niveau du menton, prise légèrement plus large que les épaules. Poussez la barre verticalement au-dessus de la tête jusqu\'en extension complète.',tips:'Gainez le core tout au long du mouvement. Évitez l\'hyperextension lombaire.',custom:false},
+  {name:'Élévations latérales',muscle:'Deltoïdes latéraux',group:'Épaules',icon:'🎯',desc:'Haltères de chaque côté, légère flexion des coudes. Levez les bras sur les côtés jusqu\'à hauteur des épaules, pouce légèrement vers le bas.',tips:'Utilisez des poids légers avec contrôle. Pensez à "verser l\'eau d\'un pichet" pour activer le deltoïde latéral.',custom:false},
+  {name:'Oiseau haltères',muscle:'Deltoïdes post.',group:'Épaules',icon:'🦅',desc:'Penché en avant, haltères pendants, coudes légèrement fléchis. Ouvrez les bras sur les côtés en arc de cercle jusqu\'à hauteur des épaules.',tips:'Le mouvement vient des épaules, pas des bras. Imaginez "écraser" quelque chose entre vos omoplates.',custom:false},
+  {name:'Curl biceps barre',muscle:'Biceps',group:'Bras',icon:'💪',desc:'Debout, prise supination (paumes vers le haut) à largeur des épaules. Fléchissez les coudes jusqu\'en haut en gardant les coudes contre le corps.',tips:'Pause d\'une seconde en haut. Descente contrôlée en 3-4 secondes pour le négatif.',custom:false},
+  {name:'Curl marteau',muscle:'Brachial / Biceps',group:'Bras',icon:'🔨',desc:'Haltères en prise neutre (pouces vers le haut). Fléchissez les coudes en alternance ou simultanément. Cible le long biceps et le brachioradial.',tips:'Excellent pour développer l\'épaisseur du bras. Combinez avec curl supination.',custom:false},
+  {name:'Extension triceps poulie',muscle:'Triceps',group:'Bras',icon:'📐',desc:'Face à une poulie haute avec corde ou barre droite. Coudes collés aux côtes, poussez vers le bas jusqu\'en extension complète.',tips:'Verrouillez les coudes. Pour la corde, séparez les extrémités en bas pour une meilleure contraction.',custom:false},
+  {name:'Skull crusher',muscle:'Triceps',group:'Bras',icon:'💀',desc:'Allongé, barre au-dessus de la poitrine, prise serrée. Fléchissez les coudes pour descendre la barre vers le front, puis poussez en extension.',tips:'Gardez les coudes pointés vers le plafond. Contrôlez la descente.',custom:false},
+  {name:'Tirage horizontal',muscle:'Dos / Rhomboïdes',group:'Dos',icon:'🎣',desc:'Assis à la machine ou poulie basse, pied contre les appuis. Tirez la poignée vers l\'abdomen en rétractant les omoplates. Dos droit.',tips:'La rétractiondes omoplates est clé. Pause d\'1s en position contractée.',custom:false},
+  {name:'Tractions',muscle:'Grand dorsal',group:'Dos',icon:'🧗',desc:'Suspendu à la barre, prise pronation (paumes vers l\'avant) à largeur des épaules. Tirez le corps vers le haut jusqu\'à ce que le menton dépasse la barre.',tips:'Débutants : utilisez une assistance. Avancés : ajoutez du lest. Pensez à "mettre les coudes dans les poches".',custom:false},
+  {name:'Tirage vertical',muscle:'Grand dorsal',group:'Dos',icon:'⬇️',desc:'Assis à la machine, prise large. Tirez la barre vers la clavicule en fléchissant les coudes et en rétractant les omoplates. Légère inclinaison arrière.',tips:'Alternative aux tractions. Variez la prise (large, serrée, supination) pour cibler différentes zones.',custom:false},
+  {name:'Rowing haltère',muscle:'Dos / Trapèzes',group:'Dos',icon:'🚣',desc:'Un genou et une main sur le banc. Tirez l\'haltère vers la hanche en gardant le dos droit et en rétractant l\'omoplate.',tips:'Pensez à "tirer avec le coude, pas la main". Rotation naturelle du torse permise.',custom:false},
+  {name:'Soulevé de terre',muscle:'Postérieur chaîne',group:'Dos',icon:'🏅',desc:'Pieds à largeur des hanches sous la barre. Saisir la barre, dos plat, hanches charnières. Poussez le sol du pied pour décoller la barre, hanches et épaules montent ensemble.',tips:'Le roi des exercices. Ceinture recommandée pour charges lourdes. Ne jamais arrondir le dos.',custom:false},
+  {name:'Squat',muscle:'Quadriceps / Fessiers',group:'Jambes',icon:'🏆',desc:'Barre sur les trapèzes, pieds à largeur des épaules légèrement ouverts. Descendez en fléchissant hanches et genoux jusqu\'à la parallèle ou en dessous.',tips:'Genoux dans l\'axe des pieds. Regard légèrement vers l\'avant-haut. Chaussures à talon pour plus de mobilité.',custom:false},
+  {name:'Leg press',muscle:'Quadriceps',group:'Jambes',icon:'🦵',desc:'Assis dans la machine, pieds à largeur des hanches sur la plateforme. Poussez la plateforme en extension des jambes sans verrouiller les genoux en haut.',tips:'Placement des pieds : haut = plus de fessiers/ischio. Bas = plus de quadriceps.',custom:false},
+  {name:'Fentes',muscle:'Quadriceps / Fessiers',group:'Jambes',icon:'🏃',desc:'Debout, faites un grand pas en avant. Fléchissez les deux genoux jusqu\'à ce que le genou arrière frôle le sol. Poussez sur le pied avant pour revenir.',tips:'Variantes : marche, statiques, bulgares. Le genou avant ne doit pas dépasser les orteils excessivement.',custom:false},
+  {name:'Leg curl',muscle:'Ischio-jambiers',group:'Jambes',icon:'🔄',desc:'Allongé sur la machine, cheville sous les coussinets. Fléchissez les genoux pour amener les talons vers les fessiers en contrôlant la descente.',tips:'Souvent négligé. Essentiel pour l\'équilibre musculaire et la prévention des blessures.',custom:false},
+  {name:'Hip thrust',muscle:'Fessiers',group:'Jambes',icon:'🍑',desc:'Épaules sur un banc, barre sur les hanches avec pad de protection. Poussez les hanches vers le haut jusqu\'à ce que le corps soit horizontal. Contraction maximale en haut.',tips:'L\'exercice le plus efficace pour les fessiers. Poussez avec les talons, pas les orteils.',custom:false},
+  {name:'Mollets debout',muscle:'Mollets',group:'Jambes',icon:'🏔️',desc:'Debout, talons sur un rebord, montez sur la pointe des pieds le plus haut possible. Contrôlez la descente pour un étirement maximal.',tips:'Pointes légèrement vers l\'extérieur pour cibler les jumeaux. Straight pour les soléaires.',custom:false},
+  {name:'Planche',muscle:'Core',group:'Abdominaux',icon:'📏',desc:'En appui sur les avant-bras et les orteils. Corps en ligne droite de la tête aux talons. Gainez les abdos, les fessiers et les quadriceps.',tips:'Qualité > Quantité. Évitez de laisser tomber les hanches ou de les lever trop.',custom:false},
+  {name:'Crunch',muscle:'Abdominaux',group:'Abdominaux',icon:'🌀',desc:'Allongé, genoux fléchis, mains derrière la tête ou sur la poitrine. Contractez les abdos pour décoller les épaules du sol. Ne tirez pas sur la nuque.',tips:'Courte amplitude concentrée. Soufflez en montant. Plus efficace avec tempo lent.',custom:false},
+  {name:'Relevé de jambes',muscle:'Abdominaux bas',group:'Abdominaux',icon:'⬆️',desc:'Allongé au sol ou suspendu à une barre. Levez les jambes tendues (ou fléchies) jusqu\'à 90° en contractant les abdominaux bas.',tips:'Pensez à "enrouler le bassin" plutôt que de juste lever les jambes.',custom:false},
+  {name:'Course',muscle:'Cardio',group:'Cardio',icon:'🏃',desc:'Course à pied. Excellente pour la santé cardiovasculaire et la condition physique générale.',tips:'Zone 2 (essoufflement modéré) : brûle plus de graisses. HIIT : améliore la VO2max.',custom:false},
+  {name:'Vélo',muscle:'Cardio',group:'Cardio',icon:'🚴',desc:'Vélo d\'appartement ou de route. Faible impact articulaire, idéal en récupération.',tips:'Séances steady-state pour la récupération active. Intervalles pour la performance.',custom:false},
+];
+
+const GROUP_COLORS = {
+  'Poitrine':'#f472b6','Épaules':'#22d3ee','Bras':'#a78bfa',
+  'Dos':'#34d399','Jambes':'#f59e0b','Abdominaux':'#fb923c','Cardio':'#60a5fa','Custom':'#00ff88'
+};
+
+let activeGroup = 'Tout';
+
+function getAll() {
+  const custom = JSON.parse(localStorage.getItem('liftoff_custom_ex') || '[]').map(e => ({...e, custom:true, group:'Custom'}));
+  return [...BUILTIN, ...custom];
+}
+
+function getPBs(exName) {
+  const workouts = JSON.parse(localStorage.getItem('liftoff_workouts') || '[]');
+  let bestWeight = 0, best1RM = 0, bestVol = 0;
+  workouts.forEach(w => {
+    (w.exercises||[]).filter(e => e.name === exName).forEach(ex => {
+      (ex.sets||[]).forEach(s => {
+        const w2 = parseFloat(s.weight)||0;
+        const r = parseInt(s.reps)||0;
+        if (w2 > bestWeight) bestWeight = w2;
+        const rm = r > 0 ? w2 / (1.0278 - 0.0278 * r) : 0;
+        if (rm > best1RM) best1RM = rm;
+        bestVol += w2 * r;
+      });
+    });
+  });
+  return {weight: bestWeight, rm: Math.round(best1RM), vol: Math.round(bestVol)};
+}
+
+function setGroup(g, btn) {
+  activeGroup = g;
+  document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function render() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  let list = getAll();
+  if (activeGroup !== 'Tout') list = list.filter(e => e.group === activeGroup);
+  if (q) list = list.filter(e => e.name.toLowerCase().includes(q) || e.muscle.toLowerCase().includes(q) || (e.desc||'').toLowerCase().includes(q));
+
+  document.getElementById('resultsCount').textContent = list.length + ' exercice' + (list.length > 1 ? 's' : '');
+  const grid = document.getElementById('exerciseGrid');
+
+  if (!list.length) {
+    grid.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><p style="font-size:14px;color:var(--muted)">Aucun exercice trouvé</p></div>';
+    return;
+  }
+
+  grid.innerHTML = list.map((ex,i) => {
+    const color = GROUP_COLORS[ex.group] || 'var(--p)';
+    const pbs = getPBs(ex.name);
+    const pbHTML = pbs.weight > 0 ? `
+      <div class="pb-section">
+        <div class="pb-title">Mes records</div>
+        <div class="pb-grid">
+          <div class="pb-item"><div class="pb-val">${pbs.weight}</div><div class="pb-label">kg max</div></div>
+          <div class="pb-item"><div class="pb-val">${pbs.rm}</div><div class="pb-label">1RM est.</div></div>
+          <div class="pb-item"><div class="pb-val">${(pbs.vol/1000).toFixed(1)}t</div><div class="pb-label">Volume</div></div>
+        </div>
+      </div>` : `<div class="pb-section"><div class="pb-title">Mes records</div><div class="no-pb">Pas encore utilisé</div></div>`;
+    return `<div class="ex-card" id="exc-${i}">
+      <div class="ex-card-header" onclick="toggleEx('exc-${i}')">
+        <div class="ex-icon" style="background:${color}22;border:1px solid ${color}33">${ex.icon||'🏋️'}</div>
+        <div class="ex-info">
+          <div class="ex-name">${ex.name}</div>
+          <div class="ex-tags">
+            <span class="ex-tag group" style="color:${color}">${ex.group}</span>
+            <span class="ex-tag muscle">${ex.muscle}</span>
+            ${ex.custom ? '<span class="ex-tag" style="color:var(--p)">Custom</span>' : ''}
+          </div>
+        </div>
+        <div class="ex-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      </div>
+      <div class="ex-detail">
+        ${ex.desc ? `<div class="ex-detail-section"><div class="ex-detail-label">Description</div><div class="ex-detail-text">${ex.desc}</div></div>` : ''}
+        ${ex.tips ? `<div class="ex-detail-section"><div class="ex-detail-label">💡 Conseils</div><div class="ex-detail-text">${ex.tips}</div></div>` : ''}
+        ${pbHTML}
+        <a href="workout.html" class="ex-detail-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          Ajouter à la séance
+        </a>
+        ${ex.custom ? `<button onclick="deleteCustom('${ex.name}')" style="background:transparent;border:none;color:var(--danger);font-size:13px;font-weight:600;margin-top:10px;padding:6px 0;display:block">Supprimer cet exercice</button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleEx(id) {
+  const card = document.getElementById(id);
+  card.classList.toggle('expanded');
+}
+
+function openModal() {
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+function saveCustom() {
+  const name = document.getElementById('customName').value.trim();
+  const group = document.getElementById('customGroup').value.trim() || 'Custom';
+  const muscle = document.getElementById('customMuscle').value.trim() || '—';
+  const desc = document.getElementById('customDesc').value.trim();
+  if (!name) { showToast('Entrez un nom !'); return; }
+  const customs = JSON.parse(localStorage.getItem('liftoff_custom_ex') || '[]');
+  customs.push({ name, group, muscle, desc, icon:'⭐' });
+  localStorage.setItem('liftoff_custom_ex', JSON.stringify(customs));
+  closeModal();
+  document.getElementById('customName').value = '';
+  document.getElementById('customGroup').value = '';
+  document.getElementById('customMuscle').value = '';
+  document.getElementById('customDesc').value = '';
+  showToast('Exercice créé ! ⭐');
+  render();
+}
+
+function deleteCustom(name) {
+  let customs = JSON.parse(localStorage.getItem('liftoff_custom_ex') || '[]');
+  customs = customs.filter(e => e.name !== name);
+  localStorage.setItem('liftoff_custom_ex', JSON.stringify(customs));
+  render();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zynit — To-Do List App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&family=Playfair+Display:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+      <link rel="stylesheet" href="zynit.css">
+</head>
+  <body>
+    <!-- Curseur personnalisé -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- En-tête -->
+    <header>
+      <a href="index.html" class="logo">PORTFOLIO</a>
+      <nav>
+        <a href="index.html#projets" data-i18n="nav.projects">Projets</a>
+        <a href="index.html#competences" data-i18n="nav.skills">Compétences</a>
+        <a href="ressources.html" data-i18n="nav.resources">Ressources</a>
+        <a href="index.html#contact" data-i18n="nav.contact">Contact</a>
+        <button
+          class="lang-switcher"
+          id="langSwitcher"
+          onclick="toggleLanguage()"
+        >
+          <span id="langIcon">FR</span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="grid-bg"></div>
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1 data-i18n="hero.title">Zynit<br />To-Do List App</h1>
+          <p data-i18n="hero.description">
+            Application mobile moderne et intuitive pour gérer vos tâches
+            quotidiennes. Catégorisez, planifiez et accomplissez vos objectifs
+            avec style.
+          </p>
+          <div class="cta-group">
+            <a
+              href="https://github.com/Artleboss2/Zynit"
+              target="_blank"
+              class="cta"
+            >
+              <span data-i18n="hero.github">Voir sur GitHub</span>
+              <span>→</span>
+            </a>
+            <a href="#features" class="cta secondary">
+              <span data-i18n="hero.features">Fonctionnalités</span>
+            </a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="phone-mockup">
+            <div class="phone-screen">
+              <div class="notch"></div>
+              <div class="app-content">
+                <div class="app-header">
+                  <h2 class="app-title">Mes Tâches</h2>
+                  <p class="app-subtitle">4 tâches · Aujourd'hui</p>
+                </div>
+                <div class="task-list">
+                  <div class="task-item">
+                    <div class="checkbox checked"></div>
+                    <div class="task-text completed">Terminer le portfolio</div>
+                  </div>
+                  <div class="task-item">
+                    <div class="checkbox"></div>
+                    <div class="task-text">Ajouter les ressources</div>
+                  </div>
+                  <div class="task-item">
+                    <div class="checkbox"></div>
+                    <div class="task-text">Déployer sur GitHub</div>
+                  </div>
+                  <div class="task-item">
+                    <div class="checkbox"></div>
+                    <div class="task-text">Partager le projet</div>
+                  </div>
+                </div>
+                <div class="add-button">+</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features">
+      <h2 class="section-title" data-i18n="features.title">
+        Fonctionnalités principales
+      </h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <span class="feature-icon">✅</span>
+          <h3 data-i18n="features.tasks.title">Gestion de tâches</h3>
+          <p data-i18n="features.tasks.description">
+            Créez, modifiez et supprimez vos tâches facilement. Interface
+            intuitive pour une productivité maximale.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">📂</span>
+          <h3 data-i18n="features.categories.title">Catégorisation</h3>
+          <p data-i18n="features.categories.description">
+            Organisez vos tâches par catégories personnalisées. Travail,
+            personnel, sport - tout est classé.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">🔔</span>
+          <h3 data-i18n="features.reminders.title">Rappels intelligents</h3>
+          <p data-i18n="features.reminders.description">
+            Recevez des notifications pour ne jamais oublier vos tâches
+            importantes.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">🎨</span>
+          <h3 data-i18n="features.design.title">Design moderne</h3>
+          <p data-i18n="features.design.description">
+            Interface élégante et épurée qui rend la gestion de tâches agréable.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">📱</span>
+          <h3 data-i18n="features.mobile.title">Cross-platform</h3>
+          <p data-i18n="features.mobile.description">
+            Développée avec React Native pour fonctionner sur iOS et Android.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <span class="feature-icon">⚖️</span>
+          <h3 data-i18n="features.legal.title">Conformité légale</h3>
+          <p data-i18n="features.legal.description">
+            CLUF complet et conformité aux lois canadiennes sur la protection
+            des données.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section class="tech-section">
+      <h2 class="section-title" data-i18n="tech.title">
+        Technologies utilisées
+      </h2>
+      <div class="tech-list">
+        <div class="tech-item">React Native</div>
+        <div class="tech-item">JavaScript</div>
+        <div class="tech-item">Mobile Development</div>
+        <div class="tech-item">UI/UX Design</div>
+        <div class="tech-item">AsyncStorage</div>
+        <div class="tech-item">Notifications</div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <h2 class="section-title" data-i18n="cta.title">
+        Découvrez le code source
+      </h2>
+      <p data-i18n="cta.description">
+        Le projet est open source et disponible sur GitHub. N'hésitez pas à
+        explorer le code, contribuer ou l'utiliser pour vos propres projets.
+      </p>
+      <a href="https://github.com/Artleboss2/Zynit" target="_blank" class="cta">
+        <span>Voir sur GitHub</span>
+        <span>→</span>
+      </a>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+      <div class="footer-content">
+        <div class="social-links">
+          <a href="https://github.com/Artleboss2" target="_blank">GitHub</a>
+          <a href="https://linkedin.com/in/votre-profil" target="_blank"
+            >LinkedIn</a
+          >
+          <a href="mailto:contact@artleboss.com">Email</a>
+          <a href="https://discord.com" target="_blank">Discord</a>
+        </div>
+        <div class="copyright">
+          <span data-i18n="footer.copyright"
+            >© 2026 — Conçu et développé avec passion</span
+          >
+        </div>
+      </div>
+    </footer>
+
+      <script src="zynit.js"></script>
+</body>
+</html>

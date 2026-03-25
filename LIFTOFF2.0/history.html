@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liftoff — Historique</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--p:#00ff88;--pd:rgba(0,255,136,.15);--pg:0 0 24px rgba(0,255,136,.35);--bg:#0a0a0f;--bg2:#111118;--card:#16161f;--card2:#1c1c28;--border:rgba(255,255,255,.07);--text:#f0f0f5;--muted:#6b7280;--danger:#ef4444;--r:12px;--rl:20px;--t:.2s cubic-bezier(.4,0,.2,1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100dvh;padding-bottom:90px}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:inherit;border:none;background:none;color:inherit}
+
+.nav{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,15,.95);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
+.nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 8px;color:var(--muted);font-size:11px;font-weight:500;transition:color var(--t)}
+.nav a.active{color:var(--p)}
+.nav a svg{width:22px;height:22px;stroke-width:1.8}
+.nav a.active svg{filter:drop-shadow(0 0 6px var(--p))}
+
+.top-bar{padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between}
+.page-title{font-size:26px;font-weight:700;letter-spacing:-.5px}
+.new-btn{background:var(--p);color:#000;font-weight:700;font-size:13px;padding:8px 16px;border-radius:8px;display:flex;align-items:center;gap:6px}
+.new-btn svg{width:16px;height:16px}
+
+.stats-row{display:flex;gap:12px;padding:20px;overflow-x:auto;scrollbar-width:none}
+.stats-row::-webkit-scrollbar{display:none}
+.mini-stat{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;flex-shrink:0;min-width:120px;position:relative;overflow:hidden}
+.mini-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--p),transparent)}
+.mini-stat-val{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:var(--p)}
+.mini-stat-label{font-size:11px;color:var(--muted);margin-top:4px}
+
+.filter-row{display:flex;gap:8px;padding:0 20px 20px;overflow-x:auto;scrollbar-width:none}
+.filter-row::-webkit-scrollbar{display:none}
+.filter-btn{height:34px;padding:0 14px;border-radius:20px;font-size:13px;font-weight:600;background:var(--card);border:1px solid var(--border);color:var(--muted);white-space:nowrap;transition:all var(--t)}
+.filter-btn.active{background:var(--pd);border-color:rgba(0,255,136,.4);color:var(--p)}
+
+.month-group{padding:0 20px;margin-bottom:8px}
+.month-label{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.month-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+.workout-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);margin-bottom:10px;overflow:hidden;transition:all var(--t)}
+.workout-card-header{padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer}
+.workout-card-header:active{background:var(--card2)}
+.workout-emoji{width:48px;height:48px;border-radius:12px;background:var(--pd);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.workout-info{flex:1;min-width:0}
+.workout-name{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.workout-date{font-size:12px;color:var(--muted);margin-top:3px}
+.workout-stats{display:flex;gap:10px;margin-top:6px}
+.workout-stat{font-size:11px;color:var(--muted);background:var(--card2);padding:3px 8px;border-radius:6px}
+.workout-stat span{color:var(--text);font-weight:600}
+.chevron{color:var(--muted);transition:transform var(--t);flex-shrink:0}
+.chevron svg{width:18px;height:18px}
+.workout-card.expanded .chevron{transform:rotate(90deg)}
+
+.workout-detail{display:none;padding:0 16px 16px;border-top:1px solid var(--border)}
+.workout-card.expanded .workout-detail{display:block}
+.detail-exercise{margin-bottom:14px}
+.detail-ex-name{font-size:14px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.detail-ex-name::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--p)}
+.detail-sets{display:flex;flex-direction:column;gap:4px}
+.detail-set{display:flex;gap:8px;font-size:13px;color:var(--muted)}
+.detail-set strong{color:var(--text)}
+.detail-1rm{font-size:12px;color:var(--p);font-family:'Space Mono',monospace}
+
+.detail-actions{display:flex;gap:8px;margin-top:16px}
+.detail-btn{flex:1;height:40px;border-radius:8px;font-size:13px;font-weight:600;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:6px;transition:all var(--t)}
+.detail-btn:active{transform:scale(.97)}
+.detail-btn.del{color:var(--danger);border-color:rgba(239,68,68,.2)}
+.detail-btn.del:active{background:rgba(239,68,68,.1)}
+.detail-btn svg{width:16px;height:16px}
+
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-state .icon{font-size:56px;margin-bottom:16px;opacity:.4}
+.empty-state h3{font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px}
+.empty-state p{font-size:14px;line-height:1.6}
+.empty-cta{display:inline-flex;align-items:center;gap:8px;background:var(--p);color:#000;font-weight:700;font-size:14px;padding:12px 24px;border-radius:40px;margin-top:20px}
+
+.chart-section{padding:0 20px 20px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:16px}
+.chart-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:16px}
+.chart-bars{display:flex;align-items:flex-end;gap:6px;height:80px}
+.chart-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%}
+.chart-bar{width:100%;border-radius:4px 4px 0 0;background:var(--pd);border:1px solid rgba(0,255,136,.2);transition:height .4s ease;position:relative;overflow:hidden;min-height:4px}
+.chart-bar::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,255,136,.3),transparent)}
+.chart-bar-label{font-size:10px;color:var(--muted);text-align:center}
+
+@keyframes fade-up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.animate{animation:fade-up .35s ease both}
+</style>
+</head>
+<body>
+
+<div class="top-bar animate">
+  <div class="page-title">Historique</div>
+  <a href="workout.html" class="new-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+    Nouvelle
+  </a>
+</div>
+
+<div class="stats-row animate" id="statsRow">
+  <div class="mini-stat">
+    <div class="mini-stat-val" id="totalSessions">0</div>
+    <div class="mini-stat-label">Séances totales</div>
+  </div>
+  <div class="mini-stat">
+    <div class="mini-stat-val" id="totalVolume">0</div>
+    <div class="mini-stat-label">Tonnes soulevées</div>
+  </div>
+  <div class="mini-stat">
+    <div class="mini-stat-val" id="totalSeries">0</div>
+    <div class="mini-stat-label">Séries totales</div>
+  </div>
+  <div class="mini-stat">
+    <div class="mini-stat-val" id="bestStreak">0</div>
+    <div class="mini-stat-label">Meilleure streak</div>
+  </div>
+</div>
+
+<div class="chart-section animate">
+  <div class="chart-card">
+    <div class="chart-title">Volume / semaine (8 dernières)</div>
+    <div class="chart-bars" id="chartBars"></div>
+  </div>
+</div>
+
+<div class="filter-row animate" id="filterRow">
+  <button class="filter-btn active" onclick="setFilter('all',this)">Tout</button>
+  <button class="filter-btn" onclick="setFilter('week',this)">Cette semaine</button>
+  <button class="filter-btn" onclick="setFilter('month',this)">Ce mois</button>
+</div>
+
+<div id="historyContainer"></div>
+
+<nav class="nav">
+  <a href="index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Accueil
+  </a>
+  <a href="workout.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6.5 6.5h11M6.5 17.5h11M3 9l1.5-2.5L6 9M18 9l1.5-2.5L21 9M3 15l1.5 2.5L6 15M18 15l1.5 2.5L21 15" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Séance
+  </a>
+  <a href="history.html" class="active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Historique
+  </a>
+  <a href="bodytrack.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Body
+  </a>
+</nav>
+
+<script>
+const EMOJIS = ['🏋️','💪','🔥','⚡','🎯','🚀','😤','🦾'];
+let currentFilter = 'all';
+
+function calc1RM(weight, reps) {
+  if (reps === 1) return weight;
+  return Math.round(weight / (1.0278 - 0.0278 * reps));
+}
+
+function calcVolume(workout) {
+  return (workout.exercises||[]).reduce((s,ex) => s + (ex.sets||[]).reduce((sv,set) => sv + (parseFloat(set.weight)||0)*(parseInt(set.reps)||0), 0), 0);
+}
+
+function formatDuration(s) {
+  if (!s) return '—';
+  const m = Math.floor(s/60), sec = s%60;
+  return m + 'min' + (sec > 0 ? ' ' + sec + 's' : '');
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderHistory();
+}
+
+function deleteWorkout(id) {
+  let workouts = JSON.parse(localStorage.getItem('liftoff_workouts') || '[]');
+  workouts = workouts.filter(w => w.id !== id);
+  localStorage.setItem('liftoff_workouts', JSON.stringify(workouts));
+  init();
+}
+
+function renderHistory() {
+  let workouts = JSON.parse(localStorage.getItem('liftoff_workouts') || '[]');
+  workouts.sort((a,b) => new Date(b.date)-new Date(a.date));
+
+  const now = new Date();
+  if (currentFilter === 'week') {
+    const weekStart = new Date(now);
+    weekStart.setDate(now.getDate() - now.getDay() + (now.getDay()===0?-6:1));
+    weekStart.setHours(0,0,0,0);
+    workouts = workouts.filter(w => new Date(w.date) >= weekStart);
+  } else if (currentFilter === 'month') {
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    workouts = workouts.filter(w => new Date(w.date) >= monthStart);
+  }
+
+  const container = document.getElementById('historyContainer');
+  if (workouts.length === 0) {
+    container.innerHTML = `<div class="empty-state">
+      <div class="icon">📭</div>
+      <h3>Aucune séance</h3>
+      <p>Commencez à enregistrer vos séances pour suivre votre progression.</p>
+      <a href="workout.html" class="empty-cta">🏋️ Commencer une séance</a>
+    </div>`;
+    return;
+  }
+
+  const groups = {};
+  workouts.forEach(w => {
+    const d = new Date(w.date);
+    const key = d.toLocaleDateString('fr-FR',{month:'long',year:'numeric'});
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(w);
+  });
+
+  container.innerHTML = Object.entries(groups).map(([month, wks]) => `
+    <div class="month-group">
+      <div class="month-label">${month}</div>
+      ${wks.map(w => {
+        const vol = Math.round(calcVolume(w));
+        const exCount = (w.exercises||[]).length;
+        const setCount = (w.exercises||[]).reduce((s,ex) => s+(ex.sets||[]).length, 0);
+        const dt = new Date(w.date);
+        const dateStr = dt.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'short'});
+        const emoji = EMOJIS[w.id % EMOJIS.length] || '🏋️';
+        const detailExercises = (w.exercises||[]).map(ex => {
+          const best = ex.sets.reduce((max,s) => {
+            const w1 = parseFloat(s.weight)||0, r = parseInt(s.reps)||0;
+            return w1*r > max.weight*max.reps ? {weight:w1,reps:r} : max;
+          }, {weight:0,reps:0});
+          const rm = best.reps > 0 ? calc1RM(best.weight, best.reps) : 0;
+          const setsStr = ex.sets.map((s,i) => `<div class="detail-set"><strong>Série ${i+1}:</strong> ${s.weight||'?'}kg × ${s.reps||'?'} reps</div>`).join('');
+          return `<div class="detail-exercise">
+            <div class="detail-ex-name">${ex.name}</div>
+            <div class="detail-sets">${setsStr}</div>
+            ${rm > 0 ? `<div class="detail-1rm">1RM estimé : ${rm} kg</div>` : ''}
+          </div>`;
+        }).join('');
+        return `<div class="workout-card" id="wcard-${w.id}">
+          <div class="workout-card-header" onclick="toggleCard(${w.id})">
+            <div class="workout-emoji">${emoji}</div>
+            <div class="workout-info">
+              <div class="workout-name">${w.name || 'Séance'}</div>
+              <div class="workout-date">${dateStr} · ${formatDuration(w.duration)}</div>
+              <div class="workout-stats">
+                <div class="workout-stat"><span>${exCount}</span> exo${exCount>1?'s':''}</div>
+                <div class="workout-stat"><span>${setCount}</span> séries</div>
+                <div class="workout-stat"><span>${vol.toLocaleString('fr')}</span> kg</div>
+              </div>
+            </div>
+            <div class="chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+          </div>
+          <div class="workout-detail">
+            ${detailExercises}
+            <div class="detail-actions">
+              <button class="detail-btn del" onclick="deleteWorkout(${w.id})">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg>
+                Supprimer
+              </button>
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`).join('');
+}
+
+function toggleCard(id) {
+  const card = document.getElementById('wcard-' + id);
+  card.classList.toggle('expanded');
+}
+
+function renderChart() {
+  const workouts = JSON.parse(localStorage.getItem('liftoff_workouts') || '[]');
+  const bars = document.getElementById('chartBars');
+  const weeks = [];
+  const now = new Date();
+  for (let i = 7; i >= 0; i--) {
+    const start = new Date(now);
+    start.setDate(now.getDate() - now.getDay() - i*7 + (now.getDay()===0?-6:1));
+    start.setHours(0,0,0,0);
+    const end = new Date(start);
+    end.setDate(start.getDate() + 7);
+    const vol = workouts.filter(w => {
+      const d = new Date(w.date);
+      return d >= start && d < end;
+    }).reduce((s,w) => s + calcVolume(w), 0);
+    const label = start.toLocaleDateString('fr-FR',{day:'numeric',month:'short'}).replace(' ','<br>');
+    weeks.push({vol, label});
+  }
+  const max = Math.max(...weeks.map(w => w.vol), 1);
+  bars.innerHTML = weeks.map(w => `
+    <div class="chart-bar-wrap">
+      <div class="chart-bar" style="height:${Math.max(4, (w.vol/max)*76)}px" title="${Math.round(w.vol)} kg"></div>
+      <div class="chart-bar-label">${w.label}</div>
+    </div>`).join('');
+}
+
+function init() {
+  const workouts = JSON.parse(localStorage.getItem('liftoff_workouts') || '[]');
+  document.getElementById('totalSessions').textContent = workouts.length;
+  const totalVol = workouts.reduce((s,w) => s + calcVolume(w), 0);
+  document.getElementById('totalVolume').textContent = (totalVol/1000).toFixed(1) + 't';
+  const totalSeries = workouts.reduce((s,w) => s + (w.exercises||[]).reduce((ss,ex) => ss+(ex.sets||[]).length, 0), 0);
+  document.getElementById('totalSeries').textContent = totalSeries;
+
+  const sortedDates = workouts.map(w => new Date(w.date).toDateString()).sort();
+  let streak = 0, best = 0, cur = 0;
+  for (let i = 0; i < sortedDates.length; i++) {
+    if (i === 0) { cur = 1; continue; }
+    const prev = new Date(sortedDates[i-1]);
+    const curr = new Date(sortedDates[i]);
+    const diff = (curr - prev) / 86400000;
+    cur = diff <= 1 ? cur + 1 : 1;
+    if (cur > best) best = cur;
+  }
+  document.getElementById('bestStreak').textContent = Math.max(best, workouts.length > 0 ? 1 : 0);
+
+  renderChart();
+  renderHistory();
+}
+
+init();
+</script>
+</body>
+</html>

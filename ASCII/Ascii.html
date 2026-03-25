@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo → ASCII Art Professionnel</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; line-height: 1.5; }
+        header { text-align: center; padding: 30px 20px 10px; }
+        header h1 { font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, #7c3aed, #06b6d4, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        header p { color: #6b7280; margin-top: 5px; font-size: 0.9rem; }
+        
+        .container { max-width: 1100px; margin: 0 auto; padding: 15px; }
+        
+        .upload-zone { border: 2px dashed #2d2d4e; border-radius: 16px; padding: 30px; text-align: center; cursor: pointer; transition: 0.3s; background: #0d0d1a; margin-bottom: 20px; }
+        .upload-zone:hover { border-color: #7c3aed; background: #110d1f; }
+        .upload-zone .icon { font-size: 2rem; display: block; margin-bottom: 8px; }
+        #previewImg { max-width: 80px; max-height: 60px; border-radius: 6px; margin: 10px auto 0; display: none; }
+        #fileInput { display: none; }
+
+        .main-grid { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
+        @media (max-width: 850px) { .main-grid { grid-template-columns: 1fr; } }
+
+        .control-group { background: #0d0d1a; border: 1px solid #1e1e3a; border-radius: 12px; padding: 16px; margin-bottom: 15px; }
+        .control-group label { display: block; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #7c3aed; margin-bottom: 12px; }
+        
+        .preset-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 10px; }
+        .preset-btn { padding: 8px; background: #141428; border: 1px solid #2d2d4e; border-radius: 8px; color: #9ca3af; cursor: pointer; font-size: .75rem; transition: 0.2s; }
+        .preset-btn:hover { border-color: #7c3aed; color: #fff; }
+        .preset-btn.active { background: #7c3aed; color: white; border-color: #7c3aed; }
+
+        input[type=range] { width: 100%; accent-color: #7c3aed; margin: 10px 0; }
+        .range-info { display: flex; justify-content: space-between; font-size: 0.8rem; color: #c4b5fd; font-weight: 600; }
+
+        .output-section { background: #070710; border: 1px solid #1e1e3a; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+        .output-header { background: #0d0d1a; padding: 12px 18px; border-bottom: 1px solid #1e1e3a; display: flex; justify-content: space-between; align-items: center; }
+        .copy-btn { background: #7c3aed; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .copy-btn:hover { background: #6d28d9; transform: scale(1.05); }
+
+        .output-wrapper { overflow: auto; flex-grow: 1; padding: 20px; min-height: 400px; background: #fff; }
+        #asciiOutput { font-family: 'Courier New', Courier, monospace; line-height: 1; white-space: pre; display: inline-block; letter-spacing: 0px; color: #000; }
+        
+        .toggle-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; color: #9ca3af; }
+        .toggle { position: relative; width: 34px; height: 18px; }
+        .toggle input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; inset: 0; background: #1e1e3a; border-radius: 20px; transition: .3s; }
+        .slider:before { content: ''; position: absolute; height: 12px; width: 12px; left: 3px; bottom: 3px; background: #4b5563; border-radius: 50%; transition: .3s; }
+        .toggle input:checked + .slider { background: #7c3aed; }
+        .toggle input:checked + .slider:before { transform: translateX(16px); background: white; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🖼️ ASCII Art Studio</h1>
+    <p>Couleurs Ultra-Vives (Texte + Fond)</p>
+</header>
+
+<div class="container">
+    <div class="upload-zone" id="uploadZone">
+        <span class="icon">📁</span>
+        <p>Glissez une image ou <strong>cliquez ici</strong></p>
+        <input type="file" id="fileInput" accept="image/*">
+        <img id="previewImg" alt="Miniature">
+    </div>
+
+    <div class="main-grid">
+        <div class="output-section">
+            <div class="output-header">
+                <span id="outputInfo" style="font-size: 0.75rem; color: #6b7280;">Aperçu final</span>
+                <button class="copy-btn" id="copyBtn">📋 Copier pour Google Docs</button>
+            </div>
+            <div class="output-wrapper" id="outputWrapper">
+                <div id="asciiOutput"></div>
+            </div>
+        </div>
+
+        <aside>
+            <div class="control-group">
+                <label>Format de destination</label>
+                <div class="preset-grid">
+                    <button class="preset-btn" data-w="45" data-size="8" data-ratio="0.45">Notes iPhone</button>
+                    <button class="preset-btn active" data-w="80" data-size="7" data-ratio="0.6">Google Docs</button>
+                    <button class="preset-btn" data-w="90" data-size="7" data-ratio="0.55">Word / Pages</button>
+                    <button class="preset-btn" data-w="120" data-size="6" data-ratio="0.5">PowerPoint</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>Amélioration Image</label>
+                <div class="range-info">Saturation <span id="sVal">1.6</span></div>
+                <input type="range" id="saturationRange" min="1.0" max="4.0" step="0.1" value="1.6">
+                
+                <div class="range-info">Contraste <span id="cVal">1.3</span></div>
+                <input type="range" id="contrastRange" min="0.5" max="3.0" step="0.1" value="1.3">
+            </div>
+
+            <div class="control-group">
+                <label>Dimensions</label>
+                <div class="range-info">Largeur <span id="wVal">80</span></div>
+                <input type="range" id="widthRange" min="10" max="250" value="80">
+                
+                <div class="range-info">Taille Police <span id="fVal">7</span>px</div>
+                <input type="range" id="fontSizeRange" min="2" max="24" value="7">
+                
+                <div class="toggle-row" style="margin-top:10px">
+                    <span>Double Couleur (Dense)</span>
+                    <label class="toggle"><input type="checkbox" id="doubleColorToggle" checked><span class="slider"></span></label>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>Caractères ASCII</label>
+                <div class="range-info">Ratio Hauteur <span id="rVal">0.60</span></div>
+                <input type="range" id="ratioRange" min="0.3" max="1.0" step="0.05" value="0.60">
+                <p style="font-size: 0.7rem; color: #6b7280; margin-top:8px;">Les caractères s'adaptent à la luminosité de l'image.</p>
+            </div>
+        </aside>
+    </div>
+</div>
+
+<canvas id="canvas" style="display:none"></canvas>
+
+<script>
+    let currentImg = null;
+    const ASCII_CHARS = "@%#*+=-:. ";
+
+    function updateLabels() {
+        ['width', 'fontSize', 'ratio', 'saturation', 'contrast'].forEach(id => {
+            const el = document.getElementById(id + 'Range');
+            const disp = document.getElementById(id.charAt(0) + 'Val');
+            if (disp) disp.textContent = el.value;
+        });
+    }
+
+    const fileInput = document.getElementById('fileInput');
+    const uploadZone = document.getElementById('uploadZone');
+    uploadZone.onclick = () => fileInput.click();
+    fileInput.onchange = () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); };
+
+    function handleFile(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => { currentImg = img; render(); document.getElementById('previewImg').src = e.target.result; document.getElementById('previewImg').style.display = 'block'; };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function render() {
+        if (!currentImg) return;
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        
+        const width = parseInt(document.getElementById('widthRange').value);
+        const fontSize = parseInt(document.getElementById('fontSizeRange').value);
+        const ratio = parseFloat(document.getElementById('ratioRange').value);
+        const saturation = document.getElementById('saturationRange').value;
+        const contrast = document.getElementById('contrastRange').value;
+        const useDoubleColor = document.getElementById('doubleColorToggle').checked;
+        
+        const height = Math.round(width * (currentImg.height / currentImg.width) * ratio);
+        canvas.width = width;
+        canvas.height = height;
+        
+        ctx.filter = `saturate(${saturation}) contrast(${contrast})`;
+        ctx.drawImage(currentImg, 0, 0, width, height);
+        
+        const imageData = ctx.getImageData(0, 0, width, height).data;
+        const output = document.getElementById('asciiOutput');
+        
+        output.style.fontSize = fontSize + 'px';
+        
+        let htmlContent = "";
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                const idx = (y * width + x) * 4;
+                const r = imageData[idx], g = imageData[idx+1], b = imageData[idx+2];
+                const brightness = (0.299*r + 0.587*g + 0.114*b)/255;
+                
+                const charIdx = Math.floor(brightness * (ASCII_CHARS.length - 1));
+                const char = ASCII_CHARS[charIdx];
+                const finalChar = char === " " ? "&nbsp;" : char;
+                const color = `rgb(${r},${g},${b})`;
+                
+                if (useDoubleColor) {
+                    // Couleur appliquée au texte ET au fond pour un maximum de densité
+                    htmlContent += `<span style="background-color:${color}; color:${color};">${finalChar}</span>`;
+                } else {
+                    htmlContent += `<span style="color:${color};">${finalChar}</span>`;
+                }
+            }
+            htmlContent += '\n';
+        }
+        output.innerHTML = htmlContent;
+        document.getElementById('outputInfo').textContent = `${width}x${height}`;
+    }
+
+    document.getElementById('copyBtn').onclick = async () => {
+        const output = document.getElementById('asciiOutput');
+        if (!output.innerText) return;
+        const btn = document.getElementById('copyBtn');
+        const fontSize = document.getElementById('fontSizeRange').value;
+        
+        const styledHtml = `
+            <div style="font-family:'Courier New', Courier, monospace; font-size:${fontSize}px; line-height:1; white-space:pre; letter-spacing:0px;">
+                ${output.innerHTML}
+            </div>
+        `;
+        
+        try {
+            const blobHtml = new Blob([styledHtml], { type: 'text/html' });
+            const blobText = new Blob([output.innerText], { type: 'text/plain' });
+
+            await navigator.clipboard.write([
+                new ClipboardItem({ 'text/html': blobHtml, 'text/plain': blobText })
+            ]);
+            
+            btn.textContent = "✅ Prêt à coller !";
+            setTimeout(() => btn.textContent = "📋 Copier pour Google Docs", 2000);
+        } catch (err) {
+            btn.textContent = "Erreur de copie";
+        }
+    };
+
+    document.querySelectorAll('.preset-btn[data-w]').forEach(btn => {
+        btn.onclick = () => {
+            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('widthRange').value = btn.dataset.w;
+            document.getElementById('fontSizeRange').value = btn.dataset.size;
+            document.getElementById('ratioRange').value = btn.dataset.ratio;
+            updateLabels();
+            render();
+        };
+    });
+
+    ['widthRange', 'fontSizeRange', 'ratioRange', 'saturationRange', 'contrastRange'].forEach(id => {
+        document.getElementById(id).oninput = () => { updateLabels(); render(); };
+    });
+    document.getElementById('doubleColorToggle').onchange = render;
+</script>
+</body>
+</html>

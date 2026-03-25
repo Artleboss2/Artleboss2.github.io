@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Porsche | Driven by Dreams</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        'porsche-red': '#D5001C',
+                        'porsche-gold': '#b09b6e',
+                        'porsche-black': '#000000',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+            scrollbar-width: none;
+        }
+        body::-webkit-scrollbar { display: none; }
+
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .hero-container {
+            height: 500vh;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-ui {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+            pointer-events: none;
+            transform: translateY(20px);
+        }
+
+        .section-ui.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .glass-nav {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .porsche-loader {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1s ease;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <div id="loader" class="porsche-loader">
+        <div class="text-center">
+            <div class="font-black text-3xl tracking-tighter uppercase mb-2">Porsche</div>
+            <div class="w-48 h-[1px] bg-white/20 relative overflow-hidden">
+                <div id="loader-bar" class="absolute inset-0 bg-porsche-red w-0 transition-all duration-300"></div>
+            </div>
+        </div>
+    </div>
+
+    <canvas id="webgl-canvas"></canvas>
+
+    <nav class="fixed top-0 w-full z-50 glass-nav px-6 py-4 flex justify-between items-center">
+        <div class="font-black text-2xl tracking-tighter uppercase">Porsche</div>
+        <div class="hidden md:flex space-x-8 text-xs font-bold tracking-widest uppercase">
+            <a href="#" class="hover:text-porsche-red transition-colors">911</a>
+            <a href="#" class="hover:text-porsche-red transition-colors">Taycan</a>
+            <a href="#" class="hover:text-porsche-red transition-colors">Héritage</a>
+        </div>
+        <div class="text-[10px] font-bold tracking-widest text-porsche-red">STUTTGART</div>
+    </nav>
+
+    <div class="hero-container">
+        <!-- Section 1 : Intro -->
+        <div class="section-ui active" data-start="0" data-end="20">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="font-serif text-7xl md:text-9xl italic mb-6">L'Âme <span class="text-porsche-red text-6xl md:text-8xl block not-italic font-sans font-black mt-2">PORSCHE</span></h1>
+                <p class="text-xs md:text-sm tracking-[0.5em] uppercase font-light text-gray-400">Scrollez pour entrer dans la légende</p>
+            </div>
+        </div>
+
+        <!-- Section 2 : Design -->
+        <div class="section-ui" data-start="25" data-end="45">
+            <div class="max-w-xl ml-[10%]">
+                <h2 class="text-4xl md:text-6xl font-black mb-6 uppercase">Design <br><span class="italic font-serif text-porsche-gold lowercase">Intemporel</span></h2>
+                <p class="text-gray-400 leading-relaxed font-light border-l border-porsche-red pl-6">
+                    Chaque ligne a une fonction. Chaque courbe raconte une victoire. La silhouette de la 911 est restée fidèle à elle-même depuis plus de 60 ans.
+                </p>
+            </div>
+        </div>
+
+        <!-- Section 3 : Performance -->
+        <div class="section-ui" data-start="50" data-end="75">
+            <div class="max-w-xl ml-auto mr-[10%] text-right">
+                <h2 class="text-4xl md:text-6xl font-black mb-6 uppercase">Précision <br><span class="italic font-serif text-porsche-red lowercase">Absolue</span></h2>
+                <div class="flex justify-end">
+                    <p class="text-gray-400 leading-relaxed font-light border-r border-porsche-red pr-6 max-w-sm">
+                        L'ingénierie portée à son paroxysme. Un moteur qui ne demande qu'à s'exprimer au-delà de 7000 tours/minute.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4 : Conclusion -->
+        <div class="section-ui" data-start="80" data-end="100">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="font-serif text-6xl md:text-8xl italic mb-8">Plus qu'une <br>voiture.</h2>
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="pointer-events-auto px-12 py-4 border border-porsche-red text-porsche-red text-xs font-bold uppercase tracking-widest hover:bg-porsche-red hover:text-white transition-all">
+                    Redécouvrir
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://esm.sh/three@0.160.0",
+                "three/examples/jsm/loaders/GLTFLoader": "https://esm.sh/three@0.160.0/examples/jsm/loaders/GLTFLoader"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+
+        const canvas = document.querySelector('#webgl-canvas');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2('#000000', 0.05);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 0, 5);
+        scene.add(camera);
+
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.toneMapping = THREE.ReinhardToneMapping;
+        renderer.toneMappingExposure = 2.3;
+
+        // Lumières Studio
+        const ambient = new THREE.AmbientLight(0xffffff, 0.2);
+        scene.add(ambient);
+
+        const spot1 = new THREE.SpotLight('#ffffff', 50); // Intensité ajustée pour v0.160
+        spot1.position.set(5, 10, 5);
+        scene.add(spot1);
+
+        const rimLight = new THREE.PointLight('#D5001C', 30, 20);
+        rimLight.position.set(-5, 2, -5);
+        scene.add(rimLight);
+
+        // Matériau Porsche Chrome
+        const carMaterial = new THREE.MeshPhysicalMaterial({
+            color: '#111111',
+            metalness: 1,
+            roughness: 0.1,
+            envMapIntensity: 1,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.05
+        });
+
+        let carModel;
+        const loader = new GLTFLoader();
+        const loaderBar = document.getElementById('loader-bar');
+
+        // Chargement du modèle avec gestion d'URL absolue pour éviter les erreurs de pattern
+        const modelUrl = new URL('3d2469dc-a734-4c85-ad9e-3be0b1c4e65a.glb', window.location.href).href;
+
+        loader.load(
+            modelUrl,
+            (gltf) => {
+                carModel = gltf.scene;
+                carModel.traverse((child) => {
+                    if (child.isMesh) {
+                        child.material = carMaterial;
+                    }
+                });
+                
+                // Centrer le modèle
+                const box = new THREE.Box3().setFromObject(carModel);
+                const center = box.getCenter(new THREE.Vector3());
+                carModel.position.sub(center);
+                
+                scene.add(carModel);
+                
+                // Masquer le loader
+                setTimeout(() => {
+                    const loaderEl = document.getElementById('loader');
+                    if (loaderEl) {
+                        loaderEl.style.opacity = '0';
+                        setTimeout(() => loaderEl.remove(), 1000);
+                    }
+                }, 500);
+            },
+            (xhr) => {
+                if (xhr.lengthComputable) {
+                    const percent = (xhr.loaded / xhr.total) * 100;
+                    loaderBar.style.width = percent + '%';
+                }
+            },
+            (err) => {
+                console.error("Erreur détaillée du loader:", err);
+                // Forcer la suppression du loader en cas d'erreur pour ne pas bloquer l'UI
+                const loaderEl = document.getElementById('loader');
+                if (loaderEl) loaderEl.remove();
+            }
+        );
+
+        // Animation au scroll
+        let targetZ = 5;
+        let targetRotY = 0;
+        let targetY = 0;
+
+        window.addEventListener('scroll', () => {
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollY = window.scrollY;
+            const percent = (scrollY / Math.max(scrollHeight, 1)) * 100;
+
+            // La caméra "rentre" dans l'image
+            targetZ = 5 - (percent / 100) * 8; 
+            targetRotY = (percent / 100) * Math.PI * 2.5; 
+            targetY = -(percent / 100) * 1;
+
+            // UI transitions
+            document.querySelectorAll('.section-ui').forEach(sec => {
+                const start = parseFloat(sec.dataset.start);
+                const end = parseFloat(sec.dataset.end);
+                sec.classList.toggle('active', percent >= start && percent < end);
+            });
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const lerpFactor = 0.05;
+
+            if (carModel) {
+                carModel.rotation.y += (targetRotY - carModel.rotation.y) * lerpFactor;
+                // Léger flottement sinusoïdal
+                carModel.rotation.x = Math.sin(Date.now() * 0.001) * 0.05; 
+                carModel.position.y += (targetY - carModel.position.y) * lerpFactor;
+            }
+            
+            camera.position.z += (targetZ - camera.position.z) * lerpFactor;
+            
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

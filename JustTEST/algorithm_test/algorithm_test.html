@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AXIOM — Computational Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="algorithm_test.css" />
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- Navigation -->
+  <nav id="nav">
+    <div class="nav-logo">AXIOM</div>
+    <div class="nav-links">
+      <a href="#hero" class="nav-link" data-section="hero">Init</a>
+      <a href="#pathfinding" class="nav-link" data-section="pathfinding">Path</a>
+      <a href="#particles" class="nav-link" data-section="particles">Physics</a>
+      <a href="#lab" class="nav-link" data-section="lab">Lab</a>
+      <a href="#neural" class="nav-link" data-section="neural">Neural</a>
+      <a href="#chaos" class="nav-link" data-section="chaos">Chaos</a>
+      <a href="#crypto" class="nav-link" data-section="crypto">Crypto</a>
+      <a href="#graph" class="nav-link" data-section="graph">Graph</a>
+      <a href="#cellular" class="nav-link" data-section="cellular">Life</a>
+      <a href="#noise" class="nav-link" data-section="noise">Noise</a>
+      <a href="#services" class="nav-link" data-section="services">Systems</a>
+    </div>
+    <div class="nav-status">
+      <span class="status-dot"></span>
+      <span id="nav-clock">00:00:00</span>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 1 — HERO: Visual Sort + Delaunay
+  ════════════════════════════════════════════════ -->
+  <section id="hero">
+    <canvas id="sort-canvas"></canvas>
+    <canvas id="delaunay-canvas"></canvas>
+    <div class="hero-content">
+      <div class="hero-eyebrow reveal-item">
+        <span class="mono">v3.14.159</span>
+        <span class="tag">COMPUTATIONAL</span>
+      </div>
+      <h1 class="hero-title reveal-item">
+        <span class="title-line" id="title-line-1">ALGO</span>
+        <span class="title-line accent" id="title-line-2">RITHM</span>
+        <span class="title-line" id="title-line-3">IC</span>
+      </h1>
+      <p class="hero-sub reveal-item">
+        Where mathematics becomes architecture.<br />
+        Where data transforms into experience.
+      </p>
+      <div class="hero-cta reveal-item">
+        <button class="btn-primary" id="init-btn">Initialize Systems</button>
+        <span class="mono small">↓ scroll to explore</span>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-val" id="stat-sort">0</span>
+        <span class="stat-label mono">comparisons</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val" id="stat-fps">60</span>
+        <span class="stat-label mono">fps</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val" id="stat-nodes">0</span>
+        <span class="stat-label mono">nodes active</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 2 — PATHFINDING: A* Interactive Grid
+  ════════════════════════════════════════════════ -->
+  <section id="pathfinding">
+    <div class="section-header reveal-item">
+      <span class="mono label">02 / NAVIGATE</span>
+      <h2>A* Pathfinding</h2>
+      <p>Click to place walls. Watch the algorithm solve in real-time.</p>
+    </div>
+    <div class="pathfinding-container">
+      <canvas id="pathfinding-canvas"></canvas>
+      <div class="pathfinding-controls">
+        <button class="ctrl-btn active" id="mode-wall">Wall Mode</button>
+        <button class="ctrl-btn" id="mode-start">Set Start</button>
+        <button class="ctrl-btn" id="mode-end">Set End</button>
+        <button class="ctrl-btn ghost" id="clear-grid">Clear</button>
+        <div class="pathfinding-stats mono">
+          <div>Explored: <span id="pf-explored">0</span></div>
+          <div>Path length: <span id="pf-length">—</span></div>
+          <div>Time: <span id="pf-time">—</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 3 — PARTICLES: Newtonian Physics
+  ════════════════════════════════════════════════ -->
+  <section id="particles">
+    <canvas id="particles-canvas"></canvas>
+    <div class="particles-overlay reveal-item">
+      <span class="mono label">03 / PHYSICS</span>
+      <h2>Newtonian<br />Particle Engine</h2>
+      <p class="mono small">500 particles · attraction · repulsion · friction</p>
+      <div class="particle-controls">
+        <label>Gravity <input type="range" id="gravity-slider" min="0" max="100" value="20" /></label>
+        <label>Repulsion <input type="range" id="repulsion-slider" min="0" max="100" value="50" /></label>
+        <label>Friction <input type="range" id="friction-slider" min="1" max="100" value="95" /></label>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 4 — LAB: Fractals + FFT Visualizer
+  ════════════════════════════════════════════════ -->
+  <section id="lab">
+    <div class="lab-grid">
+      <div class="lab-panel lab-panel-fractal reveal-item">
+        <div class="panel-header">
+          <span class="mono label">04a / GENERATIVE</span>
+          <h3>Mandelbrot Fractal</h3>
+        </div>
+        <canvas id="fractal-canvas"></canvas>
+        <div class="fractal-controls">
+          <button class="ctrl-btn" id="fractal-zoom-in">Zoom +</button>
+          <button class="ctrl-btn" id="fractal-zoom-out">Zoom −</button>
+          <button class="ctrl-btn ghost" id="fractal-reset">Reset</button>
+          <label class="mono small">Iterations: <span id="fractal-iter-val">100</span>
+            <input type="range" id="fractal-iter" min="20" max="500" value="100" />
+          </label>
+        </div>
+      </div>
+
+      <div class="lab-panel lab-panel-fft reveal-item">
+        <div class="panel-header">
+          <span class="mono label">04b / FREQUENCY</span>
+          <h3>FFT Scroll Analyzer</h3>
+        </div>
+        <canvas id="fft-canvas"></canvas>
+        <p class="mono small fft-hint">↕ Scroll to drive the waveform</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 5 — HUFFMAN: Compression Tree
+  ════════════════════════════════════════════════ -->
+  <section id="huffman">
+    <div class="section-header reveal-item">
+      <span class="mono label">05 / ENCODE</span>
+      <h2>Huffman Compression</h2>
+      <p>Type text to generate a live encoding tree.</p>
+    </div>
+    <div class="huffman-container">
+      <div class="huffman-input-panel reveal-item">
+        <textarea id="huffman-input" placeholder="Type something to encode..." maxlength="200">hello world</textarea>
+        <div class="huffman-stats mono">
+          <div>Original: <span id="huff-original">0</span> bits</div>
+          <div>Compressed: <span id="huff-compressed">0</span> bits</div>
+          <div>Ratio: <span id="huff-ratio">—</span></div>
+        </div>
+        <div id="huffman-codes" class="huffman-codes mono"></div>
+      </div>
+      <canvas id="huffman-canvas" class="reveal-item"></canvas>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 6 — SERVICES: Recommendation Engine
+  ════════════════════════════════════════════════ -->
+  <section id="services">
+    <div class="section-header reveal-item">
+      <span class="mono label">06 / SYSTEMS</span>
+      <h2>Adaptive Services</h2>
+      <p class="mono small">Collaborative filtering — recommendations update as you explore.</p>
+    </div>
+    <div class="services-grid" id="services-grid">
+      <!-- Injected by JS -->
+    </div>
+    <div class="recommendation-bar reveal-item">
+      <span class="mono small">Based on your session:</span>
+      <div id="recommendation-output" class="recommendation-tags"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 9 — NEURAL NETWORK: Live Perceptron
+  ════════════════════════════════════════════════ -->
+  <section id="neural">
+    <div class="section-header reveal-item">
+      <span class="mono label">09 / NEURAL</span>
+      <h2>Neural Network</h2>
+      <p>A 3-layer perceptron trained live in your browser via backpropagation. Draw points to classify.</p>
+    </div>
+    <div class="neural-layout">
+      <div class="neural-left reveal-item">
+        <canvas id="neural-draw-canvas"></canvas>
+        <div class="neural-draw-controls">
+          <button class="ctrl-btn active" id="nn-class-a">Class A (●)</button>
+          <button class="ctrl-btn" id="nn-class-b">Class B (■)</button>
+          <button class="ctrl-btn ghost" id="nn-clear">Clear</button>
+          <button class="ctrl-btn" id="nn-train">Train ↺</button>
+          <div class="pathfinding-stats mono">
+            <div>Epoch: <span id="nn-epoch">0</span></div>
+            <div>Loss: <span id="nn-loss">—</span></div>
+            <div>Accuracy: <span id="nn-acc">—</span></div>
+          </div>
+        </div>
+      </div>
+      <canvas id="neural-arch-canvas" class="reveal-item"></canvas>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 10 — CHAOS: Lorenz Attractor
+  ════════════════════════════════════════════════ -->
+  <section id="chaos">
+    <canvas id="lorenz-canvas"></canvas>
+    <div class="particles-overlay reveal-item">
+      <span class="mono label">10 / CHAOS THEORY</span>
+      <h2>Lorenz<br />Attractor</h2>
+      <p class="mono small">σ · ρ · β — the butterfly effect in real-time</p>
+      <div class="particle-controls">
+        <label>σ (sigma) <input type="range" id="lorenz-sigma" min="1" max="28" value="10" step="0.5"/></label>
+        <label>ρ (rho)   <input type="range" id="lorenz-rho"   min="1" max="60" value="28" step="0.5"/></label>
+        <label>β (beta)  <input type="range" id="lorenz-beta"  min="1" max="10" value="267" step="1"/></label>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 11 — CRYPTOGRAPHY: Visual Hash (SHA-256 sim)
+  ════════════════════════════════════════════════ -->
+  <section id="crypto">
+    <div class="section-header reveal-item">
+      <span class="mono label">11 / CRYPTOGRAPHY</span>
+      <h2>Visual Hashing</h2>
+      <p>Simulated SHA-256 avalanche effect — one character change cascades through the state matrix.</p>
+    </div>
+    <div class="crypto-layout">
+      <div class="crypto-input-col reveal-item">
+        <textarea id="crypto-input" placeholder="Type to hash…">AXIOM</textarea>
+        <div class="huffman-stats mono" style="margin-top:14px">
+          <div>Hash: <span id="crypto-hash" style="font-size:10px;word-break:break-all;color:var(--accent-cyan)">—</span></div>
+          <div>Avalanche: <span id="crypto-avalanche">—</span></div>
+          <div>Entropy bits: <span id="crypto-entropy">—</span></div>
+        </div>
+      </div>
+      <canvas id="crypto-canvas" class="reveal-item"></canvas>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 12 — GRAPH: Force-Directed Layout
+  ════════════════════════════════════════════════ -->
+  <section id="graph">
+    <div class="section-header reveal-item">
+      <span class="mono label">12 / GRAPH THEORY</span>
+      <h2>Force-Directed Graph</h2>
+      <p>Fruchterman-Reingold layout — drag nodes, add edges, watch repulsion & spring forces equilibrate.</p>
+    </div>
+    <div class="pathfinding-container">
+      <canvas id="graph-canvas"></canvas>
+      <div class="pathfinding-controls">
+        <button class="ctrl-btn active" id="graph-mode-move">Move Nodes</button>
+        <button class="ctrl-btn" id="graph-mode-add">Add Node</button>
+        <button class="ctrl-btn" id="graph-mode-edge">Add Edge</button>
+        <button class="ctrl-btn ghost" id="graph-reset">Reset</button>
+        <div class="pathfinding-stats mono">
+          <div>Nodes: <span id="graph-nodes">0</span></div>
+          <div>Edges: <span id="graph-edges">0</span></div>
+          <div>Diameter: <span id="graph-diam">—</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 13 — CELLULAR AUTOMATA: Conway's Game of Life
+  ════════════════════════════════════════════════ -->
+  <section id="cellular">
+    <div class="section-header reveal-item">
+      <span class="mono label">13 / CELLULAR AUTOMATA</span>
+      <h2>Game of Life</h2>
+      <p>Conway's rules on a 120×68 toroidal grid. Click to draw, watch emergence unfold.</p>
+    </div>
+    <div class="pathfinding-container">
+      <canvas id="life-canvas"></canvas>
+      <div class="pathfinding-controls">
+        <button class="ctrl-btn" id="life-play">▶ Play</button>
+        <button class="ctrl-btn" id="life-step">Step →</button>
+        <button class="ctrl-btn ghost" id="life-clear">Clear</button>
+        <button class="ctrl-btn" id="life-random">Random</button>
+        <button class="ctrl-btn" id="life-glider">Glider Gun</button>
+        <div class="pathfinding-stats mono">
+          <div>Generation: <span id="life-gen">0</span></div>
+          <div>Population: <span id="life-pop">0</span></div>
+          <div>Speed: <span id="life-speed">8</span>/s</div>
+        </div>
+        <input type="range" id="life-speed-slider" min="1" max="30" value="8" style="margin-top:8px"/>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 14 — PERLIN NOISE: Procedural Terrain
+  ════════════════════════════════════════════════ -->
+  <section id="noise">
+    <div class="lab-grid">
+      <div class="lab-panel reveal-item">
+        <div class="panel-header">
+          <span class="mono label">14a / PERLIN NOISE</span>
+          <h3>Procedural Terrain</h3>
+        </div>
+        <canvas id="noise-canvas"></canvas>
+        <div class="fractal-controls">
+          <label>Octaves <span id="noise-oct-val">4</span><input type="range" id="noise-octaves" min="1" max="8" value="4"/></label>
+          <label>Scale   <span id="noise-scale-val">3.0</span><input type="range" id="noise-scale" min="10" max="80" value="30"/></label>
+          <label>Seed    <input type="range" id="noise-seed" min="0" max="999" value="42"/></label>
+          <button class="ctrl-btn" id="noise-regen" style="margin-top:8px">Regenerate</button>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           SECTION 15 — WAVE INTERFERENCE: Huygens
+      ════════════════════════════════════════════════ -->
+      <div class="lab-panel reveal-item">
+        <div class="panel-header">
+          <span class="mono label">15 / WAVE PHYSICS</span>
+          <h3>Wave Interference</h3>
+        </div>
+        <canvas id="wave-canvas"></canvas>
+        <p class="mono small fft-hint">Click canvas to add wave sources</p>
+        <button class="ctrl-btn ghost" id="wave-clear" style="margin-top:10px">Clear Sources</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 16 — BEZIER CURVES: Casteljau Builder
+  ════════════════════════════════════════════════ -->
+  <section id="bezier" style="padding:120px 48px; background:var(--bg-deep)">
+    <div class="section-header reveal-item">
+      <span class="mono label">16 / COMPUTATIONAL GEOMETRY</span>
+      <h2>Bézier Curves</h2>
+      <p>De Casteljau algorithm visualized live. Drag control points to reshape the curve.</p>
+    </div>
+    <canvas id="bezier-canvas" class="reveal-item" style="width:100%;height:480px;border:1px solid var(--border);border-radius:var(--radius-lg);margin-top:40px;background:var(--bg-surface)"></canvas>
+    <div style="display:flex;gap:12px;margin-top:16px" class="reveal-item">
+      <button class="ctrl-btn" id="bezier-add">Add Control Point</button>
+      <button class="ctrl-btn ghost" id="bezier-reset">Reset</button>
+      <span class="mono small" style="color:var(--text-muted);align-self:center">t = <span id="bezier-t-val">0.00</span> · degree = <span id="bezier-degree">3</span></span>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 17 — MAZE GENERATOR: Recursive Backtracker
+  ════════════════════════════════════════════════ -->
+  <section id="maze" style="padding:120px 48px">
+    <div class="section-header reveal-item">
+      <span class="mono label">17 / MAZE GENERATION</span>
+      <h2>Recursive Backtracker</h2>
+      <p>Wilson's algorithm carves a perfect maze. Watch DFS excavate every passage.</p>
+    </div>
+    <div class="pathfinding-container">
+      <canvas id="maze-canvas"></canvas>
+      <div class="pathfinding-controls">
+        <button class="ctrl-btn" id="maze-gen">Generate</button>
+        <button class="ctrl-btn" id="maze-solve">Solve BFS</button>
+        <button class="ctrl-btn ghost" id="maze-clear">Clear</button>
+        <div class="pathfinding-stats mono">
+          <div>Cells: <span id="maze-cells">0</span></div>
+          <div>Passages: <span id="maze-passages">0</span></div>
+          <div>Status: <span id="maze-status">idle</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 18 — FOURIER EPICYCLES: Drawing Machine
+  ════════════════════════════════════════════════ -->
+  <section id="epicycles" style="padding:120px 48px; background:var(--bg-deep)">
+    <div class="section-header reveal-item">
+      <span class="mono label">18 / FOURIER SERIES</span>
+      <h2>Epicycle Drawing Machine</h2>
+      <p>Any closed path decomposed into rotating circles via Discrete Fourier Transform.</p>
+    </div>
+    <div class="pathfinding-container">
+      <canvas id="epicycle-canvas"></canvas>
+      <div class="pathfinding-controls">
+        <button class="ctrl-btn active" id="epi-draw-mode">Draw Path</button>
+        <button class="ctrl-btn" id="epi-play">▶ Animate DFT</button>
+        <button class="ctrl-btn ghost" id="epi-clear">Clear</button>
+        <div class="pathfinding-stats mono">
+          <div>Circles: <span id="epi-circles">0</span></div>
+          <div>Frequency: <span id="epi-freq">—</span></div>
+        </div>
+        <label style="margin-top:8px" class="mono small">Terms: <span id="epi-terms-val">20</span>
+          <input type="range" id="epi-terms" min="1" max="100" value="20" style="margin-top:4px"/>
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 19 — GENETIC ALGORITHM: Travelling Salesman
+  ════════════════════════════════════════════════ -->
+  <section id="genetic" style="padding:120px 48px">
+    <div class="section-header reveal-item">
+      <span class="mono label">19 / EVOLUTIONARY COMPUTATION</span>
+      <h2>Genetic Algorithm</h2>
+      <p>TSP solved via selection, crossover & mutation. Watch the shortest route evolve.</p>
+    </div>
+    <div class="pathfinding-container">
+      <canvas id="genetic-canvas"></canvas>
+      <div class="pathfinding-controls">
+        <button class="ctrl-btn" id="ga-start">Evolve</button>
+        <button class="ctrl-btn ghost" id="ga-reset">New Cities</button>
+        <div class="pathfinding-stats mono">
+          <div>Generation: <span id="ga-gen">0</span></div>
+          <div>Best dist: <span id="ga-best">—</span></div>
+          <div>Population: <span id="ga-pop">80</span></div>
+          <div>Mutation: <span id="ga-mut">2%</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 20 — FLUID SIMULATION: Navier-Stokes (lite)
+  ════════════════════════════════════════════════ -->
+  <section id="fluid" style="padding:0; position:relative; min-height:100vh">
+    <canvas id="fluid-canvas" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
+    <div class="particles-overlay reveal-item" style="position:relative;z-index:10">
+      <span class="mono label">20 / FLUID DYNAMICS</span>
+      <h2>Navier–Stokes<br />Fluid Simulation</h2>
+      <p class="mono small">Move mouse to inject velocity & dye</p>
+      <div class="particle-controls">
+        <label>Viscosity  <input type="range" id="fluid-viscosity" min="1" max="20" value="4"/></label>
+        <label>Diffusion  <input type="range" id="fluid-diffusion" min="0" max="20" value="2"/></label>
+        <button class="ctrl-btn" id="fluid-clear" style="margin-top:8px">Clear</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 21 — CONWAY LIFE VARIANT: Langton's Ant
+  ════════════════════════════════════════════════ -->
+  <section id="langton" style="padding:120px 48px; background:var(--bg-deep)">
+    <div class="lab-grid">
+      <div class="lab-panel reveal-item">
+        <div class="panel-header">
+          <span class="mono label">21 / TURING MACHINE</span>
+          <h3>Langton's Ant</h3>
+        </div>
+        <canvas id="langton-canvas"></canvas>
+        <div class="fractal-controls">
+          <button class="ctrl-btn" id="langton-play">▶ Run</button>
+          <button class="ctrl-btn ghost" id="langton-reset">Reset</button>
+          <div class="pathfinding-stats mono" style="margin-top:8px;border:none;padding:0">
+            <div>Steps: <span id="langton-steps">0</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 22 — FLOCKING: Boids -->
+      <div class="lab-panel reveal-item">
+        <div class="panel-header">
+          <span class="mono label">22 / EMERGENT BEHAVIOUR</span>
+          <h3>Boids Flocking</h3>
+        </div>
+        <canvas id="boids-canvas"></canvas>
+        <div class="fractal-controls">
+          <label>Cohesion  <input type="range" id="boids-cohesion"   min="0" max="100" value="40"/></label>
+          <label>Separation<input type="range" id="boids-separation" min="0" max="100" value="60"/></label>
+          <label>Alignment <input type="range" id="boids-alignment"  min="0" max="100" value="50"/></label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 23 — SPRING MESH: Cloth Simulation
+  ════════════════════════════════════════════════ -->
+  <section id="cloth" style="padding:120px 48px">
+    <div class="section-header reveal-item">
+      <span class="mono label">23 / VERLET INTEGRATION</span>
+      <h2>Cloth Simulation</h2>
+      <p>Mass-spring system with Verlet integration. Click & drag to tear the fabric.</p>
+    </div>
+    <canvas id="cloth-canvas" class="reveal-item" style="width:100%;height:520px;border:1px solid var(--border);border-radius:var(--radius-lg);margin-top:40px;background:var(--bg-surface)"></canvas>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 24 — VORONOI: Fortune's Algorithm
+  ════════════════════════════════════════════════ -->
+  <section id="voronoi" style="padding:120px 48px; background:var(--bg-deep)">
+    <div class="section-header reveal-item">
+      <span class="mono label">24 / COMPUTATIONAL GEOMETRY</span>
+      <h2>Voronoi Diagram</h2>
+      <p>Fortune's sweep-line algorithm. Move your mouse to shift the seed points.</p>
+    </div>
+    <canvas id="voronoi-canvas" class="reveal-item" style="width:100%;height:500px;border:1px solid var(--border);border-radius:var(--radius-lg);margin-top:40px"></canvas>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 25 — SORTING RACE: 6 Algorithms
+  ════════════════════════════════════════════════ -->
+  <section id="sortrace" style="padding:120px 48px">
+    <div class="section-header reveal-item">
+      <span class="mono label">25 / ALGORITHM RACE</span>
+      <h2>Sorting Race</h2>
+      <p>6 algorithms compete simultaneously on identical data. Watch complexity in action.</p>
+    </div>
+    <div id="sortrace-grid" class="sortrace-grid reveal-item"></div>
+    <div style="display:flex;gap:12px;margin-top:24px" class="reveal-item">
+      <button class="ctrl-btn" id="sortrace-start">Start Race</button>
+      <button class="ctrl-btn ghost" id="sortrace-reset">Reset</button>
+      <span class="mono small" style="color:var(--text-muted);align-self:center">N = <span id="sortrace-n">60</span></span>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 26 — L-SYSTEMS: Fractal Plants
+  ════════════════════════════════════════════════ -->
+  <section id="lsystem" style="padding:120px 48px; background:var(--bg-deep)">
+    <div class="section-header reveal-item">
+      <span class="mono label">26 / L-SYSTEMS</span>
+      <h2>Fractal Plants</h2>
+      <p>Lindenmayer system rewriting rules generate organic structures recursively.</p>
+    </div>
+    <div class="pathfinding-container">
+      <canvas id="lsystem-canvas"></canvas>
+      <div class="pathfinding-controls">
+        <button class="ctrl-btn active" id="ls-tree">Dragon Tree</button>
+        <button class="ctrl-btn" id="ls-sierpinski">Sierpinski</button>
+        <button class="ctrl-btn" id="ls-koch">Koch Curve</button>
+        <button class="ctrl-btn" id="ls-fern">Barnsley Fern</button>
+        <div class="pathfinding-stats mono">
+          <div>Iterations: <span id="ls-iter">5</span></div>
+          <div>Symbols: <span id="ls-symbols">0</span></div>
+        </div>
+        <label style="margin-top:8px" class="mono small">Depth
+          <input type="range" id="ls-depth" min="1" max="8" value="5"/>
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 27 — MARCHING SQUARES: Isosurface
+  ════════════════════════════════════════════════ -->
+  <section id="marching" style="padding:120px 48px">
+    <div class="section-header reveal-item">
+      <span class="mono label">27 / ISOSURFACE EXTRACTION</span>
+      <h2>Marching Squares</h2>
+      <p>Real-time metaball contour extraction using the marching squares algorithm.</p>
+    </div>
+    <canvas id="marching-canvas" class="reveal-item" style="width:100%;height:500px;border:1px solid var(--border);border-radius:var(--radius-lg);margin-top:40px"></canvas>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 28 — RSA VISUAL: Key Generation
+  ════════════════════════════════════════════════ -->
+  <section id="rsa" style="padding:120px 48px; background:var(--bg-deep)">
+    <div class="section-header reveal-item">
+      <span class="mono label">28 / PUBLIC-KEY CRYPTOGRAPHY</span>
+      <h2>RSA Key Visualizer</h2>
+      <p>Visual prime factorization and modular exponentiation — the mathematics of RSA exposed.</p>
+    </div>
+    <div class="huffman-container reveal-item">
+      <div class="huffman-input-panel">
+        <div class="huffman-stats mono" style="gap:12px">
+          <div>p (prime): <span id="rsa-p" style="color:var(--accent-cyan)">—</span></div>
+          <div>q (prime): <span id="rsa-q" style="color:var(--accent-cyan)">—</span></div>
+          <div>n = p·q: <span id="rsa-n" style="color:var(--accent-violet)">—</span></div>
+          <div>φ(n): <span id="rsa-phi">—</span></div>
+          <div>e (public): <span id="rsa-e">—</span></div>
+          <div>d (private): <span id="rsa-d" style="color:var(--accent-amber)">—</span></div>
+        </div>
+        <button class="ctrl-btn" id="rsa-gen" style="margin-top:20px">Generate New Keys</button>
+        <div style="margin-top:16px">
+          <input id="rsa-msg" type="number" min="2" max="99" value="42"
+            style="background:var(--bg-surface);color:var(--text-primary);font-family:var(--font-mono);font-size:14px;border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;width:100%;outline:none"/>
+          <p class="mono small" style="margin-top:8px;color:var(--text-muted)">
+            Encrypted: <span id="rsa-enc" style="color:var(--accent-red)">—</span><br/>
+            Decrypted: <span id="rsa-dec" style="color:var(--accent-cyan)">—</span>
+          </p>
+        </div>
+      </div>
+      <canvas id="rsa-canvas"></canvas>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       FOOTER: Clock + Session Stats
+  ════════════════════════════════════════════════ -->
+  <footer id="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">AXIOM</div>
+        <p class="mono small">Computational Intelligence Systems<br />Est. 2025 — All rights reserved</p>
+      </div>
+      <div class="footer-clock-wrapper">
+        <canvas id="clock-canvas"></canvas>
+        <div class="clock-digital mono" id="footer-time">00:00:00</div>
+      </div>
+      <div class="footer-session mono">
+        <div class="session-item">
+          <span class="session-label">Session duration</span>
+          <span class="session-val" id="session-duration">00:00</span>
+        </div>
+        <div class="session-item">
+          <span class="session-label">Mouse distance</span>
+          <span class="session-val" id="mouse-distance">0 px</span>
+        </div>
+        <div class="session-item">
+          <span class="session-label">Scroll depth</span>
+          <span class="session-val" id="scroll-depth">0%</span>
+        </div>
+        <div class="session-item">
+          <span class="session-label">Interactions</span>
+          <span class="session-val" id="interaction-count">0</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom mono">
+      <span>AXIOM v3.14.159</span>
+      <span id="footer-entropy">Entropy: calculating…</span>
+    </div>
+  </footer>
+
+  <script src="algorithm_test.js"></script>
+</body>
+</html>

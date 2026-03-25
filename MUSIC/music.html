@@ -1,0 +1,861 @@
+<!doctype html>
+<!--
+Geometric Resonance — by Kyler Simzer
+License: MIT (see LICENSE)
+To see the LICENSE type 
+artleboss2.github.io/musiclicense.html
+or
+artleboss2.github.io/musicnotice.html
+Attribution request (not required by the MIT License):
+If used commercially, please credit “Geometric Resonance by Kyler Simzer”.
+
+Demo audio:
+demo.mp3 © 2025 Kyler Simzer. All rights reserved.
+Not licensed under MIT. Demo/listening only. No reuse/redistribution without permission.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Geometric Resonance Ultra+</title>
+    
+      <link rel="stylesheet" href="music.css">
+</head>
+
+  <body>
+    <canvas
+      id="spectrum-overlay"
+      style="
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 50px;
+        pointer-events: none;
+        opacity: 0.5;
+        z-index: 9;
+      "
+    ></canvas>
+
+    <div id="preset-modal">
+      <h3
+        style="
+          color: rgba(255, 255, 255, 0.85);
+          font-weight: 300;
+          margin-bottom: 18px;
+          letter-spacing: 0.15em;
+          font-size: 14px;
+        "
+      >
+        PRESETS
+      </h3>
+      <input
+        type="text"
+        id="preset-name"
+        placeholder="Preset name..."
+        style="
+          width: 100%;
+          padding: 12px;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 10px;
+          color: #fff;
+          margin-bottom: 14px;
+        "
+      />
+      <div
+        id="preset-list"
+        style="max-height: 220px; overflow-y: auto; margin-bottom: 14px"
+      ></div>
+      <div style="display: flex; gap: 10px">
+        <button
+          class="btn"
+          style="width: auto; padding: 10px 20px; border-radius: 10px"
+          onclick="savePreset()"
+        >
+          Save
+        </button>
+        <button
+          class="btn"
+          style="width: auto; padding: 10px 20px; border-radius: 10px"
+          onclick="closePresetModal()"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+
+    <div id="status">
+      <div id="bpm-display">-- BPM</div>
+      <div id="energy-display" style="font-size: 9px">Energy: --</div>
+      <div id="note-display" style="font-size: 9px; opacity: 0.65">
+        Note: --
+      </div>
+      <div id="bar-display" style="font-size: 9px; opacity: 0.65">Bar: --</div>
+      <div id="rec-indicator">REC</div>
+    </div>
+
+    <div id="ui">
+      <div class="tabs">
+        <button class="tab active" data-tab="main">Main</button>
+        <button class="tab" data-tab="color">Color</button>
+        <button class="tab" data-tab="camera">Camera</button>
+        <button class="tab" data-tab="physics">Physics</button>
+        <button class="tab" data-tab="layers">Layers</button>
+        <button class="tab" data-tab="fx">FX</button>
+        <button class="tab" data-tab="env">Environment</button>
+        <button class="tab" data-tab="extra">Extra</button>
+      </div>
+
+      <div class="settings-container">
+        <!-- MAIN -->
+        <div class="settings-panel active" data-panel="main">
+          <div class="setting">
+            <span class="setting-label">Form</span>
+            <select id="form">
+              <option value="icosahedron">Icosahedron</option>
+              <option value="octahedron">Octahedron</option>
+              <option value="tetrahedron">Tetrahedron</option>
+              <option value="dodecahedron">Dodecahedron</option>
+              <option value="torus">Torus</option>
+              <option value="torusKnot">Torus Knot</option>
+              <option value="sphere">Sphere</option>
+              <option value="hyperboloid">Hyperboloid</option>
+              <option value="mobius">Möbius Strip</option>
+              <option value="kleinBottle">Klein Bottle</option>
+              <option value="gyroid">Gyroid Surface</option>
+              <option value="cliffordTorus">Clifford Torus</option>
+              <option value="hopfFibration">Hopf Fibration</option>
+              <option value="seashell">Seashell</option>
+              <option value="diniSurface">Dini Surface</option>
+            </select>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Complexity</span
+            ><input
+              type="range"
+              id="density"
+              min="1"
+              max="5"
+              step="1"
+              value="3"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Sensitivity</span
+            ><input
+              type="range"
+              id="sensitivity"
+              min="0.2"
+              max="3"
+              step="0.1"
+              value="1.2"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Smoothness</span
+            ><input
+              type="range"
+              id="smoothness"
+              min="0"
+              max="1"
+              step="0.05"
+              value="0.7"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Volume</span
+            ><input
+              type="range"
+              id="volume"
+              min="0"
+              max="1"
+              step="0.01"
+              value="0.8"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Visual Mode</span>
+            <select id="visualMode">
+              <option value="standard">Standard</option>
+              <option value="kaleidoscope">Kaleidoscope</option>
+            </select>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Model Spin</span>
+            <div class="toggle active" id="toggleModelSpin"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Spin Speed</span
+            ><input
+              type="range"
+              id="modelSpinSpeed"
+              min="0"
+              max="2"
+              step="0.01"
+              value="1"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Spin Axis</span>
+            <select id="modelSpinAxis">
+              <option value="y">Y Only (Stable)</option>
+              <option value="xyz" selected>XYZ (Complex)</option>
+            </select>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Reactive Spin</span>
+            <div class="toggle active" id="toggleModelSpinReactive"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Reactive Amount</span
+            ><input
+              type="range"
+              id="modelSpinReactivity"
+              min="0"
+              max="1"
+              step="0.01"
+              value="1"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Model Pulse</span>
+            <div class="toggle active" id="toggleModelPulse"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Pulse Amount</span
+            ><input
+              type="range"
+              id="modelPulseAmount"
+              min="0"
+              max="1"
+              step="0.01"
+              value="1"
+            />
+          </div>
+        </div>
+
+        <!-- COLOR -->
+        <div class="settings-panel" data-panel="color">
+          <div class="setting">
+            <span class="setting-label">Theme</span>
+            <select id="colorTheme">
+              <option value="void">Void</option>
+              <option value="ember">Ember</option>
+              <option value="arctic">Arctic</option>
+              <option value="neon">Neon</option>
+              <option value="sunset">Sunset</option>
+              <option value="forest">Forest</option>
+              <option value="vapor">Vaporwave</option>
+              <option value="gold">Gold</option>
+              <option value="blood">Blood</option>
+              <option value="ocean">Ocean</option>
+              <option value="aurora">Aurora</option>
+              <option value="holographic">Holographic</option>
+              <option value="plasma">Plasma</option>
+              <option value="infrared">Infrared</option>
+              <option value="bioluminescent">Bioluminescent</option>
+            </select>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Primary</span
+            ><input
+              type="color"
+              id="colorPrimary"
+              value="#ffffff"
+              style="
+                width: 40px;
+                height: 30px;
+                border: none;
+                background: none;
+                cursor: pointer;
+              "
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Secondary</span
+            ><input
+              type="color"
+              id="colorSecondary"
+              value="#4488ff"
+              style="
+                width: 40px;
+                height: 30px;
+                border: none;
+                background: none;
+                cursor: pointer;
+              "
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Background</span
+            ><input
+              type="color"
+              id="colorBg"
+              value="#020204"
+              style="
+                width: 40px;
+                height: 30px;
+                border: none;
+                background: none;
+                cursor: pointer;
+              "
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Reactivity</span
+            ><input
+              type="range"
+              id="colorReactivity"
+              min="0"
+              max="1"
+              step="0.05"
+              value="0.55"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Hue Rotate</span
+            ><input
+              type="range"
+              id="hueRotateSpeed"
+              min="0"
+              max="1"
+              step="0.01"
+              value="0"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Bar-Lock</span>
+            <div class="toggle active" id="toggleBarLockColors"></div>
+          </div>
+        </div>
+
+        <!-- CAMERA -->
+        <div class="settings-panel" data-panel="camera">
+          <div class="setting">
+            <span class="setting-label">Mode</span>
+            <select id="cameraMode">
+              <option value="orbit">Smooth Orbit</option>
+              <option value="reactive">Reactive</option>
+              <option value="cinematic">Cinematic</option>
+              <option value="spiral">Spiral</option>
+              <option value="figure8">Figure 8</option>
+              <option value="vortex">Vortex Pull</option>
+              <option value="pendulum">Pendulum</option>
+              <option value="flythrough">Fly Through</option>
+              <option value="drunk">Drunk</option>
+            </select>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Distance</span
+            ><input
+              type="range"
+              id="cameraDistance"
+              min="15"
+              max="80"
+              step="1"
+              value="35"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Speed</span
+            ><input
+              type="range"
+              id="cameraSpeed"
+              min="0.1"
+              max="2"
+              step="0.05"
+              value="0.6"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Shake</span
+            ><input
+              type="range"
+              id="cameraShake"
+              min="0"
+              max="2"
+              step="0.05"
+              value="0.45"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">FOV</span
+            ><input
+              type="range"
+              id="cameraFov"
+              min="30"
+              max="120"
+              step="5"
+              value="60"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Beat Zoom</span>
+            <div class="toggle active" id="toggleBeatZoom"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Auto Angles</span>
+            <div class="toggle" id="toggleAutoAngles"></div>
+          </div>
+        </div>
+
+        <!-- PHYSICS -->
+        <div class="settings-panel" data-panel="physics">
+          <div class="setting">
+            <span class="setting-label">Particle Mode</span>
+            <select id="particleMode">
+              <option value="vertex">Vertex Locked</option>
+              <option value="swarm">Swarm</option>
+              <option value="explode">Explosive</option>
+              <option value="orbital">Orbital</option>
+              <option value="magnetic">Magnetic</option>
+              <option value="wave">Wave</option>
+              <option value="vortex">Vortex</option>
+              <option value="aurora">Aurora</option>
+            </select>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Field</span>
+            <select id="fieldMode">
+              <option value="harmonic" selected>Harmonic</option>
+              <option value="noise">Noise</option>
+              <option value="curl">Curl Noise</option>
+              <option value="spiral">Spiral</option>
+            </select>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Symmetry</span>
+            <select id="symmetry">
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6" selected>6</option>
+              <option value="8">8</option>
+              <option value="12">12</option>
+            </select>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Turbulence</span
+            ><input
+              type="range"
+              id="turbulence"
+              min="0"
+              max="2"
+              step="0.05"
+              value="0.25"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Cohesion</span
+            ><input
+              type="range"
+              id="cohesion"
+              min="0"
+              max="1"
+              step="0.05"
+              value="0.55"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Count</span>
+            <select id="particleCount">
+              <option value="500">500</option>
+              <option value="1500" selected>1500</option>
+              <option value="4000">4000</option>
+              <option value="8000">8000</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="settings-panel" data-panel="layers">
+          <div class="setting">
+            <span class="setting-label">Wireframe Core</span>
+            <div class="toggle active" id="toggleWireframe"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Rim Glow</span>
+            <div class="toggle active" id="toggleRimGlow"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Inner Shell</span>
+            <div class="toggle active" id="toggleInner"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Outer Shell</span>
+            <div class="toggle active" id="toggleOuter"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Waveform Ring</span>
+            <div class="toggle active" id="toggleWaveform"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Freq Bars</span>
+            <div class="toggle" id="toggleBars"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Connections</span>
+            <div class="toggle active" id="toggleConnections"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Core Particles</span>
+            <div class="toggle active" id="toggleParticles"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Deep Field Particles</span>
+            <div class="toggle active" id="toggleDeepParticles"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Shockwaves</span>
+            <div class="toggle active" id="toggleShockwaves"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Rings</span>
+            <div class="toggle active" id="toggleRings"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Light Rays</span>
+            <div class="toggle" id="toggleLightRays"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Aurora</span>
+            <div class="toggle" id="toggleAurora"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Energy Field</span>
+            <div class="toggle" id="toggleEnergyField"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Orbitals</span>
+            <div class="toggle" id="toggleOrbitals"></div>
+          </div>
+
+          <div class="group-title">Particle Visibility</div>
+          <div class="setting">
+            <span class="setting-label">Particle Size</span
+            ><input
+              type="range"
+              id="particleSizeMult"
+              min="0.5"
+              max="2.5"
+              step="0.05"
+              value="1"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Particle Brightness</span
+            ><input
+              type="range"
+              id="particleBrightness"
+              min="0.3"
+              max="2.0"
+              step="0.05"
+              value="1"
+            />
+          </div>
+
+          <div class="group-title">Shockwave Tuning</div>
+          <div class="setting">
+            <span class="setting-label">Shockwave Intensity</span
+            ><input
+              type="range"
+              id="shockwaveIntensity"
+              min="0"
+              max="1.2"
+              step="0.05"
+              value="0.7"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Impact Sensitivity</span
+            ><input
+              type="range"
+              id="shockwaveImpactThreshold"
+              min="0"
+              max="1"
+              step="0.02"
+              value="0.55"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Min Time Between</span
+            ><input
+              type="range"
+              id="shockwaveCooldown"
+              min="0.05"
+              max="0.8"
+              step="0.01"
+              value="0.22"
+            />
+          </div>
+        </div>
+
+        <!-- FX -->
+        <div class="settings-panel" data-panel="fx">
+          <div class="setting">
+            <span class="setting-label">Bloom</span
+            ><input
+              type="range"
+              id="bloomStrength"
+              min="0"
+              max="3"
+              step="0.05"
+              value="0.8"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Glow Radius</span
+            ><input
+              type="range"
+              id="bloomRadius"
+              min="0"
+              max="2"
+              step="0.05"
+              value="0.7"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Trails</span>
+            <select id="trailMode">
+              <option value="none">None</option>
+              <option value="light">Light</option>
+              <option value="medium" selected>Medium</option>
+              <option value="heavy">Heavy</option>
+              <option value="smear">Smear</option>
+            </select>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Glitch</span
+            ><input
+              type="range"
+              id="glitchAmount"
+              min="0"
+              max="1"
+              step="0.05"
+              value="0"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Vignette</span
+            ><input
+              type="range"
+              id="vignette"
+              min="0"
+              max="1"
+              step="0.05"
+              value="0.35"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Grain</span
+            ><input
+              type="range"
+              id="grain"
+              min="0"
+              max="1"
+              step="0.05"
+              value="0.12"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">RGB Split</span
+            ><input
+              type="range"
+              id="aberration"
+              min="0"
+              max="1"
+              step="0.05"
+              value="0.08"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Anamorphic</span
+            ><input
+              type="range"
+              id="anamorphic"
+              min="0"
+              max="1"
+              step="0.05"
+              value="0"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Scanlines</span
+            ><input
+              type="range"
+              id="scanlines"
+              min="0"
+              max="1"
+              step="0.05"
+              value="0"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Film Look</span>
+            <select id="filmLook">
+              <option value="none">None</option>
+              <option value="cinematic">Cinematic</option>
+              <option value="vintage">Vintage</option>
+              <option value="neon">Neon Night</option>
+              <option value="dream">Dream</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- ENV -->
+        <div class="settings-panel" data-panel="env">
+          <div class="setting">
+            <span class="setting-label">Scene</span>
+            <select id="environment">
+              <option value="void">Void</option>
+              <option value="grid">Grid Floor</option>
+              <option value="stars">Starfield</option>
+              <option value="nebula">Nebula</option>
+              <option value="matrix">Matrix Rain</option>
+              <option value="ocean">Deep Ocean</option>
+              <option value="crystal">Crystal Cave</option>
+            </select>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Fog</span
+            ><input
+              type="range"
+              id="fogDensity"
+              min="0"
+              max="0.05"
+              step="0.002"
+              value="0.008"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">Rings</span
+            ><input
+              type="range"
+              id="ringCount"
+              min="0"
+              max="8"
+              step="1"
+              value="3"
+            />
+          </div>
+          <div class="setting">
+            <span class="setting-label">BG Pattern</span>
+            <select id="bgPattern">
+              <option value="none" selected>None</option>
+              <option value="mandala">Mandala</option>
+              <option value="lattice">Lattice</option>
+              <option value="plasma">Plasma</option>
+              <option value="voronoi">Voronoi</option>
+              <option value="waves">Sine Waves</option>
+            </select>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Pattern Str</span
+            ><input
+              type="range"
+              id="bgPatternStrength"
+              min="0"
+              max="1"
+              step="0.05"
+              value="0.35"
+            />
+          </div>
+        </div>
+
+        <!-- EXTRA -->
+        <div class="settings-panel" data-panel="extra">
+          <div class="setting">
+            <span class="setting-label">Spectrum</span>
+            <div class="toggle active" id="toggleSpectrum"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Auto-Pilot</span>
+            <div class="toggle" id="toggleAutoPilot"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Beat Flash</span>
+            <div class="toggle active" id="toggleBeatFlash"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Color Cycle</span>
+            <div class="toggle active" id="toggleColorCycle"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Synesthesia</span>
+            <div class="toggle" id="toggleSynesthesia"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Harmonic Snap</span>
+            <div class="toggle active" id="toggleHarmonicSnap"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Negative Space</span>
+            <div class="toggle" id="toggleNegativeSpace"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Reactive BG</span>
+            <div class="toggle active" id="toggleReactiveBg"></div>
+          </div>
+          <div class="setting">
+            <span class="setting-label">Presets</span
+            ><button
+              class="btn"
+              style="
+                width: auto;
+                padding: 6px 12px;
+                border-radius: 6px;
+                font-size: 10px;
+              "
+              onclick="openPresetModal()"
+            >
+              Open
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="btn" style="position: relative">
+          <input type="file" accept="audio/*" id="file" class="file-input" />
+          <svg viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="17 8 12 3 7 8" />
+            <line x1="12" y1="3" x2="12" y2="15" />
+          </svg>
+        </div>
+        <button class="btn primary" id="playBtn">
+          <svg id="playIcon" viewBox="0 0 24 24">
+            <polygon points="5 3 19 12 5 21 5 3" />
+          </svg>
+          <svg id="pauseIcon" viewBox="0 0 24 24" style="display: none">
+            <rect x="6" y="4" width="4" height="16" />
+            <rect x="14" y="4" width="4" height="16" />
+          </svg>
+        </button>
+        <button class="btn" id="recordBtn">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" /></svg>
+        </button>
+        <button class="btn" id="randomBtn" title="Randomize">
+          <svg viewBox="0 0 24 24">
+            <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5" />
+          </svg>
+        </button>
+        <button class="btn" id="fullscreenBtn" title="Fullscreen">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <span class="hint"
+        >Space: Play · U: Hide · R: Random · F: Fullscreen · P: Presets · 1-8:
+        Tabs</span
+      >
+    </div>
+
+    <audio id="audio" crossorigin="anonymous"></audio>
+      <script src="music.js"></script>
+</body>
+</html>
