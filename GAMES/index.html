@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>.io GAMES</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%234A5568'/><stop offset='100%25' stop-color='%23718096'/></linearGradient></defs><rect width='32' height='32' rx='8' fill='url(%23g)'/><circle cx='16' cy='16' r='6' fill='none' stroke='%23F8F9FA' stroke-width='2'/><line x1='16' y1='4' x2='16' y2='10' stroke='%23F8F9FA' stroke-width='2' stroke-linecap='round'/><line x1='16' y1='22' x2='16' y2='28' stroke='%23F8F9FA' stroke-width='2' stroke-linecap='round'/><line x1='4' y1='16' x2='10' y2='16' stroke='%23F8F9FA' stroke-width='2' stroke-linecap='round'/><line x1='22' y1='16' x2='28' y2='16' stroke='%23F8F9FA' stroke-width='2' stroke-linecap='round'/></svg>">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.5/cdn.min.js" defer></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --alabaster:   #F8F9FA;
+    --pearl:       #F0F2F5;
+    --snow:        #FAFBFC;
+    --linen:       #FAF9F6;
+    --ivory:       #F5F5F7;
+    --bone:        #E9ECEF;
+    --slate-dark:  #4A5568;
+    --slate-mid:   #718096;
+    --slate-light: #CBD5E0;
+    --slate-ultra: #EDF2F7;
+    --accent:      #4A5568;
+    --glass-bg:    rgba(255,255,255,0.55);
+    --glass-border:rgba(255,255,255,0.75);
+    --shadow-soft: 0 4px 32px rgba(74,85,104,0.08);
+    --shadow-card: 0 8px 40px rgba(74,85,104,0.12);
+    --shadow-hover: 0 20px 60px rgba(74,85,104,0.18);
+    --radius-card: 20px;
+    --radius-pill: 999px;
+    --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: linear-gradient(145deg, var(--snow) 0%, var(--alabaster) 20%, var(--ivory) 45%, var(--pearl) 70%, var(--linen) 85%, var(--bone) 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: var(--slate-dark);
+    overflow-x: hidden;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem;
+    height: 68px;
+    background: rgba(248,249,250,0.72);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.8), var(--shadow-soft);
+  }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800; font-size: 1.05rem;
+    letter-spacing: -0.02em;
+    color: var(--slate-dark);
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .nav-logo:hover { opacity: 0.7; }
+
+  .nav-logo-icon {
+    width: 34px; height: 34px;
+    background: linear-gradient(135deg, var(--slate-dark), var(--slate-mid));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(74,85,104,0.25);
+  }
+
+  .nav-search {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-pill);
+    padding: 8px 18px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), var(--shadow-soft);
+    transition: box-shadow 0.25s var(--ease-expo), border-color 0.25s;
+    min-width: 240px;
+  }
+  .nav-search:focus-within {
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 0 0 3px rgba(74,85,104,0.12);
+    border-color: var(--slate-mid);
+  }
+  .nav-search input {
+    border: none; outline: none; background: transparent;
+    font-family: 'DM Sans', sans-serif; font-size: 0.875rem;
+    color: var(--slate-dark); width: 100%;
+  }
+  .nav-search input::placeholder { color: var(--slate-light); }
+
+  .nav-pill {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-pill);
+    padding: 8px 18px;
+    font-size: 0.8rem; font-weight: 500;
+    color: var(--slate-mid);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    cursor: pointer;
+    transition: all 0.22s var(--ease-expo);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
+    white-space: nowrap;
+  }
+  .nav-pill:hover { background: rgba(74,85,104,0.08); color: var(--slate-dark); border-color: var(--slate-light); }
+
+  /* ── MAIN CONTENT ── */
+  main {
+    padding-top: 100px;
+    padding-bottom: 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    position: relative; z-index: 1;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    margin-bottom: 3.5rem;
+    animation: fadeUp 0.7s var(--ease-expo) both;
+  }
+  .hero-label {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-pill);
+    padding: 5px 14px;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--slate-mid);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    margin-bottom: 1.25rem;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
+  }
+  .hero h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800; font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1.1; letter-spacing: -0.03em;
+    color: var(--slate-dark);
+    margin-bottom: 0.75rem;
+  }
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--slate-dark) 0%, var(--slate-mid) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    color: var(--slate-mid); font-weight: 300; font-size: 1rem;
+    max-width: 500px; line-height: 1.7;
+  }
+
+  /* ── CATEGORY FILTERS ── */
+  .filter-bar {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 2.5rem;
+    overflow-x: auto; padding-bottom: 4px;
+    scrollbar-width: none;
+    animation: fadeUp 0.7s 0.1s var(--ease-expo) both;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+
+  .filter-chip {
+    display: flex; align-items: center; gap: 6px;
+    padding: 7px 16px;
+    border-radius: var(--radius-pill);
+    font-size: 0.8rem; font-weight: 500;
+    cursor: pointer; white-space: nowrap;
+    transition: all 0.22s var(--ease-expo);
+    border: 1px solid transparent;
+    user-select: none;
+  }
+  .filter-chip.inactive {
+    background: var(--glass-bg);
+    border-color: var(--glass-border);
+    color: var(--slate-mid);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
+  }
+  .filter-chip.inactive:hover {
+    background: rgba(74,85,104,0.08); color: var(--slate-dark);
+    border-color: var(--slate-light);
+    transform: translateY(-1px);
+  }
+  .filter-chip.active {
+    background: var(--slate-dark);
+    color: var(--ivory);
+    border-color: transparent;
+    box-shadow: 0 4px 16px rgba(74,85,104,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+    transform: translateY(-1px);
+  }
+
+  /* ── GAME GRID ── */
+  .section-header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  .section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; font-size: 1.1rem; letter-spacing: -0.02em;
+    color: var(--slate-dark);
+  }
+  .section-count {
+    font-size: 0.78rem; color: var(--slate-mid); font-weight: 400;
+  }
+
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+    animation: fadeUp 0.7s 0.15s var(--ease-expo) both;
+  }
+
+  /* ── GAME CARD ── */
+  .game-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.35s var(--ease-expo), box-shadow 0.35s var(--ease-expo), border-color 0.25s;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), var(--shadow-card);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    position: relative;
+  }
+  .game-card:hover {
+    transform: translateY(-6px) scale(1.015);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), var(--shadow-hover);
+    border-color: var(--slate-light);
+  }
+  .game-card:active { transform: translateY(-2px) scale(1.005); }
+
+  .card-thumb {
+    position: relative; overflow: hidden;
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, var(--pearl), var(--bone));
+  }
+  .card-thumb-inner {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+    transition: transform 0.5s var(--ease-expo);
+  }
+  .game-card:hover .card-thumb-inner { transform: scale(1.08); }
+
+  .card-thumb-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(74,85,104,0.08) 100%);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .game-card:hover .card-thumb-overlay { opacity: 1; }
+
+  .card-play-btn {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.7);
+    width: 48px; height: 48px;
+    background: rgba(255,255,255,0.92);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(74,85,104,0.25);
+    opacity: 0; transition: all 0.3s var(--ease-expo);
+  }
+  .game-card:hover .card-play-btn {
+    opacity: 1; transform: translate(-50%, -50%) scale(1);
+  }
+
+  .card-body { padding: 16px 18px 18px; }
+
+  .card-category {
+    display: inline-block;
+    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.07em;
+    text-transform: uppercase; color: var(--slate-mid);
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; font-size: 0.95rem;
+    color: var(--slate-dark); letter-spacing: -0.01em;
+    margin-bottom: 6px; line-height: 1.3;
+  }
+  .card-desc {
+    font-size: 0.78rem; color: var(--slate-mid);
+    font-weight: 300; line-height: 1.55;
+    display: -webkit-box; -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical; overflow: hidden;
+  }
+
+  .card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 18px;
+    border-top: 1px solid rgba(203,213,224,0.35);
+  }
+  .card-badge {
+    font-size: 0.68rem; font-weight: 500;
+    padding: 3px 9px; border-radius: var(--radius-pill);
+    background: rgba(74,85,104,0.07);
+    color: var(--slate-mid);
+  }
+  .card-play-text {
+    font-size: 0.72rem; font-weight: 600;
+    color: var(--slate-mid); letter-spacing: 0.04em;
+    display: flex; align-items: center; gap: 5px;
+    transition: color 0.2s;
+  }
+  .game-card:hover .card-play-text { color: var(--slate-dark); }
+
+  /* ── CINEMA MODE ── */
+  .cinema-view {
+    position: fixed; inset: 0; z-index: 200;
+    background: linear-gradient(145deg, var(--snow), var(--ivory), var(--pearl));
+    display: flex; flex-direction: column;
+    animation: cinemaIn 0.45s var(--ease-expo) both;
+  }
+
+  @keyframes cinemaIn {
+    from { opacity: 0; transform: scale(0.97); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  .cinema-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem;
+    height: 64px; flex-shrink: 0;
+    background: rgba(248,249,250,0.8);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.9);
+  }
+
+  .cinema-back {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.85rem; font-weight: 500; color: var(--slate-mid);
+    cursor: pointer; padding: 8px 14px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: all 0.22s var(--ease-expo);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
+  }
+  .cinema-back:hover {
+    background: rgba(74,85,104,0.08); color: var(--slate-dark);
+    border-color: var(--slate-light); transform: translateX(-2px);
+  }
+
+  .cinema-info { text-align: center; }
+  .cinema-info h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; font-size: 1rem; letter-spacing: -0.02em;
+    color: var(--slate-dark);
+  }
+  .cinema-info p {
+    font-size: 0.72rem; color: var(--slate-mid); font-weight: 400;
+  }
+
+  .cinema-actions { display: flex; gap: 8px; }
+
+  .cinema-body {
+    flex: 1; display: flex;
+    align-items: center; justify-content: center;
+    padding: 24px;
+    overflow: hidden;
+  }
+
+  .iframe-wrapper {
+    width: 100%; height: 100%;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    box-shadow: var(--shadow-hover);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    position: relative;
+  }
+
+  .iframe-wrapper iframe {
+    width: 100%; height: 100%;
+    border: none; display: block;
+  }
+
+  .iframe-loader {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 16px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: opacity 0.4s;
+  }
+
+  .loader-ring {
+    width: 40px; height: 40px;
+    border: 2px solid var(--bone);
+    border-top-color: var(--slate-mid);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  .loader-text {
+    font-size: 0.8rem; color: var(--slate-mid); font-weight: 400;
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    grid-column: 1 / -1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 5rem 2rem; gap: 12px;
+    text-align: center;
+  }
+  .empty-icon {
+    width: 56px; height: 56px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow-card);
+  }
+  .empty-state h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; font-size: 1rem;
+    color: var(--slate-dark);
+  }
+  .empty-state p {
+    font-size: 0.83rem; color: var(--slate-mid); font-weight: 300;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 1;
+    border-top: 1px solid var(--bone);
+    padding: 2rem 2.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(248,249,250,0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  footer p { font-size: 0.75rem; color: var(--slate-mid); font-weight: 300; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Stagger cards */
+  .game-card { animation: fadeUp 0.5s var(--ease-expo) both; }
+  .game-card:nth-child(1)  { animation-delay: 0.05s; }
+  .game-card:nth-child(2)  { animation-delay: 0.10s; }
+  .game-card:nth-child(3)  { animation-delay: 0.15s; }
+  .game-card:nth-child(4)  { animation-delay: 0.20s; }
+  .game-card:nth-child(5)  { animation-delay: 0.25s; }
+  .game-card:nth-child(6)  { animation-delay: 0.30s; }
+  .game-card:nth-child(7)  { animation-delay: 0.35s; }
+  .game-card:nth-child(8)  { animation-delay: 0.40s; }
+  .game-card:nth-child(9)  { animation-delay: 0.45s; }
+  .game-card:nth-child(10) { animation-delay: 0.50s; }
+  .game-card:nth-child(n+11) { animation-delay: 0.55s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    nav { padding: 0 1.25rem; }
+    .nav-search { display: none; }
+    main { padding-left: 1.25rem; padding-right: 1.25rem; }
+    .games-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+    .cinema-bar { padding: 0 1.25rem; }
+    .cinema-info h2 { font-size: 0.85rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ── NAV ── -->
+  <nav>
+    <div class="nav-logo" onclick="goHome()">
+      <div class="nav-logo-icon">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <circle cx="9" cy="9" r="4" stroke="#F8F9FA" stroke-width="1.5"/>
+          <line x1="9" y1="1" x2="9" y2="5" stroke="#F8F9FA" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="9" y1="13" x2="9" y2="17" stroke="#F8F9FA" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="1" y1="9" x2="5" y2="9" stroke="#F8F9FA" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="13" y1="9" x2="17" y2="9" stroke="#F8F9FA" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      .io GAMES
+    </div>
+
+    <div class="nav-search">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <circle cx="6" cy="6" r="4.5" stroke="#CBD5E0" stroke-width="1.5"/>
+        <line x1="9.5" y1="9.5" x2="13" y2="13" stroke="#CBD5E0" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Search games..." oninput="onSearch()" autocomplete="off">
+    </div>
+
+    <div style="display:flex;gap:8px;align-items:center;">
+      <div class="nav-pill" onclick="openAddGameModal()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <line x1="6" y1="1" x2="6" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="1" y1="6" x2="11" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Add Game
+      </div>
+      <div class="nav-pill" id="countPill">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <rect x="1" y="1" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.25"/>
+          <rect x="7" y="1" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.25"/>
+          <rect x="1" y="7" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.25"/>
+          <rect x="7" y="7" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.25"/>
+        </svg>
+        <span id="totalCount">0</span> Games
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── HOME VIEW ── -->
+  <div id="homeView">
+    <main>
+      <!-- Hero -->
+      <div class="hero">
+        <div class="hero-label">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <circle cx="5" cy="5" r="3" fill="#718096"/>
+            <circle cx="5" cy="5" r="1.5" fill="#F8F9FA"/>
+          </svg>
+          Unblocked · Free to Play
+        </div>
+        <h1>Play <span>Anywhere</span>,<br>Anytime.</h1>
+        <p>A curated collection of browser games. No installs, no barriers — just instant play.</p>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar" id="filterBar">
+        <!-- injected by JS -->
+      </div>
+
+      <!-- Grid -->
+      <div class="section-header">
+        <span class="section-title" id="sectionTitle">All Games</span>
+        <span class="section-count" id="sectionCount"></span>
+      </div>
+      <div class="games-grid" id="gamesGrid">
+        <!-- injected by JS -->
+      </div>
+    </main>
+
+    <footer>
+      <p>.io Games — Open-source browser gaming portal</p>
+      <p style="font-size:0.7rem;color:var(--slate-light);">Built with glassmorphism design</p>
+    </footer>
+  </div>
+
+  <!-- ── CINEMA VIEW ── -->
+  <div id="cinemaView" class="cinema-view" style="display:none;">
+    <div class="cinema-bar">
+      <button class="cinema-back" onclick="goHome()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <line x1="13" y1="7" x2="1" y2="7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <polyline points="6,2 1,7 6,12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+        Back
+      </button>
+
+      <div class="cinema-info">
+        <h2 id="cinemaTitle">Game</h2>
+        <p id="cinemaCategory">Category</p>
+      </div>
+
+      <div class="cinema-actions">
+        <div class="nav-pill" onclick="openInNewTab()">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M5 2H2a1 1 0 00-1 1v7a1 1 0 001 1h7a1 1 0 001-1V7" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+            <line x1="7" y1="1" x2="11" y2="1" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+            <line x1="11" y1="1" x2="11" y2="5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+            <line x1="11" y1="1" x2="6" y2="6" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+          </svg>
+          Open Tab
+        </div>
+      </div>
+    </div>
+
+    <div class="cinema-body">
+      <div class="iframe-wrapper" id="iframeWrapper">
+        <div class="iframe-loader" id="iframeLoader">
+          <div class="loader-ring"></div>
+          <span class="loader-text">Loading game...</span>
+        </div>
+        <iframe id="gameFrame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" allowfullscreen onload="onIframeLoad()"></iframe>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Add Game Modal ── -->
+<div id="modalOverlay" style="display:none;position:fixed;inset:0;z-index:300;background:rgba(74,85,104,0.18);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:1.5rem;" onclick="closeModal(event)">
+  <div onclick="event.stopPropagation()" style="background:rgba(248,249,250,0.92);border:1px solid rgba(255,255,255,0.85);border-radius:24px;padding:2rem;width:100%;max-width:480px;box-shadow:0 32px 80px rgba(74,85,104,0.18);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+      <span style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:1rem;color:var(--slate-dark);">Add a Game</span>
+      <button onclick="document.getElementById('modalOverlay').style.display='none'" style="width:30px;height:30px;border-radius:50%;border:1px solid var(--bone);background:var(--glass-bg);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--slate-mid);">
+        <svg width="10" height="10" viewBox="0 0 10 10"><line x1="1" y1="1" x2="9" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="9" y1="1" x2="1" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <input id="f-title" placeholder="Game title" style="padding:10px 14px;border:1px solid var(--bone);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:0.875rem;background:rgba(255,255,255,0.6);outline:none;color:var(--slate-dark);" oninput="this.style.borderColor='var(--slate-light)'">
+      <input id="f-desc" placeholder="Short description" style="padding:10px 14px;border:1px solid var(--bone);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:0.875rem;background:rgba(255,255,255,0.6);outline:none;color:var(--slate-dark);" oninput="this.style.borderColor='var(--slate-light)'">
+      <input id="f-category" placeholder="Category (e.g. Strategy)" style="padding:10px 14px;border:1px solid var(--bone);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:0.875rem;background:rgba(255,255,255,0.6);outline:none;color:var(--slate-dark);" oninput="this.style.borderColor='var(--slate-light)'">
+      <input id="f-embed" placeholder="Embed URL (https://...)" style="padding:10px 14px;border:1px solid var(--bone);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:0.875rem;background:rgba(255,255,255,0.6);outline:none;color:var(--slate-dark);" oninput="this.style.borderColor='var(--slate-light)'">
+      <input id="f-icon" placeholder="Icon SVG path or emoji fallback" style="padding:10px 14px;border:1px solid var(--bone);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:0.875rem;background:rgba(255,255,255,0.6);outline:none;color:var(--slate-dark);" oninput="this.style.borderColor='var(--slate-light)'">
+      <button onclick="submitNewGame()" style="padding:12px;border-radius:12px;background:var(--slate-dark);color:var(--ivory);font-family:'Montserrat',sans-serif;font-weight:600;font-size:0.85rem;border:none;cursor:pointer;transition:opacity 0.2s;margin-top:4px;" onmouseover="this.style.opacity=0.85" onmouseout="this.style.opacity=1">
+        Add to Library
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  GAMES DATABASE
+//  Add an object here → card + category + page are auto-generated.
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const GAMES_DATABASE = [
+  {
+    id: "slither",
+    title: "Slither.io",
+    description: "Grow your snake by consuming pellets and outmaneuver opponents.",
+    category: "Multiplayer",
+    tags: ["Snake", "Classic"],
+    icon: `<svg viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 30 Q15 10 30 20 Q45 30 55 15" stroke="#718096" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="55" cy="15" r="5" fill="#4A5568"/><circle cx="53" cy="13" r="1.5" fill="#F8F9FA"/></svg>`,
+    embedUrl: "https://slither.io"
+  },
+  {
+    id: "agar",
+    title: "Agar.io",
+    description: "Consume smaller cells to grow while avoiding larger predators.",
+    category: "Multiplayer",
+    tags: ["Classic", "Strategy"],
+    icon: `<svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="20" fill="none" stroke="#718096" stroke-width="2.5"/><circle cx="20" cy="22" r="6" fill="#CBD5E0"/><circle cx="38" cy="36" r="10" fill="#A0AEC0"/><circle cx="36" cy="34" r="2" fill="#F8F9FA"/></svg>`,
+    embedUrl: "https://agar.io"
+  },
+  {
+    id: "diep",
+    title: "Diep.io",
+    description: "Control a tank, destroy shapes and other players to level up.",
+    category: "Shooter",
+    tags: ["Tank", "RPG"],
+    icon: `<svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="18" fill="none" stroke="#718096" stroke-width="2.5"/><rect x="40" y="26" width="16" height="8" rx="4" fill="#A0AEC0"/><rect x="14" y="26" width="16" height="8" rx="4" fill="#CBD5E0" transform="rotate(180 22 30)"/></svg>`,
+    embedUrl: "https://diep.io"
+  },
+  {
+    id: "mope",
+    title: "Mope.io",
+    description: "Evolve through the food chain, from a tiny mouse to a dragon.",
+    category: "Survival",
+    tags: ["Evolution", "Animals"],
+    icon: `<svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="28" cy="35" rx="18" ry="14" fill="none" stroke="#718096" stroke-width="2.5"/><circle cx="28" cy="22" r="10" fill="none" stroke="#A0AEC0" stroke-width="2"/><path d="M20 18 Q28 8 36 18" stroke="#CBD5E0" stroke-width="2" stroke-linecap="round" fill="none"/></svg>`,
+    embedUrl: "https://mope.io"
+  },
+  {
+    id: "surviv",
+    title: "Surviv.io",
+    description: "Top-down battle royale. Be the last one standing on the island.",
+    category: "Battle Royale",
+    tags: ["Shooter", "Survival"],
+    icon: `<svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="20" fill="none" stroke="#718096" stroke-width="2"/><line x1="30" y1="10" x2="30" y2="50" stroke="#A0AEC0" stroke-width="1.5" stroke-dasharray="3 3"/><line x1="10" y1="30" x2="50" y2="30" stroke="#A0AEC0" stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="30" cy="30" r="3" fill="#4A5568"/></svg>`,
+    embedUrl: "https://surviv.io"
+  },
+  {
+    id: "krunker",
+    title: "Krunker.io",
+    description: "Fast-paced FPS in a blocky world. Choose your class and dominate.",
+    category: "Shooter",
+    tags: ["FPS", "3D"],
+    icon: `<svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="28" width="28" height="12" rx="3" fill="none" stroke="#718096" stroke-width="2"/><rect x="36" y="30" width="16" height="4" rx="2" fill="#A0AEC0"/><rect x="14" y="22" width="14" height="8" rx="2" fill="none" stroke="#CBD5E0" stroke-width="1.5"/></svg>`,
+    embedUrl: "https://krunker.io"
+  },
+  {
+    id: "paper",
+    title: "Paper.io 2",
+    description: "Claim territory by drawing lines without getting cut off.",
+    category: "Strategy",
+    tags: ["Territory", "Classic"],
+    icon: `<svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="8" width="44" height="44" rx="4" fill="none" stroke="#CBD5E0" stroke-width="2" stroke-dasharray="4 3"/><path d="M15 45 L15 20 L35 20 L35 40 L25 40 L25 30 L20 30" stroke="#718096" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
+    embedUrl: "https://paper-io.com"
+  },
+  {
+    id: "wormate",
+    title: "Wormate.io",
+    description: "Eat donuts and cakes to grow your worm faster than rivals.",
+    category: "Casual",
+    tags: ["Snake", "Fun"],
+    icon: `<svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 50 Q20 30 30 40 Q40 50 50 30 Q55 20 45 15" stroke="#A0AEC0" stroke-width="6" stroke-linecap="round" fill="none"/><circle cx="45" cy="15" r="6" fill="#718096"/><circle cx="43" cy="13" r="1.5" fill="#F8F9FA"/><circle cx="20" cy="20" r="4" fill="#CBD5E0" opacity="0.6"/><circle cx="40" cy="42" r="3" fill="#CBD5E0" opacity="0.5"/></svg>`,
+    embedUrl: "https://wormate.io"
+  },
+  {
+    id: "skribbl",
+    title: "skribbl.io",
+    description: "Draw and guess words in this real-time multiplayer art game.",
+    category: "Casual",
+    tags: ["Drawing", "Party"],
+    icon: `<svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 48 L18 42 L42 18 Q46 14 50 18 Q54 22 50 26 L26 50 Z" fill="none" stroke="#718096" stroke-width="2"/><line x1="12" y1="48" x2="18" y2="42" stroke="#CBD5E0" stroke-width="4" stroke-linecap="round"/><path d="M38 22 L46 30" stroke="#A0AEC0" stroke-width="1.5"/></svg>`,
+    embedUrl: "https://skribbl.io"
+  },
+  {
+    id: "1v1lol",
+    title: "1v1.lol",
+    description: "Build structures and battle in this popular competitive arena.",
+    category: "Battle Royale",
+    tags: ["Building", "FPS"],
+    icon: `<svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="30" width="16" height="20" rx="2" fill="none" stroke="#718096" stroke-width="2"/><rect x="22" y="20" width="16" height="30" rx="2" fill="none" stroke="#A0AEC0" stroke-width="2"/><rect x="34" y="12" width="16" height="38" rx="2" fill="none" stroke="#CBD5E0" stroke-width="2"/></svg>`,
+    embedUrl: "https://1v1.lol"
+  },
+  {
+    id: "zombsroyale",
+    title: "ZombsRoyale.io",
+    description: "100-player battle royale with weapons, shields, and zone pressure.",
+    category: "Battle Royale",
+    tags: ["Zombies", "Shooter"],
+    icon: `<svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="28" r="14" fill="none" stroke="#718096" stroke-width="2"/><path d="M22 26 Q25 20 30 22 Q35 24 34 30" stroke="#A0AEC0" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="24" cy="29" r="2" fill="#CBD5E0"/><circle cx="36" cy="29" r="2" fill="#CBD5E0"/><path d="M25 35 Q30 38 35 35" stroke="#A0AEC0" stroke-width="1.5" fill="none" stroke-linecap="round"/><line x1="30" y1="42" x2="30" y2="52" stroke="#718096" stroke-width="2"/><line x1="22" y1="48" x2="38" y2="48" stroke="#718096" stroke-width="2" stroke-linecap="round"/></svg>`,
+    embedUrl: "https://zombsroyale.io"
+  },
+  {
+    id: "lordz",
+    title: "Lordz.io",
+    description: "Build a medieval army, conquer castles and dominate the map.",
+    category: "Strategy",
+    tags: ["Medieval", "RTS"],
+    icon: `<svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="20" width="24" height="32" rx="2" fill="none" stroke="#718096" stroke-width="2"/><path d="M18 20 L18 10 L22 10 L22 14 L26 14 L26 10 L30 10 L30 14 L34 14 L34 10 L38 10 L38 10 L42 10 L42 20" stroke="#A0AEC0" stroke-width="2" stroke-linejoin="round" fill="none"/><rect x="25" y="36" width="10" height="16" rx="1" fill="none" stroke="#CBD5E0" stroke-width="1.5"/></svg>`,
+    embedUrl: "https://lordz.io"
+  }
+];
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  STATE
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let activeFilter = "All";
+let searchQuery  = "";
+let currentGame  = null;
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  BOOTSTRAP
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+document.addEventListener("DOMContentLoaded", () => {
+  renderFilters();
+  renderGrid();
+  document.getElementById("totalCount").textContent = GAMES_DATABASE.length;
+});
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  FILTERS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function getCategories() {
+  const cats = [...new Set(GAMES_DATABASE.map(g => g.category))].sort();
+  return ["All", ...cats];
+}
+
+function renderFilters() {
+  const bar = document.getElementById("filterBar");
+  const icons = {
+    "All":          `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.25"/><rect x="7" y="1" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.25"/><rect x="1" y="7" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.25"/><rect x="7" y="7" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.25"/></svg>`,
+    "Multiplayer":  `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="4" cy="4" r="2.5" stroke="currentColor" stroke-width="1.25"/><circle cx="8.5" cy="7.5" r="2.5" stroke="currentColor" stroke-width="1.25"/></svg>`,
+    "Shooter":      `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 6 H7 M7 4 H10 V8 H7 V4" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    "Strategy":     `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1 L11 4 V8 L6 11 L1 8 V4 Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/></svg>`,
+    "Survival":     `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.25"/><line x1="6" y1="3" x2="6" y2="6" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/><line x1="6" y1="6" x2="8" y2="8" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/></svg>`,
+    "Battle Royale":`<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.25" stroke-dasharray="2 1.5"/><circle cx="6" cy="6" r="1.5" fill="currentColor"/></svg>`,
+    "Casual":       `<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1 L7.5 4.5 L11 5 L8.5 7.5 L9 11 L6 9.5 L3 11 L3.5 7.5 L1 5 L4.5 4.5 Z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/></svg>`,
+  };
+
+  bar.innerHTML = getCategories().map(cat => `
+    <div class="filter-chip ${cat === activeFilter ? 'active' : 'inactive'}"
+         onclick="setFilter('${cat}')">
+      ${icons[cat] || icons["All"]}
+      ${cat}
+    </div>
+  `).join("");
+}
+
+function setFilter(cat) {
+  activeFilter = cat;
+  renderFilters();
+  renderGrid();
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  SEARCH
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function onSearch() {
+  searchQuery = document.getElementById("searchInput").value.toLowerCase().trim();
+  renderGrid();
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  GRID RENDERING
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function getFilteredGames() {
+  return GAMES_DATABASE.filter(g => {
+    const matchCat = activeFilter === "All" || g.category === activeFilter;
+    const matchSearch = !searchQuery ||
+      g.title.toLowerCase().includes(searchQuery) ||
+      g.description.toLowerCase().includes(searchQuery) ||
+      g.category.toLowerCase().includes(searchQuery) ||
+      (g.tags || []).some(t => t.toLowerCase().includes(searchQuery));
+    return matchCat && matchSearch;
+  });
+}
+
+function renderGrid() {
+  const games = getFilteredGames();
+  const grid  = document.getElementById("gamesGrid");
+  const title = document.getElementById("sectionTitle");
+  const count = document.getElementById("sectionCount");
+
+  title.textContent = activeFilter === "All" ? "All Games" : activeFilter;
+  count.textContent = `${games.length} game${games.length !== 1 ? 's' : ''}`;
+
+  if (games.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <circle cx="10" cy="10" r="7" stroke="#CBD5E0" stroke-width="1.5"/>
+            <line x1="15" y1="15" x2="21" y2="21" stroke="#CBD5E0" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="7" y1="10" x2="13" y2="10" stroke="#CBD5E0" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>No games found</h3>
+        <p>Try a different filter or search term.</p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = games.map(g => `
+    <div class="game-card" onclick="openGame('${g.id}')">
+      <div class="card-thumb">
+        <div class="card-thumb-inner">${g.icon}</div>
+        <div class="card-thumb-overlay"></div>
+        <div class="card-play-btn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <polygon points="6,4 13,8 6,12" fill="#4A5568"/>
+          </svg>
+        </div>
+      </div>
+      <div class="card-body">
+        <span class="card-category">${g.category}</span>
+        <div class="card-title">${g.title}</div>
+        <div class="card-desc">${g.description}</div>
+      </div>
+      <div class="card-footer">
+        <span class="card-badge">${(g.tags && g.tags[0]) || 'Free'}</span>
+        <span class="card-play-text">
+          Play Now
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <line x1="2" y1="5" x2="8" y2="5" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"/>
+            <polyline points="5.5,2 8,5 5.5,8" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </span>
+      </div>
+    </div>
+  `).join("");
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  CINEMA MODE
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function openGame(id) {
+  const game = GAMES_DATABASE.find(g => g.id === id);
+  if (!game) return;
+  currentGame = game;
+
+  document.getElementById("cinemaTitle").textContent    = game.title;
+  document.getElementById("cinemaCategory").textContent = game.category;
+
+  const frame = document.getElementById("gameFrame");
+  const loader = document.getElementById("iframeLoader");
+  loader.style.opacity = "1";
+  loader.style.pointerEvents = "all";
+  frame.src = "";
+  setTimeout(() => { frame.src = game.embedUrl; }, 80);
+
+  document.getElementById("homeView").style.display   = "none";
+  document.getElementById("cinemaView").style.display = "flex";
+  document.title = `${game.title} — .io GAMES`;
+}
+
+function onIframeLoad() {
+  const loader = document.getElementById("iframeLoader");
+  loader.style.opacity = "0";
+  loader.style.pointerEvents = "none";
+}
+
+function goHome() {
+  const frame = document.getElementById("gameFrame");
+  frame.src = "";
+  document.getElementById("cinemaView").style.display = "none";
+  document.getElementById("homeView").style.display   = "block";
+  document.title = ".io GAMES";
+  currentGame = null;
+}
+
+function openInNewTab() {
+  if (currentGame) window.open(currentGame.embedUrl, "_blank", "noopener,noreferrer");
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  ADD GAME MODAL
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function openAddGameModal() {
+  document.getElementById("modalOverlay").style.display = "flex";
+}
+
+function closeModal(e) {
+  if (e.target.id === "modalOverlay") {
+    document.getElementById("modalOverlay").style.display = "none";
+  }
+}
+
+function submitNewGame() {
+  const title    = document.getElementById("f-title").value.trim();
+  const desc     = document.getElementById("f-desc").value.trim();
+  const category = document.getElementById("f-category").value.trim() || "Casual";
+  const embedUrl = document.getElementById("f-embed").value.trim();
+  const iconHint = document.getElementById("f-icon").value.trim();
+
+  if (!title || !embedUrl) {
+    document.getElementById("f-title").style.borderColor = title ? "" : "#E53E3E";
+    document.getElementById("f-embed").style.borderColor = embedUrl ? "" : "#E53E3E";
+    return;
+  }
+
+  const id = title.toLowerCase().replace(/\W+/g, "-") + "-" + Date.now();
+  const icon = `<svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="30" cy="30" r="22" stroke="#CBD5E0" stroke-width="2"/><text x="30" y="36" text-anchor="middle" font-size="18" fill="#718096" font-family="Montserrat,sans-serif" font-weight="700">${title.slice(0,2).toUpperCase()}</text></svg>`;
+
+  GAMES_DATABASE.unshift({ id, title, description: desc || "Click to play!", category, tags: [], icon, embedUrl });
+
+  // Reset fields
+  ["f-title","f-desc","f-category","f-embed","f-icon"].forEach(f => {
+    document.getElementById(f).value = "";
+    document.getElementById(f).style.borderColor = "";
+  });
+
+  document.getElementById("modalOverlay").style.display = "none";
+  document.getElementById("totalCount").textContent = GAMES_DATABASE.length;
+  renderFilters();
+  renderGrid();
+}
+</script>
+</body>
+</html>
