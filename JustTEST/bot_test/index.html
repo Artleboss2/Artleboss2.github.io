@@ -3,202 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neural Singularity</title>
+    <title>Luminous Neural Monolith</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         body {
             margin: 0;
+            padding: 0;
             overflow: hidden;
             background-color: #050505;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            width: 100vw;
-            cursor: crosshair;
+            cursor: pointer;
         }
 
-        #canvas-container {
-            width: 100%;
-            height: 100%;
+        canvas {
+            display: block;
         }
 
-        .overlay {
-            position: fixed;
+        #ui-overlay {
+            position: absolute;
             bottom: 30px;
-            left: 30px;
+            left: 50%;
+            transform: translateX(-50%);
             color: rgba(255, 255, 255, 0.3);
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 10px;
-            letter-spacing: 2px;
+            letter-spacing: 4px;
             text-transform: uppercase;
             pointer-events: none;
             transition: opacity 1s ease;
+        }
+
+        body:active #ui-overlay {
+            opacity: 0;
         }
     </style>
 </head>
 <body>
 
-    <div id="canvas-container"></div>
-    <div class="overlay">Interact to warp the field</div>
+    <div id="ui-overlay">Interact to Distort</div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
     <script>
-        // High-end Generative Experience using Particle Physics and Noise
-        let scene, camera, renderer, particles, geometry;
+        let scene, camera, renderer, clock, particles, innerCore, ring;
         let mouseX = 0, mouseY = 0;
         let targetX = 0, targetY = 0;
-        const PARTICLE_COUNT = 80000;
-        
-        const init = () => {
+
+        const PARTICLE_COUNT = 8000;
+        const VIEW_DISTANCE = 5;
+
+        function init() {
             scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
-            camera.position.z = 400;
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = VIEW_DISTANCE;
 
             renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setPixelRatio(window.devicePixelRatio);
             renderer.setSize(window.innerWidth, window.innerHeight);
-            document.getElementById('canvas-container').appendChild(renderer.domElement);
+            document.body.appendChild(renderer.domElement);
 
-            // Create Geometry
-            geometry = new THREE.BufferGeometry();
+            clock = new THREE.Clock();
+
+            // Setup Geometry
+            createMonolith();
+            createBackground();
+            
+            // Lights
+            const ambientLight = new THREE.AmbientLight(0x404040, 2);
+            scene.add(ambientLight);
+
+            const pointLight = new THREE.PointLight(0x00ff88, 2, 10);
+            pointLight.position.set(2, 2, 2);
+            scene.add(pointLight);
+
+            const purpleLight = new THREE.PointLight(0x7700ff, 2, 10);
+            purpleLight.position.set(-2, -2, 2);
+            scene.add(purpleLight);
+
+            window.addEventListener('resize', onWindowResize, false);
+            document.addEventListener('mousemove', onMouseMove, false);
+            document.addEventListener('touchstart', onTouchMove, false);
+            document.addEventListener('touchmove', onTouchMove, false);
+        }
+
+        function createMonolith() {
+            // The Core: A Refractive Icosahedron
+            const coreGeom = new THREE.IcosahedronGeometry(1, 0);
+            const coreMat = new THREE.MeshPhongMaterial({
+                color: 0xffffff,
+                emissive: 0x111111,
+                specular: 0xffffff,
+                shininess: 100,
+                flatShading: true,
+                transparent: true,
+                opacity: 0.8,
+                wireframe: false
+            });
+            innerCore = new THREE.Mesh(coreGeom, coreMat);
+            scene.add(innerCore);
+
+            // The Particle Cloud
             const positions = new Float32Array(PARTICLE_COUNT * 3);
-            const colors = new Float32Array(PARTICLE_COUNT * 3);
             const sizes = new Float32Array(PARTICLE_COUNT);
-
-            const color1 = new THREE.Color(0x4400ff); // Deep Blue
-            const color2 = new THREE.Color(0x00ffff); // Cyan
-            const color3 = new THREE.Color(0xff0088); // Hot Pink
+            const colors = new Float32Array(PARTICLE_COUNT * 3);
 
             for (let i = 0; i < PARTICLE_COUNT; i++) {
-                // Initialize in a sphere
-                const r = 150 + Math.random() * 100;
+                // Spherical distribution
+                const r = 1.5 + Math.random() * 1.5;
                 const theta = Math.random() * Math.PI * 2;
-                const phi = Math.acos(2 * Math.random() - 1);
+                const phi = Math.acos((Math.random() * 2) - 1);
 
                 positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
                 positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
                 positions[i * 3 + 2] = r * Math.cos(phi);
 
-                // Blend colors based on position
-                const mixedColor = color1.clone().lerp(color2, Math.random());
-                if(Math.random() > 0.9) mixedColor.lerp(color3, 0.5);
-                
-                colors[i * 3] = mixedColor.r;
-                colors[i * 3 + 1] = mixedColor.g;
-                colors[i * 3 + 2] = mixedColor.b;
+                sizes[i] = Math.random() * 2.0;
 
-                sizes[i] = Math.random() * 1.5 + 0.5;
+                // Color gradient (Cyan to Purple)
+                const mix = Math.random();
+                colors[i * 3] = mix * 0.2; // R
+                colors[i * 3 + 1] = 0.5 + (1 - mix) * 0.5; // G
+                colors[i * 3 + 2] = 0.8 + mix * 0.2; // B
             }
 
-            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-            geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+            const partGeom = new THREE.BufferGeometry();
+            partGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            partGeom.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-            const material = new THREE.PointsMaterial({
-                size: 1.2,
+            const partMat = new THREE.PointsMaterial({
+                size: 0.015,
                 vertexColors: true,
                 transparent: true,
-                opacity: 0.8,
-                blending: THREE.AdditiveBlending,
-                sizeAttenuation: true
+                opacity: 0.6,
+                blending: THREE.AdditiveBlending
             });
 
-            particles = new THREE.Points(geometry, material);
+            particles = new THREE.Points(partGeom, partMat);
             scene.add(particles);
 
-            // Event Listeners
-            window.addEventListener('resize', onWindowResize, false);
-            document.addEventListener('mousemove', onMouseMove, false);
-            document.addEventListener('touchstart', onTouchMove, false);
-            document.addEventListener('touchmove', onTouchMove, false);
+            // An outer faint ring
+            const ringGeom = new THREE.TorusGeometry(2.5, 0.005, 16, 100);
+            const ringMat = new THREE.MeshBasicMaterial({ color: 0x444444, transparent: true, opacity: 0.3 });
+            ring = new THREE.Mesh(ringGeom, ringMat);
+            scene.add(ring);
+        }
 
-            animate();
-        };
+        function createBackground() {
+            // Faint stars for depth
+            const starGeom = new THREE.BufferGeometry();
+            const starPos = new Float32Array(3000);
+            for(let i=0; i<3000; i++) starPos[i] = (Math.random() - 0.5) * 50;
+            starGeom.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+            const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.01, transparent: true, opacity: 0.2 });
+            scene.add(new THREE.Points(starGeom, starMat));
+        }
 
-        const onMouseMove = (event) => {
-            targetX = (event.clientX - window.innerWidth / 2) * 0.5;
-            targetY = (event.clientY - window.innerHeight / 2) * 0.5;
-        };
+        function onMouseMove(event) {
+            targetX = (event.clientX - window.innerWidth / 2) * 0.001;
+            targetY = (event.clientY - window.innerHeight / 2) * 0.001;
+        }
 
-        const onTouchMove = (event) => {
+        function onTouchMove(event) {
             if (event.touches.length > 0) {
-                targetX = (event.touches[0].clientX - window.innerWidth / 2) * 0.5;
-                targetY = (event.touches[0].clientY - window.innerHeight / 2) * 0.5;
+                targetX = (event.touches[0].clientX - window.innerWidth / 2) * 0.002;
+                targetY = (event.touches[0].clientY - window.innerHeight / 2) * 0.002;
             }
-        };
+        }
 
-        const onWindowResize = () => {
+        function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
-        };
+        }
 
-        const animate = () => {
+        function animate() {
             requestAnimationFrame(animate);
-            render();
-        };
 
-        const render = () => {
-            const time = Date.now() * 0.0001;
+            const time = clock.getElapsedTime();
 
-            // Smooth camera movement
+            // Smooth damping for interaction
             mouseX += (targetX - mouseX) * 0.05;
             mouseY += (targetY - mouseY) * 0.05;
+
+            // Rotate Inner Core
+            innerCore.rotation.x = time * 0.2;
+            innerCore.rotation.y = time * 0.3;
+            innerCore.scale.setScalar(1 + Math.sin(time * 2) * 0.05);
+
+            // Animate Particles
+            const positions = particles.geometry.attributes.position.array;
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                const ix = i * 3;
+                const iy = i * 3 + 1;
+                const iz = i * 3 + 2;
+
+                // Subtle organic "breathing"
+                const noise = Math.sin(time * 0.5 + i) * 0.002;
+                positions[ix] += Math.cos(time + i) * 0.001 + mouseX * 0.01;
+                positions[iy] += Math.sin(time + i) * 0.001 + mouseY * 0.01;
+                
+                // Return to center pull
+                positions[ix] *= 0.999;
+                positions[iy] *= 0.999;
+                positions[iz] *= 0.999;
+            }
+            particles.geometry.attributes.position.needsUpdate = true;
             
-            camera.position.x += (mouseX - camera.position.x) * 0.03;
-            camera.position.y += (-mouseY - camera.position.y) * 0.03;
+            // Movement based on mouse
+            particles.rotation.y += 0.002 + mouseX * 0.05;
+            particles.rotation.x += mouseY * 0.05;
+
+            ring.rotation.z = time * 0.1;
+            ring.rotation.x = Math.PI / 2 + mouseY;
+
+            // Camera subtle drift
+            camera.position.x += (mouseX - camera.position.x) * 0.05;
+            camera.position.y += (-mouseY - camera.position.y) * 0.05;
             camera.lookAt(scene.position);
 
-            const positions = geometry.attributes.position.array;
-            
-            // Dynamic warp field logic
-            for (let i = 0; i < PARTICLE_COUNT; i++) {
-                const i3 = i * 3;
-                
-                // Original spherical coordinates logic applied as a force
-                const x = positions[i3];
-                const y = positions[i3 + 1];
-                const z = positions[i3 + 2];
-
-                // Simulating a "living" organism movement using trig functions
-                const noise = Math.sin(x * 0.01 + time) * Math.cos(y * 0.01 + time) * Math.sin(z * 0.01 + time);
-                
-                // Apply subtle vibration/flow
-                positions[i3] += Math.sin(time * 2 + i) * 0.2;
-                positions[i3 + 1] += Math.cos(time * 3 + i) * 0.2;
-                positions[i3 + 2] += Math.sin(time * 1.5 + i) * 0.2;
-
-                // React to mouse distance
-                const dx = x - mouseX;
-                const dy = y + mouseY;
-                const dist = Math.sqrt(dx*dx + dy*dy);
-                
-                if (dist < 200) {
-                    const force = (200 - dist) / 200;
-                    positions[i3] += dx * force * 0.02;
-                    positions[i3 + 1] += dy * force * 0.02;
-                }
-                
-                // Keep them within a soft boundary
-                const dCenter = Math.sqrt(x*x + y*y + z*z);
-                if (dCenter > 400) {
-                    positions[i3] *= 0.98;
-                    positions[i3 + 1] *= 0.98;
-                    positions[i3 + 2] *= 0.98;
-                }
-            }
-
-            geometry.attributes.position.needsUpdate = true;
-            
-            // Subtle rotation of the whole system
-            particles.rotation.y += 0.001;
-            particles.rotation.z += 0.0005;
-
             renderer.render(scene, camera);
-        };
+        }
 
         window.onload = init;
+        animate();
     </script>
 </body>
 </html>
