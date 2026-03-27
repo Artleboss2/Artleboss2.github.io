@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Learn the Bible</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #A9CCE3;
+            --secondary: #F5F5DC;
+            --accent-1: #D1E8E2;
+            --accent-2: #DCDDE1;
+            --background: #FDFDFD;
+            --text: #2F3640;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+        .bible-text {
+            font-family: 'Lora', serif;
+            line-height: 1.8;
+            letter-spacing: 0.01em;
+        }
+        .card-beige { background-color: var(--secondary); }
+        .bg-primary { background-color: var(--primary); }
+        .bg-accent-1 { background-color: var(--accent-1); }
+        .progress-bar-inner {
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .verse {
+            transition: background-color 0.2s;
+            border-radius: 8px;
+            padding: 8px;
+            margin-bottom: 4px;
+        }
+        .verse:hover {
+            background-color: rgba(169, 204, 227, 0.1);
+        }
+        .active-nav {
+            color: var(--primary);
+            border-top: 3px solid var(--primary);
+        }
+        .ios-bottom-padding {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%232F3640'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1.5em 1.5em;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-gray-100 p-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold shadow-sm">
+                <span id="user-initial">E</span>
+            </div>
+            <div>
+                <h1 class="text-xs font-bold uppercase tracking-wider text-gray-400" id="current-level-title">Novice</h1>
+                <div class="flex items-center gap-2">
+                    <div class="w-24 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                        <div id="xp-progress" class="progress-bar-inner h-full bg-accent-1" style="width: 0%"></div>
+                    </div>
+                    <span class="text-[10px] font-mono font-bold" id="xp-text">0/100 XP</span>
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="flex flex-col items-center">
+                <i data-lucide="flame" class="text-orange-500 w-5 h-5"></i>
+                <span class="text-xs font-bold" id="streak-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <main id="app-container" class="flex-grow pb-24 overflow-y-auto">
+        <section id="view-reader" class="p-4 max-w-2xl mx-auto">
+            <div class="flex gap-2 mb-6">
+                <select id="book-select" onchange="handleBookChange()" class="flex-grow bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary/50"></select>
+                <select id="chapter-select" onchange="handleChapterChange()" class="w-24 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary/50 text-center"></select>
+            </div>
+
+            <div class="mb-8 text-center">
+                <h2 id="display-book-name" class="text-4xl font-bold font-serif mb-2 text-gray-800">Genèse</h2>
+                <div class="h-1 w-16 bg-primary mx-auto rounded-full opacity-60"></div>
+            </div>
+
+            <article id="bible-content" class="bible-text text-lg space-y-1 text-gray-700"></article>
+
+            <div id="completion-card" class="mt-12 p-8 rounded-3xl card-beige border border-[#DCDDE1] text-center shadow-sm">
+                <div id="xp-status-icon" class="mb-4">
+                    <i data-lucide="book-open" class="w-12 h-12 mx-auto text-primary"></i>
+                </div>
+                <h3 id="completion-title" class="font-bold text-xl mb-2 text-gray-800">Chapitre terminé ?</h3>
+                <p id="completion-subtitle" class="text-sm text-gray-500 mb-6">Lisez attentivement pour valider vos progrès.</p>
+                <button id="xp-claim-btn" onclick="completeChapter()" class="bg-primary text-white px-12 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0 transition-all w-full md:w-auto">
+                    Valider et gagner +10 XP
+                </button>
+            </div>
+            
+            <div class="mt-10 flex justify-between items-center border-t border-gray-100 pt-6">
+                <button onclick="changeChapter(-1)" class="p-3 rounded-full hover:bg-gray-100 transition-colors">
+                    <i data-lucide="chevron-left" class="w-6 h-6 text-gray-400"></i>
+                </button>
+                <span class="text-xs font-bold uppercase tracking-widest text-gray-300">Learn the Bible</span>
+                <button onclick="changeChapter(1)" class="p-3 rounded-full hover:bg-gray-100 transition-colors">
+                    <i data-lucide="chevron-right" class="w-6 h-6 text-gray-400"></i>
+                </button>
+            </div>
+        </section>
+
+        <section id="view-profile" class="hidden p-6 max-w-2xl mx-auto">
+            <div class="text-center mb-8">
+                <div class="relative inline-block">
+                    <div class="w-24 h-24 bg-primary rounded-full mx-auto mb-4 flex items-center justify-center text-3xl text-white font-bold shadow-xl border-4 border-white">E</div>
+                    <div class="absolute bottom-4 right-0 bg-accent-1 p-1 rounded-full border-2 border-white shadow-sm">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
+                    </div>
+                </div>
+                <h2 class="text-2xl font-bold" id="profile-name">Explorateur</h2>
+                <p class="text-gray-500 italic" id="profile-title">Novice</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="p-6 bg-white border rounded-3xl shadow-sm text-center">
+                    <i data-lucide="book-marked" class="w-6 h-6 mx-auto mb-2 text-primary"></i>
+                    <p class="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Chapitres lus</p>
+                    <p class="text-3xl font-black text-gray-800" id="stats-chapters">0</p>
+                </div>
+                <div class="p-6 bg-white border rounded-3xl shadow-sm text-center">
+                    <i data-lucide="sparkles" class="w-6 h-6 mx-auto mb-2 text-orange-400"></i>
+                    <p class="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Total XP</p>
+                    <p class="text-3xl font-black text-gray-800" id="stats-xp">0</p>
+                </div>
+            </div>
+
+            <h3 class="font-bold mb-4 flex items-center gap-2 text-gray-700">
+                <i data-lucide="trophy" class="w-5 h-5 text-yellow-500"></i>
+                Récompenses
+            </h3>
+            <div id="badge-container" class="grid grid-cols-3 gap-4 bg-gray-50 p-6 rounded-3xl border border-gray-100"></div>
+        </section>
+    </main>
+
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-gray-100 flex justify-around items-center h-20 ios-bottom-padding z-40">
+        <button onclick="switchView('reader')" id="nav-reader" class="flex flex-col items-center justify-center w-full h-full active-nav">
+            <i data-lucide="book-open" class="w-6 h-6"></i>
+            <span class="text-[10px] font-bold mt-1 uppercase tracking-widest">Lire</span>
+        </button>
+        <button onclick="switchView('profile')" id="nav-profile" class="flex flex-col items-center justify-center w-full h-full text-gray-400">
+            <i data-lucide="user" class="w-6 h-6"></i>
+            <span class="text-[10px] font-bold mt-1 uppercase tracking-widest">Profil</span>
+        </button>
+    </nav>
+
+    <div id="xp-toast" class="fixed top-20 left-1/2 -translate-x-1/2 bg-gray-900/90 text-white px-8 py-4 rounded-2xl shadow-2xl z-[60] opacity-0 transition-all pointer-events-none flex items-center gap-3 backdrop-blur-sm">
+        <div class="bg-primary p-1 rounded-full"><i data-lucide="zap" class="w-4 h-4 text-white"></i></div>
+        <span id="xp-toast-text" class="font-bold">+10 XP</span>
+    </div>
+
+    <script>
+        const BIBLE_METADATA = [
+            { id: "GEN", name: "Genèse", chapters: 50 },
+            { id: "EXO", name: "Exode", chapters: 40 },
+            { id: "LEV", name: "Lévitique", chapters: 27 },
+            { id: "NUM", name: "Nombres", chapters: 36 },
+            { id: "DEU", name: "Deutéronome", chapters: 34 },
+            { id: "PSA", name: "Psaumes", chapters: 150 },
+            { id: "JHN", name: "Jean", chapters: 21 },
+            { id: "REV", name: "Apocalypse", chapters: 22 }
+        ];
+
+        const bibleContentData = {
+            "GEN-1": [
+                { n: 1, t: "Au commencement, Dieu créa les cieux et la terre." },
+                { n: 2, t: "La terre était informe et vide : il y avait des ténèbres à la surface de l’abîme, et l’esprit de Dieu se mouvait au-dessus des eaux." },
+                { n: 3, t: "Dieu dit : Que la lumière soit ! Et la lumière fut." },
+                { n: 4, t: "Dieu vit que la lumière était bonne ; et Dieu sépara la lumière d’avec les ténèbres." },
+                { n: 5, t: "Dieu appela la lumière jour, et il appela les ténèbres nuit. Ainsi, il y eut un soir, et il y eut un matin : ce fut le premier jour." },
+                { n: 6, t: "Dieu dit : Qu’il y ait une étendue entre les eaux, et qu’elle sépare les eaux d’avec les eaux." },
+                { n: 7, t: "Et Dieu fit l’étendue, et il sépara les eaux qui sont au-dessous de l’étendue d’avec les eaux qui sont au-dessus de l’étendue. Et cela fut ainsi." },
+                { n: 8, t: "Dieu appela l’étendue ciel. Ainsi, il y eut un soir, et il y eut un matin : ce fut le second jour." },
+                { n: 9, t: "Dieu dit : Que les eaux qui sont au-dessous du ciel se rassemblent en un seul lieu, et que le sec paraisse. Et cela fut ainsi." },
+                { n: 10, t: "Dieu appela le sec terre, et il appela l’amas des eaux mers. Dieu vit que cela était bon." },
+                { n: 11, t: "Puis Dieu dit : Que la terre produise de la verdure, de l’herbe portant de la semence, des arbres fruitiers donnant du fruit selon leur espèce et ayant en eux leur semence sur la terre. Et cela fut ainsi." },
+                { n: 12, t: "La terre produisit de la verdure, de l’herbe portant de la semence selon son espèce, et des arbres donnant du fruit et ayant en eux leur semence selon leur espèce. Dieu vit que cela était bon." },
+                { n: 13, t: "Ainsi, il y eut un soir, et il y eut un matin : ce fut le troisième jour." },
+                { n: 14, t: "Dieu dit : Qu’il y ait des luminaires dans l’étendue du ciel, pour séparer le jour d’avec la nuit ; que ce soient des signes pour marquer les époques, les jours et les années ;" },
+                { n: 15, t: "et qu’ils servent de luminaires dans l’étendue du ciel, pour éclairer la terre. Et cela fut ainsi." },
+                { n: 16, t: "Dieu fit les deux grands luminaires, le plus grand luminaire pour présider au jour, et le plus petit luminaire pour présider à la nuit ; il fit aussi les étoiles." },
+                { n: 17, t: "Dieu les plaça dans l’étendue du ciel, pour éclairer la terre," },
+                { n: 18, t: "pour présider au jour et à la nuit, et pour séparer la lumière d’avec les ténèbres. Dieu vit que cela était bon." },
+                { n: 19, t: "Ainsi, il y eut un soir, et il y eut un matin : ce fut le quatrième jour." },
+                { n: 20, t: "Dieu dit : Que les eaux produisent en abondance des animaux vivants, et que des oiseaux volent sur la terre vers l’étendue du ciel." },
+                { n: 21, t: "Dieu créa les grands poissons et tous les animaux vivants qui se meuvent, et que les eaux produisirent en abondance selon leur espèce ; il créa aussi tout oiseau ailé selon son espèce. Dieu vit que cela était bon." },
+                { n: 22, t: "Dieu les bénit, en disant : Soyez féconds, multipliez, et remplissez les eaux des mers ; et que les oiseaux multiplient sur la terre." },
+                { n: 23, t: "Ainsi, il y eut un soir, et il y eut un matin : ce fut le cinquième jour." },
+                { n: 24, t: "Dieu dit : Que la terre produise des animaux vivants selon leur espèce, du bétail, des reptiles et des animaux terrestres, selon leur espèce. Et cela fut ainsi." },
+                { n: 25, t: "Dieu fit les animaux de la terre selon leur espèce, le bétail selon son espèce, et tous les reptiles de la terre selon leur espèce. Dieu vit que cela était bon." },
+                { n: 26, t: "Puis Dieu dit : Faisons l’homme à notre image, selon notre ressemblance, et qu’il domine sur les poissons de la mer, sur les oiseaux du ciel, sur le bétail, sur toute la terre, et sur tous les reptiles qui rampent sur la terre." },
+                { n: 27, t: "Dieu créa l’homme à son image, il le créa à l’image de Dieu, il créa l’homme et la femme." },
+                { n: 28, t: "Dieu les bénit, et Dieu leur dit : Soyez féconds, multipliez, remplissez la terre, et l’assujettissez ; et dominez sur les poissons de la mer, sur les oiseaux du ciel, et sur tout animal qui se meut sur la terre." },
+                { n: 29, t: "Et Dieu dit : Voici, je vous donne toute herbe portant de la semence et qui est à la surface de toute la terre, et tout arbre ayant en lui du fruit d’arbre et portant de la semence : ce sera votre nourriture." },
+                { n: 30, t: "Et à tout animal de la terre, à tout oiseau du ciel, et à tout ce qui se meut sur la terre, ayant en soi un souffle de vie, je donne toute herbe verte pour nourriture. Et cela fut ainsi." },
+                { n: 31, t: "Dieu vit tout ce qu’il avait fait et voici, cela était très bon. Ainsi, il y eut un soir, et il y eut un matin : ce fut le sixième jour." }
+            ]
+        };
+
+        const config = {
+            levels: [
+                { level: 1, min_xp: 0, title: "Novice" },
+                { level: 2, min_xp: 100, title: "Apprenti" },
+                { level: 3, min_xp: 250, title: "Lecteur" },
+                { level: 4, min_xp: 500, title: "Disciple" },
+                { level: 10, min_xp: 5000, title: "Sage" }
+            ],
+            badges: [
+                { id: "B1", name: "Genèse", icon: "book-open" },
+                { id: "B2", name: "7 Jours", icon: "calendar" },
+                { id: "B3", name: "Savant", icon: "graduation-cap" }
+            ]
+        };
+
+        let state = {
+            xp: 0,
+            streak: 0,
+            completedChapters: [],
+            currentBook: "GEN",
+            currentChapter: 1,
+            badges: []
+        };
+
+        function initApp() {
+            loadFromStorage();
+            populateSelectors();
+            renderBible();
+            updateUI();
+            lucide.createIcons();
+        }
+
+        function loadFromStorage() {
+            const saved = localStorage.getItem('sophia_bible_v2');
+            if (saved) state = JSON.parse(saved);
+        }
+
+        function saveToStorage() {
+            localStorage.setItem('sophia_bible_v2', JSON.stringify(state));
+        }
+
+        function populateSelectors() {
+            const bSelect = document.getElementById('book-select');
+            bSelect.innerHTML = BIBLE_METADATA.map(b => 
+                `<option value="${b.id}" ${state.currentBook === b.id ? 'selected' : ''}>${b.name}</option>`
+            ).join('');
+            updateChapterSelector();
+        }
+
+        function updateChapterSelector() {
+            const cSelect = document.getElementById('chapter-select');
+            const book = BIBLE_METADATA.find(b => b.id === state.currentBook);
+            let options = '';
+            for (let i = 1; i <= book.chapters; i++) {
+                options += `<option value="${i}" ${state.currentChapter === i ? 'selected' : ''}>${i}</option>`;
+            }
+            cSelect.innerHTML = options;
+        }
+
+        function handleBookChange() {
+            state.currentBook = document.getElementById('book-select').value;
+            state.currentChapter = 1;
+            updateChapterSelector();
+            renderBible();
+        }
+
+        function handleChapterChange() {
+            state.currentChapter = parseInt(document.getElementById('chapter-select').value);
+            renderBible();
+        }
+
+        function renderBible() {
+            const container = document.getElementById('bible-content');
+            const book = BIBLE_METADATA.find(b => b.id === state.currentBook);
+            const key = `${state.currentBook}-${state.currentChapter}`;
+            const verses = bibleContentData[key];
+
+            document.getElementById('display-book-name').textContent = book.name;
+            
+            if (verses) {
+                container.innerHTML = verses.map(v => `
+                    <div class="verse group">
+                        <span class="text-xs font-bold text-primary mr-3 select-none">${v.n}</span>
+                        <span class="text-gray-800">${v.t}</span>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = `
+                    <div class="text-center py-20 opacity-30">
+                        <i data-lucide="scroll-text" class="w-12 h-12 mx-auto mb-4"></i>
+                        <p class="italic text-sm">Contenu en cours d'intégration.<br>Essayez Genèse Chapitre 1.</p>
+                    </div>
+                `;
+            }
+
+            const btn = document.getElementById('xp-claim-btn');
+            const alreadyRead = state.completedChapters.includes(key);
+            
+            if (alreadyRead) {
+                btn.innerHTML = `Chapitre déjà validé <i data-lucide="check" class="w-4 h-4 ml-2 inline"></i>`;
+                btn.classList.replace('bg-primary', 'bg-gray-100');
+                btn.classList.add('text-gray-400', 'cursor-default');
+                btn.disabled = true;
+                document.getElementById('completion-title').textContent = "Déjà lu";
+                document.getElementById('completion-subtitle').textContent = "Vous avez déjà gagné de l'XP pour ce chapitre.";
+            } else {
+                btn.innerHTML = `Valider et gagner +10 XP`;
+                btn.classList.remove('bg-gray-100', 'text-gray-400', 'cursor-default');
+                btn.classList.add('bg-primary', 'text-white');
+                btn.disabled = false;
+                document.getElementById('completion-title').textContent = "Chapitre terminé ?";
+                document.getElementById('completion-subtitle').textContent = "Lisez attentivement pour valider vos progrès.";
+            }
+
+            lucide.createIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function completeChapter() {
+            const key = `${state.currentBook}-${state.currentChapter}`;
+            if (state.completedChapters.includes(key)) return;
+
+            state.completedChapters.push(key);
+            state.xp += 10;
+            if (state.streak === 0) state.streak = 1;
+
+            if (state.completedChapters.length === 1) unlockBadge("B1");
+            if (state.completedChapters.length >= 7) unlockBadge("B2");
+
+            showToast("+10 XP");
+            updateUI();
+            renderBible();
+        }
+
+        function updateUI() {
+            const level = config.levels.slice().reverse().find(l => state.xp >= l.min_xp) || config.levels[0];
+            const next = config.levels.find(l => l.level === level.level + 1) || { min_xp: state.xp + 1000 };
+            
+            document.getElementById('current-level-title').textContent = level.title;
+            document.getElementById('xp-text').textContent = `${state.xp} / ${next.min_xp} XP`;
+            const pct = ((state.xp - level.min_xp) / (next.min_xp - level.min_xp)) * 100;
+            document.getElementById('xp-progress').style.width = `${Math.min(100, pct)}%`;
+            document.getElementById('streak-count').textContent = state.streak;
+
+            document.getElementById('profile-title').textContent = level.title;
+            document.getElementById('stats-chapters').textContent = state.completedChapters.length;
+            document.getElementById('stats-xp').textContent = state.xp;
+
+            renderBadges();
+            saveToStorage();
+        }
+
+        function unlockBadge(id) {
+            if (!state.badges.includes(id)) {
+                state.badges.push(id);
+                showToast("Nouveau Badge !");
+            }
+        }
+
+        function renderBadges() {
+            const container = document.getElementById('badge-container');
+            container.innerHTML = config.badges.map(b => `
+                <div class="flex flex-col items-center gap-2 ${state.badges.includes(b.id) ? 'opacity-100' : 'opacity-20 grayscale'}">
+                    <div class="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center border border-gray-100">
+                        <i data-lucide="${b.icon}" class="w-7 h-7 text-primary"></i>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-gray-500">${b.name}</span>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function changeChapter(dir) {
+            const book = BIBLE_METADATA.find(b => b.id === state.currentBook);
+            let next = state.currentChapter + dir;
+            if (next > book.chapters) {
+                const idx = BIBLE_METADATA.findIndex(b => b.id === state.currentBook);
+                if (idx < BIBLE_METADATA.length - 1) {
+                    state.currentBook = BIBLE_METADATA[idx + 1].id;
+                    state.currentChapter = 1;
+                }
+            } else if (next < 1) {
+                const idx = BIBLE_METADATA.findIndex(b => b.id === state.currentBook);
+                if (idx > 0) {
+                    state.currentBook = BIBLE_METADATA[idx - 1].id;
+                    state.currentChapter = BIBLE_METADATA[idx - 1].chapters;
+                }
+            } else {
+                state.currentChapter = next;
+            }
+            document.getElementById('book-select').value = state.currentBook;
+            updateChapterSelector();
+            renderBible();
+        }
+
+        function switchView(viewId) {
+            const views = ['reader', 'profile'];
+            views.forEach(v => {
+                document.getElementById(`view-${v}`).classList.toggle('hidden', v !== viewId);
+                document.getElementById(`nav-${v}`).classList.toggle('active-nav', v === viewId);
+                document.getElementById(`nav-${v}`).classList.toggle('text-gray-400', v !== viewId);
+            });
+            window.scrollTo({ top: 0 });
+        }
+
+        function showToast(text) {
+            const toast = document.getElementById('xp-toast');
+            document.getElementById('xp-toast-text').textContent = text;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translate(-50%, -10px)';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translate(-50%, 0)';
+            }, 3000);
+        }
+        window.onload = initApp;
+    </script>
+</body>
+</html>
