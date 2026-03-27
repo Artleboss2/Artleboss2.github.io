@@ -615,4 +615,26 @@ window.BIBLE_DATA_GEN = {
                 { n: 23, t: "Bethuel a engendré Rebecca. Ce sont là les huit fils que Milca a enfantés à Nachor, frère d'Abraham." },
                 { n: 24, t: "Sa concubine, nommée Réuma, a aussi enfanté Thébach, Gaham, Thahasch et Maaca." }
             ],
+            "GEN-23": [
+                { n: 1, t: "La vie de Sara fut de cent vingt-sept ans : telles sont les années de la vie de Sara." },
+                { n: 2, t: "Sara mourut à Kirjath-Arba, qui est Hébron, dans le pays de Canaan ; et Abraham vint pour mener deuil sur Sara et pour la pleurer." },
+                { n: 3, t: "Abraham se leva de devant son mort, et parla ainsi aux fils de Heth :" },
+                { n: 4, t: "Je suis étranger et voyageur parmi vous ; donnez-moi la possession d'un sépulcre chez vous, pour que j'enterre mon mort et que je l'ôte de devant ma face." },
+                { n: 5, t: "Les fils de Heth répondirent à Abraham, en lui disant :" },
+                { n: 6, t: "Ecoute-nous, seigneur ! Tu es un prince de Dieu au milieu de nous ; enterre ton mort dans celui de nos sépulcres que tu choisiras ; aucun de nous ne te refusera son sépulcre pour enterrer ton mort." },
+                { n: 7, t: "Abraham se leva, et se prosterna devant le peuple du pays, devant les fils de Heth." },
+                { n: 8, t: "Et il leur parla ainsi : Si vous permettez que j'enterre mon mort et que je l'ôte de devant ma face, écoutez-moi, et priez pour moi Ephron, fils de Tsachar," },
+                { n: 9, t: "afin qu'il me cède la caverne de Macpéla, qui lui appartient, à l'extrémité de son champ, qu'il me la cède contre sa valeur en argent, pour que j'aie au milieu de vous la possession d'un sépulcre." },
+                { n: 10, t: "Ephron était assis parmi les fils de Heth. Et Ephron, le Héthien, répondit à Abraham, en présence des fils de Heth et de tous ceux qui entraient par la porte de sa ville :" },
+                { n: 11, t: "Non, mon seigneur, écoute-moi ! Je te donne le champ, et je te donne la caverne qui y est. Je te les donne en présence des fils de mon peuple : enterre ton mort." },
+                { n: 12, t: "Abraham se prosterna devant le peuple du pays." },
+                { n: 13, t: "Et il parla ainsi à Ephron, en présence du peuple du pays : Ecoute-moi, je te prie ! Je donne le prix du champ : accepte-le de moi ; et j'y enterrerai mon mort." },
+                { n: 14, t: "Et Ephron répondit à Abraham, en lui disant :" },
+                { n: 15, t: "Mon seigneur, écoute-moi ! Une terre de quatre cents sicles d'argent, qu'est-ce que cela entre moi et toi ? Enterre ton mort." },
+                { n: 16, t: "Abraham entendit Ephron ; et Abraham pesa à Ephron l'argent qu'il avait dit, en présence des fils de Heth, quatre cents sicles d'argent ayant cours parmi les marchands." },
+                { n: 17, t: "Le champ d'Ephron à Macpéla, vis-à-vis de Mamré, le champ et la caverne qui y est, et tous les arbres qui étaient dans le champ et dans toutes ses limites alentour," },
+                { n: 18, t: "devinrent ainsi la propriété d'Abraham, en présence des fils de Heth et de tous ceux qui entraient par la porte de sa ville." },
+                { n: 19, t: "Après cela, Abraham enterra Sara, sa femme, dans la caverne du champ de Macpéla, vis-à-vis de Mamré, qui est Hébron, dans le pays de Canaan." },
+                { n: 20, t: "Le champ et la caverne qui y est demeurèrent à Abraham comme possession d'un sépulcre, acquise des fils de Heth." }
+            ],
         };
