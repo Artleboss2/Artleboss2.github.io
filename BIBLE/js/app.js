@@ -1,0 +1,259 @@
+/**
+ * Logique principale de l'application Learn the Bible
+ * Contient la liste complète des 66 livres et la gestion des chapitres.
+ */
+
+const BIBLE_METADATA = [
+    // ANCIEN TESTAMENT
+    { id: "GEN", name: "Genèse", chapters: 50, file: "genese.js" },
+    { id: "EXO", name: "Exode", chapters: 40, file: "exode.js" },
+    { id: "LEV", name: "Lévitique", chapters: 27, file: "levitique.js" },
+    { id: "NUM", name: "Nombres", chapters: 36, file: "nombres.js" },
+    { id: "DEU", name: "Deutéronome", chapters: 34, file: "deuteronome.js" },
+    { id: "JOS", name: "Josué", chapters: 24, file: "josue.js" },
+    { id: "JUG", name: "Juges", chapters: 21, file: "juges.js" },
+    { id: "RUT", name: "Ruth", chapters: 4, file: "ruth.js" },
+    { id: "1SAM", name: "1 Samuel", chapters: 31, file: "1samuel.js" },
+    { id: "2SAM", name: "2 Samuel", chapters: 24, file: "2samuel.js" },
+    { id: "1ROI", name: "1 Rois", chapters: 22, file: "1rois.js" },
+    { id: "2ROI", name: "2 Rois", chapters: 25, file: "2rois.js" },
+    { id: "1CHR", name: "1 Chroniques", chapters: 29, file: "1chroniques.js" },
+    { id: "2CHR", name: "2 Chroniques", chapters: 36, file: "2chroniques.js" },
+    { id: "ESD", name: "Esdras", chapters: 10, file: "esdras.js" },
+    { id: "NEH", name: "Néhémie", chapters: 13, file: "nehemie.js" },
+    { id: "EST", name: "Esther", chapters: 10, file: "esther.js" },
+    { id: "JOB", name: "Job", chapters: 42, file: "job.js" },
+    { id: "PSA", name: "Psaumes", chapters: 150, file: "psaumes.js" },
+    { id: "PRO", name: "Proverbes", chapters: 31, file: "proverbes.js" },
+    { id: "ECC", name: "Ecclésiaste", chapters: 12, file: "ecclesiaste.js" },
+    { id: "CAN", name: "Cantique des Cantiques", chapters: 8, file: "cantique.js" },
+    { id: "ESA", name: "Ésaïe", chapters: 66, file: "esaie.js" },
+    { id: "JER", name: "Jérémie", chapters: 52, file: "jeremie.js" },
+    { id: "LAM", name: "Lamentations", chapters: 5, file: "lamentations.js" },
+    { id: "EZE", name: "Ézéchiel", chapters: 48, file: "ezechiel.js" },
+    { id: "DAN", name: "Daniel", chapters: 12, file: "daniel.js" },
+    { id: "OSE", name: "Osée", chapters: 14, file: "osee.js" },
+    { id: "JOE", name: "Joël", chapters: 3, file: "joel.js" },
+    { id: "AMO", name: "Amos", chapters: 9, file: "amos.js" },
+    { id: "ABD", name: "Abdias", chapters: 1, file: "abdias.js" },
+    { id: "JON", name: "Jonas", chapters: 4, file: "jonas.js" },
+    { id: "MIC", name: "Michée", chapters: 7, file: "michee.js" },
+    { id: "NAH", name: "Nahum", chapters: 3, file: "nahum.js" },
+    { id: "HAB", name: "Habacuc", chapters: 3, file: "habacuc.js" },
+    { id: "SOP", name: "Sophonie", chapters: 3, file: "sophonie.js" },
+    { id: "AGG", name: "Aggée", chapters: 2, file: "aggee.js" },
+    { id: "ZAC", name: "Zacharie", chapters: 14, file: "zacharie.js" },
+    { id: "MAL", name: "Malachie", chapters: 4, file: "malachie.js" },
+
+    // NOUVEAU TESTAMENT
+    { id: "MAT", name: "Matthieu", chapters: 28, file: "matthieu.js" },
+    { id: "MAR", name: "Marc", chapters: 16, file: "marc.js" },
+    { id: "LUC", name: "Luc", chapters: 24, file: "luc.js" },
+    { id: "JEAN", name: "Jean", chapters: 21, file: "jean.js" },
+    { id: "ACT", name: "Actes", chapters: 28, file: "actes.js" },
+    { id: "ROM", name: "Romains", chapters: 16, file: "romains.js" },
+    { id: "1COR", name: "1 Corinthiens", chapters: 16, file: "1corinthiens.js" },
+    { id: "2COR", name: "2 Corinthiens", chapters: 13, file: "2corinthiens.js" },
+    { id: "GAL", name: "Galates", chapters: 6, file: "galates.js" },
+    { id: "EPH", name: "Éphésiens", chapters: 6, file: "ephesiens.js" },
+    { id: "PHI", name: "Philippiens", chapters: 4, file: "philippiens.js" },
+    { id: "COL", name: "Colossiens", chapters: 4, file: "colossiens.js" },
+    { id: "1THES", name: "1 Thessaloniciens", chapters: 5, file: "1thessaloniciens.js" },
+    { id: "2THES", name: "2 Thessaloniciens", chapters: 3, file: "2thessaloniciens.js" },
+    { id: "1TIM", name: "1 Timothée", chapters: 6, file: "1timothee.js" },
+    { id: "2TIM", name: "2 Timothée", chapters: 4, file: "2timothee.js" },
+    { id: "TIT", name: "Tite", chapters: 3, file: "tite.js" },
+    { id: "PHILE", name: "Philémon", chapters: 1, file: "philemon.js" },
+    { id: "HEB", name: "Hébreux", chapters: 13, file: "hebreux.js" },
+    { id: "JAC", name: "Jacques", chapters: 5, file: "jacques.js" },
+    { id: "1PIE", name: "1 Pierre", chapters: 5, file: "1pierre.js" },
+    { id: "2PIE", name: "2 Pierre", chapters: 3, file: "2pierre.js" },
+    { id: "1JEAN", name: "1 Jean", chapters: 5, file: "1jean.js" },
+    { id: "2JEAN", name: "2 Jean", chapters: 1, file: "2jean.js" },
+    { id: "3JEAN", name: "3 Jean", chapters: 1, file: "3jean.js" },
+    { id: "JUDE", name: "Jude", chapters: 1, file: "jude.js" },
+    { id: "APO", name: "Apocalypse", chapters: 22, file: "apocalypse.js" }
+];
+
+let state = {
+    xp: parseInt(localStorage.getItem('bible_xp')) || 0,
+    currentBook: localStorage.getItem('bible_last_book') || "GEN",
+    currentChapter: parseInt(localStorage.getItem('bible_last_chap')) || 1,
+    loadedBooks: new Set()
+};
+
+/**
+ * Initialisation de l'application
+ */
+function initApp() {
+    populateBookSelect();
+    updateXPDisplay();
+    // Charger le livre initial
+    loadBookData(state.currentBook, () => {
+        updateChapterSelector();
+        renderBible();
+    });
+}
+
+/**
+ * Charge un fichier JS de livre à la demande
+ */
+function loadBookData(bookId, callback) {
+    const bookInfo = BIBLE_METADATA.find(b => b.id === bookId);
+    if (!bookInfo) return;
+
+    if (state.loadedBooks.has(bookId)) {
+        if (callback) callback();
+        return;
+    }
+
+    document.getElementById('loading').style.display = 'flex';
+
+    const script = document.createElement('script');
+    script.src = `js/bible-data/${bookInfo.file}`;
+    script.onload = () => {
+        state.loadedBooks.add(bookId);
+        document.getElementById('loading').style.display = 'none';
+        if (callback) callback();
+    };
+    script.onerror = () => {
+        document.getElementById('loading').style.display = 'none';
+        // Message d'erreur personnalisé si le fichier n'est pas encore créé
+        const container = document.getElementById('bible-content');
+        container.innerHTML = `
+            <div class="p-6 text-center">
+                <p class="text-red-500 font-bold">Fichier manquant</p>
+                <p class="text-sm text-gray-500">Le fichier "js/bible-data/${bookInfo.file}" n'a pas encore été ajouté au projet.</p>
+            </div>
+        `;
+    };
+    document.head.appendChild(script);
+}
+
+function populateBookSelect() {
+    const select = document.getElementById('book-select');
+    select.innerHTML = BIBLE_METADATA.map(b => 
+        `<option value="${b.id}" ${b.id === state.currentBook ? 'selected' : ''}>${b.name}</option>`
+    ).join('');
+}
+
+function updateChapterSelector() {
+    const bookInfo = BIBLE_METADATA.find(b => b.id === state.currentBook);
+    const select = document.getElementById('chapter-select');
+    let options = "";
+    for (let i = 1; i <= bookInfo.chapters; i++) {
+        options += `<option value="${i}" ${i === state.currentChapter ? 'selected' : ''}>Chap. ${i}</option>`;
+    }
+    select.innerHTML = options;
+}
+
+function handleBookChange() {
+    state.currentBook = document.getElementById('book-select').value;
+    state.currentChapter = 1;
+    loadBookData(state.currentBook, () => {
+        updateChapterSelector();
+        renderBible();
+        saveState();
+    });
+}
+
+function handleChapterChange() {
+    state.currentChapter = parseInt(document.getElementById('chapter-select').value);
+    renderBible();
+    saveState();
+}
+
+function renderBible() {
+    const dataName = `BIBLE_DATA_${state.currentBook}`;
+    const bookContent = window[dataName];
+    const key = `${state.currentBook}-${state.currentChapter}`;
+    
+    const container = document.getElementById('bible-content');
+    
+    if (!bookContent || !bookContent[key]) {
+        container.innerHTML = `
+            <div class="p-6 text-center">
+                <h2 class="text-xl font-bold mb-2">${BIBLE_METADATA.find(b => b.id === state.currentBook).name} ${state.currentChapter}</h2>
+                <p class="text-gray-400 italic">Le contenu de ce chapitre arrive bientôt !</p>
+            </div>
+        `;
+        return;
+    }
+
+    const verses = bookContent[key];
+    container.innerHTML = `
+        <h2 class="text-2xl font-serif mb-6 border-b pb-2 italic text-gray-500">
+            ${BIBLE_METADATA.find(b => b.id === state.currentBook).name} ${state.currentChapter}
+        </h2>
+        <div class="space-y-4">
+            ${verses.map(v => `
+                <div class="flex gap-3 group">
+                    <span class="text-xs font-bold mt-1.5 opacity-30 group-hover:opacity-100 transition">${v.n}</span>
+                    <p class="text-lg">${v.t}</p>
+                </div>
+            `).join('')}
+        </div>
+    `;
+    
+    addXP(5);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function changeChapter(direction) {
+    const bookIndex = BIBLE_METADATA.findIndex(b => b.id === state.currentBook);
+    const bookInfo = BIBLE_METADATA[bookIndex];
+    
+    let nextChap = state.currentChapter + direction;
+
+    if (nextChap >= 1 && nextChap <= bookInfo.chapters) {
+        // Changement de chapitre normal
+        state.currentChapter = nextChap;
+        document.getElementById('chapter-select').value = nextChap;
+        renderBible();
+        saveState();
+    } else if (nextChap > bookInfo.chapters && bookIndex < BIBLE_METADATA.length - 1) {
+        // Passage au livre suivant
+        state.currentBook = BIBLE_METADATA[bookIndex + 1].id;
+        state.currentChapter = 1;
+        document.getElementById('book-select').value = state.currentBook;
+        loadBookData(state.currentBook, () => {
+            updateChapterSelector();
+            renderBible();
+            saveState();
+        });
+    } else if (nextChap < 1 && bookIndex > 0) {
+        // Passage au livre précédent (dernier chapitre)
+        state.currentBook = BIBLE_METADATA[bookIndex - 1].id;
+        state.currentChapter = BIBLE_METADATA[bookIndex - 1].chapters;
+        document.getElementById('book-select').value = state.currentBook;
+        loadBookData(state.currentBook, () => {
+            updateChapterSelector();
+            renderBible();
+            saveState();
+        });
+    }
+}
+
+function addXP(amount) {
+    state.xp += amount;
+    updateXPDisplay();
+    localStorage.setItem('bible_xp', state.xp);
+}
+
+function updateXPDisplay() {
+    document.getElementById('xp-badge').textContent = `XP: ${state.xp}`;
+}
+
+function saveState() {
+    localStorage.setItem('bible_last_book', state.currentBook);
+    localStorage.setItem('bible_last_chap', state.currentChapter);
+}
+
+function switchView(viewId) {
+    document.getElementById('view-reader').classList.toggle('hidden', viewId !== 'reader');
+    document.getElementById('view-profile').classList.toggle('hidden', viewId !== 'profile');
+    document.getElementById('nav-reader').classList.toggle('active-nav', viewId === 'reader');
+    document.getElementById('nav-profile').classList.toggle('active-nav', viewId === 'profile');
+}
+
+window.onload = initApp;
