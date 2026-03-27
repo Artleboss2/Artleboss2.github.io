@@ -44,6 +44,31 @@
         .verse:hover {
             background-color: rgba(169, 204, 227, 0.1);
         }
+        body.bg-gray-900 [data-lucide] {
+            color: #e5e7eb;
+        }
+        body.bg-gray-900 .text-primary [data-lucide],
+        body.bg-gray-900 [data-lucide].text-primary {
+            color: var(--primary);
+        }
+        body.bg-gray-900 .stats-card [data-lucide] {
+            color: var(--primary) !important;
+        }
+        body.bg-gray-900 #stats-chapters,
+        body.bg-gray-900 #stats-xp {
+            color: #f9fafb;
+        }
+        body.bg-gray-900 .stats-card p.text-gray-400 {
+            color: #9ca3af;
+        }
+        body.bg-gray-900 #xp-progress {
+            background-color: #1e40af;
+            box-shadow: 0 0 0 1.5px white;
+            border-radius: 9999px;
+        }
+        body.bg-gray-900 .w-24.h-1\.5 {
+            background-color: #374151;
+        }
         .active-nav {
             color: var(--primary);
             border-top: 3px solid var(--primary);
@@ -187,118 +212,118 @@
         const bibleContentData = {
             "GEN-1": [
                 { n: 1, t: "Au commencement, Dieu créa les cieux et la terre." },
-                { n: 2, t: "La terre était informe et vide : il y avait des ténèbres à la surface de l’abîme, et l’esprit de Dieu se mouvait au-dessus des eaux." },
+                { n: 2, t: "La terre était informe et vide : il y avait des ténèbres à la surface de l'abîme, et l'esprit de Dieu se mouvait au-dessus des eaux." },
                 { n: 3, t: "Dieu dit : Que la lumière soit ! Et la lumière fut." },
-                { n: 4, t: "Dieu vit que la lumière était bonne ; et Dieu sépara la lumière d’avec les ténèbres." },
+                { n: 4, t: "Dieu vit que la lumière était bonne ; et Dieu sépara la lumière d'avec les ténèbres." },
                 { n: 5, t: "Dieu appela la lumière jour, et il appela les ténèbres nuit. Ainsi, il y eut un soir, et il y eut un matin : ce fut le premier jour." },
-                { n: 6, t: "Dieu dit : Qu’il y ait une étendue entre les eaux, et qu’elle sépare les eaux d’avec les eaux." },
-                { n: 7, t: "Et Dieu fit l’étendue, et il sépara les eaux qui sont au-dessous de l’étendue d’avec les eaux qui sont au-dessus de l’étendue. Et cela fut ainsi." },
-                { n: 8, t: "Dieu appela l’étendue ciel. Ainsi, il y eut un soir, et il y eut un matin : ce fut le second jour." },
+                { n: 6, t: "Dieu dit : Qu'il y ait une étendue entre les eaux, et qu'elle sépare les eaux d'avec les eaux." },
+                { n: 7, t: "Et Dieu fit l'étendue, et il sépara les eaux qui sont au-dessous de l'étendue d'avec les eaux qui sont au-dessus de l'étendue. Et cela fut ainsi." },
+                { n: 8, t: "Dieu appela l'étendue ciel. Ainsi, il y eut un soir, et il y eut un matin : ce fut le second jour." },
                 { n: 9, t: "Dieu dit : Que les eaux qui sont au-dessous du ciel se rassemblent en un seul lieu, et que le sec paraisse. Et cela fut ainsi." },
-                { n: 10, t: "Dieu appela le sec terre, et il appela l’amas des eaux mers. Dieu vit que cela était bon." },
-                { n: 11, t: "Puis Dieu dit : Que la terre produise de la verdure, de l’herbe portant de la semence, des arbres fruitiers donnant du fruit selon leur espèce et ayant en eux leur semence sur la terre. Et cela fut ainsi." },
-                { n: 12, t: "La terre produisit de la verdure, de l’herbe portant de la semence selon son espèce, et des arbres donnant du fruit et ayant en eux leur semence selon leur espèce. Dieu vit que cela était bon." },
+                { n: 10, t: "Dieu appela le sec terre, et il appela l'amas des eaux mers. Dieu vit que cela était bon." },
+                { n: 11, t: "Puis Dieu dit : Que la terre produise de la verdure, de l'herbe portant de la semence, des arbres fruitiers donnant du fruit selon leur espèce et ayant en eux leur semence sur la terre. Et cela fut ainsi." },
+                { n: 12, t: "La terre produisit de la verdure, de l'herbe portant de la semence selon son espèce, et des arbres donnant du fruit et ayant en eux leur semence selon leur espèce. Dieu vit que cela était bon." },
                 { n: 13, t: "Ainsi, il y eut un soir, et il y eut un matin : ce fut le troisième jour." },
-                { n: 14, t: "Dieu dit : Qu’il y ait des luminaires dans l’étendue du ciel, pour séparer le jour d’avec la nuit ; que ce soient des signes pour marquer les époques, les jours et les années ;" },
-                { n: 15, t: "et qu’ils servent de luminaires dans l’étendue du ciel, pour éclairer la terre. Et cela fut ainsi." },
+                { n: 14, t: "Dieu dit : Qu'il y ait des luminaires dans l'étendue du ciel, pour séparer le jour d'avec la nuit ; que ce soient des signes pour marquer les époques, les jours et les années ;" },
+                { n: 15, t: "et qu'ils servent de luminaires dans l'étendue du ciel, pour éclairer la terre. Et cela fut ainsi." },
                 { n: 16, t: "Dieu fit les deux grands luminaires, le plus grand luminaire pour présider au jour, et le plus petit luminaire pour présider à la nuit ; il fit aussi les étoiles." },
-                { n: 17, t: "Dieu les plaça dans l’étendue du ciel, pour éclairer la terre," },
-                { n: 18, t: "pour présider au jour et à la nuit, et pour séparer la lumière d’avec les ténèbres. Dieu vit que cela était bon." },
+                { n: 17, t: "Dieu les plaça dans l'étendue du ciel, pour éclairer la terre," },
+                { n: 18, t: "pour présider au jour et à la nuit, et pour séparer la lumière d'avec les ténèbres. Dieu vit que cela était bon." },
                 { n: 19, t: "Ainsi, il y eut un soir, et il y eut un matin : ce fut le quatrième jour." },
-                { n: 20, t: "Dieu dit : Que les eaux produisent en abondance des animaux vivants, et que des oiseaux volent sur la terre vers l’étendue du ciel." },
+                { n: 20, t: "Dieu dit : Que les eaux produisent en abondance des animaux vivants, et que des oiseaux volent sur la terre vers l'étendue du ciel." },
                 { n: 21, t: "Dieu créa les grands poissons et tous les animaux vivants qui se meuvent, et que les eaux produisirent en abondance selon leur espèce ; il créa aussi tout oiseau ailé selon son espèce. Dieu vit que cela était bon." },
                 { n: 22, t: "Dieu les bénit, en disant : Soyez féconds, multipliez, et remplissez les eaux des mers ; et que les oiseaux multiplient sur la terre." },
                 { n: 23, t: "Ainsi, il y eut un soir, et il y eut un matin : ce fut le cinquième jour." },
                 { n: 24, t: "Dieu dit : Que la terre produise des animaux vivants selon leur espèce, du bétail, des reptiles et des animaux terrestres, selon leur espèce. Et cela fut ainsi." },
                 { n: 25, t: "Dieu fit les animaux de la terre selon leur espèce, le bétail selon son espèce, et tous les reptiles de la terre selon leur espèce. Dieu vit que cela était bon." },
-                { n: 26, t: "Puis Dieu dit : Faisons l’homme à notre image, selon notre ressemblance, et qu’il domine sur les poissons de la mer, sur les oiseaux du ciel, sur le bétail, sur toute la terre, et sur tous les reptiles qui rampent sur la terre." },
-                { n: 27, t: "Dieu créa l’homme à son image, il le créa à l’image de Dieu, il créa l’homme et la femme." },
-                { n: 28, t: "Dieu les bénit, et Dieu leur dit : Soyez féconds, multipliez, remplissez la terre, et l’assujettissez ; et dominez sur les poissons de la mer, sur les oiseaux du ciel, et sur tout animal qui se meut sur la terre." },
-                { n: 29, t: "Et Dieu dit : Voici, je vous donne toute herbe portant de la semence et qui est à la surface de toute la terre, et tout arbre ayant en lui du fruit d’arbre et portant de la semence : ce sera votre nourriture." },
+                { n: 26, t: "Puis Dieu dit : Faisons l'homme à notre image, selon notre ressemblance, et qu'il domine sur les poissons de la mer, sur les oiseaux du ciel, sur le bétail, sur toute la terre, et sur tous les reptiles qui rampent sur la terre." },
+                { n: 27, t: "Dieu créa l'homme à son image, il le créa à l'image de Dieu, il créa l'homme et la femme." },
+                { n: 28, t: "Dieu les bénit, et Dieu leur dit : Soyez féconds, multipliez, remplissez la terre, et l'assujettissez ; et dominez sur les poissons de la mer, sur les oiseaux du ciel, et sur tout animal qui se meut sur la terre." },
+                { n: 29, t: "Et Dieu dit : Voici, je vous donne toute herbe portant de la semence et qui est à la surface de toute la terre, et tout arbre ayant en lui du fruit d'arbre et portant de la semence : ce sera votre nourriture." },
                 { n: 30, t: "Et à tout animal de la terre, à tout oiseau du ciel, et à tout ce qui se meut sur la terre, ayant en soi un souffle de vie, je donne toute herbe verte pour nourriture. Et cela fut ainsi." },
-                { n: 31, t: "Dieu vit tout ce qu’il avait fait et voici, cela était très bon. Ainsi, il y eut un soir, et il y eut un matin : ce fut le sixième jour." }
+                { n: 31, t: "Dieu vit tout ce qu'il avait fait et voici, cela était très bon. Ainsi, il y eut un soir, et il y eut un matin : ce fut le sixième jour." }
             ],
             "GEN-2": [
                 { n: 1, t: "Ainsi furent achevés les cieux et la terre, et toute leur armée." },
-                { n: 2, t: "Dieu acheva au septième jour son oeuvre, qu’il avait faite : et il se reposa au septième jour de toute son oeuvre, qu’il avait faite." },
-                { n: 3, t: "Dieu bénit le septième jour, et il le sanctifia, parce qu’en ce jour il se reposa de toute son oeuvre qu’il avait créée en la faisant." },
-                { n: 4, t: "Voici les origines des cieux et de la terre, quand ils furent créés. Lorsque l’Eternel Dieu fit une terre et des cieux," },
-                { n: 5, t: "aucun arbuste des champs n’était encore sur la terre, et aucune herbe des champs ne germait encore : car l’Eternel Dieu n’avait pas fait pleuvoir sur la terre, et il n’y avait point d’homme pour cultiver le sol." },
-                { n: 6, t: "Mais une vapeur s’éleva de la terre, et arrosa toute la surface du sol." },
-                { n: 7, t: "L’Eternel Dieu forma l’homme de la poussière de la terre, il souffla dans ses narines un souffle de vie et l’homme devint un être vivant." },
-                { n: 8, t: "Puis l’Eternel Dieu planta un jardin en Eden, du côté de l’orient, et il y mit l’homme qu’il avait formé." },
-                { n: 9, t: "L’Eternel Dieu fit pousser du sol des arbres de toute espèce, agréables à voir et bons à manger, et l’arbre de la vie au milieu du jardin, et l’arbre de la connaissance du bien et du mal." },
-                { n: 10, t: "Un fleuve sortait d’Eden pour arroser le jardin, et de là il se divisait en quatre bras." },
-                { n: 11, t: "Le nom du premier est Pischon ; c’est celui qui entoure tout le pays de Havila, où se trouve l’or." },
-                { n: 12, t: "L’or de ce pays est pur ; on y trouve aussi le bdellium et la pierre d’onyx." },
-                { n: 13, t: "Le nom du second fleuve est Guihon ; c’est celui qui entoure tout le pays de Cusch." },
-                { n: 14, t: "Le nom du troisième est Hiddékel ; c’est celui qui coule à l’orient de l’Assyrie. Le quatrième fleuve, c’est l’Euphrate." },
-                { n: 15, t: "L’Eternel Dieu prit l’homme, et le plaça dans le jardin d’Eden pour le cultiver et pour le garder." },
-                { n: 16, t: "L’Eternel Dieu donna cet ordre à l’homme : Tu pourras manger de tous les arbres du jardin ;" },
-                { n: 17, t: "mais tu ne mangeras pas de l’arbre de la connaissance du bien et du mal, car le jour où tu en mangeras, tu mourras." },
-                { n: 18, t: "L’Eternel Dieu dit : Il n’est pas bon que l’homme soit seul ; je lui ferai une aide semblable à lui." },
-                { n: 19, t: "L’Eternel Dieu forma de la terre tous les animaux des champs et tous les oiseaux du ciel, et il les fit venir vers l’homme, pour voir comment il les appellerait, et afin que tout être vivant portât le nom que lui donnerait l’homme." },
-                { n: 20, t: "Et l’homme donna des noms à tout le bétail, aux oiseaux du ciel et à tous les animaux des champs ; mais, pour l’homme, il ne trouva point d’aide semblable à lui." },
-                { n: 21, t: "Alors l’Eternel Dieu fit tomber un profond sommeil sur l’homme, qui s’endormit ; il prit une de ses côtes, et referma la chair à sa place." },
-                { n: 22, t: "L’Eternel Dieu forma une femme de la côte qu’il avait prise de l’homme, et il l’amena vers l’homme." },
-                { n: 23, t: "Et l’homme dit : Voici cette fois celle qui est os de mes os et chair de ma chair ! on l’appellera femme, parce qu’elle a été prise de l’homme." },
-                { n: 24, t: "C’est pourquoi l’homme quittera son père et sa mère, et s’attachera à sa femme, et ils deviendront une seule chair." },
-                { n: 25, t: "L’homme et sa femme étaient tous deux nus, et ils n’en avaient point honte." }
+                { n: 2, t: "Dieu acheva au septième jour son oeuvre, qu'il avait faite : et il se reposa au septième jour de toute son oeuvre, qu'il avait faite." },
+                { n: 3, t: "Dieu bénit le septième jour, et il le sanctifia, parce qu'en ce jour il se reposa de toute son oeuvre qu'il avait créée en la faisant." },
+                { n: 4, t: "Voici les origines des cieux et de la terre, quand ils furent créés. Lorsque l'Eternel Dieu fit une terre et des cieux," },
+                { n: 5, t: "aucun arbuste des champs n'était encore sur la terre, et aucune herbe des champs ne germait encore : car l'Eternel Dieu n'avait pas fait pleuvoir sur la terre, et il n'y avait point d'homme pour cultiver le sol." },
+                { n: 6, t: "Mais une vapeur s'éleva de la terre, et arrosa toute la surface du sol." },
+                { n: 7, t: "L'Eternel Dieu forma l'homme de la poussière de la terre, il souffla dans ses narines un souffle de vie et l'homme devint un être vivant." },
+                { n: 8, t: "Puis l'Eternel Dieu planta un jardin en Eden, du côté de l'orient, et il y mit l'homme qu'il avait formé." },
+                { n: 9, t: "L'Eternel Dieu fit pousser du sol des arbres de toute espèce, agréables à voir et bons à manger, et l'arbre de la vie au milieu du jardin, et l'arbre de la connaissance du bien et du mal." },
+                { n: 10, t: "Un fleuve sortait d'Eden pour arroser le jardin, et de là il se divisait en quatre bras." },
+                { n: 11, t: "Le nom du premier est Pischon ; c'est celui qui entoure tout le pays de Havila, où se trouve l'or." },
+                { n: 12, t: "L'or de ce pays est pur ; on y trouve aussi le bdellium et la pierre d'onyx." },
+                { n: 13, t: "Le nom du second fleuve est Guihon ; c'est celui qui entoure tout le pays de Cusch." },
+                { n: 14, t: "Le nom du troisième est Hiddékel ; c'est celui qui coule à l'orient de l'Assyrie. Le quatrième fleuve, c'est l'Euphrate." },
+                { n: 15, t: "L'Eternel Dieu prit l'homme, et le plaça dans le jardin d'Eden pour le cultiver et pour le garder." },
+                { n: 16, t: "L'Eternel Dieu donna cet ordre à l'homme : Tu pourras manger de tous les arbres du jardin ;" },
+                { n: 17, t: "mais tu ne mangeras pas de l'arbre de la connaissance du bien et du mal, car le jour où tu en mangeras, tu mourras." },
+                { n: 18, t: "L'Eternel Dieu dit : Il n'est pas bon que l'homme soit seul ; je lui ferai une aide semblable à lui." },
+                { n: 19, t: "L'Eternel Dieu forma de la terre tous les animaux des champs et tous les oiseaux du ciel, et il les fit venir vers l'homme, pour voir comment il les appellerait, et afin que tout être vivant portât le nom que lui donnerait l'homme." },
+                { n: 20, t: "Et l'homme donna des noms à tout le bétail, aux oiseaux du ciel et à tous les animaux des champs ; mais, pour l'homme, il ne trouva point d'aide semblable à lui." },
+                { n: 21, t: "Alors l'Eternel Dieu fit tomber un profond sommeil sur l'homme, qui s'endormit ; il prit une de ses côtes, et referma la chair à sa place." },
+                { n: 22, t: "L'Eternel Dieu forma une femme de la côte qu'il avait prise de l'homme, et il l'amena vers l'homme." },
+                { n: 23, t: "Et l'homme dit : Voici cette fois celle qui est os de mes os et chair de ma chair ! on l'appellera femme, parce qu'elle a été prise de l'homme." },
+                { n: 24, t: "C'est pourquoi l'homme quittera son père et sa mère, et s'attachera à sa femme, et ils deviendront une seule chair." },
+                { n: 25, t: "L'homme et sa femme étaient tous deux nus, et ils n'en avaient point honte." }
             ],
-            "GEN-3":[
-                { n: 1, t:"Le serpent était le plus rusé de tous les animaux des champs, que l’Eternel Dieu avait faits. Il dit à la femme : Dieu a-t-il réellement dit : Vous ne mangerez pas de tous les arbres du jardin ?"},
-                { n: 2, t:"La femme répondit au serpent : Nous mangeons du fruit des arbres du jardin."},
-                { n: 3, t:"Mais quant au fruit de l’arbre qui est au milieu du jardin, Dieu a dit : Vous n’en mangerez point et vous n’y toucherez point, de peur que vous ne mouriez."},
-                { n: 4, t:"Alors le serpent dit à la femme : Vous ne mourrez point ;"},
-                { n: 5, t:"mais Dieu sait que, le jour où vous en mangerez, vos yeux s’ouvriront, et que vous serez comme des dieux, connaissant le bien et le mal."},
-                { n: 6, t:"La femme vit que l’arbre était bon à manger et agréable à la vue, et qu’il était précieux pour ouvrir l’intelligence ; elle prit de son fruit, et en mangea ; elle en donna aussi à son mari, qui était auprès d’elle, et il en mangea."},
-				{ n: 7, t:"Les yeux de l’un et de l’autre s’ouvrirent, ils connurent qu’ils étaient nus, et ayant cousu des feuilles de figuier, ils s’en firent des ceintures."},
-				{ n: 8, t:"Alors ils entendirent la voix de l’Eternel Dieu, qui parcourait le jardin vers le soir, et l’homme et sa femme se cachèrent loin de la face de l’Eternel Dieu, au milieu des arbres du jardin. "},
-				{ n: 9, t:"Mais l’Eternel Dieu appela l’homme, et lui dit : Où es-tu ? "},
-				{ n: 10, t:"Il répondit : J’ai entendu ta voix dans le jardin, et j’ai eu peur, parce que je suis nu, et je me suis caché. "},
-				{ n: 11, t:"Et l’Eternel Dieu dit : Qui t’a appris que tu es nu ? Est-ce que tu as mangé de l’arbre dont je t’avais défendu de manger ?"},
-				{ n: 12, t:"L’homme répondit : La femme que tu as mise auprès de moi m’a donné de l’arbre, et j’en ai mangé."},
-				{ n: 13, t:"Et l’Eternel Dieu dit à la femme : Pourquoi as-tu fait cela ? La femme répondit : Le serpent m’a séduite, et j’en ai mangé."},
-				{ n: 14, t:"L’Eternel Dieu dit au serpent : Puisque tu as fait cela, tu seras maudit entre tout le bétail et entre tous les animaux des champs, tu marcheras sur ton ventre, et tu mangeras de la poussière tous les jours de ta vie."},
-				{ n: 15, t:"Je mettrai inimitié entre toi et la femme, entre ta postérité et sa postérité : celle-ci t’écrasera la tête, et tu lui blesseras le talon."},
-				{ n: 16, t:" Il dit à la femme : J’augmenterai la souffrance de tes grossesses, tu enfanteras avec douleur, et tes désirs se porteront vers ton mari, mais il dominera sur toi."},
-				{ n: 17, t:"Il dit à l’homme : Puisque tu as écouté la voix de ta femme, et que tu as mangé de l’arbre au sujet duquel je t’avais donné cet ordre : Tu n’en mangeras point ! le sol sera maudit à cause de toi. C’est à force de peine que tu en tireras ta nourriture tous les jours de ta vie,"},
-				{ n: 18, t:"il te produira des épines et des ronces, et tu mangeras de l’herbe des champs."},
-				{ n: 19, t:"C’est à la sueur de ton visage que tu mangeras du pain, jusqu’à ce que tu retournes dans la terre, d’où tu as été pris ; car tu es poussière, et tu retourneras dans la poussière."},
-				{ n: 20, t:"Adam donna à sa femme le nom d’Eve : car elle a été la mère de tous les vivants."},
-				{ n: 21, t:" L’Eternel Dieu fit à Adam et à sa femme des habits de peau, et il les en revêtit."},
-				{ n: 22, t:" L’Eternel Dieu dit : Voici, l’homme est devenu comme l’un de nous, pour la connaissance du bien et du mal. Empêchons-le maintenant d’avancer sa main, de prendre de l’arbre de vie, d’en manger, et de vivre éternellement. "},
-				{ n: 23, t:"Et l’Eternel Dieu le chassa du jardin d’Eden, pour qu’il cultivât la terre, d’où il avait été pris."},
-				{ n: 24, t:"C’est ainsi qu’il chassa Adam ; et il mit à l’orient du jardin d’Eden les chérubins qui agitent une épée flamboyante, pour garder le chemin de l’arbre de vie."},
+            "GEN-3": [
+                { n: 1, t: "Le serpent était le plus rusé de tous les animaux des champs, que l'Eternel Dieu avait faits. Il dit à la femme : Dieu a-t-il réellement dit : Vous ne mangerez pas de tous les arbres du jardin ?" },
+                { n: 2, t: "La femme répondit au serpent : Nous mangeons du fruit des arbres du jardin." },
+                { n: 3, t: "Mais quant au fruit de l'arbre qui est au milieu du jardin, Dieu a dit : Vous n'en mangerez point et vous n'y toucherez point, de peur que vous ne mouriez." },
+                { n: 4, t: "Alors le serpent dit à la femme : Vous ne mourrez point ;" },
+                { n: 5, t: "mais Dieu sait que, le jour où vous en mangerez, vos yeux s'ouvriront, et que vous serez comme des dieux, connaissant le bien et le mal." },
+                { n: 6, t: "La femme vit que l'arbre était bon à manger et agréable à la vue, et qu'il était précieux pour ouvrir l'intelligence ; elle prit de son fruit, et en mangea ; elle en donna aussi à son mari, qui était auprès d'elle, et il en mangea." },
+                { n: 7, t: "Les yeux de l'un et de l'autre s'ouvrirent, ils connurent qu'ils étaient nus, et ayant cousu des feuilles de figuier, ils s'en firent des ceintures." },
+                { n: 8, t: "Alors ils entendirent la voix de l'Eternel Dieu, qui parcourait le jardin vers le soir, et l'homme et sa femme se cachèrent loin de la face de l'Eternel Dieu, au milieu des arbres du jardin." },
+                { n: 9, t: "Mais l'Eternel Dieu appela l'homme, et lui dit : Où es-tu ?" },
+                { n: 10, t: "Il répondit : J'ai entendu ta voix dans le jardin, et j'ai eu peur, parce que je suis nu, et je me suis caché." },
+                { n: 11, t: "Et l'Eternel Dieu dit : Qui t'a appris que tu es nu ? Est-ce que tu as mangé de l'arbre dont je t'avais défendu de manger ?" },
+                { n: 12, t: "L'homme répondit : La femme que tu as mise auprès de moi m'a donné de l'arbre, et j'en ai mangé." },
+                { n: 13, t: "Et l'Eternel Dieu dit à la femme : Pourquoi as-tu fait cela ? La femme répondit : Le serpent m'a séduite, et j'en ai mangé." },
+                { n: 14, t: "L'Eternel Dieu dit au serpent : Puisque tu as fait cela, tu seras maudit entre tout le bétail et entre tous les animaux des champs, tu marcheras sur ton ventre, et tu mangeras de la poussière tous les jours de ta vie." },
+                { n: 15, t: "Je mettrai inimitié entre toi et la femme, entre ta postérité et sa postérité : celle-ci t'écrasera la tête, et tu lui blesseras le talon." },
+                { n: 16, t: "Il dit à la femme : J'augmenterai la souffrance de tes grossesses, tu enfanteras avec douleur, et tes désirs se porteront vers ton mari, mais il dominera sur toi." },
+                { n: 17, t: "Il dit à l'homme : Puisque tu as écouté la voix de ta femme, et que tu as mangé de l'arbre au sujet duquel je t'avais donné cet ordre : Tu n'en mangeras point ! le sol sera maudit à cause de toi. C'est à force de peine que tu en tireras ta nourriture tous les jours de ta vie," },
+                { n: 18, t: "il te produira des épines et des ronces, et tu mangeras de l'herbe des champs." },
+                { n: 19, t: "C'est à la sueur de ton visage que tu mangeras du pain, jusqu'à ce que tu retournes dans la terre, d'où tu as été pris ; car tu es poussière, et tu retourneras dans la poussière." },
+                { n: 20, t: "Adam donna à sa femme le nom d'Eve : car elle a été la mère de tous les vivants." },
+                { n: 21, t: "L'Eternel Dieu fit à Adam et à sa femme des habits de peau, et il les en revêtit." },
+                { n: 22, t: "L'Eternel Dieu dit : Voici, l'homme est devenu comme l'un de nous, pour la connaissance du bien et du mal. Empêchons-le maintenant d'avancer sa main, de prendre de l'arbre de vie, d'en manger, et de vivre éternellement." },
+                { n: 23, t: "Et l'Eternel Dieu le chassa du jardin d'Eden, pour qu'il cultivât la terre, d'où il avait été pris." },
+                { n: 24, t: "C'est ainsi qu'il chassa Adam ; et il mit à l'orient du jardin d'Eden les chérubins qui agitent une épée flamboyante, pour garder le chemin de l'arbre de vie." }
             ],
-			"GEN-4":[
-				{ n: 1, t:"Adam connut Eve, sa femme ; elle conçut, et enfanta Caïn et elle dit : J’ai formé un homme avec l’aide de l’Eternel. "},
-				{ n: 2, t:"Elle enfanta encore son frère Abel. Abel fut berger, et Caïn fut laboureur."},
-				{ n: 3, t:"Au bout de quelque temps, Caïn fit à l’Eternel une offrande des fruits de la terre ;"},
-				{ n: 4, t:"et Abel, de son côté, en fit une des premiers-nés de son troupeau et de leur graisse. L’Eternel porta un regard favorable sur Abel et sur son offrande ;"},
-				{ n: 5, t:"mais il ne porta pas un regard favorable sur Caïn et sur son offrande. Caïn fut très irrité, et son visage fut abattu."},
-				{ n: 6, t:" Et l’Eternel dit à Caïn : Pourquoi es-tu irrité, et pourquoi ton visage est-il abattu ?"},
-				{ n: 7, t:"Certainement, si tu agis bien, tu relèveras ton visage, et si tu agis mal, le péché se couche à la porte, et ses désirs se portent vers toi : mais toi, domine sur lui."},
-				{ n: 8, t:"Cependant, Caïn adressa la parole à son frère Abel ; mais, comme ils étaient dans les champs, Caïn se jeta sur son frère Abel, et le tua."},
-				{ n: 9, t:"L’Eternel dit à Caïn : Où est ton frère Abel ? Il répondit : Je ne sais pas ; suis-je le gardien de mon frère ?"},
-				{ n: 10, t:"Et Dieu dit : Qu’as-tu fait ? La voix du sang de ton frère crie de la terre jusqu’à moi."},
-				{ n: 11, t:"Maintenant, tu seras maudit de la terre qui a ouvert sa bouche pour recevoir de ta main le sang de ton frère. "},
-				{ n: 12, t:"Quand tu cultiveras le sol, il ne te donnera plus sa richesse. Tu seras errant et vagabond sur la terre. "},
-				{ n: 13, t:"Caïn dit à l’Eternel : Mon châtiment est trop grand pour être supporté."},
-				{ n: 14, t:"Voici, tu me chasses aujourd’hui de cette terre ; je serai caché loin de ta face, je serai errant et vagabond sur la terre, et quiconque me trouvera me tuera."},
-				{ n: 15, t:"L’Eternel lui dit : Si quelqu’un tuait Caïn, Caïn serait vengé sept fois. Et l’Eternel mit un signe sur Caïn pour que quiconque le trouverait ne le tuât point."},
-				{ n: 16, t:"Puis, Caïn s’éloigna de la face de l’Eternel, et habita dans la terre de Nod, à l’orient d’Eden."},
-				{ n: 17, t:"Caïn connut sa femme ; elle conçut, et enfanta Hénoc. Il bâtit ensuite une ville, et il donna à cette ville le nom de son fils Hénoc."},
-				{ n: 18, t:"Hénoc engendra Irad, Irad engendra Mehujaël, Mehujaël engendra Metuschaël, et Metuschaël engendra Lémec. "},
-				{ n: 19, t:"Lémec prit deux femmes : le nom de l’une était Ada, et le nom de l’autre Tsilla."},
-				{ n: 20, t:"Ada enfanta Jabal : il fut le père de ceux qui habitent sous des tentes et près des troupeaux."},
-				{ n: 21, t:"Le nom de son frère était Jubal : il fut le père de tous ceux qui jouent de la harpe et du chalumeau."},
-				{ n: 22, t:"Tsilla, de son côté, enfanta Tubal-Caïn, qui forgeait tous les instruments d’airain et de fer. La soeur de Tubal-Caïn était Naama."},
-				{ n: 23, t:"Lémec dit à ses femmes : Ada et Tsilla, écoutez ma voix ! Femmes de Lémec, écoutez ma parole ! J’ai tué un homme pour ma blessure, Et un jeune homme pour ma meurtrissure"},
-				{ n: 24, t:"Caïn sera vengé sept fois, Et Lémec soixante-dix-sept fois"},
-				{ n: 25, t:"Adam connut encore sa femme ; elle enfanta un fils, et l’appela du nom de Seth, car, dit-elle, Dieu m’a donné un autre fils à la place d’Abel, que Caïn a tué."},
-				{ n: 26, t:"Seth eut aussi un fils, et il l’appela du nom d’Enosch. C’est alors que l’on commença à invoquer le nom de l’Eternel."},
-			]
+            "GEN-4": [
+                { n: 1, t: "Adam connut Eve, sa femme ; elle conçut, et enfanta Caïn et elle dit : J'ai formé un homme avec l'aide de l'Eternel." },
+                { n: 2, t: "Elle enfanta encore son frère Abel. Abel fut berger, et Caïn fut laboureur." },
+                { n: 3, t: "Au bout de quelque temps, Caïn fit à l'Eternel une offrande des fruits de la terre ;" },
+                { n: 4, t: "et Abel, de son côté, en fit une des premiers-nés de son troupeau et de leur graisse. L'Eternel porta un regard favorable sur Abel et sur son offrande ;" },
+                { n: 5, t: "mais il ne porta pas un regard favorable sur Caïn et sur son offrande. Caïn fut très irrité, et son visage fut abattu." },
+                { n: 6, t: "Et l'Eternel dit à Caïn : Pourquoi es-tu irrité, et pourquoi ton visage est-il abattu ?" },
+                { n: 7, t: "Certainement, si tu agis bien, tu relèveras ton visage, et si tu agis mal, le péché se couche à la porte, et ses désirs se portent vers toi : mais toi, domine sur lui." },
+                { n: 8, t: "Cependant, Caïn adressa la parole à son frère Abel ; mais, comme ils étaient dans les champs, Caïn se jeta sur son frère Abel, et le tua." },
+                { n: 9, t: "L'Eternel dit à Caïn : Où est ton frère Abel ? Il répondit : Je ne sais pas ; suis-je le gardien de mon frère ?" },
+                { n: 10, t: "Et Dieu dit : Qu'as-tu fait ? La voix du sang de ton frère crie de la terre jusqu'à moi." },
+                { n: 11, t: "Maintenant, tu seras maudit de la terre qui a ouvert sa bouche pour recevoir de ta main le sang de ton frère." },
+                { n: 12, t: "Quand tu cultiveras le sol, il ne te donnera plus sa richesse. Tu seras errant et vagabond sur la terre." },
+                { n: 13, t: "Caïn dit à l'Eternel : Mon châtiment est trop grand pour être supporté." },
+                { n: 14, t: "Voici, tu me chasses aujourd'hui de cette terre ; je serai caché loin de ta face, je serai errant et vagabond sur la terre, et quiconque me trouvera me tuera." },
+                { n: 15, t: "L'Eternel lui dit : Si quelqu'un tuait Caïn, Caïn serait vengé sept fois. Et l'Eternel mit un signe sur Caïn pour que quiconque le trouverait ne le tuât point." },
+                { n: 16, t: "Puis, Caïn s'éloigna de la face de l'Eternel, et habita dans la terre de Nod, à l'orient d'Eden." },
+                { n: 17, t: "Caïn connut sa femme ; elle conçut, et enfanta Hénoc. Il bâtit ensuite une ville, et il donna à cette ville le nom de son fils Hénoc." },
+                { n: 18, t: "Hénoc engendra Irad, Irad engendra Mehujaël, Mehujaël engendra Metuschaël, et Metuschaël engendra Lémec." },
+                { n: 19, t: "Lémec prit deux femmes : le nom de l'une était Ada, et le nom de l'autre Tsilla." },
+                { n: 20, t: "Ada enfanta Jabal : il fut le père de ceux qui habitent sous des tentes et près des troupeaux." },
+                { n: 21, t: "Le nom de son frère était Jubal : il fut le père de tous ceux qui jouent de la harpe et du chalumeau." },
+                { n: 22, t: "Tsilla, de son côté, enfanta Tubal-Caïn, qui forgeait tous les instruments d'airain et de fer. La soeur de Tubal-Caïn était Naama." },
+                { n: 23, t: "Lémec dit à ses femmes : Ada et Tsilla, écoutez ma voix ! Femmes de Lémec, écoutez ma parole ! J'ai tué un homme pour ma blessure, Et un jeune homme pour ma meurtrissure" },
+                { n: 24, t: "Caïn sera vengé sept fois, Et Lémec soixante-dix-sept fois" },
+                { n: 25, t: "Adam connut encore sa femme ; elle enfanta un fils, et l'appela du nom de Seth, car, dit-elle, Dieu m'a donné un autre fils à la place d'Abel, que Caïn a tué." },
+                { n: 26, t: "Seth eut aussi un fils, et il l'appela du nom d'Enosch. C'est alors que l'on commença à invoquer le nom de l'Eternel." }
+            ]
         };
 
         const config = {
@@ -345,7 +370,7 @@
         function toggleContrast() {
             const isDark = document.body.classList.toggle('bg-gray-900');
             const icon = document.getElementById('contrast-icon');
-            
+
             const header = document.querySelector('header');
             const nav = document.querySelector('nav');
             const selects = document.querySelectorAll('select');
@@ -356,6 +381,9 @@
             const bookName = document.getElementById('display-book-name');
             const completionTitle = document.getElementById('completion-title');
             const badgeContainer = document.getElementById('badge-container');
+
+            const smallPfp = document.querySelector('.w-10.h-10.rounded-full');
+            const bigPfp = document.querySelector('.w-24.h-24.rounded-full');
 
             if (isDark) {
                 document.body.classList.add('text-white');
@@ -383,6 +411,9 @@
                     el.classList.replace('text-gray-800', 'text-white');
                     el.classList.replace('text-gray-700', 'text-white');
                 });
+
+                if (smallPfp) smallPfp.classList.replace('bg-primary', 'bg-gray-700');
+                if (bigPfp) bigPfp.classList.replace('bg-primary', 'bg-gray-700');
 
                 icon.setAttribute('data-lucide', 'sun');
             } else {
@@ -412,16 +443,19 @@
                     el.classList.remove('text-white');
                 });
 
+                if (smallPfp) smallPfp.classList.replace('bg-gray-700', 'bg-primary');
+                if (bigPfp) bigPfp.classList.replace('bg-gray-700', 'bg-primary');
+
                 icon.setAttribute('data-lucide', 'moon');
             }
-            
+
             renderBible();
             lucide.createIcons();
         }
 
         function populateSelectors() {
             const bSelect = document.getElementById('book-select');
-            bSelect.innerHTML = BIBLE_METADATA.map(b => 
+            bSelect.innerHTML = BIBLE_METADATA.map(b =>
                 `<option value="${b.id}" ${state.currentBook === b.id ? 'selected' : ''}>${b.name}</option>`
             ).join('');
             updateChapterSelector();
@@ -455,7 +489,7 @@
             const key = `${state.currentBook}-${state.currentChapter}`;
             const verses = bibleContentData[key];
             document.getElementById('display-book-name').textContent = book.name;
-            
+
             const isDark = document.body.classList.contains('bg-gray-900');
 
             if (verses) {
@@ -468,7 +502,7 @@
             } else {
                 container.innerHTML = `<div class="text-center py-20 opacity-30"><i data-lucide="scroll-text" class="w-12 h-12 mx-auto mb-4"></i><p class="italic text-sm">Contenu à venir.</p></div>`;
             }
-            
+
             const btn = document.getElementById('xp-claim-btn');
             const alreadyRead = state.completedChapters.includes(key);
             if (alreadyRead) {
@@ -579,6 +613,7 @@
                 toast.style.transform = 'translate(-50%, 0)';
             }, 3000);
         }
+
         window.onload = initApp;
     </script>
 </body>
