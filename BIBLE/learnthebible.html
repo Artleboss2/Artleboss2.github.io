@@ -30,85 +30,49 @@
             letter-spacing: 0.01em;
         }
         .card-beige { background-color: var(--secondary); }
-        .bg-primary { background-color: var(--primary); }
-        .bg-accent-1 { background-color: var(--accent-1); }
         .progress-bar-inner {
             transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .verse {
-            transition: background-color 0.2s;
-            border-radius: 8px;
-            padding: 8px;
-            margin-bottom: 4px;
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-        }
-        .verse:hover {
-            background-color: #C5B4A2;
-        }
-        body.bg-gray-900 [data-lucide] {
-            color: #e5e7eb;
-        }
-        body.bg-gray-900 .text-primary [data-lucide],
-        body.bg-gray-900 [data-lucide].text-primary {
-            color: var(--primary);
-        }
-        body.bg-gray-900 .stats-card [data-lucide] {
-            color: var(--primary) !important;
-        }
-        body.bg-gray-900 #stats-chapters,
-        body.bg-gray-900 #stats-xp {
-            color: #f9fafb;
-        }
-        body.bg-gray-900 .stats-card p.text-gray-400 {
-            color: #9ca3af;
-        }
-        body.bg-gray-900 #xp-progress {
-            background-color: #1e40af;
-            box-shadow: 0 0 0 1.5px white;
-            border-radius: 9999px;
-        }
-        body.bg-gray-900 .w-24.h-1\.5 {
-            background-color: #374151;
         }
         .active-nav {
             color: var(--primary);
             border-top: 3px solid var(--primary);
         }
-        .ios-bottom-padding {
-            padding-bottom: env(safe-area-inset-bottom);
+        .loading-overlay {
+            position: fixed; inset: 0; background: rgba(252, 226, 226, 0.8);
+            display: none; align-items: center; justify-content: center; z-index: 100;
         }
-        select {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%232F3640'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 0.5rem center;
-            background-size: 1.5em 1.5em;
+        /* Style pour les versets */
+        .verse-num {
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-right: 0.5rem;
+            vertical-align: super;
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
+    <!-- Overlay de chargement -->
+    <div id="loading" class="loading-overlay">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-400"></div>
+    </div>
+
     <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-gray-100 p-4 flex justify-between items-center transition-colors">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold shadow-sm">
+            <div class="w-10 h-10 rounded-full bg-[#A9CCE3] flex items-center justify-center text-white font-bold shadow-sm">
                 <span id="user-initial">E</span>
             </div>
             <div>
-                <h1 class="text-xs font-bold uppercase tracking-wider text-gray-400" id="current-level-title">Novice</h1>
+                <h1 class="text-[10px] font-bold uppercase tracking-wider text-gray-400" id="current-level-title">Novice</h1>
                 <div class="flex items-center gap-2">
                     <div class="w-24 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                        <div id="xp-progress" class="progress-bar-inner h-full bg-accent-1" style="width: 0%"></div>
+                        <div id="xp-progress" class="progress-bar-inner h-full bg-[#D1E8E2]" style="width: 0%"></div>
                     </div>
                     <span class="text-[10px] font-mono font-bold" id="xp-text">0/100 XP</span>
                 </div>
             </div>
         </div>
         <div class="flex items-center gap-4">
-            <button onclick="toggleContrast()" class="p-2 rounded-full hover:bg-gray-100/10 transition-colors" title="Changer le contraste">
-                <i data-lucide="moon" id="contrast-icon" class="w-5 h-5 text-gray-600"></i>
-            </button>
             <div class="flex flex-col items-center border-l pl-4 border-gray-100">
                 <i data-lucide="flame" class="text-orange-500 w-5 h-5"></i>
                 <span class="text-xs font-bold" id="streak-count">0</span>
@@ -117,75 +81,70 @@
     </header>
 
     <main id="app-container" class="flex-grow pb-24 overflow-y-auto">
+        <!-- VUE LECTEUR -->
         <section id="view-reader" class="p-4 max-w-2xl mx-auto">
             <div class="flex gap-2 mb-6">
-                <select id="book-select" onchange="handleBookChange()" class="flex-grow bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors"></select>
-                <select id="chapter-select" onchange="handleChapterChange()" class="w-24 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary/50 text-center transition-colors"></select>
+                <select id="book-select" onchange="handleBookChange()" class="flex-grow bg-white border border-gray-200 rounded-xl px-4 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-200 transition-colors"></select>
+                <select id="chapter-select" onchange="handleChapterChange()" class="w-24 bg-white border border-gray-200 rounded-xl px-4 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-blue-200 text-center transition-colors"></select>
             </div>
 
             <div class="mb-8 text-center">
                 <h2 id="display-book-name" class="text-4xl font-bold font-serif mb-2 text-gray-800 transition-colors">Genèse</h2>
-                <div class="h-1 w-16 bg-primary mx-auto rounded-full opacity-60"></div>
+                <div class="h-1 w-16 bg-[#A9CCE3] mx-auto rounded-full opacity-60"></div>
             </div>
 
-            <article id="bible-content" class="bible-text text-lg space-y-1 text-gray-700 transition-colors"></article>
+            <article id="bible-content" class="bible-text text-lg space-y-4 text-gray-700 transition-colors">
+                <!-- Les versets seront injectés ici -->
+            </article>
 
+            <!-- Carte de complétion -->
             <div id="completion-card" class="mt-12 p-8 rounded-3xl card-beige border border-[#DCDDE1] text-center shadow-sm transition-colors">
-                <div id="xp-status-icon" class="mb-4">
-                    <i data-lucide="book-open" class="w-12 h-12 mx-auto text-primary"></i>
+                <div class="mb-4">
+                    <i data-lucide="book-open" class="w-12 h-12 mx-auto text-[#A9CCE3]"></i>
                 </div>
-                <h3 id="completion-title" class="font-bold text-xl mb-2 text-gray-800 transition-colors">Chapitre terminé ?</h3>
-                <p id="completion-subtitle" class="text-sm text-gray-500 mb-6">Lisez attentivement pour valider vos progrès.</p>
-                <button id="xp-claim-btn" onclick="completeChapter()" class="bg-primary text-white px-12 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0 transition-all w-full md:w-auto">
-                    Valider et gagner +10 XP
+                <h3 class="font-bold text-xl mb-2 text-gray-800">Chapitre terminé ?</h3>
+                <p class="text-sm text-gray-500 mb-6">Validez pour enregistrer vos progrès et gagner de l'XP.</p>
+                <button onclick="completeChapter()" class="bg-[#A9CCE3] text-white px-12 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all w-full md:w-auto">
+                    Valider +10 XP
                 </button>
             </div>
             
             <div class="mt-10 flex justify-between items-center border-t border-gray-100 pt-6">
-                <button onclick="changeChapter(-1)" class="p-3 rounded-full hover:bg-gray-100/10 transition-colors">
+                <button onclick="changeChapter(-1)" class="p-3 rounded-full hover:bg-white/50 transition-colors">
                     <i data-lucide="chevron-left" class="w-6 h-6 text-gray-400"></i>
                 </button>
-                <span class="text-xs font-bold uppercase tracking-widest text-gray-300">Learn the Bible</span>
-                <button onclick="changeChapter(1)" class="p-3 rounded-full hover:bg-gray-100/10 transition-colors">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-300">Learn the Bible</span>
+                <button onclick="changeChapter(1)" class="p-3 rounded-full hover:bg-white/50 transition-colors">
                     <i data-lucide="chevron-right" class="w-6 h-6 text-gray-400"></i>
                 </button>
             </div>
         </section>
 
+        <!-- VUE PROFIL -->
         <section id="view-profile" class="hidden p-6 max-w-2xl mx-auto">
             <div class="text-center mb-8">
-                <div class="relative inline-block">
-                    <div class="w-24 h-24 bg-primary rounded-full mx-auto mb-4 flex items-center justify-center text-3xl text-white font-bold shadow-xl border-4 border-white">E</div>
-                    <div class="absolute bottom-4 right-0 bg-accent-1 p-1 rounded-full border-2 border-white shadow-sm">
-                        <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
-                    </div>
-                </div>
-                <h2 class="text-2xl font-bold text-gray-800 transition-colors" id="profile-name">Explorateur</h2>
+                <div class="w-24 h-24 bg-[#A9CCE3] rounded-full mx-auto mb-4 flex items-center justify-center text-3xl text-white font-bold shadow-xl border-4 border-white">E</div>
+                <h2 class="text-2xl font-bold text-gray-800" id="profile-name">Explorateur</h2>
                 <p class="text-gray-500 italic" id="profile-title">Novice</p>
             </div>
 
             <div class="grid grid-cols-2 gap-4 mb-8">
-                <div class="p-6 bg-white border rounded-3xl shadow-sm text-center transition-colors stats-card">
-                    <i data-lucide="book-marked" class="w-6 h-6 mx-auto mb-2 text-primary"></i>
-                    <p class="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Chapitres lus</p>
-                    <p class="text-3xl font-black text-gray-800 transition-colors" id="stats-chapters">0</p>
+                <div class="p-6 bg-white border rounded-3xl shadow-sm text-center">
+                    <i data-lucide="book-marked" class="w-6 h-6 mx-auto mb-2 text-[#A9CCE3]"></i>
+                    <p class="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Chapitres</p>
+                    <p class="text-3xl font-black text-gray-800" id="stats-chapters">0</p>
                 </div>
-                <div class="p-6 bg-white border rounded-3xl shadow-sm text-center transition-colors stats-card">
+                <div class="p-6 bg-white border rounded-3xl shadow-sm text-center">
                     <i data-lucide="sparkles" class="w-6 h-6 mx-auto mb-2 text-orange-400"></i>
                     <p class="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Total XP</p>
-                    <p class="text-3xl font-black text-gray-800 transition-colors" id="stats-xp">0</p>
+                    <p class="text-3xl font-black text-gray-800" id="stats-xp">0</p>
                 </div>
             </div>
-
-            <h3 class="font-bold mb-4 flex items-center gap-2 text-gray-700 transition-colors" id="reward-title">
-                <i data-lucide="trophy" class="w-5 h-5 text-yellow-500"></i>
-                Récompenses
-            </h3>
-            <div id="badge-container" class="grid grid-cols-3 gap-4 bg-gray-50 p-6 rounded-3xl border border-gray-100 transition-colors"></div>
         </section>
     </main>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-gray-100 flex justify-around items-center h-20 ios-bottom-padding z-40 transition-colors">
+    <!-- Navigation Basse -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-gray-100 flex justify-around items-center h-20 z-40">
         <button onclick="switchView('reader')" id="nav-reader" class="flex flex-col items-center justify-center w-full h-full active-nav">
             <i data-lucide="book-open" class="w-6 h-6"></i>
             <span class="text-[10px] font-bold mt-1 uppercase tracking-widest">Lire</span>
@@ -196,9 +155,12 @@
         </button>
     </nav>
 
-    <div id="xp-toast" class="fixed top-20 left-1/2 -translate-x-1/2 bg-gray-900/90 text-white px-8 py-4 rounded-2xl shadow-2xl z-[60] opacity-0 transition-all pointer-events-none flex items-center gap-3 backdrop-blur-sm">
-        <div class="bg-primary p-1 rounded-full"><i data-lucide="zap" class="w-4 h-4 text-white"></i></div>
+    <!-- Toast Notification -->
+    <div id="xp-toast" class="fixed top-20 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-8 py-4 rounded-2xl shadow-2xl z-[60] opacity-0 transition-all pointer-events-none flex items-center gap-3">
+        <i data-lucide="zap" class="w-4 h-4 text-yellow-400"></i>
         <span id="xp-toast-text" class="font-bold">+10 XP</span>
     </div>
+
+    <script src="js/app.js"></script>
 </body>
 </html>
