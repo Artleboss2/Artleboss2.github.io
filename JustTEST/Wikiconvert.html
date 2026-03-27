@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gitipedia Converter</title>
+    <script src="https://unpkg.com/turndown/dist/turndown.js"></script>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; background: #f4f4f4; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        input[type="text"] { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { background: #2b2b2b; color: white; border: none; padding: 12px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; }
+        button:hover { background: #444; }
+        textarea { width: 100%; height: 400px; margin-top: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: monospace; box-sizing: border-box; }
+        .status { color: #666; font-size: 0.9em; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Gitipedia Converter</h1>
+    <p>Paste a Wikipedia URL to transform it into Markdown.</p>
+    
+    <input type="text" id="wikiUrl" placeholder="https://en.wikipedia.org/wiki/Catfish">
+    <button onclick="convertWiki()">Transform to Markdown</button>
+    <div id="status" class="status"></div>
+
+    <textarea id="output" placeholder="Markdown will appear here..."></textarea>
+</div>
+
+<script>
+    async function convertWiki() {
+        const urlInput = document.getElementById('wikiUrl').value.trim();
+        const status = document.getElementById('status');
+        const output = document.getElementById('output');
+        
+        if (!urlInput) return;
+
+        try {
+            status.innerText = "Fetching data from Wikipedia...";
+            
+            const match = urlInput.match(/https?:\/\/([a-z]+)\.wikipedia\.org\/wiki\/(.+)/);
+            if (!match) throw new Error("Invalid Wikipedia URL");
+
+            const lang = match[1];
+            const title = match[2];
+
+            const apiUrl = `https://${lang}.wikipedia.org/api/rest_v1/page/html/${title}`;
+            
+            const response = await fetch(apiUrl);
+            if (!response.ok) throw new Error("Page not found");
+            
+            const html = await response.text();
+
+            const turndownService = new TurndownService({
+                headingStyle: 'atx',
+                codeBlockStyle: 'fenced'
+            });
+
+            let markdown = turndownService.turndown(html);
+
+            const finalMarkdown = `# ${decodeURIComponent(title).replace(/_/g, ' ')}\n\n${markdown}`;
+
+            output.value = finalMarkdown;
+            status.innerText = "Transformation complete!";
+            
+        } catch (error) {
+            status.innerText = "Error: " + error.message;
+            console.error(error);
+        }
+    }
+</script>
+
+</body>
+</html>
