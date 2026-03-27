@@ -533,4 +533,24 @@ window.BIBLE_DATA_GEN = {
                 { n: 37, t: "L'aînée enfanta un fils, qu'elle appela du nom de Moab : c'est le père des Moabites, jusqu'à ce jour." },
                 { n: 38, t: "La plus jeune enfanta aussi un fils, qu'elle appela du nom de Ben-Ammi : c'est le père des Ammonites, jusqu'à ce jour." }
             ],
+            "GEN-20": [
+                { n: 1, t: "Abraham partit de là pour la contrée du midi ; il s'établit entre Kadès et Schur, et fit un séjour à Guérar." },
+                { n: 2, t: "Abraham disait de Sara, sa femme : C'est ma soeur. Abimélec, roi de Guérar, fit enlever Sara." },
+                { n: 3, t: "Alors Dieu apparut en songe à Abimélec pendant la nuit, et lui dit : Voici, tu vas mourir à cause de la femme que tu as prise, car elle a un mari." },
+                { n: 4, t: "Abimélec, qui ne s'était point approché d'elle, répondit : Seigneur, tuerais-tu même une nation juste ?" },
+                { n: 5, t: "Ne m'a-t-il pas dit : C'est ma soeur ? et elle-même n'a-t-elle pas dit : C'est mon frère ? J'ai agi avec un coeur pur et avec des mains innocentes." },
+                { n: 6, t: "Dieu lui dit en songe : Je sais que tu as agi avec un coeur pur ; aussi t'ai-je empêché de pécher contre moi. C'est pourquoi je n'ai pas permis que tu la touchasses." },
+                { n: 7, t: "Maintenant, rends la femme de cet homme ; car il est prophète, il priera pour toi, et tu vivras. Mais, si tu ne la rends pas, sache que tu mourras, toi et tout ce qui t'appartient." },
+                { n: 8, t: "Abimélec se leva de bon matin, il appela tous ses serviteurs, et leur rapporta toutes ces choses ; et ces gens furent saisis d'une grande frayeur." },
+                { n: 9, t: "Abimélec appela aussi Abraham, et lui dit : Qu'est-ce que tu nous as fait ? Et en quoi t'ai-je offensé, que tu aies fait venir sur moi et sur mon royaume un si grand péché ? Tu as commis à mon égard des actes qui ne doivent pas se commettre." },
+                { n: 10, t: "Et Abimélec dit à Abraham : Quelle intention avais-tu pour agir de la sorte ?" },
+                { n: 11, t: "Abraham répondit : Je me disais qu'il n'y avait sans doute aucune crainte de Dieu dans ce pays, et qu'on me tuerait à cause de ma femme." },
+                { n: 12, t: "De plus, il est vrai qu'elle est ma soeur, fille de mon père ; seulement, elle n'est pas fille de ma mère ; et elle est devenue ma femme." },
+                { n: 13, t: "Lorsque Dieu me fit errer loin de la maison de mon père, je dis à Sara : Voici la grâce que tu me feras ; dans tous les lieux où nous irons, dis de moi : C'est mon frère." },
+                { n: 14, t: "Abimélec prit des brebis et des boeufs, des serviteurs et des servantes, et les donna à Abraham ; et il lui rendit Sara, sa femme." },
+                { n: 15, t: "Abimélec dit : Voici, mon pays est devant toi ; établis-toi où il te plaira." },
+                { n: 16, t: "Et il dit à Sara : Voici, je donne à ton frère mille pièces d'argent ; cela te sera un voile sur les yeux pour tous ceux qui sont avec toi, et auprès de tous tu seras justifiée." },
+                { n: 17, t: "Abraham pria Dieu, et Dieu guérit Abimélec, sa femme et ses servantes, de sorte qu'elles purent enfanter." },
+                { n: 18, t: "Car l'Eternel avait frappé de stérilité tout le sein dans la maison d'Abimélec, à cause de Sara, femme d'Abraham." }
+            ],
         };
