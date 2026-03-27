@@ -74,11 +74,16 @@
                 </div>
             </div>
         </div>
-        <div class="flex items-center gap-4">
-            <div class="flex flex-col items-center">
-                <i data-lucide="flame" class="text-orange-500 w-5 h-5"></i>
-                <span class="text-xs font-bold" id="streak-count">0</span>
-            </div>
+       <div class="flex items-center gap-4">
+    <button onclick="toggleContrast()" class="p-2 rounded-full hover:bg-gray-100 transition-colors mr-2" title="Changer le contraste">
+        <i data-lucide="moon" id="contrast-icon" class="w-5 h-5 text-gray-600"></i>
+    </button>
+
+    <div class="flex flex-col items-center">
+        <i data-lucide="flame" class="text-orange-500 w-5 h-5"></i>
+        <span class="text-xs font-bold" id="streak-count">0</span>
+        </div>
+    </div>
         </div>
     </header>
 
@@ -213,6 +218,33 @@
                 { n: 30, t: "Et à tout animal de la terre, à tout oiseau du ciel, et à tout ce qui se meut sur la terre, ayant en soi un souffle de vie, je donne toute herbe verte pour nourriture. Et cela fut ainsi." },
                 { n: 31, t: "Dieu vit tout ce qu’il avait fait et voici, cela était très bon. Ainsi, il y eut un soir, et il y eut un matin : ce fut le sixième jour." }
             ]
+            "GEN-2":[
+                { n: 1, t:" Ainsi furent achevés les cieux et la terre, et toute leur armée"}
+                { n: 2, t:"Dieu acheva au septième jour son oeuvre, qu’il avait faite : et il se reposa au septième jour de toute son oeuvre, qu’il avait faite."}
+                { n: 3, t:" Dieu bénit le septième jour, et il le sanctifia, parce qu’en ce jour il se reposa de toute son oeuvre qu’il avait créée en la faisant."}
+                { n: 4, t:"Voici les origines des cieux et de la terre, quand ils furent créés. Lorsque l’Eternel Dieu fit une terre et des cieux,"}
+                { n: 5, t:"aucun arbuste des champs n’était encore sur la terre, et aucune herbe des champs ne germait encore : car l’Eternel Dieu n’avait pas fait pleuvoir sur la terre, et il n’y avait point d’homme pour cultiver le sol."}
+                { n: 6, t:" Mais une vapeur s’éleva de la terre, et arrosa toute la surface du sol."}
+                { n: 7, t:"L’Eternel Dieu forma l’homme de la poussière de la terre, il souffla dans ses narines un souffle de vie et l’homme devint un être vivant."}
+                { n: 8, t:"Puis l’Eternel Dieu planta un jardin en Eden, du côté de l’orient, et il y mit l’homme qu’il avait formé."}
+                { n: 9, t:"L’Eternel Dieu fit pousser du sol des arbres de toute espèce, agréables à voir et bons à manger, et l’arbre de la vie au milieu du jardin, et l’arbre de la connaissance du bien et du mal."}
+                { n: 10, t:"Un fleuve sortait d’Eden pour arroser le jardin, et de là il se divisait en quatre bras."}
+                { n: 11, t:"Le nom du premier est Pischon ; c’est celui qui entoure tout le pays de Havila, où se trouve l’or."}
+                { n: 12, t:"L’or de ce pays est pur ; on y trouve aussi le bdellium et la pierre d’onyx. "}
+                { n: 13, t:"Le nom du second fleuve est Guihon ; c’est celui qui entoure tout le pays de Cusch. "}
+                { n: 14, t:"Le nom du troisième est Hiddékel ; c’est celui qui coule à l’orient de l’Assyrie. Le quatrième fleuve, c’est l’Euphrate."}
+                { n: 15, t:"L’Eternel Dieu prit l’homme, et le plaça dans le jardin d’Eden pour le cultiver et pour le garder."}
+                { n: 16, t:" L’Eternel Dieu donna cet ordre à l’homme : Tu pourras manger de tous les arbres du jardin ;"}
+                { n: 17, t:"mais tu ne mangeras pas de l’arbre de la connaissance du bien et du mal, car le jour où tu en mangeras, tu mourras."}
+                { n: 18, t:"L’Eternel Dieu dit : Il n’est pas bon que l’homme soit seul ; je lui ferai une aide semblable à lui."}
+                { n: 19, t:"L’Eternel Dieu forma de la terre tous les animaux des champs et tous les oiseaux du ciel, et il les fit venir vers l’homme, pour voir comment il les appellerait, et afin que tout être vivant portât le nom que lui donnerait l’homme."}
+                { n: 20, t:"Et l’homme donna des noms à tout le bétail, aux oiseaux du ciel et à tous les animaux des champs ; mais, pour l’homme, il ne trouva point d’aide semblable à lui."}
+                { n: 21, t:" Alors l’Eternel Dieu fit tomber un profond sommeil sur l’homme, qui s’endormit ; il prit une de ses côtes, et referma la chair à sa place."}
+                { n: 22, t:"L’Eternel Dieu forma une femme de la côte qu’il avait prise de l’homme, et il l’amena vers l’homme"}
+                { n: 23, t:" Et l’homme dit : Voici cette fois celle qui est os de mes os et chair de ma chair ! on l’appellera femme, parce qu’elle a été prise de l’homme."}
+                { n: 24, t:"C’est pourquoi l’homme quittera son père et sa mère, et s’attachera à sa femme, et ils deviendront une seule chair. "}
+                { n: 25, t:"L’homme et sa femme étaient tous deux nus, et ils n’en avaient point honte."}
+            ]
         };
 
         const config = {
@@ -229,7 +261,23 @@
                 { id: "B3", name: "Savant", icon: "graduation-cap" }
             ]
         };
-
+        function toggleContrast() {
+    const isDark = document.body.classList.toggle('bg-gray-900');
+    const icon = document.getElementById('contrast-icon');
+    
+    if (isDark) {
+        	document.body.classList.add('text-white');
+        	document.querySelectorAll('.text-gray-800, .text-gray-700').forEach(el => el.classList.replace('text-gray-800', 'text-gray-100'));
+            document.querySelectorAll('.bg-white').forEach(el => el.classList.replace('bg-white', 'bg-gray-800'));
+            icon.setAttribute('data-lucide', 'sun');
+        } else {
+                document.body.classList.remove('text-white');
+                document.querySelectorAll('.text-gray-100').forEach(el => el.classList.replace('text-gray-100', 'text-gray-800'));
+                document.querySelectorAll('.bg-gray-800').forEach(el => el.classList.replace('bg-gray-800', 'bg-white'));
+                icon.setAttribute('data-lucide', 'moon');
+            }
+        lucide.createIcons();
+        }
         let state = {
             xp: 0,
             streak: 0,
