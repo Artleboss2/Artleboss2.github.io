@@ -22,6 +22,7 @@
             background-color: var(--background);
             color: var(--text);
             overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
         }
         .bible-text {
             font-family: 'Lora', serif;
@@ -60,7 +61,7 @@
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
-    <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-gray-100 p-4 flex justify-between items-center">
+    <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-gray-100 p-4 flex justify-between items-center transition-colors">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold shadow-sm">
                 <span id="user-initial">E</span>
@@ -75,38 +76,36 @@
                 </div>
             </div>
         </div>
-       <div class="flex items-center gap-4">
-    <button onclick="toggleContrast()" class="p-2 rounded-full hover:bg-gray-100 transition-colors mr-2" title="Changer le contraste">
-        <i data-lucide="moon" id="contrast-icon" class="w-5 h-5 text-gray-600"></i>
-    </button>
-
-    <div class="flex flex-col items-center">
-        <i data-lucide="flame" class="text-orange-500 w-5 h-5"></i>
-        <span class="text-xs font-bold" id="streak-count">0</span>
-        </div>
-    </div>
+        <div class="flex items-center gap-4">
+            <button onclick="toggleContrast()" class="p-2 rounded-full hover:bg-gray-100/10 transition-colors" title="Changer le contraste">
+                <i data-lucide="moon" id="contrast-icon" class="w-5 h-5 text-gray-600"></i>
+            </button>
+            <div class="flex flex-col items-center border-l pl-4 border-gray-100">
+                <i data-lucide="flame" class="text-orange-500 w-5 h-5"></i>
+                <span class="text-xs font-bold" id="streak-count">0</span>
+            </div>
         </div>
     </header>
 
     <main id="app-container" class="flex-grow pb-24 overflow-y-auto">
         <section id="view-reader" class="p-4 max-w-2xl mx-auto">
             <div class="flex gap-2 mb-6">
-                <select id="book-select" onchange="handleBookChange()" class="flex-grow bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary/50"></select>
-                <select id="chapter-select" onchange="handleChapterChange()" class="w-24 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary/50 text-center"></select>
+                <select id="book-select" onchange="handleBookChange()" class="flex-grow bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors"></select>
+                <select id="chapter-select" onchange="handleChapterChange()" class="w-24 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary/50 text-center transition-colors"></select>
             </div>
 
             <div class="mb-8 text-center">
-                <h2 id="display-book-name" class="text-4xl font-bold font-serif mb-2 text-gray-800">Genèse</h2>
+                <h2 id="display-book-name" class="text-4xl font-bold font-serif mb-2 text-gray-800 transition-colors">Genèse</h2>
                 <div class="h-1 w-16 bg-primary mx-auto rounded-full opacity-60"></div>
             </div>
 
-            <article id="bible-content" class="bible-text text-lg space-y-1 text-gray-700"></article>
+            <article id="bible-content" class="bible-text text-lg space-y-1 text-gray-700 transition-colors"></article>
 
-            <div id="completion-card" class="mt-12 p-8 rounded-3xl card-beige border border-[#DCDDE1] text-center shadow-sm">
+            <div id="completion-card" class="mt-12 p-8 rounded-3xl card-beige border border-[#DCDDE1] text-center shadow-sm transition-colors">
                 <div id="xp-status-icon" class="mb-4">
                     <i data-lucide="book-open" class="w-12 h-12 mx-auto text-primary"></i>
                 </div>
-                <h3 id="completion-title" class="font-bold text-xl mb-2 text-gray-800">Chapitre terminé ?</h3>
+                <h3 id="completion-title" class="font-bold text-xl mb-2 text-gray-800 transition-colors">Chapitre terminé ?</h3>
                 <p id="completion-subtitle" class="text-sm text-gray-500 mb-6">Lisez attentivement pour valider vos progrès.</p>
                 <button id="xp-claim-btn" onclick="completeChapter()" class="bg-primary text-white px-12 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0 transition-all w-full md:w-auto">
                     Valider et gagner +10 XP
@@ -114,11 +113,11 @@
             </div>
             
             <div class="mt-10 flex justify-between items-center border-t border-gray-100 pt-6">
-                <button onclick="changeChapter(-1)" class="p-3 rounded-full hover:bg-gray-100 transition-colors">
+                <button onclick="changeChapter(-1)" class="p-3 rounded-full hover:bg-gray-100/10 transition-colors">
                     <i data-lucide="chevron-left" class="w-6 h-6 text-gray-400"></i>
                 </button>
                 <span class="text-xs font-bold uppercase tracking-widest text-gray-300">Learn the Bible</span>
-                <button onclick="changeChapter(1)" class="p-3 rounded-full hover:bg-gray-100 transition-colors">
+                <button onclick="changeChapter(1)" class="p-3 rounded-full hover:bg-gray-100/10 transition-colors">
                     <i data-lucide="chevron-right" class="w-6 h-6 text-gray-400"></i>
                 </button>
             </div>
@@ -132,32 +131,32 @@
                         <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
                     </div>
                 </div>
-                <h2 class="text-2xl font-bold" id="profile-name">Explorateur</h2>
+                <h2 class="text-2xl font-bold text-gray-800 transition-colors" id="profile-name">Explorateur</h2>
                 <p class="text-gray-500 italic" id="profile-title">Novice</p>
             </div>
 
             <div class="grid grid-cols-2 gap-4 mb-8">
-                <div class="p-6 bg-white border rounded-3xl shadow-sm text-center">
+                <div class="p-6 bg-white border rounded-3xl shadow-sm text-center transition-colors stats-card">
                     <i data-lucide="book-marked" class="w-6 h-6 mx-auto mb-2 text-primary"></i>
                     <p class="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Chapitres lus</p>
-                    <p class="text-3xl font-black text-gray-800" id="stats-chapters">0</p>
+                    <p class="text-3xl font-black text-gray-800 transition-colors" id="stats-chapters">0</p>
                 </div>
-                <div class="p-6 bg-white border rounded-3xl shadow-sm text-center">
+                <div class="p-6 bg-white border rounded-3xl shadow-sm text-center transition-colors stats-card">
                     <i data-lucide="sparkles" class="w-6 h-6 mx-auto mb-2 text-orange-400"></i>
                     <p class="text-[10px] text-gray-400 uppercase font-bold tracking-widest">Total XP</p>
-                    <p class="text-3xl font-black text-gray-800" id="stats-xp">0</p>
+                    <p class="text-3xl font-black text-gray-800 transition-colors" id="stats-xp">0</p>
                 </div>
             </div>
 
-            <h3 class="font-bold mb-4 flex items-center gap-2 text-gray-700">
+            <h3 class="font-bold mb-4 flex items-center gap-2 text-gray-700 transition-colors" id="reward-title">
                 <i data-lucide="trophy" class="w-5 h-5 text-yellow-500"></i>
                 Récompenses
             </h3>
-            <div id="badge-container" class="grid grid-cols-3 gap-4 bg-gray-50 p-6 rounded-3xl border border-gray-100"></div>
+            <div id="badge-container" class="grid grid-cols-3 gap-4 bg-gray-50 p-6 rounded-3xl border border-gray-100 transition-colors"></div>
         </section>
     </main>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-gray-100 flex justify-around items-center h-20 ios-bottom-padding z-40">
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-gray-100 flex justify-around items-center h-20 ios-bottom-padding z-40 transition-colors">
         <button onclick="switchView('reader')" id="nav-reader" class="flex flex-col items-center justify-center w-full h-full active-nav">
             <i data-lucide="book-open" class="w-6 h-6"></i>
             <span class="text-[10px] font-bold mt-1 uppercase tracking-widest">Lire</span>
@@ -218,33 +217,33 @@
                 { n: 29, t: "Et Dieu dit : Voici, je vous donne toute herbe portant de la semence et qui est à la surface de toute la terre, et tout arbre ayant en lui du fruit d’arbre et portant de la semence : ce sera votre nourriture." },
                 { n: 30, t: "Et à tout animal de la terre, à tout oiseau du ciel, et à tout ce qui se meut sur la terre, ayant en soi un souffle de vie, je donne toute herbe verte pour nourriture. Et cela fut ainsi." },
                 { n: 31, t: "Dieu vit tout ce qu’il avait fait et voici, cela était très bon. Ainsi, il y eut un soir, et il y eut un matin : ce fut le sixième jour." }
-            ]
-            "GEN-2":[
-                { n: 1, t:" Ainsi furent achevés les cieux et la terre, et toute leur armée"}
-                { n: 2, t:"Dieu acheva au septième jour son oeuvre, qu’il avait faite : et il se reposa au septième jour de toute son oeuvre, qu’il avait faite."}
-                { n: 3, t:" Dieu bénit le septième jour, et il le sanctifia, parce qu’en ce jour il se reposa de toute son oeuvre qu’il avait créée en la faisant."}
-                { n: 4, t:"Voici les origines des cieux et de la terre, quand ils furent créés. Lorsque l’Eternel Dieu fit une terre et des cieux,"}
-                { n: 5, t:"aucun arbuste des champs n’était encore sur la terre, et aucune herbe des champs ne germait encore : car l’Eternel Dieu n’avait pas fait pleuvoir sur la terre, et il n’y avait point d’homme pour cultiver le sol."}
-                { n: 6, t:" Mais une vapeur s’éleva de la terre, et arrosa toute la surface du sol."}
-                { n: 7, t:"L’Eternel Dieu forma l’homme de la poussière de la terre, il souffla dans ses narines un souffle de vie et l’homme devint un être vivant."}
-                { n: 8, t:"Puis l’Eternel Dieu planta un jardin en Eden, du côté de l’orient, et il y mit l’homme qu’il avait formé."}
-                { n: 9, t:"L’Eternel Dieu fit pousser du sol des arbres de toute espèce, agréables à voir et bons à manger, et l’arbre de la vie au milieu du jardin, et l’arbre de la connaissance du bien et du mal."}
-                { n: 10, t:"Un fleuve sortait d’Eden pour arroser le jardin, et de là il se divisait en quatre bras."}
-                { n: 11, t:"Le nom du premier est Pischon ; c’est celui qui entoure tout le pays de Havila, où se trouve l’or."}
-                { n: 12, t:"L’or de ce pays est pur ; on y trouve aussi le bdellium et la pierre d’onyx. "}
-                { n: 13, t:"Le nom du second fleuve est Guihon ; c’est celui qui entoure tout le pays de Cusch. "}
-                { n: 14, t:"Le nom du troisième est Hiddékel ; c’est celui qui coule à l’orient de l’Assyrie. Le quatrième fleuve, c’est l’Euphrate."}
-                { n: 15, t:"L’Eternel Dieu prit l’homme, et le plaça dans le jardin d’Eden pour le cultiver et pour le garder."}
-                { n: 16, t:" L’Eternel Dieu donna cet ordre à l’homme : Tu pourras manger de tous les arbres du jardin ;"}
-                { n: 17, t:"mais tu ne mangeras pas de l’arbre de la connaissance du bien et du mal, car le jour où tu en mangeras, tu mourras."}
-                { n: 18, t:"L’Eternel Dieu dit : Il n’est pas bon que l’homme soit seul ; je lui ferai une aide semblable à lui."}
-                { n: 19, t:"L’Eternel Dieu forma de la terre tous les animaux des champs et tous les oiseaux du ciel, et il les fit venir vers l’homme, pour voir comment il les appellerait, et afin que tout être vivant portât le nom que lui donnerait l’homme."}
-                { n: 20, t:"Et l’homme donna des noms à tout le bétail, aux oiseaux du ciel et à tous les animaux des champs ; mais, pour l’homme, il ne trouva point d’aide semblable à lui."}
-                { n: 21, t:" Alors l’Eternel Dieu fit tomber un profond sommeil sur l’homme, qui s’endormit ; il prit une de ses côtes, et referma la chair à sa place."}
-                { n: 22, t:"L’Eternel Dieu forma une femme de la côte qu’il avait prise de l’homme, et il l’amena vers l’homme"}
-                { n: 23, t:" Et l’homme dit : Voici cette fois celle qui est os de mes os et chair de ma chair ! on l’appellera femme, parce qu’elle a été prise de l’homme."}
-                { n: 24, t:"C’est pourquoi l’homme quittera son père et sa mère, et s’attachera à sa femme, et ils deviendront une seule chair. "}
-                { n: 25, t:"L’homme et sa femme étaient tous deux nus, et ils n’en avaient point honte."}
+            ],
+            "GEN-2": [
+                { n: 1, t: "Ainsi furent achevés les cieux et la terre, et toute leur armée." },
+                { n: 2, t: "Dieu acheva au septième jour son oeuvre, qu’il avait faite : et il se reposa au septième jour de toute son oeuvre, qu’il avait faite." },
+                { n: 3, t: "Dieu bénit le septième jour, et il le sanctifia, parce qu’en ce jour il se reposa de toute son oeuvre qu’il avait créée en la faisant." },
+                { n: 4, t: "Voici les origines des cieux et de la terre, quand ils furent créés. Lorsque l’Eternel Dieu fit une terre et des cieux," },
+                { n: 5, t: "aucun arbuste des champs n’était encore sur la terre, et aucune herbe des champs ne germait encore : car l’Eternel Dieu n’avait pas fait pleuvoir sur la terre, et il n’y avait point d’homme pour cultiver le sol." },
+                { n: 6, t: "Mais une vapeur s’éleva de la terre, et arrosa toute la surface du sol." },
+                { n: 7, t: "L’Eternel Dieu forma l’homme de la poussière de la terre, il souffla dans ses narines un souffle de vie et l’homme devint un être vivant." },
+                { n: 8, t: "Puis l’Eternel Dieu planta un jardin en Eden, du côté de l’orient, et il y mit l’homme qu’il avait formé." },
+                { n: 9, t: "L’Eternel Dieu fit pousser du sol des arbres de toute espèce, agréables à voir et bons à manger, et l’arbre de la vie au milieu du jardin, et l’arbre de la connaissance du bien et du mal." },
+                { n: 10, t: "Un fleuve sortait d’Eden pour arroser le jardin, et de là il se divisait en quatre bras." },
+                { n: 11, t: "Le nom du premier est Pischon ; c’est celui qui entoure tout le pays de Havila, où se trouve l’or." },
+                { n: 12, t: "L’or de ce pays est pur ; on y trouve aussi le bdellium et la pierre d’onyx." },
+                { n: 13, t: "Le nom du second fleuve est Guihon ; c’est celui qui entoure tout le pays de Cusch." },
+                { n: 14, t: "Le nom du troisième est Hiddékel ; c’est celui qui coule à l’orient de l’Assyrie. Le quatrième fleuve, c’est l’Euphrate." },
+                { n: 15, t: "L’Eternel Dieu prit l’homme, et le plaça dans le jardin d’Eden pour le cultiver et pour le garder." },
+                { n: 16, t: "L’Eternel Dieu donna cet ordre à l’homme : Tu pourras manger de tous les arbres du jardin ;" },
+                { n: 17, t: "mais tu ne mangeras pas de l’arbre de la connaissance du bien et du mal, car le jour où tu en mangeras, tu mourras." },
+                { n: 18, t: "L’Eternel Dieu dit : Il n’est pas bon que l’homme soit seul ; je lui ferai une aide semblable à lui." },
+                { n: 19, t: "L’Eternel Dieu forma de la terre tous les animaux des champs et tous les oiseaux du ciel, et il les fit venir vers l’homme, pour voir comment il les appellerait, et afin que tout être vivant portât le nom que lui donnerait l’homme." },
+                { n: 20, t: "Et l’homme donna des noms à tout le bétail, aux oiseaux du ciel et à tous les animaux des champs ; mais, pour l’homme, il ne trouva point d’aide semblable à lui." },
+                { n: 21, t: "Alors l’Eternel Dieu fit tomber un profond sommeil sur l’homme, qui s’endormit ; il prit une de ses côtes, et referma la chair à sa place." },
+                { n: 22, t: "L’Eternel Dieu forma une femme de la côte qu’il avait prise de l’homme, et il l’amena vers l’homme." },
+                { n: 23, t: "Et l’homme dit : Voici cette fois celle qui est os de mes os et chair de ma chair ! on l’appellera femme, parce qu’elle a été prise de l’homme." },
+                { n: 24, t: "C’est pourquoi l’homme quittera son père et sa mère, et s’attachera à sa femme, et ils deviendront une seule chair." },
+                { n: 25, t: "L’homme et sa femme étaient tous deux nus, et ils n’en avaient point honte." }
             ]
         };
 
@@ -262,23 +261,7 @@
                 { id: "B3", name: "Savant", icon: "graduation-cap" }
             ]
         };
-        function toggleContrast() {
-    const isDark = document.body.classList.toggle('bg-gray-900');
-    const icon = document.getElementById('contrast-icon');
-    
-    if (isDark) {
-        	document.body.classList.add('text-white');
-        	document.querySelectorAll('.text-gray-800, .text-gray-700').forEach(el => el.classList.replace('text-gray-800', 'text-gray-100'));
-            document.querySelectorAll('.bg-white').forEach(el => el.classList.replace('bg-white', 'bg-gray-800'));
-            icon.setAttribute('data-lucide', 'sun');
-        } else {
-                document.body.classList.remove('text-white');
-                document.querySelectorAll('.text-gray-100').forEach(el => el.classList.replace('text-gray-100', 'text-gray-800'));
-                document.querySelectorAll('.bg-gray-800').forEach(el => el.classList.replace('bg-gray-800', 'bg-white'));
-                icon.setAttribute('data-lucide', 'moon');
-            }
-        lucide.createIcons();
-        }
+
         let state = {
             xp: 0,
             streak: 0,
@@ -303,6 +286,83 @@
 
         function saveToStorage() {
             localStorage.setItem('sophia_bible_v2', JSON.stringify(state));
+        }
+
+        function toggleContrast() {
+            const isDark = document.body.classList.toggle('bg-gray-900');
+            const icon = document.getElementById('contrast-icon');
+            
+            const header = document.querySelector('header');
+            const nav = document.querySelector('nav');
+            const selects = document.querySelectorAll('select');
+            const completionCard = document.getElementById('completion-card');
+            const statsCards = document.querySelectorAll('.stats-card');
+            const rewardTitle = document.getElementById('reward-title');
+            const profileName = document.getElementById('profile-name');
+            const bookName = document.getElementById('display-book-name');
+            const completionTitle = document.getElementById('completion-title');
+            const badgeContainer = document.getElementById('badge-container');
+
+            if (isDark) {
+                document.body.classList.add('text-white');
+                header.classList.replace('bg-white/90', 'bg-gray-900/90');
+                header.classList.replace('border-gray-100', 'border-gray-800');
+                nav.classList.replace('bg-white/90', 'bg-gray-900/90');
+                nav.classList.replace('border-t', 'border-gray-800');
+                completionCard.classList.replace('card-beige', 'bg-gray-800');
+                completionCard.classList.replace('border-[#DCDDE1]', 'border-gray-700');
+                badgeContainer.classList.replace('bg-gray-50', 'bg-gray-800');
+                badgeContainer.classList.replace('border-gray-100', 'border-gray-700');
+
+                selects.forEach(s => {
+                    s.classList.replace('bg-gray-50', 'bg-gray-800');
+                    s.classList.replace('border-gray-200', 'border-gray-700');
+                    s.classList.add('text-white');
+                });
+
+                statsCards.forEach(c => {
+                    c.classList.replace('bg-white', 'bg-gray-800');
+                    c.classList.replace('border', 'border-gray-700');
+                });
+
+                [rewardTitle, profileName, bookName, completionTitle].forEach(el => {
+                    el.classList.replace('text-gray-800', 'text-white');
+                    el.classList.replace('text-gray-700', 'text-white');
+                });
+
+                icon.setAttribute('data-lucide', 'sun');
+            } else {
+                document.body.classList.remove('text-white');
+                header.classList.replace('bg-gray-900/90', 'bg-white/90');
+                header.classList.replace('border-gray-800', 'border-gray-100');
+                nav.classList.replace('bg-gray-900/90', 'bg-white/90');
+                nav.classList.replace('border-gray-800', 'border-t');
+                completionCard.classList.replace('bg-gray-800', 'card-beige');
+                completionCard.classList.replace('border-gray-700', 'border-[#DCDDE1]');
+                badgeContainer.classList.replace('bg-gray-800', 'bg-gray-50');
+                badgeContainer.classList.replace('border-gray-700', 'border-gray-100');
+
+                selects.forEach(s => {
+                    s.classList.replace('bg-gray-800', 'bg-gray-50');
+                    s.classList.replace('border-gray-700', 'border-gray-200');
+                    s.classList.remove('text-white');
+                });
+
+                statsCards.forEach(c => {
+                    c.classList.replace('bg-gray-800', 'bg-white');
+                    c.classList.replace('border-gray-700', 'border');
+                });
+
+                [rewardTitle, profileName, bookName, completionTitle].forEach(el => {
+                    el.classList.add('text-gray-800');
+                    el.classList.remove('text-white');
+                });
+
+                icon.setAttribute('data-lucide', 'moon');
+            }
+            
+            renderBible();
+            lucide.createIcons();
         }
 
         function populateSelectors() {
@@ -340,44 +400,35 @@
             const book = BIBLE_METADATA.find(b => b.id === state.currentBook);
             const key = `${state.currentBook}-${state.currentChapter}`;
             const verses = bibleContentData[key];
-
             document.getElementById('display-book-name').textContent = book.name;
             
+            const isDark = document.body.classList.contains('bg-gray-900');
+
             if (verses) {
                 container.innerHTML = verses.map(v => `
                     <div class="verse group">
                         <span class="text-xs font-bold text-primary mr-3 select-none">${v.n}</span>
-                        <span class="text-gray-800">${v.t}</span>
+                        <span class="${isDark ? 'text-gray-100' : 'text-gray-800'}">${v.t}</span>
                     </div>
                 `).join('');
             } else {
-                container.innerHTML = `
-                    <div class="text-center py-20 opacity-30">
-                        <i data-lucide="scroll-text" class="w-12 h-12 mx-auto mb-4"></i>
-                        <p class="italic text-sm">Contenu en cours d'intégration.<br>Essayez Genèse Chapitre 1.</p>
-                    </div>
-                `;
+                container.innerHTML = `<div class="text-center py-20 opacity-30"><i data-lucide="scroll-text" class="w-12 h-12 mx-auto mb-4"></i><p class="italic text-sm">Contenu à venir.</p></div>`;
             }
-
+            
             const btn = document.getElementById('xp-claim-btn');
             const alreadyRead = state.completedChapters.includes(key);
-            
             if (alreadyRead) {
                 btn.innerHTML = `Chapitre déjà validé <i data-lucide="check" class="w-4 h-4 ml-2 inline"></i>`;
                 btn.classList.replace('bg-primary', 'bg-gray-100');
+                if (isDark) btn.classList.replace('bg-gray-100', 'bg-gray-700');
                 btn.classList.add('text-gray-400', 'cursor-default');
                 btn.disabled = true;
-                document.getElementById('completion-title').textContent = "Déjà lu";
-                document.getElementById('completion-subtitle').textContent = "Vous avez déjà gagné de l'XP pour ce chapitre.";
             } else {
                 btn.innerHTML = `Valider et gagner +10 XP`;
-                btn.classList.remove('bg-gray-100', 'text-gray-400', 'cursor-default');
+                btn.classList.remove('bg-gray-100', 'bg-gray-700', 'text-gray-400', 'cursor-default');
                 btn.classList.add('bg-primary', 'text-white');
                 btn.disabled = false;
-                document.getElementById('completion-title').textContent = "Chapitre terminé ?";
-                document.getElementById('completion-subtitle').textContent = "Lisez attentivement pour valider vos progrès.";
             }
-
             lucide.createIcons();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -385,14 +436,11 @@
         function completeChapter() {
             const key = `${state.currentBook}-${state.currentChapter}`;
             if (state.completedChapters.includes(key)) return;
-
             state.completedChapters.push(key);
             state.xp += 10;
             if (state.streak === 0) state.streak = 1;
-
             if (state.completedChapters.length === 1) unlockBadge("B1");
             if (state.completedChapters.length >= 7) unlockBadge("B2");
-
             showToast("+10 XP");
             updateUI();
             renderBible();
@@ -401,17 +449,14 @@
         function updateUI() {
             const level = config.levels.slice().reverse().find(l => state.xp >= l.min_xp) || config.levels[0];
             const next = config.levels.find(l => l.level === level.level + 1) || { min_xp: state.xp + 1000 };
-            
             document.getElementById('current-level-title').textContent = level.title;
             document.getElementById('xp-text').textContent = `${state.xp} / ${next.min_xp} XP`;
             const pct = ((state.xp - level.min_xp) / (next.min_xp - level.min_xp)) * 100;
             document.getElementById('xp-progress').style.width = `${Math.min(100, pct)}%`;
             document.getElementById('streak-count').textContent = state.streak;
-
             document.getElementById('profile-title').textContent = level.title;
             document.getElementById('stats-chapters').textContent = state.completedChapters.length;
             document.getElementById('stats-xp').textContent = state.xp;
-
             renderBadges();
             saveToStorage();
         }
@@ -425,9 +470,10 @@
 
         function renderBadges() {
             const container = document.getElementById('badge-container');
+            const isDark = document.body.classList.contains('bg-gray-900');
             container.innerHTML = config.badges.map(b => `
                 <div class="flex flex-col items-center gap-2 ${state.badges.includes(b.id) ? 'opacity-100' : 'opacity-20 grayscale'}">
-                    <div class="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center border border-gray-100">
+                    <div class="w-16 h-16 rounded-2xl ${isDark ? 'bg-gray-700' : 'bg-white'} shadow-sm flex items-center justify-center border ${isDark ? 'border-gray-600' : 'border-gray-100'}">
                         <i data-lucide="${b.icon}" class="w-7 h-7 text-primary"></i>
                     </div>
                     <span class="text-[10px] font-bold uppercase tracking-widest text-gray-500">${b.name}</span>
