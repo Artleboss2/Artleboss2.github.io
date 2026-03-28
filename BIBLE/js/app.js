@@ -100,11 +100,6 @@ function loadBookData(bookId, callback) {
 
     const script = document.createElement('script');
     
-    /**
-     * LOGIQUE DE CHEMIN POUR GITHUB PAGES
-     * Si index.html est à la racine, le chemin vers les données doit être "js/bible-data/..."
-     * même si ce fichier app.js est lui-même dans "js/".
-     */
     const timestamp = new Date().getTime();
     const scriptPath = `js/bible-data/${bookInfo.file}?t=${timestamp}`;
     script.src = scriptPath;
@@ -122,7 +117,6 @@ function loadBookData(bookId, callback) {
         console.error(`404 : Fichier non trouvé à ${scriptPath}`);
         if (loader) loader.style.display = 'none';
         
-        // Tentative de secours : Essayer sans le préfixe "js/" au cas où la structure serait différente
         const fallbackPath = `bible-data/${bookInfo.file}?t=${timestamp}`;
         console.log(`Tentative de secours (fallback) : ${fallbackPath}`);
         
@@ -168,7 +162,8 @@ function updateChapterSelector() {
 
     let options = "";
     for (let i = 1; i <= bookInfo.chapters; i++) {
-        options += `<option value="${i}" ${i === state.currentChapter ? 'selected' : ''}>Chapitre ${i}</option>`;
+        // Changement demandé : afficher uniquement le chiffre
+        options += `<option value="${i}" ${i === state.currentChapter ? 'selected' : ''}>${i}</option>`;
     }
     select.innerHTML = options;
 }
@@ -189,6 +184,19 @@ function handleChapterChange() {
     state.currentChapter = parseInt(select.value);
     renderBible();
     saveState();
+}
+
+/**
+ * Fonction appelée quand l'utilisateur clique sur "Chapitre Terminé"
+ */
+function completeChapter() {
+    state.xp += 10;
+    updateXPDisplay();
+    changeChapter(1); // Passe au chapitre suivant
+    saveState();
+    
+    // Petite notification visuelle si un élément existe
+    console.log("+10 XP ! Bravo.");
 }
 
 function renderBible() {
@@ -263,7 +271,7 @@ function syncNavigation() {
 function updateXPDisplay() {
     const badge = document.getElementById('xp-badge');
     const progress = document.getElementById('xp-progress');
-    if (badge) badge.textContent = `⚡ ${state.xp} XP`;
+    if (badge) badge.textContent = `${state.xp} XP`;
     if (progress) progress.style.width = `${Math.min(state.xp % 100, 100)}%`;
 }
 
