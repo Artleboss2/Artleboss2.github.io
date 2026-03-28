@@ -1,10 +1,4 @@
-/**
- * Logique principale de l'application Learn the Bible
- * Contient la liste complète des 66 livres et la gestion des chapitres.
- */
-
 const BIBLE_METADATA = [
-    // ANCIEN TESTAMENT
     { id: "GEN", name: "Genèse", chapters: 50, file: "genese.js" },
     { id: "EXO", name: "Exode", chapters: 40, file: "exode.js" },
     { id: "LEV", name: "Lévitique", chapters: 27, file: "levitique.js" },
@@ -44,8 +38,6 @@ const BIBLE_METADATA = [
     { id: "AGG", name: "Aggée", chapters: 2, file: "aggee.js" },
     { id: "ZAC", name: "Zacharie", chapters: 14, file: "zacharie.js" },
     { id: "MAL", name: "Malachie", chapters: 4, file: "malachie.js" },
-
-    // NOUVEAU TESTAMENT
     { id: "MAT", name: "Matthieu", chapters: 28, file: "matthieu.js" },
     { id: "MAR", name: "Marc", chapters: 16, file: "marc.js" },
     { id: "LUC", name: "Luc", chapters: 24, file: "luc.js" },
@@ -82,22 +74,16 @@ let state = {
     loadedBooks: new Set()
 };
 
-/**
- * Initialisation de l'application
- */
 function initApp() {
+    if (window.lucide) lucide.createIcons();
     populateBookSelect();
     updateXPDisplay();
-    // Charger le livre initial
     loadBookData(state.currentBook, () => {
         updateChapterSelector();
         renderBible();
     });
 }
 
-/**
- * Charge un fichier JS de livre à la demande
- */
 function loadBookData(bookId, callback) {
     const bookInfo = BIBLE_METADATA.find(b => b.id === bookId);
     if (!bookInfo) return;
@@ -107,31 +93,37 @@ function loadBookData(bookId, callback) {
         return;
     }
 
-    document.getElementById('loading').style.display = 'flex';
+    const loader = document.getElementById('loading');
+    if (loader) loader.style.display = 'flex';
 
     const script = document.createElement('script');
-    script.src = `js/bible-data/${bookInfo.file}`;
+    script.src = `./bible-data/${bookInfo.file}`;
+    
     script.onload = () => {
         state.loadedBooks.add(bookId);
-        document.getElementById('loading').style.display = 'none';
+        if (loader) loader.style.display = 'none';
         if (callback) callback();
     };
+
     script.onerror = () => {
-        document.getElementById('loading').style.display = 'none';
-        // Message d'erreur personnalisé si le fichier n'est pas encore créé
+        if (loader) loader.style.display = 'none';
         const container = document.getElementById('bible-content');
-        container.innerHTML = `
-            <div class="p-6 text-center">
-                <p class="text-red-500 font-bold">Fichier manquant</p>
-                <p class="text-sm text-gray-500">Le fichier "js/bible-data/${bookInfo.file}" n'a pas encore été ajouté au projet.</p>
-            </div>
-        `;
+        if (container) {
+            container.innerHTML = `
+                <div class="p-10 text-center border-2 border-dashed border-red-200 rounded-2xl bg-white/50">
+                    <p class="text-red-500 font-bold text-lg">Fichier manquant</p>
+                    <p class="text-sm text-gray-500 mt-2">Le fichier est introuvable à l'adresse suivante :<br>
+                    <code class="bg-gray-100 px-2 py-1 rounded">./bible-data/${bookInfo.file}</code></p>
+                </div>`;
+        }
     };
+
     document.head.appendChild(script);
 }
 
 function populateBookSelect() {
     const select = document.getElementById('book-select');
+    if (!select) return;
     select.innerHTML = BIBLE_METADATA.map(b => 
         `<option value="${b.id}" ${b.id === state.currentBook ? 'selected' : ''}>${b.name}</option>`
     ).join('');
@@ -140,15 +132,18 @@ function populateBookSelect() {
 function updateChapterSelector() {
     const bookInfo = BIBLE_METADATA.find(b => b.id === state.currentBook);
     const select = document.getElementById('chapter-select');
+    if (!select || !bookInfo) return;
+
     let options = "";
     for (let i = 1; i <= bookInfo.chapters; i++) {
-        options += `<option value="${i}" ${i === state.currentChapter ? 'selected' : ''}>Chap. ${i}</option>`;
+        options += `<option value="${i}" ${i === state.currentChapter ? 'selected' : ''}>Ch. ${i}</option>`;
     }
     select.innerHTML = options;
 }
 
 function handleBookChange() {
-    state.currentBook = document.getElementById('book-select').value;
+    const select = document.getElementById('book-select');
+    state.currentBook = select.value;
     state.currentChapter = 1;
     loadBookData(state.currentBook, () => {
         updateChapterSelector();
@@ -158,7 +153,8 @@ function handleBookChange() {
 }
 
 function handleChapterChange() {
-    state.currentChapter = parseInt(document.getElementById('chapter-select').value);
+    const select = document.getElementById('chapter-select');
+    state.currentChapter = parseInt(select.value);
     renderBible();
     saveState();
 }
@@ -167,93 +163,75 @@ function renderBible() {
     const dataName = `BIBLE_DATA_${state.currentBook}`;
     const bookContent = window[dataName];
     const key = `${state.currentBook}-${state.currentChapter}`;
-    
     const container = document.getElementById('bible-content');
     
+    if (!container) return;
+
     if (!bookContent || !bookContent[key]) {
         container.innerHTML = `
-            <div class="p-6 text-center">
-                <h2 class="text-xl font-bold mb-2">${BIBLE_METADATA.find(b => b.id === state.currentBook).name} ${state.currentChapter}</h2>
-                <p class="text-gray-400 italic">Le contenu de ce chapitre arrive bientôt !</p>
-            </div>
-        `;
+            <div class="text-center p-10">
+                <h2 class="text-2xl font-serif font-bold mb-4">${BIBLE_METADATA.find(b=>b.id===state.currentBook).name} ${state.currentChapter}</h2>
+                <p class="text-gray-400 italic">Chargement du texte ou contenu non disponible...</p>
+            </div>`;
         return;
     }
 
     const verses = bookContent[key];
     container.innerHTML = `
-        <h2 class="text-2xl font-serif mb-6 border-b pb-2 italic text-gray-500">
-            ${BIBLE_METADATA.find(b => b.id === state.currentBook).name} ${state.currentChapter}
-        </h2>
+        <h2 class="text-3xl font-serif font-bold mb-6">${BIBLE_METADATA.find(b=>b.id===state.currentBook).name} ${state.currentChapter}</h2>
         <div class="space-y-4">
-            ${verses.map(v => `
-                <div class="flex gap-3 group">
-                    <span class="text-xs font-bold mt-1.5 opacity-30 group-hover:opacity-100 transition">${v.n}</span>
-                    <p class="text-lg">${v.t}</p>
-                </div>
-            `).join('')}
-        </div>
-    `;
+            ${verses.map(v => `<p><span class="verse-num">${v.n}</span>${v.t}</p>`).join('')}
+        </div>`;
     
-    addXP(5);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const mainContainer = document.getElementById('app-container');
+    if (mainContainer) mainContainer.scrollTo(0, 0);
 }
 
-function changeChapter(direction) {
-    const bookIndex = BIBLE_METADATA.findIndex(b => b.id === state.currentBook);
-    const bookInfo = BIBLE_METADATA[bookIndex];
-    
-    let nextChap = state.currentChapter + direction;
+function changeChapter(dir) {
+    const bookInfo = BIBLE_METADATA.find(b => b.id === state.currentBook);
+    let next = state.currentChapter + dir;
 
-    if (nextChap >= 1 && nextChap <= bookInfo.chapters) {
-        // Changement de chapitre normal
-        state.currentChapter = nextChap;
-        document.getElementById('chapter-select').value = nextChap;
+    if (next >= 1 && next <= bookInfo.chapters) {
+        state.currentChapter = next;
+        const select = document.getElementById('chapter-select');
+        if (select) select.value = next;
         renderBible();
         saveState();
-    } else if (nextChap > bookInfo.chapters && bookIndex < BIBLE_METADATA.length - 1) {
-        // Passage au livre suivant
-        state.currentBook = BIBLE_METADATA[bookIndex + 1].id;
-        state.currentChapter = 1;
-        document.getElementById('book-select').value = state.currentBook;
-        loadBookData(state.currentBook, () => {
-            updateChapterSelector();
-            renderBible();
-            saveState();
-        });
-    } else if (nextChap < 1 && bookIndex > 0) {
-        // Passage au livre précédent (dernier chapitre)
-        state.currentBook = BIBLE_METADATA[bookIndex - 1].id;
-        state.currentChapter = BIBLE_METADATA[bookIndex - 1].chapters;
-        document.getElementById('book-select').value = state.currentBook;
-        loadBookData(state.currentBook, () => {
-            updateChapterSelector();
-            renderBible();
-            saveState();
-        });
     }
 }
 
 function addXP(amount) {
     state.xp += amount;
     updateXPDisplay();
-    localStorage.setItem('bible_xp', state.xp);
+    saveState();
 }
 
 function updateXPDisplay() {
-    document.getElementById('xp-badge').textContent = `XP: ${state.xp}`;
+    const badge = document.getElementById('xp-badge');
+    const progress = document.getElementById('xp-progress');
+    const profileDisplay = document.getElementById('profile-xp-display');
+
+    if (badge) badge.textContent = `XP: ${state.xp}`;
+    if (progress) progress.style.width = `${state.xp % 100}%`;
+    if (profileDisplay) profileDisplay.textContent = `${state.xp} XP`;
 }
 
 function saveState() {
+    localStorage.setItem('bible_xp', state.xp);
     localStorage.setItem('bible_last_book', state.currentBook);
     localStorage.setItem('bible_last_chap', state.currentChapter);
 }
 
 function switchView(viewId) {
-    document.getElementById('view-reader').classList.toggle('hidden', viewId !== 'reader');
-    document.getElementById('view-profile').classList.toggle('hidden', viewId !== 'profile');
-    document.getElementById('nav-reader').classList.toggle('active-nav', viewId === 'reader');
-    document.getElementById('nav-profile').classList.toggle('active-nav', viewId === 'profile');
+    const reader = document.getElementById('view-reader');
+    const profile = document.getElementById('view-profile');
+    const navReader = document.getElementById('nav-reader');
+    const navProfile = document.getElementById('nav-profile');
+
+    if (reader) reader.classList.toggle('hidden', viewId !== 'reader');
+    if (profile) profile.classList.toggle('hidden', viewId !== 'profile');
+    if (navReader) navReader.classList.toggle('active-nav', viewId === 'reader');
+    if (navProfile) navProfile.classList.toggle('active-nav', viewId === 'profile');
 }
 
 window.onload = initApp;
