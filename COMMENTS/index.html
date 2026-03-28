@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GhostCode | Comment Stripper</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        :root {
+            --bg-deep: #000000;
+            --bg-card: #0a0a0a;
+            --accent-blue: #0070f3;
+            --border-gray: #1f1f1f;
+            --text-muted: #888888;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-gray);
+            border-radius: 12px;
+        }
+
+        .code-area {
+            font-family: 'JetBrains Mono', monospace;
+            background: transparent;
+            resize: none;
+            scrollbar-width: thin;
+            scrollbar-color: #333 transparent;
+        }
+
+        .btn-purify {
+            background: var(--accent-blue);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-purify:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+            box-shadow: 0 0 20px rgba(0, 112, 243, 0.4);
+        }
+
+        .btn-purify:active {
+            transform: translateY(1px);
+        }
+
+        .loader {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid var(--accent-blue);
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .copy-toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            transition: transform 0.3s ease;
+            background: var(--accent-blue);
+            padding: 0.5rem 1.5rem;
+            border-radius: 999px;
+        }
+
+        .copy-toast.visible {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-4 md:p-12">
+    
+    <header class="w-full max-w-6xl mb-12 flex justify-between items-center">
+        <div>
+            <h1 class="text-2xl font-semibold tracking-tight">Ghost<span class="text-blue-500">Code</span></h1>
+            <p class="text-sm text-gray-500">Nettoyage de code minimaliste et sécurisé.</p>
+        </div>
+        <div class="flex items-center gap-4">
+            <select id="languageSelect" class="bg-transparent border border-[#1f1f1f] rounded-lg px-3 py-1.5 text-sm outline-none focus:border-blue-500 transition-colors cursor-pointer">
+                <option value="js" class="bg-black">JavaScript / TypeScript</option>
+                <option value="go" class="bg-black">Go (Golang)</option>
+                <option value="python" class="bg-black">Python</option>
+                <option value="cpp" class="bg-black">C++ / C</option>
+                <option value="java" class="bg-black">Java</option>
+            </select>
+        </div>
+    </header>
+
+    <main class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-6 flex-grow">
+        <div class="glass-panel flex flex-col overflow-hidden relative group">
+            <div class="px-4 py-2 border-b border-[#1f1f1f] flex justify-between items-center bg-[#050505]">
+                <span class="text-xs uppercase tracking-widest text-gray-500 font-medium">Input</span>
+                <span id="charCount" class="text-[10px] text-gray-600">0 chars</span>
+            </div>
+            <textarea id="inputArea" class="code-area flex-grow p-6 outline-none text-sm leading-relaxed" placeholder="// Collez votre code ici..."></textarea>
+        </div>
+
+        <div class="glass-panel flex flex-col overflow-hidden relative">
+            <div class="px-4 py-2 border-b border-[#1f1f1f] flex justify-between items-center bg-[#050505]">
+                <span class="text-xs uppercase tracking-widest text-gray-500 font-medium">Output (Cleaned)</span>
+                <button onclick="copyOutput()" class="text-xs text-gray-500 hover:text-white transition-colors flex items-center gap-1.5">
+                    <i class="fa-regular fa-copy"></i> Copier
+                </button>
+            </div>
+            <textarea id="outputArea" class="code-area flex-grow p-6 outline-none text-sm leading-relaxed text-blue-100/80" readonly placeholder="Le code purifié apparaîtra ici..."></textarea>
+        </div>
+    </main>
+
+    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
+        <button id="purifyBtn" onclick="purifyCode()" class="btn-purify flex items-center gap-3 px-8 py-3 rounded-full font-medium text-sm">
+            <span id="btnText">PURIFIER LE CODE</span>
+            <div id="btnLoader" class="loader"></div>
+            <i class="fa-solid fa-ghost text-xs opacity-50"></i>
+        </button>
+    </div>
+
+    <div id="toast" class="copy-toast text-xs font-medium shadow-2xl pointer-events-none">
+        Copié dans le presse-papier
+    </div>
+
+    <script>
+        const REGEX_MAP = {
+            js: {
+                single: /\/\/.*$/gm,
+                multi: /\/\*[\s\S]*?\*\//g
+            },
+            go: {
+                single: /\/\/.*$/gm,
+                multi: /\/\*[\s\S]*?\*\//g
+            },
+            python: {
+                single: /#.*$/gm,
+                multi: /(['"]{3})[\s\S]*?\1/g
+            },
+            cpp: {
+                single: /\/\/.*$/gm,
+                multi: /\/\*[\s\S]*?\*\//g
+            },
+            java: {
+                single: /\/\/.*$/gm,
+                multi: /\/\*[\s\S]*?\*\//g
+            }
+        };
+
+        const inputArea = document.getElementById('inputArea');
+        const outputArea = document.getElementById('outputArea');
+        const purifyBtn = document.getElementById('purifyBtn');
+        const btnText = document.getElementById('btnText');
+        const btnLoader = document.getElementById('btnLoader');
+        const langSelect = document.getElementById('languageSelect');
+        const charCount = document.getElementById('charCount');
+
+        inputArea.addEventListener('input', () => {
+            charCount.textContent = `${inputArea.value.length} chars`;
+        });
+
+        async function purifyCode() {
+            const code = inputArea.value.trim();
+            if (!code) return;
+
+            btnText.style.opacity = '0.5';
+            btnLoader.style.display = 'block';
+            purifyBtn.disabled = true;
+
+            const lang = langSelect.value;
+            const config = REGEX_MAP[lang];
+
+            await new Promise(r => setTimeout(r, 600));
+
+            let cleaned = code;
+            
+            if (lang === 'python') {
+                cleaned = cleaned.replace(config.multi, '');
+                cleaned = cleaned.replace(config.single, '');
+            } else {
+                cleaned = cleaned.replace(config.multi, '');
+                cleaned = cleaned.replace(config.single, '');
+            }
+
+            cleaned = cleaned.split('\n')
+                             .map(line => line.trimEnd())
+                             .filter((line, i, arr) => line !== '' || (arr[i-1] !== ''))
+                             .join('\n');
+
+            outputArea.value = cleaned.trim();
+
+            btnText.style.opacity = '1';
+            btnLoader.style.display = 'none';
+            purifyBtn.disabled = false;
+        }
+
+        function copyOutput() {
+            if (!outputArea.value) return;
+            
+            const el = document.createElement('textarea');
+            el.value = outputArea.value;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            const toast = document.getElementById('toast');
+            toast.classList.add('visible');
+            setTimeout(() => toast.classList.remove('visible'), 2000);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                purifyCode();
+            }
+        });
+    </script>
+</body>
+</html>
