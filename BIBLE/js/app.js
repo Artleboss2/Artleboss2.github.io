@@ -75,9 +75,11 @@ const BIBLE_METADATA = [
 // État de l'application
 let state = {
     xp: parseInt(localStorage.getItem('bible_xp')) || 0,
+    chaptersRead: parseInt(localStorage.getItem('bible_chapters_read')) || 0,
     currentBook: localStorage.getItem('bible_last_book') || "GEN",
     currentChapter: parseInt(localStorage.getItem('bible_last_chap')) || 1,
-    loadedBooks: new Set()
+    loadedBooks: new Set(),
+    isDark: localStorage.getItem('bible_dark_mode') === 'true'
 };
 
 /**
@@ -89,9 +91,23 @@ function updateXPDisplay() {
     const statsXp = document.getElementById('stats-xp');
     const progress = document.getElementById('xp-progress');
     
+    // Calcul du titre selon le niveau
+    const level = Math.floor(state.xp / 100) + 1;
+    const titles = ["Novice", "Explorateur", "Disciple", "Sage", "Maître", "Érudit"];
+    const title = titles[Math.min(Math.floor(level / 5), titles.length - 1)];
+
     if (badge) badge.textContent = `⚡ ${state.xp} XP`;
     if (statsXp) statsXp.textContent = state.xp;
     if (progress) progress.style.width = `${Math.min(state.xp % 100, 100)}%`;
+    
+    // Mise à jour des textes de profil s'ils existent
+    const profTitle = document.getElementById('profile-title');
+    const currentLevTitle = document.getElementById('current-level-title');
+    const statsChap = document.getElementById('stats-chapters');
+    
+    if (profTitle) profTitle.textContent = title;
+    if (currentLevTitle) currentLevTitle.textContent = title;
+    if (statsChap) statsChap.textContent = state.chaptersRead;
 }
 
 function populateBookSelect() {
@@ -109,7 +125,6 @@ function updateChapterSelector() {
 
     let options = "";
     for (let i = 1; i <= bookInfo.chapters; i++) {
-        // Affiche uniquement le chiffre, pas de préfixe "Ch."
         options += `<option value="${i}" ${i === state.currentChapter ? 'selected' : ''}>${i}</option>`;
     }
     select.innerHTML = options;
@@ -123,7 +138,6 @@ function loadBookData(bookId, callback) {
     const bookInfo = BIBLE_METADATA.find(b => b.id === bookId);
     if (!bookInfo) return;
 
-    // Si déjà chargé en mémoire
     if (window[`BIBLE_DATA_${bookId}`]) {
         if (callback) callback();
         return;
@@ -133,7 +147,6 @@ function loadBookData(bookId, callback) {
     if (loader) loader.style.display = 'flex';
 
     const script = document.createElement('script');
-    // Anti-cache pour forcer la mise à jour
     script.src = `js/bible-data/${bookInfo.file}?v=${new Date().getTime()}`;
     
     script.onload = () => {
@@ -143,9 +156,9 @@ function loadBookData(bookId, callback) {
     };
 
     script.onerror = () => {
-        console.error(`Échec du chargement : ${script.src}`);
+        console.error(`Erreur chargement : ${script.src}`);
         if (loader) loader.style.display = 'none';
-        // Tentative alternative sans le dossier /js/ au cas où
+        // Fallback
         const altScript = document.createElement('script');
         altScript.src = `bible-data/${bookInfo.file}`;
         altScript.onload = () => { if (callback) callback(); };
@@ -160,6 +173,7 @@ function renderBible() {
     const bookContent = window[dataName];
     const key = `${state.currentBook}-${state.currentChapter}`;
     const container = document.getElementById('bible-content');
+    const appContainer = document.getElementById('app-container');
     
     if (!container) return;
 
@@ -173,25 +187,42 @@ function renderBible() {
 
     container.innerHTML = `
         <div class="animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <h2 class="text-3xl font-serif font-bold text-gray-800 mb-6 border-b pb-4 border-gray-100">
+            <h2 class="text-3xl font-serif font-bold text-gray-800 dark:text-gray-100 mb-6 border-b pb-4 border-gray-100 dark:border-gray-800">
                 ${bookInfo.name} ${state.currentChapter}
             </h2>
-            <div class="space-y-6 text-lg text-gray-700 leading-relaxed font-serif">
+            <div class="space-y-2 text-lg text-gray-700 dark:text-gray-300 leading-relaxed font-serif">
                 ${verses.map(v => `
-                    <p class="flex items-start">
-                        <span class="text-blue-500 font-bold mr-4 text-xs mt-1.5 opacity-40 w-6 text-right select-none">${v.n}</span>
-                        <span>${v.t}</span>
-                    </p>
+                    <div class="verse-row flex items-start p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-800 transition-colors group">
+                        <span class="text-blue-500 font-bold mr-4 text-xs mt-1.5 opacity-40 group-hover:opacity-100 w-6 text-right select-none">${v.n}</span>
+                        <span class="flex-1">${v.t}</span>
+                    </div>
                 `).join('')}
             </div>
         </div>`;
     
-    document.getElementById('app-container')?.scrollTo({ top: 0, behavior: 'smooth' });
+    // CORRECTION : Remonter en haut de page lors du changement de chapitre
+    if (appContainer) {
+        appContainer.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 }
 
 /**
  * Fonctions Publiques (disponibles pour le HTML)
  */
+
+window.switchView = function(viewId) {
+    console.log("Changement de vue vers : " + viewId);
+    const reader = document.getElementById('view-reader');
+    const profile = document.getElementById('view-profile');
+    const navReader = document.getElementById('nav-reader');
+    const navProfile = document.getElementById('nav-profile');
+
+    if (reader) reader.classList.toggle('hidden', viewId !== 'reader');
+    if (profile) profile.classList.toggle('hidden', viewId !== 'profile');
+    
+    if (navReader) navReader.classList.toggle('active-nav', viewId === 'reader');
+    if (navProfile) navProfile.classList.toggle('active-nav', viewId === 'profile');
+};
 
 window.handleBookChange = function() {
     const select = document.getElementById('book-select');
@@ -244,9 +275,26 @@ window.changeChapter = function(dir) {
 window.completeChapter = function() {
     console.log("Validation du chapitre...");
     state.xp += 10;
+    state.chaptersRead += 1;
     updateXPDisplay();
     window.changeChapter(1);
     saveState();
+    
+    // Optionnel : afficher un toast ou une notification
+    if (typeof showToast === 'function') showToast("+10 XP");
+};
+
+window.toggleContrast = function() {
+    state.isDark = !state.isDark;
+    document.body.classList.toggle('bg-gray-900', state.isDark);
+    document.body.classList.toggle('text-white', state.isDark);
+    localStorage.setItem('bible_dark_mode', state.isDark);
+    
+    const icon = document.getElementById('contrast-icon');
+    if (icon) {
+        icon.setAttribute('data-lucide', state.isDark ? 'sun' : 'moon');
+        if (window.lucide) window.lucide.createIcons();
+    }
 };
 
 function refreshNavigation() {
@@ -261,6 +309,7 @@ function refreshNavigation() {
 
 function saveState() {
     localStorage.setItem('bible_xp', state.xp);
+    localStorage.setItem('bible_chapters_read', state.chaptersRead);
     localStorage.setItem('bible_last_book', state.currentBook);
     localStorage.setItem('bible_last_chap', state.currentChapter);
 }
@@ -269,6 +318,14 @@ function saveState() {
 window.onload = function() {
     console.log("Application initialisée");
     if (window.lucide) window.lucide.createIcons();
+    
+    // Appliquer le mode sombre au démarrage si besoin
+    if (state.isDark) {
+        document.body.classList.add('bg-gray-900');
+        const icon = document.getElementById('contrast-icon');
+        if (icon) icon.setAttribute('data-lucide', 'sun');
+    }
+
     populateBookSelect();
     updateXPDisplay();
     loadBookData(state.currentBook, () => {
