@@ -75,7 +75,7 @@ let state = {
 };
 
 function initApp() {
-    console.log("Démarrage de Learn the Bible...");
+    console.log("Initialisation...");
     if (window.lucide) lucide.createIcons();
     populateBookSelect();
     updateXPDisplay();
@@ -99,51 +99,59 @@ function loadBookData(bookId, callback) {
     if (loader) loader.style.display = 'flex';
 
     const script = document.createElement('script');
-    // On utilise un chemin relatif propre par rapport à l'emplacement du HTML
-    // On ajoute un paramètre de version (?v=...) pour forcer le navigateur à ignorer son cache
+    
+    /**
+     * LOGIQUE DE CHEMIN POUR GITHUB PAGES
+     * Si index.html est à la racine, le chemin vers les données doit être "js/bible-data/..."
+     * même si ce fichier app.js est lui-même dans "js/".
+     */
     const timestamp = new Date().getTime();
     const scriptPath = `js/bible-data/${bookInfo.file}?t=${timestamp}`;
     script.src = scriptPath;
     
-    console.log(`Requête vers : ${scriptPath}`);
+    console.log(`Tentative de chargement : ${scriptPath}`);
 
     script.onload = () => {
-        console.log(`Chargement réussi : ${bookInfo.file}`);
+        console.log(`Chargé avec succès : ${bookInfo.file}`);
         state.loadedBooks.add(bookId);
         if (loader) loader.style.display = 'none';
         if (callback) callback();
     };
 
     script.onerror = () => {
-        console.error(`ERREUR 404 : Le fichier est introuvable à l'adresse ${scriptPath}`);
+        console.error(`404 : Fichier non trouvé à ${scriptPath}`);
         if (loader) loader.style.display = 'none';
-        const container = document.getElementById('bible-content');
-        if (container) {
-            container.innerHTML = `
-                <div class="p-8 text-center bg-white rounded-3xl shadow-xl border-2 border-red-100">
-                    <h3 class="text-xl font-bold text-red-600 mb-2">Erreur de chemin</h3>
-                    <p class="text-gray-600 text-sm">Le navigateur a cherché ici :</p>
-                    <code class="block bg-gray-100 p-3 rounded mt-2 text-xs text-blue-600 break-all">
-                        ${window.location.origin}/${scriptPath}
-                    </code>
-                    <p class="text-gray-500 mt-4 text-xs italic text-left">
-                        Structure attendue : <br>
-                        📁 BIBLE/ (ton dossier racine)<br>
-                        &nbsp;&nbsp; 📄 index.html<br>
-                        &nbsp;&nbsp; 📁 js/<br>
-                        &nbsp;&nbsp; &nbsp;&nbsp; 📄 app.js<br>
-                        &nbsp;&nbsp; &nbsp;&nbsp; 📁 bible-data/<br>
-                        &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 📄 genese.js
-                    </p>
-                </div>`;
-        }
+        
+        // Tentative de secours : Essayer sans le préfixe "js/" au cas où la structure serait différente
+        const fallbackPath = `bible-data/${bookInfo.file}?t=${timestamp}`;
+        console.log(`Tentative de secours (fallback) : ${fallbackPath}`);
+        
+        const fallbackScript = document.createElement('script');
+        fallbackScript.src = fallbackPath;
+        fallbackScript.onload = () => {
+            console.log(`Chargé avec succès via fallback : ${bookInfo.file}`);
+            state.loadedBooks.add(bookId);
+            if (callback) callback();
+        };
+        fallbackScript.onerror = () => {
+            const container = document.getElementById('bible-content');
+            if (container) {
+                container.innerHTML = `
+                    <div class="p-8 text-center bg-white rounded-3xl shadow-xl border-2 border-red-100">
+                        <h3 class="text-xl font-bold text-red-600 mb-2">Erreur de chargement</h3>
+                        <p class="text-gray-600 text-sm mb-4">Le fichier "${bookInfo.file}" est introuvable.</p>
+                        <div class="text-left bg-gray-50 p-4 rounded-xl text-[10px] font-mono text-gray-400">
+                            URL testée 1 : ${scriptPath}<br>
+                            URL testée 2 : ${fallbackPath}
+                        </div>
+                    </div>`;
+            }
+        };
+        document.head.appendChild(fallbackScript);
     };
 
     document.head.appendChild(script);
 }
-
-// ... le reste des fonctions (populateBookSelect, renderBible, etc.) reste identique
-// Assure-toi que les fonctions appelées par les boutons sont présentes.
 
 function populateBookSelect() {
     const select = document.getElementById('book-select');
@@ -193,19 +201,25 @@ function renderBible() {
     const bookInfo = BIBLE_METADATA.find(b => b.id === state.currentBook);
 
     if (!bookContent || !bookContent[key]) {
-        container.innerHTML = `<p class="p-10 text-center text-gray-400">Données non trouvées...</p>`;
+        container.innerHTML = `
+            <div class="text-center py-20">
+                <div class="animate-spin inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mb-4"></div>
+                <p class="text-gray-400">Chargement des versets...</p>
+            </div>`;
         return;
     }
 
     const verses = bookContent[key];
     container.innerHTML = `
-        <h2 class="text-4xl font-serif font-bold text-gray-800 mb-8 border-b pb-4 border-gray-100">${bookInfo.name} ${state.currentChapter}</h2>
-        <div class="space-y-6 text-lg text-gray-700 leading-relaxed font-serif">
-            ${verses.map(v => `<p><span class="text-blue-500 font-bold mr-3 text-sm">${v.n}</span>${v.t}</p>`).join('')}
+        <div class="animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <h2 class="text-4xl font-serif font-bold text-gray-800 mb-8 border-b pb-4 border-gray-100">${bookInfo.name} ${state.currentChapter}</h2>
+            <div class="space-y-6 text-lg text-gray-700 leading-relaxed font-serif">
+                ${verses.map(v => `<p class="flex items-start"><span class="text-blue-500 font-bold mr-4 text-sm mt-1 select-none opacity-50">${v.n}</span><span>${v.t}</span></p>`).join('')}
+            </div>
         </div>`;
     
     const mainContainer = document.getElementById('app-container');
-    if (mainContainer) mainContainer.scrollTo(0, 0);
+    if (mainContainer) mainContainer.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function changeChapter(dir) {
