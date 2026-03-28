@@ -97,7 +97,8 @@ function loadBookData(bookId, callback) {
     if (loader) loader.style.display = 'flex';
 
     const script = document.createElement('script');
-    script.src = `./bible-data/${bookInfo.file}`;
+    // Mise à jour du chemin vers le dossier correct : ./js/bible-data/
+    script.src = `./js/bible-data/${bookInfo.file}`;
     
     script.onload = () => {
         state.loadedBooks.add(bookId);
@@ -112,7 +113,7 @@ function loadBookData(bookId, callback) {
             container.innerHTML = `
                 <div class="p-10 text-center border-2 border-dashed border-red-200 rounded-2xl bg-white/50">
                     <p class="text-red-500 font-bold text-lg">Erreur de chargement</p>
-                    <p class="text-sm text-gray-500 mt-2">Le fichier ./bible-data/${bookInfo.file} est introuvable.</p>
+                    <p class="text-sm text-gray-500 mt-2">Le fichier ./js/bible-data/${bookInfo.file} est introuvable.</p>
                 </div>`;
         }
     };
