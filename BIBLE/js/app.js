@@ -75,9 +75,11 @@ let state = {
 };
 
 function initApp() {
+    console.log("Démarrage de Learn the Bible...");
     if (window.lucide) lucide.createIcons();
     populateBookSelect();
     updateXPDisplay();
+    // Charger le premier livre
     loadBookData(state.currentBook, () => {
         updateChapterSelector();
         renderBible();
@@ -88,7 +90,9 @@ function loadBookData(bookId, callback) {
     const bookInfo = BIBLE_METADATA.find(b => b.id === bookId);
     if (!bookInfo) return;
 
-    if (state.loadedBooks.has(bookId)) {
+    // Si déjà chargé, on lance le callback direct
+    if (state.loadedBooks.has(bookId) || window[`BIBLE_DATA_${bookId}`]) {
+        state.loadedBooks.add(bookId);
         if (callback) callback();
         return;
     }
@@ -97,23 +101,32 @@ function loadBookData(bookId, callback) {
     if (loader) loader.style.display = 'flex';
 
     const script = document.createElement('script');
-    // Mise à jour du chemin vers le dossier correct : ./js/bible-data/
-    script.src = `./js/bible-data/${bookInfo.file}`;
+    // Chemin exact demandé : js/bible-data/
+    const scriptPath = `js/bible-data/${bookInfo.file}`;
+    script.src = scriptPath;
     
+    console.log(`Chargement de la ressource : ${scriptPath}`);
+
     script.onload = () => {
+        console.log(`Réussite : ${bookInfo.file} est prêt.`);
         state.loadedBooks.add(bookId);
         if (loader) loader.style.display = 'none';
         if (callback) callback();
     };
 
     script.onerror = () => {
+        console.error(`Échec critique : Impossible de trouver ${scriptPath}`);
         if (loader) loader.style.display = 'none';
         const container = document.getElementById('bible-content');
         if (container) {
             container.innerHTML = `
-                <div class="p-10 text-center border-2 border-dashed border-red-200 rounded-2xl bg-white/50">
-                    <p class="text-red-500 font-bold text-lg">Erreur de chargement</p>
-                    <p class="text-sm text-gray-500 mt-2">Le fichier ./js/bible-data/${bookInfo.file} est introuvable.</p>
+                <div class="p-8 text-center bg-white/80 rounded-3xl shadow-xl border-2 border-red-100">
+                    <div class="text-red-500 mb-4 flex justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800">Fichier introuvable</h3>
+                    <p class="text-gray-500 mt-2">Le livre n'a pas pu être chargé depuis : <br>
+                    <code class="text-xs bg-red-50 text-red-600 p-2 rounded block mt-2">${scriptPath}</code></p>
                 </div>`;
         }
     };
@@ -136,7 +149,7 @@ function updateChapterSelector() {
 
     let options = "";
     for (let i = 1; i <= bookInfo.chapters; i++) {
-        options += `<option value="${i}" ${i === state.currentChapter ? 'selected' : ''}>Ch. ${i}</option>`;
+        options += `<option value="${i}" ${i === state.currentChapter ? 'selected' : ''}>Chapitre ${i}</option>`;
     }
     select.innerHTML = options;
 }
@@ -166,27 +179,42 @@ function renderBible() {
     const container = document.getElementById('bible-content');
     
     if (!container) return;
-
     const bookInfo = BIBLE_METADATA.find(b => b.id === state.currentBook);
 
     if (!bookContent || !bookContent[key]) {
+        console.warn(`Clé introuvable : ${key} dans window.${dataName}`);
         container.innerHTML = `
-            <div class="text-center p-10">
-                <h2 class="text-2xl font-serif font-bold mb-4">${bookInfo.name} ${state.currentChapter}</h2>
-                <p class="text-gray-400 italic">Veuillez vérifier que le fichier de données est correctement chargé.</p>
+            <div class="text-center p-12">
+                <h2 class="text-3xl font-serif font-bold text-gray-800">${bookInfo.name} ${state.currentChapter}</h2>
+                <div class="mt-8 p-6 bg-blue-50 rounded-2xl border border-blue-100">
+                    <p class="text-blue-600">Lecture des données en cours...</p>
+                    <p class="text-xs text-blue-400 mt-2">Si ce message reste, vérifiez le format de window.${dataName}</p>
+                </div>
             </div>`;
         return;
     }
 
     const verses = bookContent[key];
     container.innerHTML = `
-        <h2 class="text-3xl font-serif font-bold mb-6">${bookInfo.name} ${state.currentChapter}</h2>
-        <div class="space-y-4">
-            ${verses.map(v => `<p><span class="verse-num">${v.n}</span>${v.t}</p>`).join('')}
+        <div class="animate-in fade-in duration-500">
+            <h2 class="text-4xl font-serif font-bold text-gray-800 mb-8 border-b pb-4 border-gray-100 tracking-tight">
+                ${bookInfo.name} <span class="text-blue-500">${state.currentChapter}</span>
+            </h2>
+            <div class="space-y-6 text-lg text-gray-700 leading-relaxed font-serif">
+                ${verses.map(v => `
+                    <p class="group flex items-start">
+                        <span class="verse-num select-none opacity-40 group-hover:opacity-100 transition-opacity text-blue-500 font-bold mr-4 text-sm pt-1 w-6 text-right shrink-0">
+                            ${v.n}
+                        </span>
+                        <span>${v.t}</span>
+                    </p>
+                `).join('')}
+            </div>
         </div>`;
     
+    // Retour en haut de page
     const mainContainer = document.getElementById('app-container');
-    if (mainContainer) mainContainer.scrollTo(0, 0);
+    if (mainContainer) mainContainer.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function changeChapter(dir) {
@@ -237,8 +265,8 @@ function updateXPDisplay() {
     const badge = document.getElementById('xp-badge');
     const progress = document.getElementById('xp-progress');
     const profileDisplay = document.getElementById('profile-xp-display');
-    if (badge) badge.textContent = `XP: ${state.xp}`;
-    if (progress) progress.style.width = `${state.xp % 100}%`;
+    if (badge) badge.textContent = `⚡ ${state.xp} XP`;
+    if (progress) progress.style.width = `${Math.min(state.xp % 100, 100)}%`;
     if (profileDisplay) profileDisplay.textContent = `${state.xp} XP`;
 }
 
