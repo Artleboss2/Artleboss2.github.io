@@ -111,9 +111,8 @@ function loadBookData(bookId, callback) {
         if (container) {
             container.innerHTML = `
                 <div class="p-10 text-center border-2 border-dashed border-red-200 rounded-2xl bg-white/50">
-                    <p class="text-red-500 font-bold text-lg">Fichier manquant</p>
-                    <p class="text-sm text-gray-500 mt-2">Le fichier est introuvable à l'adresse suivante :<br>
-                    <code class="bg-gray-100 px-2 py-1 rounded">./bible-data/${bookInfo.file}</code></p>
+                    <p class="text-red-500 font-bold text-lg">Erreur de chargement</p>
+                    <p class="text-sm text-gray-500 mt-2">Le fichier ./bible-data/${bookInfo.file} est introuvable.</p>
                 </div>`;
         }
     };
@@ -167,18 +166,20 @@ function renderBible() {
     
     if (!container) return;
 
+    const bookInfo = BIBLE_METADATA.find(b => b.id === state.currentBook);
+
     if (!bookContent || !bookContent[key]) {
         container.innerHTML = `
             <div class="text-center p-10">
-                <h2 class="text-2xl font-serif font-bold mb-4">${BIBLE_METADATA.find(b=>b.id===state.currentBook).name} ${state.currentChapter}</h2>
-                <p class="text-gray-400 italic">Chargement du texte ou contenu non disponible...</p>
+                <h2 class="text-2xl font-serif font-bold mb-4">${bookInfo.name} ${state.currentChapter}</h2>
+                <p class="text-gray-400 italic">Veuillez vérifier que le fichier de données est correctement chargé.</p>
             </div>`;
         return;
     }
 
     const verses = bookContent[key];
     container.innerHTML = `
-        <h2 class="text-3xl font-serif font-bold mb-6">${BIBLE_METADATA.find(b=>b.id===state.currentBook).name} ${state.currentChapter}</h2>
+        <h2 class="text-3xl font-serif font-bold mb-6">${bookInfo.name} ${state.currentChapter}</h2>
         <div class="space-y-4">
             ${verses.map(v => `<p><span class="verse-num">${v.n}</span>${v.t}</p>`).join('')}
         </div>`;
@@ -188,16 +189,41 @@ function renderBible() {
 }
 
 function changeChapter(dir) {
-    const bookInfo = BIBLE_METADATA.find(b => b.id === state.currentBook);
+    const bookIndex = BIBLE_METADATA.findIndex(b => b.id === state.currentBook);
+    const bookInfo = BIBLE_METADATA[bookIndex];
     let next = state.currentChapter + dir;
 
-    if (next >= 1 && next <= bookInfo.chapters) {
+    if (next < 1) {
+        if (bookIndex > 0) {
+            const prevBook = BIBLE_METADATA[bookIndex - 1];
+            state.currentBook = prevBook.id;
+            state.currentChapter = prevBook.chapters;
+            syncNavigation();
+        }
+    } else if (next > bookInfo.chapters) {
+        if (bookIndex < BIBLE_METADATA.length - 1) {
+            const nextBook = BIBLE_METADATA[bookIndex + 1];
+            state.currentBook = nextBook.id;
+            state.currentChapter = 1;
+            syncNavigation();
+        }
+    } else {
         state.currentChapter = next;
         const select = document.getElementById('chapter-select');
         if (select) select.value = next;
         renderBible();
         saveState();
     }
+}
+
+function syncNavigation() {
+    const bookSelect = document.getElementById('book-select');
+    if (bookSelect) bookSelect.value = state.currentBook;
+    loadBookData(state.currentBook, () => {
+        updateChapterSelector();
+        renderBible();
+        saveState();
+    });
 }
 
 function addXP(amount) {
@@ -210,7 +236,6 @@ function updateXPDisplay() {
     const badge = document.getElementById('xp-badge');
     const progress = document.getElementById('xp-progress');
     const profileDisplay = document.getElementById('profile-xp-display');
-
     if (badge) badge.textContent = `XP: ${state.xp}`;
     if (progress) progress.style.width = `${state.xp % 100}%`;
     if (profileDisplay) profileDisplay.textContent = `${state.xp} XP`;
@@ -227,7 +252,6 @@ function switchView(viewId) {
     const profile = document.getElementById('view-profile');
     const navReader = document.getElementById('nav-reader');
     const navProfile = document.getElementById('nav-profile');
-
     if (reader) reader.classList.toggle('hidden', viewId !== 'reader');
     if (profile) profile.classList.toggle('hidden', viewId !== 'profile');
     if (navReader) navReader.classList.toggle('active-nav', viewId === 'reader');
