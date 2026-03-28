@@ -75,7 +75,7 @@ let state = {
 };
 
 function initApp() {
-    console.log("Application initialisée avec succès.");
+    console.log("Démarrage de l'application...");
     if (window.lucide) lucide.createIcons();
     populateBookSelect();
     updateXPDisplay();
@@ -121,7 +121,7 @@ function loadBookData(bookId, callback) {
         fallbackScript.onerror = () => {
             const container = document.getElementById('bible-content');
             if (container) {
-                container.innerHTML = `<div class="p-8 text-center text-red-500">Erreur de chargement.</div>`;
+                container.innerHTML = `<div class="p-8 text-center text-red-500">Erreur de chargement des données.</div>`;
             }
         };
         document.head.appendChild(fallbackScript);
@@ -145,14 +145,14 @@ function updateChapterSelector() {
 
     let options = "";
     for (let i = 1; i <= bookInfo.chapters; i++) {
-        // Affichage strict du numéro uniquement
+        // CORRECTION : Uniquement le chiffre i, pas de texte "Ch." ou "Chapitre"
         options += `<option value="${i}" ${i === state.currentChapter ? 'selected' : ''}>${i}</option>`;
     }
     select.innerHTML = options;
 }
 
 /**
- * Fonctions de navigation globale
+ * Fonctions globales rattachées à window pour garantir l'accès HTML
  */
 window.handleBookChange = function() {
     const select = document.getElementById('book-select');
@@ -175,6 +175,7 @@ window.handleChapterChange = function() {
 };
 
 window.completeChapter = function() {
+    console.log("Action : Terminer le chapitre");
     state.xp += 10;
     updateXPDisplay();
     window.changeChapter(1); 
@@ -191,7 +192,7 @@ function renderBible() {
     const bookInfo = BIBLE_METADATA.find(b => b.id === state.currentBook);
 
     if (!bookContent || !bookContent[key]) {
-        container.innerHTML = `<div class="text-center py-20 text-gray-400">Chargement des versets...</div>`;
+        container.innerHTML = `<div class="text-center py-20 text-gray-400">Chargement...</div>`;
         return;
     }
 
@@ -249,8 +250,11 @@ function syncNavigation() {
 function updateXPDisplay() {
     const badge = document.getElementById('xp-badge');
     const progress = document.getElementById('xp-progress');
-    if (badge) badge.textContent = `⚡ ${state.xp} XP`;
+    const statsXp = document.getElementById('stats-xp');
+    
+    if (badge) badge.textContent = ` ${state.xp} XP`;
     if (progress) progress.style.width = `${Math.min(state.xp % 100, 100)}%`;
+    if (statsXp) statsXp.textContent = state.xp;
 }
 
 function saveState() {
