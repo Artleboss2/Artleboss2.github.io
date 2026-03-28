@@ -1,3 +1,8 @@
+/**
+ * Bible App - Logique de Navigation et Progression
+ * Assure la liaison entre l'interface HTML et les données JS
+ */
+
 const BIBLE_METADATA = [
     { id: "GEN", name: "Genèse", chapters: 50, file: "genese.js" },
     { id: "EXO", name: "Exode", chapters: 40, file: "exode.js" },
@@ -67,6 +72,7 @@ const BIBLE_METADATA = [
     { id: "APO", name: "Apocalypse", chapters: 22, file: "apocalypse.js" }
 ];
 
+// État de l'application
 let state = {
     xp: parseInt(localStorage.getItem('bible_xp')) || 0,
     currentBook: localStorage.getItem('bible_last_book') || "GEN",
@@ -74,60 +80,18 @@ let state = {
     loadedBooks: new Set()
 };
 
-function initApp() {
-    console.log("Démarrage de l'application...");
-    if (window.lucide) lucide.createIcons();
-    populateBookSelect();
-    updateXPDisplay();
-    loadBookData(state.currentBook, () => {
-        updateChapterSelector();
-        renderBible();
-    });
-}
+/**
+ * Fonctions de Gestion de l'Interface
+ */
 
-function loadBookData(bookId, callback) {
-    const bookInfo = BIBLE_METADATA.find(b => b.id === bookId);
-    if (!bookInfo) return;
-
-    if (state.loadedBooks.has(bookId) || window[`BIBLE_DATA_${bookId}`]) {
-        state.loadedBooks.add(bookId);
-        if (callback) callback();
-        return;
-    }
-
-    const loader = document.getElementById('loading');
-    if (loader) loader.style.display = 'flex';
-
-    const script = document.createElement('script');
-    const timestamp = new Date().getTime();
-    const scriptPath = `js/bible-data/${bookInfo.file}?t=${timestamp}`;
-    script.src = scriptPath;
-
-    script.onload = () => {
-        state.loadedBooks.add(bookId);
-        if (loader) loader.style.display = 'none';
-        if (callback) callback();
-    };
-
-    script.onerror = () => {
-        if (loader) loader.style.display = 'none';
-        const fallbackPath = `bible-data/${bookInfo.file}?t=${timestamp}`;
-        const fallbackScript = document.createElement('script');
-        fallbackScript.src = fallbackPath;
-        fallbackScript.onload = () => {
-            state.loadedBooks.add(bookId);
-            if (callback) callback();
-        };
-        fallbackScript.onerror = () => {
-            const container = document.getElementById('bible-content');
-            if (container) {
-                container.innerHTML = `<div class="p-8 text-center text-red-500">Erreur de chargement des données.</div>`;
-            }
-        };
-        document.head.appendChild(fallbackScript);
-    };
-
-    document.head.appendChild(script);
+function updateXPDisplay() {
+    const badge = document.getElementById('xp-badge');
+    const statsXp = document.getElementById('stats-xp');
+    const progress = document.getElementById('xp-progress');
+    
+    if (badge) badge.textContent = `⚡ ${state.xp} XP`;
+    if (statsXp) statsXp.textContent = state.xp;
+    if (progress) progress.style.width = `${Math.min(state.xp % 100, 100)}%`;
 }
 
 function populateBookSelect() {
@@ -145,15 +109,90 @@ function updateChapterSelector() {
 
     let options = "";
     for (let i = 1; i <= bookInfo.chapters; i++) {
-        // CORRECTION : Uniquement le chiffre i, pas de texte "Ch." ou "Chapitre"
+        // Affiche uniquement le chiffre, pas de préfixe "Ch."
         options += `<option value="${i}" ${i === state.currentChapter ? 'selected' : ''}>${i}</option>`;
     }
     select.innerHTML = options;
 }
 
 /**
- * Fonctions globales rattachées à window pour garantir l'accès HTML
+ * Chargement et Rendu des Données
  */
+
+function loadBookData(bookId, callback) {
+    const bookInfo = BIBLE_METADATA.find(b => b.id === bookId);
+    if (!bookInfo) return;
+
+    // Si déjà chargé en mémoire
+    if (window[`BIBLE_DATA_${bookId}`]) {
+        if (callback) callback();
+        return;
+    }
+
+    const loader = document.getElementById('loading');
+    if (loader) loader.style.display = 'flex';
+
+    const script = document.createElement('script');
+    // Anti-cache pour forcer la mise à jour
+    script.src = `js/bible-data/${bookInfo.file}?v=${new Date().getTime()}`;
+    
+    script.onload = () => {
+        console.log(`Données chargées : ${bookId}`);
+        if (loader) loader.style.display = 'none';
+        if (callback) callback();
+    };
+
+    script.onerror = () => {
+        console.error(`Échec du chargement : ${script.src}`);
+        if (loader) loader.style.display = 'none';
+        // Tentative alternative sans le dossier /js/ au cas où
+        const altScript = document.createElement('script');
+        altScript.src = `bible-data/${bookInfo.file}`;
+        altScript.onload = () => { if (callback) callback(); };
+        document.head.appendChild(altScript);
+    };
+
+    document.head.appendChild(script);
+}
+
+function renderBible() {
+    const dataName = `BIBLE_DATA_${state.currentBook}`;
+    const bookContent = window[dataName];
+    const key = `${state.currentBook}-${state.currentChapter}`;
+    const container = document.getElementById('bible-content');
+    
+    if (!container) return;
+
+    if (!bookContent || !bookContent[key]) {
+        container.innerHTML = `<div class="text-center py-20 text-gray-400">Contenu indisponible (${key})</div>`;
+        return;
+    }
+
+    const verses = bookContent[key];
+    const bookInfo = BIBLE_METADATA.find(b => b.id === state.currentBook);
+
+    container.innerHTML = `
+        <div class="animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <h2 class="text-3xl font-serif font-bold text-gray-800 mb-6 border-b pb-4 border-gray-100">
+                ${bookInfo.name} ${state.currentChapter}
+            </h2>
+            <div class="space-y-6 text-lg text-gray-700 leading-relaxed font-serif">
+                ${verses.map(v => `
+                    <p class="flex items-start">
+                        <span class="text-blue-500 font-bold mr-4 text-xs mt-1.5 opacity-40 w-6 text-right select-none">${v.n}</span>
+                        <span>${v.t}</span>
+                    </p>
+                `).join('')}
+            </div>
+        </div>`;
+    
+    document.getElementById('app-container')?.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/**
+ * Fonctions Publiques (disponibles pour le HTML)
+ */
+
 window.handleBookChange = function() {
     const select = document.getElementById('book-select');
     if (!select) return;
@@ -174,41 +213,6 @@ window.handleChapterChange = function() {
     saveState();
 };
 
-window.completeChapter = function() {
-    console.log("Action : Terminer le chapitre");
-    state.xp += 10;
-    updateXPDisplay();
-    window.changeChapter(1); 
-    saveState();
-};
-
-function renderBible() {
-    const dataName = `BIBLE_DATA_${state.currentBook}`;
-    const bookContent = window[dataName];
-    const key = `${state.currentBook}-${state.currentChapter}`;
-    const container = document.getElementById('bible-content');
-    
-    if (!container) return;
-    const bookInfo = BIBLE_METADATA.find(b => b.id === state.currentBook);
-
-    if (!bookContent || !bookContent[key]) {
-        container.innerHTML = `<div class="text-center py-20 text-gray-400">Chargement...</div>`;
-        return;
-    }
-
-    const verses = bookContent[key];
-    container.innerHTML = `
-        <div class="animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <h2 class="text-4xl font-serif font-bold text-gray-800 mb-8 border-b pb-4 border-gray-100">${bookInfo.name} ${state.currentChapter}</h2>
-            <div class="space-y-6 text-lg text-gray-700 leading-relaxed font-serif">
-                ${verses.map(v => `<p class="flex items-start"><span class="text-blue-500 font-bold mr-4 text-sm mt-1 select-none opacity-50">${v.n}</span><span>${v.t}</span></p>`).join('')}
-            </div>
-        </div>`;
-    
-    const mainContainer = document.getElementById('app-container');
-    if (mainContainer) mainContainer.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
 window.changeChapter = function(dir) {
     const bookIndex = BIBLE_METADATA.findIndex(b => b.id === state.currentBook);
     const bookInfo = BIBLE_METADATA[bookIndex];
@@ -219,14 +223,14 @@ window.changeChapter = function(dir) {
             const prevBook = BIBLE_METADATA[bookIndex - 1];
             state.currentBook = prevBook.id;
             state.currentChapter = prevBook.chapters;
-            syncNavigation();
+            refreshNavigation();
         }
     } else if (next > bookInfo.chapters) {
         if (bookIndex < BIBLE_METADATA.length - 1) {
             const nextBook = BIBLE_METADATA[bookIndex + 1];
             state.currentBook = nextBook.id;
             state.currentChapter = 1;
-            syncNavigation();
+            refreshNavigation();
         }
     } else {
         state.currentChapter = next;
@@ -237,7 +241,15 @@ window.changeChapter = function(dir) {
     }
 };
 
-function syncNavigation() {
+window.completeChapter = function() {
+    console.log("Validation du chapitre...");
+    state.xp += 10;
+    updateXPDisplay();
+    window.changeChapter(1);
+    saveState();
+};
+
+function refreshNavigation() {
     const bookSelect = document.getElementById('book-select');
     if (bookSelect) bookSelect.value = state.currentBook;
     loadBookData(state.currentBook, () => {
@@ -247,20 +259,20 @@ function syncNavigation() {
     });
 }
 
-function updateXPDisplay() {
-    const badge = document.getElementById('xp-badge');
-    const progress = document.getElementById('xp-progress');
-    const statsXp = document.getElementById('stats-xp');
-    
-    if (badge) badge.textContent = ` ${state.xp} XP`;
-    if (progress) progress.style.width = `${Math.min(state.xp % 100, 100)}%`;
-    if (statsXp) statsXp.textContent = state.xp;
-}
-
 function saveState() {
     localStorage.setItem('bible_xp', state.xp);
     localStorage.setItem('bible_last_book', state.currentBook);
     localStorage.setItem('bible_last_chap', state.currentChapter);
 }
 
-window.onload = initApp;
+// Initialisation
+window.onload = function() {
+    console.log("Application initialisée");
+    if (window.lucide) window.lucide.createIcons();
+    populateBookSelect();
+    updateXPDisplay();
+    loadBookData(state.currentBook, () => {
+        updateChapterSelector();
+        renderBible();
+    });
+};
