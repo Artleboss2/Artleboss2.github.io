@@ -75,7 +75,7 @@ let state = {
 };
 
 function initApp() {
-    console.log("Initialisation...");
+    console.log("Application initialisée avec succès.");
     if (window.lucide) lucide.createIcons();
     populateBookSelect();
     updateXPDisplay();
@@ -102,8 +102,6 @@ function loadBookData(bookId, callback) {
     const timestamp = new Date().getTime();
     const scriptPath = `js/bible-data/${bookInfo.file}?t=${timestamp}`;
     script.src = scriptPath;
-    
-    console.log(`Tentative de chargement : ${scriptPath}`);
 
     script.onload = () => {
         state.loadedBooks.add(bookId);
@@ -123,7 +121,7 @@ function loadBookData(bookId, callback) {
         fallbackScript.onerror = () => {
             const container = document.getElementById('bible-content');
             if (container) {
-                container.innerHTML = `<div class="p-8 text-center text-red-500">Erreur de chargement des données.</div>`;
+                container.innerHTML = `<div class="p-8 text-center text-red-500">Erreur de chargement.</div>`;
             }
         };
         document.head.appendChild(fallbackScript);
@@ -147,13 +145,16 @@ function updateChapterSelector() {
 
     let options = "";
     for (let i = 1; i <= bookInfo.chapters; i++) {
-        // Affiche uniquement le chiffre
+        // Affichage strict du numéro uniquement
         options += `<option value="${i}" ${i === state.currentChapter ? 'selected' : ''}>${i}</option>`;
     }
     select.innerHTML = options;
 }
 
-function handleBookChange() {
+/**
+ * Fonctions de navigation globale
+ */
+window.handleBookChange = function() {
     const select = document.getElementById('book-select');
     if (!select) return;
     state.currentBook = select.value;
@@ -163,25 +164,21 @@ function handleBookChange() {
         renderBible();
         saveState();
     });
-}
+};
 
-function handleChapterChange() {
+window.handleChapterChange = function() {
     const select = document.getElementById('chapter-select');
     if (!select) return;
     state.currentChapter = parseInt(select.value);
     renderBible();
     saveState();
-}
+};
 
-/**
- * Fonction globale pour s'assurer que le bouton HTML peut l'appeler
- */
 window.completeChapter = function() {
     state.xp += 10;
     updateXPDisplay();
     window.changeChapter(1); 
     saveState();
-    console.log("+10 XP !");
 };
 
 function renderBible() {
@@ -194,7 +191,7 @@ function renderBible() {
     const bookInfo = BIBLE_METADATA.find(b => b.id === state.currentBook);
 
     if (!bookContent || !bookContent[key]) {
-        container.innerHTML = `<div class="text-center py-20 text-gray-400">Chargement...</div>`;
+        container.innerHTML = `<div class="text-center py-20 text-gray-400">Chargement des versets...</div>`;
         return;
     }
 
@@ -252,7 +249,7 @@ function syncNavigation() {
 function updateXPDisplay() {
     const badge = document.getElementById('xp-badge');
     const progress = document.getElementById('xp-progress');
-    if (badge) badge.textContent = ` ${state.xp} XP`;
+    if (badge) badge.textContent = `⚡ ${state.xp} XP`;
     if (progress) progress.style.width = `${Math.min(state.xp % 100, 100)}%`;
 }
 
