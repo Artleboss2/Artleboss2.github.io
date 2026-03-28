@@ -99,7 +99,6 @@ function loadBookData(bookId, callback) {
     if (loader) loader.style.display = 'flex';
 
     const script = document.createElement('script');
-    
     const timestamp = new Date().getTime();
     const scriptPath = `js/bible-data/${bookInfo.file}?t=${timestamp}`;
     script.src = scriptPath;
@@ -107,38 +106,24 @@ function loadBookData(bookId, callback) {
     console.log(`Tentative de chargement : ${scriptPath}`);
 
     script.onload = () => {
-        console.log(`Chargé avec succès : ${bookInfo.file}`);
         state.loadedBooks.add(bookId);
         if (loader) loader.style.display = 'none';
         if (callback) callback();
     };
 
     script.onerror = () => {
-        console.error(`404 : Fichier non trouvé à ${scriptPath}`);
         if (loader) loader.style.display = 'none';
-        
         const fallbackPath = `bible-data/${bookInfo.file}?t=${timestamp}`;
-        console.log(`Tentative de secours (fallback) : ${fallbackPath}`);
-        
         const fallbackScript = document.createElement('script');
         fallbackScript.src = fallbackPath;
         fallbackScript.onload = () => {
-            console.log(`Chargé avec succès via fallback : ${bookInfo.file}`);
             state.loadedBooks.add(bookId);
             if (callback) callback();
         };
         fallbackScript.onerror = () => {
             const container = document.getElementById('bible-content');
             if (container) {
-                container.innerHTML = `
-                    <div class="p-8 text-center bg-white rounded-3xl shadow-xl border-2 border-red-100">
-                        <h3 class="text-xl font-bold text-red-600 mb-2">Erreur de chargement</h3>
-                        <p class="text-gray-600 text-sm mb-4">Le fichier "${bookInfo.file}" est introuvable.</p>
-                        <div class="text-left bg-gray-50 p-4 rounded-xl text-[10px] font-mono text-gray-400">
-                            URL testée 1 : ${scriptPath}<br>
-                            URL testée 2 : ${fallbackPath}
-                        </div>
-                    </div>`;
+                container.innerHTML = `<div class="p-8 text-center text-red-500">Erreur de chargement des données.</div>`;
             }
         };
         document.head.appendChild(fallbackScript);
@@ -162,7 +147,7 @@ function updateChapterSelector() {
 
     let options = "";
     for (let i = 1; i <= bookInfo.chapters; i++) {
-        // Changement demandé : afficher uniquement le chiffre
+        // Affiche uniquement le chiffre
         options += `<option value="${i}" ${i === state.currentChapter ? 'selected' : ''}>${i}</option>`;
     }
     select.innerHTML = options;
@@ -170,6 +155,7 @@ function updateChapterSelector() {
 
 function handleBookChange() {
     const select = document.getElementById('book-select');
+    if (!select) return;
     state.currentBook = select.value;
     state.currentChapter = 1;
     loadBookData(state.currentBook, () => {
@@ -181,23 +167,22 @@ function handleBookChange() {
 
 function handleChapterChange() {
     const select = document.getElementById('chapter-select');
+    if (!select) return;
     state.currentChapter = parseInt(select.value);
     renderBible();
     saveState();
 }
 
 /**
- * Fonction appelée quand l'utilisateur clique sur "Chapitre Terminé"
+ * Fonction globale pour s'assurer que le bouton HTML peut l'appeler
  */
-function completeChapter() {
+window.completeChapter = function() {
     state.xp += 10;
     updateXPDisplay();
-    changeChapter(1); // Passe au chapitre suivant
+    window.changeChapter(1); 
     saveState();
-    
-    // Petite notification visuelle si un élément existe
-    console.log("+10 XP ! Bravo.");
-}
+    console.log("+10 XP !");
+};
 
 function renderBible() {
     const dataName = `BIBLE_DATA_${state.currentBook}`;
@@ -209,11 +194,7 @@ function renderBible() {
     const bookInfo = BIBLE_METADATA.find(b => b.id === state.currentBook);
 
     if (!bookContent || !bookContent[key]) {
-        container.innerHTML = `
-            <div class="text-center py-20">
-                <div class="animate-spin inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mb-4"></div>
-                <p class="text-gray-400">Chargement des versets...</p>
-            </div>`;
+        container.innerHTML = `<div class="text-center py-20 text-gray-400">Chargement...</div>`;
         return;
     }
 
@@ -230,7 +211,7 @@ function renderBible() {
     if (mainContainer) mainContainer.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function changeChapter(dir) {
+window.changeChapter = function(dir) {
     const bookIndex = BIBLE_METADATA.findIndex(b => b.id === state.currentBook);
     const bookInfo = BIBLE_METADATA[bookIndex];
     let next = state.currentChapter + dir;
@@ -256,7 +237,7 @@ function changeChapter(dir) {
         renderBible();
         saveState();
     }
-}
+};
 
 function syncNavigation() {
     const bookSelect = document.getElementById('book-select');
@@ -271,7 +252,7 @@ function syncNavigation() {
 function updateXPDisplay() {
     const badge = document.getElementById('xp-badge');
     const progress = document.getElementById('xp-progress');
-    if (badge) badge.textContent = `${state.xp} XP`;
+    if (badge) badge.textContent = ` ${state.xp} XP`;
     if (progress) progress.style.width = `${Math.min(state.xp % 100, 100)}%`;
 }
 
