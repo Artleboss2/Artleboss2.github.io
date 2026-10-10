@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Data Analyzer - Analysez vos discussions et tokens</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gemini: {
+                            50: '#f0f4f8',
+                            100: '#d9e2ec',
+                            500: '#1a73e8',
+                            600: '#1557b0',
+                            700: '#0d3c7a',
+                            900: '#072042'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="h-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-200">
+    <div class="min-h-full flex flex-col">
+        <!-- Header -->
+        <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md">
+                        <i class="fa-solid fa-brain text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg leading-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Gemini Data Analyzer</h1>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">100% Client-side & Sécurisé</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button id="demo-btn" class="hidden sm:inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-lg text-blue-700 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/50 transition">
+                        <i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i> Charger un exemple
+                    </button>
+                    <button id="theme-toggle" class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-700 transition" title="Changer de thème">
+                        <i class="fa-solid fa-moon dark:hidden"></i>
+                        <i class="fa-solid fa-sun hidden dark:inline"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Container -->
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+            <!-- Upload / Welcome Section -->
+            <section id="upload-section" class="space-y-6">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 text-white shadow-xl relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+                    <div class="relative z-10 max-w-2xl space-y-4">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-white/20 text-white backdrop-blur-sm">
+                            <i class="fa-solid fa-shield-halved mr-1.5"></i> Respect total de votre vie privée
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-bold">Analysez vos conversations Google Gemini</h2>
+                        <p class="text-blue-100 text-sm sm:text-base">
+                            Importez votre fichier d'export (JSON ou Takeout) pour découvrir des statistiques détaillées sur vos discussions, l'estimation de vos tokens consommés, et l'évolution de votre utilisation. Aucune donnée ne quitte votre navigateur !
+                        </p>
+                        <div class="pt-2 flex flex-wrap gap-3">
+                            <button id="hero-demo-btn" class="sm:hidden px-4 py-2 bg-white text-blue-700 font-medium rounded-lg text-sm shadow hover:bg-blue-50 transition">
+                                <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Tester avec des données factices
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drag & Drop Zone -->
+                <div id="drop-zone" class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-8 text-center bg-white dark:bg-slate-800 hover:border-blue-500 dark:hover:border-blue-400 transition cursor-pointer shadow-sm">
+                    <input type="file" id="file-input" accept=".json,.html,.txt" class="hidden" multiple>
+                    <div class="max-w-md mx-auto space-y-4">
+                        <div class="w-16 h-16 mx-auto rounded-full bg-blue-50 dark:bg-slate-700 flex items-center justify-center text-blue-600 dark:text-blue-400 text-2xl shadow-inner">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-200">Glissez-déposez vos fichiers ici</h3>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Formats acceptés : <span class="font-medium text-slate-700 dark:text-slate-300">JSON</span> (Export Gemini / Takeout)</p>
+                        </div>
+                        <div>
+                            <label for="file-input" class="inline-flex items-center px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600 transition shadow-sm cursor-pointer">
+                                <i class="fa-solid fa-folder-open mr-2 text-blue-500">></i> Parcourir les fichiers
+                            </label>
+                        </div>
+                        <p class="text-xs text-slate-400 dark:text-slate-500">Astuce : Vous pouvez aussi cliquer sur "Charger un exemple" en haut si vous n'avez pas de fichier sous la main.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dashboard Section (Hidden by default until data is loaded) -->
+            <div id="dashboard-section" class="space-y-8 hidden">
+                <!-- Action bar / Status -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 gap-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
+                        <span id="data-source-label" class="text-sm font-medium text-slate-700 dark:text-slate-300">Données chargées avec succès</span>
+                    </div>
+                    <div class="flex items-center space-x-3 w-full sm:w-auto justify-end">
+                        <button id="reset-btn" class="px-3 py-1.5 text-xs font-medium rounded-lg text-rose-600 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:text-rose-400 dark:hover:bg-rose-900/60 transition flex items-center">
+                            <i class="fa-solid fa-rotate-right mr-1.5"></i> Réinitialiser
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Metrics Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Total Discussions -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between">
+                        <div class="space-y-1">
+                            <p class="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">Discussions</p>
+                            <h3 id="metric-conversations" class="text-2xl font-bold text-slate-800 dark:text-slate-100">0</h3>
+                            <p class="text-xs text-slate-400">Conversations totales</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-comments"></i>
+                        </div>
+                    </div>
+
+                    <!-- Total Tokens -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between">
+                        <div class="space-y-1">
+                            <p class="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">Tokens Estimés</p>
+                            <h3 id="metric-tokens" class="text-2xl font-bold text-slate-800 dark:text-slate-100">0</h3>
+                            <p class="text-xs text-slate-400" title="Calculé sur la base de ~1.33 tokens par mot">Prompt + Réponses (~1.33 tok/mot)</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-microchip"></i>
+                        </div>
+                    </div>
+
+                    <!-- Total Messages -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between">
+                        <div class="space-y-1">
+                            <p class="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">Messages Échangés</p>
+                            <h3 id="metric-messages" class="text-2xl font-bold text-slate-800 dark:text-slate-100">0</h3>
+                            <p id="metric-messages-breakdown" class="text-xs text-slate-400">0 prompts / 0 réponses</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-message"></i>
+                        </div>
+                    </div>
+
+                    <!-- Total Words / Characters -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between">
+                        <div class="space-y-1">
+                            <p class="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">Volume de texte</p>
+                            <h3 id="metric-words" class="text-2xl font-bold text-slate-800 dark:text-slate-100">0</h3>
+                            <p id="metric-chars" class="text-xs text-slate-400">0 caractères</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-file-lines"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Activity Over Time Chart -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm lg:col-span-2 flex flex-col">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold text-slate-800 dark:text-slate-100 flex items-center">
+                                <i class="fa-solid fa-chart-line text-blue-500 mr-2"></i> Activité au fil du temps
+                            </h3>
+                            <span class="text-xs text-slate-400">Discussions par mois</span>
+                        </div>
+                        <div class="flex-1 relative min-h-[280px]">
+                            <canvas id="activityChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Token Breakdown Chart -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold text-slate-800 dark:text-slate-100 flex items-center">
+                                <i class="fa-solid fa-chart-pie text-indigo-500 mr-2"></i> Répartition des Tokens
+                            </h3>
+                            <span class="text-xs text-slate-400">Prompts vs Modèle</span>
+                        </div>
+                        <div class="flex-1 relative min-h-[280px] flex items-center justify-center">
+                            <canvas id="tokensChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Discussion Explorer Section -->
+                <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+                        <div>
+                            <h3 class="font-semibold text-slate-800 dark:text-slate-100 flex items-center text-lg">
+                                <i class="fa-solid fa-list-ul text-blue-500 mr-2"></i> Explorateur de Discussions
+                            </h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Recherchez, filtrez et prévisualisez vos anciennes conversations</p>
+                        </div>
+                        <div class="relative w-full sm:w-72">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-search"></i>
+                            </span>
+                            <input type="text" id="search-input" placeholder="Rechercher un sujet, un mot..." class="w-full pl-9 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 dark:text-slate-100">
+                        </div>
+                    </div>
+
+                    <!-- Discussions List & Preview Split View -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 min-h-[450px]">
+                        <!-- List (Left side) -->
+                        <div id="discussions-list" class="lg:col-span-5 border-r border-slate-200 dark:border-slate-700 overflow-y-auto max-h-[500px] divide-y divide-slate-100 dark:divide-slate-700/50">
+                            <!-- Populated dynamically -->
+                            <div class="p-8 text-center text-slate-400 text-sm">Aucune discussion trouvée.</div>
+                        </div>
+
+                        <!-- Preview (Right side) -->
+                        <div id="discussion-preview" class="lg:col-span-7 p-6 overflow-y-auto max-h-[500px] bg-slate-50/50 dark:bg-slate-900/50 flex flex-col justify-between">
+                            <div class="text-center py-20 text-slate-400 dark:text-slate-500">
+                                <i class="fa-solid fa-comments text-4xl mb-3 opacity-40"></i>
+                                <p class="text-sm font-medium">Sélectionnez une discussion pour afficher son contenu</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 mt-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-400 space-y-1">
+                <p>Gemini Data Analyzer - Conçu pour l'analyse sécurisée des exports d'IA.</p>
+                <p>Toutes les données sont traitées localement dans votre navigateur et ne sont jamais stockées ni envoyées à un serveur externe.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript Application Code -->
+    <script>
+        // State Management
+        let appData = {
+            conversations: []
+        };
+
+        let charts = {
+            activity: null,
+            tokens: null
+        };
+
+        // Theme Toggle Logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+
+        // Check initial preference
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+        } else {
+            htmlElement.classList.remove('dark');
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (htmlElement.classList.contains('dark')) {
+                htmlElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                htmlElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            // Update charts colors if needed
+            updateChartsTheme();
+        });
+
+        // DOM Elements
+        const uploadSection = document.getElementById('upload-section');
+        const dashboardSection = document.getElementById('dashboard-section');
+        const fileInput = document.getElementById('file-input');
+        const dropZone = document.getElementById('drop-zone');
+        const demoBtn = document.getElementById('demo-btn');
+        const heroDemoBtn = document.getElementById('hero-demo-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const searchInput = document.getElementById('search-input');
+        const discussionsList = document.getElementById('discussions-list');
+        const discussionPreview = document.getElementById('discussion-preview');
+        const dataSourceLabel = document.getElementById('data-source-label');
+
+        // Drag and Drop Events
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.add('border-blue-500', 'bg-blue-50/50', 'dark:bg-slate-700/50');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.remove('border-blue-500', 'bg-blue-50/50', 'dark:bg-slate-700/50');
+            }, false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            if (files.length > 0) {
+                handleFiles(files);
+            }
+        });
+
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFiles(e.target.files);
+            }
+        });
+
+        // Demo Data Loader
+        demoBtn.addEventListener('click', loadDemoData);
+        heroDemoBtn.addEventListener('click', loadDemoData);
+        resetBtn.addEventListener('click', resetApp);
+
+        // File Handler Function
+        function handleFiles(files) {
+            const file = files[0];
+            const reader = new FileReader();
+
+            dataSourceLabel.textContent = `Fichier analysé : ${file.name}`;
+            
+            reader.onload = function(e) {
+                try {
+                    const content = e.target.result;
+                    let parsedData;
+                    
+                    if (file.name.endsWith('.json')) {
+                        parsedData = JSON.parse(content);
+                        processGeminiJson(parsedData);
+                    } else {
+                        // Fallback text parser
+                        processTextExport(content);
+                    }
+                } catch (err) {
+                    alert("Erreur lors de la lecture du fichier JSON. Veuillez vérifier qu'il s'agit bien d'un export valide.");
+                    console.error(err);
+                }
+            };
+
+            reader.readAsText(file);
+        }
+
+        // Generate Mock Demo Data
+        function loadDemoData() {
+            dataSourceLabel.textContent = "Mode Démonstration (Données simulées)";
+            const mockConversations = [];
+            const topics = [
+                "Développement d'une application React avec Tailwind",
+                "Explication de la physique quantique pour débutants",
+                "Idées de recettes végétariennes pour la semaine",
+                "Optimisation des requêtes SQL complexes",
+                "Traduction et relecture d'un article en anglais",
+                "Planification d'un voyage au Japon en 2 semaines",
+                "Résolution d'un bug de synchronisation asynchrone en JavaScript",
+                "Conseils pour rédiger une lettre de motivation en stage"
+            ];
+
+            const now = new Date();
+            for (let i = 0; i < 35; i++) {
+                const date = new Date(now);
+                date.setDate(date.getDate() - Math.floor(Math.random() * 90)); // Within last 3 months
+                
+                const messagesCount = Math.floor(Math.random() * 8) + 2; // 2 to 10 messages
+                const messages = [];
+                
+                for (let j = 0; j < messagesCount; j++) {
+                    const isUser = j % 2 === 0;
+                    const textLength = Math.floor(Math.random() * 300) + 50;
+                    const sampleWords = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ".repeat(Math.ceil(textLength / 50));
+                    messages.push({
+                        role: isUser ? 'user' : 'model',
+                        text: sampleWords.substring(0, textLength),
+                        timestamp: new Date(date.getTime() + j * 60000).toISOString()
+                    });
+                }
+
+                mockConversations.push({
+                    id: `conv_${i}`,
+                    title: topics[i % topics.length] + (i >= topics.length ? ` (${i})` : ''),
+                    createTime: date.toISOString(),
+                    messages: messages
+                });
+            }
+
+            appData.conversations = mockConversations;
+            renderDashboard();
+        }
+
+        // Parser for Gemini / Google Takeout JSON format
+        function processGeminiJson(json) {
+            let convs = [];
+            
+            // Handle different possible structures of Google Takeout / Gemini exports
+            let rawList = [];
+            if (Array.isArray(json)) {
+                rawList = json;
+            } else if (json.conversations && Array.isArray(json.conversations)) {
+                rawList = json.conversations;
+            } else if (json.chats && Array.isArray(json.chats)) {
+                rawList = json.chats;
+            } else {
+                // Try to find any array property in the object
+                const foundKey = Object.keys(json).find(k => Array.isArray(json[k]));
+                if (foundKey) {
+                    rawList = json[foundKey];
+                } else {
+                    // Single conversation object wrap
+                    rawList = [json];
+                }
+            }
+
+            convs = rawList.map((item, index) => {
+                let title = item.title || item.name || `Discussion #${index + 1}`;
+                let createTime = item.createTime || item.timestamp || item.date || new Date().toISOString();
+                let messages = [];
+
+                if (item.messages && Array.isArray(item.messages)) {
+                    messages = item.messages.map(m => ({
+                        role: m.role || (m.sender === 'user' ? 'user' : 'model'),
+                        text: m.text || m.content || m.body || '',
+                        timestamp: m.timestamp || createTime
+                    }));
+                } else if (item.mapping) {
+                    // Handle OpenAI / Gemini node mapping style if exported similarly
+                    Object.values(item.mapping).forEach(node => {
+                        if (node.message && node.message.content && node.message.content.parts) {
+                            const text = node.message.content.parts.join(' ');
+                            const role = node.message.author && node.message.author.role === 'user' ? 'user' : 'model';
+                            messages.push({
+                                role: role,
+                                text: text,
+                                timestamp: new Date(node.message.create_time ? node.message.create_time * 1000 : Date.now()).toISOString()
+                            });
+                        }
+                    });
+                } else {
+                    // Fallback generic extraction
+                    messages = [
+                        { role: 'user', text: item.prompt || item.query || "Requête initiale", timestamp: createTime },
+                        { role: 'model', text: item.response || item.answer || item.output || "Réponse du modèle", timestamp: createTime }
+                    ];
+                }
+
+                return {
+                    id: item.id || `conv_${index}`,
+                    title: title,
+                    createTime: createTime,
+                    messages: messages
+                };
+            });
+
+            appData.conversations = convs;
+            renderDashboard();
+        }
+
+        // Fallback text parser
+        function processTextExport(text) {
+            appData.conversations = [{
+                id: 'conv_text',
+                title: 'Export texte brut',
+                createTime: new Date().toISOString(),
+                messages: [
+                    { role: 'user', text: text.substring(0, 1000), timestamp: new Date().toISOString() },
+                    { role: 'model', text: text.substring(1000, 3000) || "Analyse du document texte complet.", timestamp: new Date().toISOString() }
+                ]
+            }];
+            renderDashboard();
+        }
+
+        // Reset App State
+        function resetApp() {
+            appData.conversations = [];
+            uploadSection.classList.remove('hidden');
+            dashboardSection.classList.add('hidden');
+            fileInput.value = '';
+            if (charts.activity) charts.activity.destroy();
+            if (charts.tokens) charts.tokens.destroy();
+        }
+
+        // Render Dashboard Metrics & Charts
+        function renderDashboard() {
+            if (appData.conversations.length === 0) return;
+
+            uploadSection.classList.add('hidden');
+            dashboardSection.classList.remove('hidden');
+
+            let totalConversations = appData.conversations.length;
+            let totalMessages = 0;
+            let userMessages = 0;
+            let modelMessages = 0;
+            let totalChars = 0;
+            let totalWords = 0;
+            let userTokens = 0;
+            let modelTokens = 0;
+
+            // Monthly activity map for chart
+            let activityByMonth = {};
+
+            appData.conversations.forEach(conv => {
+                // Date formatting for activity chart
+                const dateObj = new Date(conv.createTime);
+                const monthKey = !isNaN(dateObj.getTime()) ? `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}` : 'Inconnu';
+                
+                activityByMonth[monthKey] = (activityByMonth[monthKey] || 0) + 1;
+
+                conv.messages.forEach(msg => {
+                    totalMessages++;
+                    if (msg.role === 'user') userMessages++;
+                    else modelMessages++;
+
+                    const text = msg.text || '';
+                    const chars = text.length;
+                    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                    // Standard estimation: ~1.33 tokens per word (or ~4 characters per token)
+                    const tokens = Math.round(words * 1.33);
+
+                    totalChars += chars;
+                    totalWords += words;
+
+                    if (msg.role === 'user') {
+                        userTokens += tokens;
+                    } else {
+                        modelTokens += tokens;
+                    }
+                });
+            });
+
+            const totalTokens = userTokens + modelTokens;
+
+            // Update DOM metrics
+            document.getElementById('metric-conversations').textContent = totalConversations.toLocaleString();
+            document.getElementById('metric-tokens').textContent = totalTokens.toLocaleString();
+            document.getElementById('metric-messages').textContent = totalMessages.toLocaleString();
+            document.getElementById('metric-messages-breakdown').textContent = `${userMessages} prompts / ${modelMessages} réponses`;
+            document.getElementById('metric-words').textContent = `${totalWords.toLocaleString()} mots`;
+            document.getElementById('metric-chars').textContent = `${totalChars.toLocaleString()} caractères`;
+
+            // Render Charts
+            renderActivityChart(activityByMonth);
+            renderTokensChart(userTokens, modelTokens);
+
+            // Render Discussions List
+            renderDiscussionsList(appData.conversations);
+        }
+
+        // Render Activity Chart
+        function renderActivityChart(activityMap) {
+            const ctx = document.getElementById('activityChart').getContext('2d');
+            if (charts.activity) charts.activity.destroy();
+
+            // Sort months chronological
+            const sortedKeys = Object.keys(activityMap).sort();
+            const labels = sortedKeys.map(k => {
+                if (k === 'Inconnu') return k;
+                const [year, month] = k.split('-');
+                const date = new Date(year, month - 1, 1);
+                return date.toLocaleDateString('fr-FR', { month: 'short', year: 'numeric' });
+            });
+            const data = sortedKeys.map(k => activityMap[k]);
+
+            const isDark = document.documentElement.classList.contains('dark');
+
+            charts.activity = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Discussions',
+                        data: data,
+                        backgroundColor: '#1a73e8',
+                        borderRadius: 8,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: isDark ? '#94a3b8' : '#64748b' }
+                        },
+                        y: {
+                            grid: { color: isDark ? '#334155' : '#f1f5f9' },
+                            ticks: { color: isDark ? '#94a3b8' : '#64748b', precision: 0 }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Render Tokens Doughnut Chart
+        function renderTokensChart(userTokens, modelTokens) {
+            const ctx = document.getElementById('tokensChart').getContext('2d');
+            if (charts.tokens) charts.tokens.destroy();
+
+            const isDark = document.documentElement.classList.contains('dark');
+
+            charts.tokens = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Prompts (Utilisateur)', 'Réponses (Modèle)'],
+                    datasets: [{
+                        data: [userTokens, modelTokens],
+                        backgroundColor: ['#3b82f6', '#6366f1'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: isDark ? '#94a3b8' : '#64748b',
+                                font: { family: 'Inter', size: 12 },
+                                boxWidth: 12,
+                                padding: 16
+                            }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+
+        // Update charts on theme toggle
+        function updateChartsTheme() {
+            if (appData.conversations.length > 0) {
+                renderDashboard();
+            }
+        }
+
+        // Render Discussions List in Explorer
+        function renderDiscussionsList(conversations, filterText = '') {
+            discussionsList.innerHTML = '';
+
+            const filtered = conversations.filter(c => 
+                c.title.toLowerCase().includes(filterText.toLowerCase()) ||
+                c.messages.some(m => m.text.toLowerCase().includes(filterText.toLowerCase()))
+            );
+
+            if (filtered.length === 0) {
+                discussionsList.innerHTML = `<div class="p-8 text-center text-slate-400 text-sm">Aucune discussion ne correspond à votre recherche.</div>`;
+                return;
+            }
+
+            filtered.forEach((conv, index) => {
+                const dateObj = new Date(conv.createTime);
+                const dateStr = !isNaN(dateObj.getTime()) ? dateObj.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Date inconnue';
+                const msgCount = conv.messages.length;
+
+                const itemEl = document.createElement('div');
+                itemEl.className = `p-4 hover:bg-slate-50 dark:hover:bg-slate-700/50 cursor-pointer transition border-b border-slate-100 dark:border-slate-700/50 ${index === 0 ? 'bg-blue-50/40 dark:bg-slate-700/30' : ''}`;
+                itemEl.innerHTML = `
+                    <div class="flex justify-between items-start mb-1">
+                        <h4 class="font-semibold text-sm text-slate-800 dark:text-slate-100 truncate pr-2">${escapeHtml(conv.title)}</h4>
+                        <span class="text-[10px] bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full whitespace-nowrap">${msgCount} msg</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs text-slate-400">
+                        <span><i class="fa-regular fa-calendar mr-1"></i> ${dateStr}</span>
+                        <span>~${Math.round(conv.messages.reduce((acc, m) => acc + (m.text ? m.text.split(/\s+/).length * 1.33 : 0), 0))} tokens</span>
+                    </div>
+                `;
+
+                itemEl.addEventListener('click', () => {
+                    // Highlight selected
+                    document.querySelectorAll('#discussions-list > div').forEach(el => el.classList.remove('bg-blue-50/40', 'dark:bg-slate-700/30'));
+                    itemEl.classList.add('bg-blue-50/40', 'dark:bg-slate-700/30');
+                    renderDiscussionPreview(conv);
+                });
+
+                discussionsList.appendChild(itemEl);
+            });
+
+            // Automatically select first item
+            if (filtered.length > 0) {
+                renderDiscussionPreview(filtered[0]);
+            }
+        }
+
+        // Render Discussion Preview Detail
+        function renderDiscussionPreview(conv) {
+            let messagesHtml = '';
+            conv.messages.forEach(m => {
+                const isUser = m.role === 'user';
+                const words = m.text ? m.text.trim().split(/\s+/).length : 0;
+                const estTokens = Math.round(words * 1.33);
+
+                messagesHtml += `
+                    <div class="space-y-1 mb-4">
+                        <div class="flex items-center justify-between text-xs text-slate-400 px-1">
+                            <span class="font-medium ${isUser ? 'text-blue-600 dark:text-blue-400' : 'text-indigo-600 dark:text-indigo-400'}">
+                                <i class="fa-solid ${isUser ? 'fa-user' : 'fa-robot'} mr-1"></i> ${isUser ? 'Vous' : 'Gemini'}
+                            </span>
+                            <span>~${estTokens} tokens (${words} mots)</span>
+                        </div>
+                        <div class="p-3.5 rounded-xl text-sm ${isUser ? 'bg-blue-600 text-white' : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 shadow-sm'}">
+                            <p class="whitespace-pre-wrap leading-relaxed">${escapeHtml(m.text)}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            discussionPreview.innerHTML = `
+                <div class="space-y-4">
+                    <div class="border-b border-slate-200 dark:border-slate-700 pb-3">
+                        <h4 class="font-bold text-base text-slate-800 dark:text-slate-100">${escapeHtml(conv.title)}</h4>
+                        <p class="text-xs text-slate-400 mt-0.5">ID: ${conv.id} • ${conv.messages.length} messages au total</p>
+                    </div>
+                    <div class="space-y-3">
+                        ${messagesHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Search Filter Event
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value;
+            renderDiscussionsList(appData.conversations, query);
+        });
+
+        // Helper function to escape HTML for safety
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
