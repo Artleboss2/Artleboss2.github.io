@@ -27,6 +27,8 @@
     </script>
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- JSZip CDN for in-browser archive extraction -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts Inter -->
@@ -37,7 +39,6 @@
 </head>
 <body class="h-full bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-200">
     <div class="min-h-full flex flex-col">
-        <!-- Header -->
         <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
                 <div class="flex items-center space-x-3">
@@ -63,7 +64,6 @@
 
         <!-- Main Container -->
         <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-            <!-- Upload / Welcome Section -->
             <section id="upload-section" class="space-y-6">
                 <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 text-white shadow-xl relative overflow-hidden">
                     <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
@@ -73,7 +73,7 @@
                         </span>
                         <h2 class="text-2xl sm:text-3xl font-bold">Analysez vos conversations Google Gemini</h2>
                         <p class="text-blue-100 text-sm sm:text-base">
-                            Importez votre fichier d'export (JSON ou Takeout) pour découvrir des statistiques détaillées sur vos discussions, l'estimation de vos tokens consommés, et l'évolution de votre utilisation. Aucune donnée ne quitte votre navigateur !
+                            Importez votre archive Google Takeout (au format <b>.zip</b>) ou vos fichiers individuels (<b>.html</b>, <b>.json</b>) situés dans <code>Takeout/Gemini/</code> pour découvrir vos statistiques détaillées, le nombre de tokens estimés, et l'évolution de vos discussions. Tout est analysé localement dans votre navigateur !
                         </p>
                         <div class="pt-2 flex flex-wrap gap-3">
                             <button id="hero-demo-btn" class="sm:hidden px-4 py-2 bg-white text-blue-700 font-medium rounded-lg text-sm shadow hover:bg-blue-50 transition">
@@ -85,26 +85,25 @@
 
                 <!-- Drag & Drop Zone -->
                 <div id="drop-zone" class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-8 text-center bg-white dark:bg-slate-800 hover:border-blue-500 dark:hover:border-blue-400 transition cursor-pointer shadow-sm">
-                    <input type="file" id="file-input" accept=".json,.html,.txt" class="hidden" multiple>
+                    <input type="file" id="file-input" accept=".zip,.json,.html,.txt" class="hidden" multiple>
                     <div class="max-w-md mx-auto space-y-4">
                         <div class="w-16 h-16 mx-auto rounded-full bg-blue-50 dark:bg-slate-700 flex items-center justify-center text-blue-600 dark:text-blue-400 text-2xl shadow-inner">
                             <i class="fa-solid fa-cloud-arrow-up"></i>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-200">Glissez-déposez vos fichiers ici</h3>
-                            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Formats acceptés : <span class="font-medium text-slate-700 dark:text-slate-300">JSON</span> (Export Gemini / Takeout)</p>
+                            <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-200">Glissez-déposez votre ZIP Takeout ici</h3>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Recherche automatique dans <span class="font-medium text-slate-700 dark:text-slate-300">Takeout/Gemini/</span> ou fichiers HTML/JSON</p>
                         </div>
                         <div>
                             <label for="file-input" class="inline-flex items-center px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600 transition shadow-sm cursor-pointer">
-                                <i class="fa-solid fa-folder-open mr-2 text-blue-500">></i> Parcourir les fichiers
+                                <i class="fa-solid fa-folder-open mr-2 text-blue-500"></i> Parcourir les fichiers
                             </label>
                         </div>
-                        <p class="text-xs text-slate-400 dark:text-slate-500">Astuce : Vous pouvez aussi cliquer sur "Charger un exemple" en haut si vous n'avez pas de fichier sous la main.</p>
+                        <p class="text-xs text-slate-400 dark:text-slate-500">Astuce : Vous pouvez aussi cliquer sur "Charger un exemple" en haut.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- Dashboard Section (Hidden by default until data is loaded) -->
             <div id="dashboard-section" class="space-y-8 hidden">
                 <!-- Action bar / Status -->
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 gap-4">
@@ -245,7 +244,6 @@
         </footer>
     </div>
 
-    <!-- JavaScript Application Code -->
     <script>
         // State Management
         let appData = {
@@ -261,7 +259,6 @@
         const themeToggleBtn = document.getElementById('theme-toggle');
         const htmlElement = document.documentElement;
 
-        // Check initial preference
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             htmlElement.classList.add('dark');
         } else {
@@ -276,7 +273,6 @@
                 htmlElement.classList.add('dark');
                 localStorage.setItem('theme', 'dark');
             }
-            // Update charts colors if needed
             updateChartsTheme();
         });
 
@@ -328,37 +324,207 @@
             }
         });
 
-        // Demo Data Loader
         demoBtn.addEventListener('click', loadDemoData);
         heroDemoBtn.addEventListener('click', loadDemoData);
         resetBtn.addEventListener('click', resetApp);
 
-        // File Handler Function
-        function handleFiles(files) {
+        // Main File Handler (ZIP or individual files)
+        async function handleFiles(files) {
             const file = files[0];
-            const reader = new FileReader();
+            dataSourceLabel.textContent = `Analyse en cours : ${file.name}...`;
 
-            dataSourceLabel.textContent = `Fichier analysé : ${file.name}`;
-            
-            reader.onload = function(e) {
-                try {
-                    const content = e.target.result;
-                    let parsedData;
-                    
-                    if (file.name.endsWith('.json')) {
-                        parsedData = JSON.parse(content);
-                        processGeminiJson(parsedData);
-                    } else {
-                        // Fallback text parser
-                        processTextExport(content);
-                    }
-                } catch (err) {
-                    alert("Erreur lors de la lecture du fichier JSON. Veuillez vérifier qu'il s'agit bien d'un export valide.");
-                    console.error(err);
+            try {
+                if (file.name.endsWith('.zip')) {
+                    await handleZipFile(file);
+                } else if (file.name.endsWith('.json')) {
+                    const text = await file.text();
+                    const json = JSON.parse(text);
+                    processGeminiJson(json);
+                } else if (file.name.endsWith('.html') || file.name.endsWith('.txt')) {
+                    const text = await file.text();
+                    parseSingleHtmlOrText(text, file.name);
+                } else {
+                    // Try parsing as text/html by default
+                    const text = await file.text();
+                    parseSingleHtmlOrText(text, file.name);
                 }
-            };
+            } catch (err) {
+                console.error(err);
+                alert("Erreur lors de l'analyse du fichier. Veuillez vérifier le format.");
+                dataSourceLabel.textContent = "Erreur de chargement du fichier";
+            }
+        }
 
-            reader.readAsText(file);
+        // Unzip Google Takeout ZIP Archive and search for Takeout/Gemini/ paths
+        async function handleZipFile(zipFile) {
+            const zip = new JSZip();
+            const contents = await zip.loadAsync(zipFile);
+            
+            let parsedConversations = [];
+            let fileCount = 0;
+
+            // Iterate through all files inside the ZIP
+            const promises = [];
+            contents.forEach((relativePath, zipEntry) => {
+                const lowerPath = relativePath.toLowerCase();
+                // Look for Takeout/Gemini or Takeout/Gemini Apps paths or any HTML conversation files
+                const isGeminiPath = lowerPath.includes('takeout/gemini') || 
+                                     lowerPath.includes('gemini apps') ||
+                                     lowerPath.includes('my activity/gemini');
+
+                if (isGeminiPath && (lowerPath.endsWith('.html') || lowerPath.endsWith('.json'))) {
+                    fileCount++;
+                    promises.push(
+                        zipEntry.async('text').then(content => {
+                            if (lowerPath.endsWith('.json')) {
+                                try {
+                                    const json = JSON.parse(content);
+                                    return extractConversationsFromJson(json);
+                                } catch (e) {
+                                    return [];
+                                }
+                            } else {
+                                return [extractConversationFromHtml(content, zipEntry.name)];
+                            }
+                        }).catch(() => [])
+                    );
+                }
+            });
+
+            const results = await Promise.all(promises);
+            results.forEach(convList => {
+                if (Array.isArray(convList)) {
+                    parsedConversations.push(...convList);
+                }
+            });
+
+            // If no conversations found via path filtering, fallback to scanning ALL html files in zip
+            if (parsedConversations.length === 0) {
+                const fallbackPromises = [];
+                contents.forEach((relativePath, zipEntry) => {
+                    if (relativePath.toLowerCase().endsWith('.html')) {
+                        fallbackPromises.push(
+                            zipEntry.async('text').then(content => {
+                                return extractConversationFromHtml(content, zipEntry.name);
+                            }).catch(() => null)
+                        );
+                    }
+                });
+                const fallbackResults = await Promise.all(fallbackPromises);
+                parsedConversations = fallbackResults.filter(Boolean);
+            }
+
+            if (parsedConversations.length === 0) {
+                throw new Error("Aucun fichier de conversation Gemini valide n'a été trouvé dans l'archive ZIP.");
+            }
+
+            appData.conversations = parsedConversations;
+            dataSourceLabel.textContent = `Archive ZIP analysée : ${fileCount} fichiers trouvés (${parsedConversations.length} discussions)`;
+            renderDashboard();
+        }
+
+        // Extract conversation data from Google Takeout HTML Export
+        function extractConversationFromHtml(htmlContent, fileName) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlContent, 'text/html');
+
+            // Google Takeout typically structures chats with outer cells or mdl-grid
+            const titleEl = doc.querySelector('title') || doc.querySelector('h1') || doc.querySelector('.header');
+            let title = titleEl ? titleEl.textContent.trim() : fileName.replace(/^.*[\\\/]/, '').replace('.html', '');
+            
+            // Clean up common Takeout suffixes
+            title = title.replace(' - Google Takeout', '').replace('Google Gemini - ', '');
+
+            let messages = [];
+            
+            // Look for standard Google Takeout My Activity structure (.outer-cell, .content-cell)
+            const outerCells = doc.querySelectorAll('.outer-cell, .content-cell, .card, .record');
+            
+            if (outerCells.length > 0) {
+                outerCells.forEach((cell, idx) => {
+                    const text = cell.textContent ? cell.textContent.trim() : '';
+                    if (text.length > 3) {
+                        // Alternate roles or guess based on content headers
+                        const role = (idx % 2 === 0) ? 'user' : 'model';
+                        messages.push({
+                            role: role,
+                            text: text,
+                            timestamp: new Date().toISOString()
+                        });
+                    }
+                });
+            }
+
+            // Fallback: If no structured cells found, parse paragraphs from body
+            if (messages.length === 0) {
+                const bodyText = doc.body ? doc.body.innerText : htmlContent;
+                messages = [
+                    { role: 'user', text: bodyText.substring(0, 1000), timestamp: new Date().toISOString() },
+                    { role: 'model', text: bodyText.substring(1000, 3000) || "Contenu de la conversation extrait du fichier HTML Takeout.", timestamp: new Date().toISOString() }
+                ];
+            }
+
+            return {
+                id: fileName,
+                title: title || "Discussion Gemini",
+                createTime: new Date().toISOString(),
+                messages: messages
+            };
+        }
+
+        // Parse Single HTML or Text File
+        function parseSingleHtmlOrText(content, fileName) {
+            const conv = extractConversationFromHtml(content, fileName);
+            appData.conversations = [conv];
+            dataSourceLabel.textContent = `Fichier analysé : ${fileName}`;
+            renderDashboard();
+        }
+
+        // Extract from JSON format
+        function extractConversationsFromJson(json) {
+            let rawList = [];
+            if (Array.isArray(json)) {
+                rawList = json;
+            } else if (json.conversations && Array.isArray(json.conversations)) {
+                rawList = json.conversations;
+            } else if (json.chats && Array.isArray(json.chats)) {
+                rawList = json.chats;
+            } else {
+                const foundKey = Object.keys(json).find(k => Array.isArray(json[k]));
+                rawList = foundKey ? json[foundKey] : [json];
+            }
+
+            return rawList.map((item, index) => {
+                let title = item.title || item.name || `Discussion #${index + 1}`;
+                let createTime = item.createTime || item.timestamp || new Date().toISOString();
+                let messages = [];
+
+                if (item.messages && Array.isArray(item.messages)) {
+                    messages = item.messages.map(m => ({
+                        role: m.role || (m.sender === 'user' ? 'user' : 'model'),
+                        text: m.text || m.content || m.body || '',
+                        timestamp: m.timestamp || createTime
+                    }));
+                } else {
+                    messages = [
+                        { role: 'user', text: item.prompt || item.query || "Requête initiale", timestamp: createTime },
+                        { role: 'model', text: item.response || item.answer || "Réponse Gemini", timestamp: createTime }
+                    ];
+                }
+
+                return {
+                    id: item.id || `conv_${index}`,
+                    title: title,
+                    createTime: createTime,
+                    messages: messages
+                };
+            });
+        }
+
+        function processGeminiJson(json) {
+            appData.conversations = extractConversationsFromJson(json);
+            dataSourceLabel.textContent = `Fichier JSON analysé avec succès`;
+            renderDashboard();
         }
 
         // Generate Mock Demo Data
@@ -379,15 +545,15 @@
             const now = new Date();
             for (let i = 0; i < 35; i++) {
                 const date = new Date(now);
-                date.setDate(date.getDate() - Math.floor(Math.random() * 90)); // Within last 3 months
+                date.setDate(date.getDate() - Math.floor(Math.random() * 90));
                 
-                const messagesCount = Math.floor(Math.random() * 8) + 2; // 2 to 10 messages
+                const messagesCount = Math.floor(Math.random() * 8) + 2;
                 const messages = [];
                 
                 for (let j = 0; j < messagesCount; j++) {
                     const isUser = j % 2 === 0;
                     const textLength = Math.floor(Math.random() * 300) + 50;
-                    const sampleWords = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ".repeat(Math.ceil(textLength / 50));
+                    const sampleWords = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ".repeat(Math.ceil(textLength / 50));
                     messages.push({
                         role: isUser ? 'user' : 'model',
                         text: sampleWords.substring(0, textLength),
@@ -407,88 +573,6 @@
             renderDashboard();
         }
 
-        // Parser for Gemini / Google Takeout JSON format
-        function processGeminiJson(json) {
-            let convs = [];
-            
-            // Handle different possible structures of Google Takeout / Gemini exports
-            let rawList = [];
-            if (Array.isArray(json)) {
-                rawList = json;
-            } else if (json.conversations && Array.isArray(json.conversations)) {
-                rawList = json.conversations;
-            } else if (json.chats && Array.isArray(json.chats)) {
-                rawList = json.chats;
-            } else {
-                // Try to find any array property in the object
-                const foundKey = Object.keys(json).find(k => Array.isArray(json[k]));
-                if (foundKey) {
-                    rawList = json[foundKey];
-                } else {
-                    // Single conversation object wrap
-                    rawList = [json];
-                }
-            }
-
-            convs = rawList.map((item, index) => {
-                let title = item.title || item.name || `Discussion #${index + 1}`;
-                let createTime = item.createTime || item.timestamp || item.date || new Date().toISOString();
-                let messages = [];
-
-                if (item.messages && Array.isArray(item.messages)) {
-                    messages = item.messages.map(m => ({
-                        role: m.role || (m.sender === 'user' ? 'user' : 'model'),
-                        text: m.text || m.content || m.body || '',
-                        timestamp: m.timestamp || createTime
-                    }));
-                } else if (item.mapping) {
-                    // Handle OpenAI / Gemini node mapping style if exported similarly
-                    Object.values(item.mapping).forEach(node => {
-                        if (node.message && node.message.content && node.message.content.parts) {
-                            const text = node.message.content.parts.join(' ');
-                            const role = node.message.author && node.message.author.role === 'user' ? 'user' : 'model';
-                            messages.push({
-                                role: role,
-                                text: text,
-                                timestamp: new Date(node.message.create_time ? node.message.create_time * 1000 : Date.now()).toISOString()
-                            });
-                        }
-                    });
-                } else {
-                    // Fallback generic extraction
-                    messages = [
-                        { role: 'user', text: item.prompt || item.query || "Requête initiale", timestamp: createTime },
-                        { role: 'model', text: item.response || item.answer || item.output || "Réponse du modèle", timestamp: createTime }
-                    ];
-                }
-
-                return {
-                    id: item.id || `conv_${index}`,
-                    title: title,
-                    createTime: createTime,
-                    messages: messages
-                };
-            });
-
-            appData.conversations = convs;
-            renderDashboard();
-        }
-
-        // Fallback text parser
-        function processTextExport(text) {
-            appData.conversations = [{
-                id: 'conv_text',
-                title: 'Export texte brut',
-                createTime: new Date().toISOString(),
-                messages: [
-                    { role: 'user', text: text.substring(0, 1000), timestamp: new Date().toISOString() },
-                    { role: 'model', text: text.substring(1000, 3000) || "Analyse du document texte complet.", timestamp: new Date().toISOString() }
-                ]
-            }];
-            renderDashboard();
-        }
-
-        // Reset App State
         function resetApp() {
             appData.conversations = [];
             uploadSection.classList.remove('hidden');
@@ -514,11 +598,9 @@
             let userTokens = 0;
             let modelTokens = 0;
 
-            // Monthly activity map for chart
             let activityByMonth = {};
 
             appData.conversations.forEach(conv => {
-                // Date formatting for activity chart
                 const dateObj = new Date(conv.createTime);
                 const monthKey = !isNaN(dateObj.getTime()) ? `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}` : 'Inconnu';
                 
@@ -532,7 +614,6 @@
                     const text = msg.text || '';
                     const chars = text.length;
                     const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-                    // Standard estimation: ~1.33 tokens per word (or ~4 characters per token)
                     const tokens = Math.round(words * 1.33);
 
                     totalChars += chars;
@@ -548,7 +629,6 @@
 
             const totalTokens = userTokens + modelTokens;
 
-            // Update DOM metrics
             document.getElementById('metric-conversations').textContent = totalConversations.toLocaleString();
             document.getElementById('metric-tokens').textContent = totalTokens.toLocaleString();
             document.getElementById('metric-messages').textContent = totalMessages.toLocaleString();
@@ -556,20 +636,15 @@
             document.getElementById('metric-words').textContent = `${totalWords.toLocaleString()} mots`;
             document.getElementById('metric-chars').textContent = `${totalChars.toLocaleString()} caractères`;
 
-            // Render Charts
             renderActivityChart(activityByMonth);
             renderTokensChart(userTokens, modelTokens);
-
-            // Render Discussions List
             renderDiscussionsList(appData.conversations);
         }
 
-        // Render Activity Chart
         function renderActivityChart(activityMap) {
             const ctx = document.getElementById('activityChart').getContext('2d');
             if (charts.activity) charts.activity.destroy();
 
-            // Sort months chronological
             const sortedKeys = Object.keys(activityMap).sort();
             const labels = sortedKeys.map(k => {
                 if (k === 'Inconnu') return k;
@@ -578,7 +653,6 @@
                 return date.toLocaleDateString('fr-FR', { month: 'short', year: 'numeric' });
             });
             const data = sortedKeys.map(k => activityMap[k]);
-
             const isDark = document.documentElement.classList.contains('dark');
 
             charts.activity = new Chart(ctx, {
@@ -596,9 +670,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
+                    plugins: { legend: { display: false } },
                     scales: {
                         x: {
                             grid: { display: false },
@@ -613,7 +685,6 @@
             });
         }
 
-        // Render Tokens Doughnut Chart
         function renderTokensChart(userTokens, modelTokens) {
             const ctx = document.getElementById('tokensChart').getContext('2d');
             if (charts.tokens) charts.tokens.destroy();
@@ -649,14 +720,12 @@
             });
         }
 
-        // Update charts on theme toggle
         function updateChartsTheme() {
             if (appData.conversations.length > 0) {
                 renderDashboard();
             }
         }
 
-        // Render Discussions List in Explorer
         function renderDiscussionsList(conversations, filterText = '') {
             discussionsList.innerHTML = '';
 
@@ -672,7 +741,7 @@
 
             filtered.forEach((conv, index) => {
                 const dateObj = new Date(conv.createTime);
-                const dateStr = !isNaN(dateObj.getTime()) ? dateObj.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Date inconnue';
+                const dateStr = !isNaN(dateObj.getTime()) ? dateObj.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Date récente';
                 const msgCount = conv.messages.length;
 
                 const itemEl = document.createElement('div');
@@ -689,7 +758,6 @@
                 `;
 
                 itemEl.addEventListener('click', () => {
-                    // Highlight selected
                     document.querySelectorAll('#discussions-list > div').forEach(el => el.classList.remove('bg-blue-50/40', 'dark:bg-slate-700/30'));
                     itemEl.classList.add('bg-blue-50/40', 'dark:bg-slate-700/30');
                     renderDiscussionPreview(conv);
@@ -698,13 +766,11 @@
                 discussionsList.appendChild(itemEl);
             });
 
-            // Automatically select first item
             if (filtered.length > 0) {
                 renderDiscussionPreview(filtered[0]);
             }
         }
 
-        // Render Discussion Preview Detail
         function renderDiscussionPreview(conv) {
             let messagesHtml = '';
             conv.messages.forEach(m => {
@@ -740,13 +806,11 @@
             `;
         }
 
-        // Search Filter Event
         searchInput.addEventListener('input', (e) => {
             const query = e.target.value;
             renderDiscussionsList(appData.conversations, query);
         });
 
-        // Helper function to escape HTML for safety
         function escapeHtml(text) {
             if (!text) return '';
             return text
